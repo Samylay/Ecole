@@ -88,6 +88,15 @@ type TranslationKeys = {
     hasAccount: string;
     orContinueWith: string;
     google: string;
+    invalidCredentials: string;
+    missingFields: string;
+    emailTaken: string;
+    weakPassword: string;
+    passwordMismatch: string;
+    signupSuccess: string;
+    welcome: string;
+    logout: string;
+    loginToAccess: string;
   };
   footer: {
     about: string;
@@ -173,6 +182,15 @@ const translations: Record<Locale, TranslationKeys> = {
       hasAccount: "D\u00e9j\u00e0 un compte ?",
       orContinueWith: "Ou continuer avec",
       google: "Google",
+      invalidCredentials: "Email ou mot de passe incorrect",
+      missingFields: "Veuillez remplir tous les champs",
+      emailTaken: "Cet email est d\u00e9j\u00e0 utilis\u00e9",
+      weakPassword: "Le mot de passe doit contenir au moins 6 caract\u00e8res",
+      passwordMismatch: "Les mots de passe ne correspondent pas",
+      signupSuccess: "Compte cr\u00e9\u00e9 avec succ\u00e8s !",
+      welcome: "Bienvenue",
+      logout: "D\u00e9connexion",
+      loginToAccess: "Connectez-vous pour acc\u00e9der aux cours",
     },
     footer: {
       about: "\u00c0 propos",
@@ -256,6 +274,15 @@ const translations: Record<Locale, TranslationKeys> = {
       hasAccount: "Already have an account?",
       orContinueWith: "Or continue with",
       google: "Google",
+      invalidCredentials: "Invalid email or password",
+      missingFields: "Please fill in all fields",
+      emailTaken: "This email is already taken",
+      weakPassword: "Password must be at least 6 characters",
+      passwordMismatch: "Passwords do not match",
+      signupSuccess: "Account created successfully!",
+      welcome: "Welcome",
+      logout: "Log out",
+      loginToAccess: "Sign in to access courses",
     },
     footer: {
       about: "About",
@@ -339,6 +366,15 @@ const translations: Record<Locale, TranslationKeys> = {
       hasAccount: "\u0644\u062F\u064A\u0643 \u062D\u0633\u0627\u0628 \u0628\u0627\u0644\u0641\u0639\u0644\u061F",
       orContinueWith: "\u0623\u0648 \u062A\u0627\u0628\u0639 \u0628\u0640",
       google: "\u062C\u0648\u062C\u0644",
+      invalidCredentials: "\u0627\u0644\u0628\u0631\u064A\u062F \u0627\u0644\u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A \u0623\u0648 \u0643\u0644\u0645\u0629 \u0627\u0644\u0645\u0631\u0648\u0631 \u063A\u064A\u0631 \u0635\u062D\u064A\u062D\u0629",
+      missingFields: "\u064A\u0631\u062C\u0649 \u0645\u0644\u0621 \u062C\u0645\u064A\u0639 \u0627\u0644\u062D\u0642\u0648\u0644",
+      emailTaken: "\u0647\u0630\u0627 \u0627\u0644\u0628\u0631\u064A\u062F \u0627\u0644\u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A \u0645\u0633\u062A\u062E\u062F\u0645 \u0628\u0627\u0644\u0641\u0639\u0644",
+      weakPassword: "\u064A\u062C\u0628 \u0623\u0646 \u062A\u062A\u0643\u0648\u0646 \u0643\u0644\u0645\u0629 \u0627\u0644\u0645\u0631\u0648\u0631 \u0645\u0646 6 \u0623\u062D\u0631\u0641 \u0639\u0644\u0649 \u0627\u0644\u0623\u0642\u0644",
+      passwordMismatch: "\u0643\u0644\u0645\u062A\u0627 \u0627\u0644\u0645\u0631\u0648\u0631 \u063A\u064A\u0631 \u0645\u062A\u0637\u0627\u0628\u0642\u062A\u064A\u0646",
+      signupSuccess: "\u062A\u0645 \u0625\u0646\u0634\u0627\u0621 \u0627\u0644\u062D\u0633\u0627\u0628 \u0628\u0646\u062C\u0627\u062D!",
+      welcome: "\u0645\u0631\u062D\u0628\u0627",
+      logout: "\u062A\u0633\u062C\u064A\u0644 \u0627\u0644\u062E\u0631\u0648\u062C",
+      loginToAccess: "\u0633\u062C\u0644 \u0627\u0644\u062F\u062E\u0648\u0644 \u0644\u0644\u0648\u0635\u0648\u0644 \u0625\u0644\u0649 \u0627\u0644\u062F\u0631\u0648\u0633",
     },
     footer: {
       about: "\u062D\u0648\u0644",
