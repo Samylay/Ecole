@@ -1,11 +1,59 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { useLocale } from "@/lib/locale-context";
+import { useAuth } from "@/lib/auth-context";
 
 export default function SignUpPage() {
   const { t } = useLocale();
+  const { signup } = useAuth();
+  const router = useRouter();
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const errorMessages: Record<string, string> = {
+    missing_fields: t.auth.missingFields,
+    email_taken: t.auth.emailTaken,
+    weak_password: t.auth.weakPassword,
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    if (!name || !email || !password || !confirmPassword) {
+      setError(t.auth.missingFields);
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError(t.auth.passwordMismatch);
+      return;
+    }
+
+    if (password.length < 6) {
+      setError(t.auth.weakPassword);
+      return;
+    }
+
+    setLoading(true);
+    const result = await signup(name, email, password);
+    setLoading(false);
+
+    if (result.success) {
+      router.push("/my-courses");
+    } else {
+      setError(errorMessages[result.error || ""] || t.auth.missingFields);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -21,11 +69,19 @@ export default function SignUpPage() {
               <h1 className="text-2xl font-bold text-gray-900">{t.auth.signUp}</h1>
             </div>
 
-            <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+            {error && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                {error}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">{t.auth.fullName}</label>
                 <input
                   type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
                 />
               </div>
@@ -34,6 +90,8 @@ export default function SignUpPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">{t.auth.email}</label>
                 <input
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
                   placeholder="email@example.com"
                 />
@@ -43,6 +101,8 @@ export default function SignUpPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">{t.auth.password}</label>
                 <input
                   type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
                   placeholder="********"
                 />
@@ -52,6 +112,8 @@ export default function SignUpPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">{t.auth.confirmPassword}</label>
                 <input
                   type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
                   placeholder="********"
                 />
@@ -59,9 +121,10 @@ export default function SignUpPage() {
 
               <button
                 type="submit"
-                className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
+                disabled={loading}
+                className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {t.auth.signUp}
+                {loading ? "..." : t.auth.signUp}
               </button>
             </form>
 

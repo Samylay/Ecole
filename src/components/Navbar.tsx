@@ -2,13 +2,22 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useLocale } from "@/lib/locale-context";
+import { useAuth } from "@/lib/auth-context";
 import { Locale, localeNames, locales } from "@/lib/i18n";
 
 export function Navbar() {
   const { locale, setLocale, t } = useLocale();
+  const { user, logout } = useAuth();
+  const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    router.push("/");
+  };
 
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
@@ -27,12 +36,16 @@ export function Navbar() {
             <Link href="/" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">
               {t.nav.home}
             </Link>
-            <Link href="/#courses" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">
-              {t.nav.courses}
-            </Link>
-            <Link href="/my-courses" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">
-              {t.nav.myCourses}
-            </Link>
+            {user && (
+              <>
+                <Link href="/#courses" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">
+                  {t.nav.courses}
+                </Link>
+                <Link href="/my-courses" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">
+                  {t.nav.myCourses}
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Right side */}
@@ -63,15 +76,36 @@ export function Navbar() {
               )}
             </div>
 
-            <Link href="/signin" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">
-              {t.nav.signIn}
-            </Link>
-            <Link
-              href="/signup"
-              className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 font-medium transition-colors"
-            >
-              {t.nav.signUp}
-            </Link>
+            {user ? (
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
+                    <span className="text-indigo-700 font-semibold text-sm">
+                      {user.name.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                  <span className="text-sm font-medium text-gray-700">{user.name}</span>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="text-gray-500 hover:text-red-600 font-medium text-sm transition-colors"
+                >
+                  {t.auth.logout}
+                </button>
+              </div>
+            ) : (
+              <>
+                <Link href="/signin" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">
+                  {t.nav.signIn}
+                </Link>
+                <Link
+                  href="/signup"
+                  className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 font-medium transition-colors"
+                >
+                  {t.nav.signUp}
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile hamburger */}
@@ -97,12 +131,16 @@ export function Navbar() {
             <Link href="/" className="block py-2 text-gray-600 font-medium" onClick={() => setMobileOpen(false)}>
               {t.nav.home}
             </Link>
-            <Link href="/#courses" className="block py-2 text-gray-600 font-medium" onClick={() => setMobileOpen(false)}>
-              {t.nav.courses}
-            </Link>
-            <Link href="/my-courses" className="block py-2 text-gray-600 font-medium" onClick={() => setMobileOpen(false)}>
-              {t.nav.myCourses}
-            </Link>
+            {user && (
+              <>
+                <Link href="/#courses" className="block py-2 text-gray-600 font-medium" onClick={() => setMobileOpen(false)}>
+                  {t.nav.courses}
+                </Link>
+                <Link href="/my-courses" className="block py-2 text-gray-600 font-medium" onClick={() => setMobileOpen(false)}>
+                  {t.nav.myCourses}
+                </Link>
+              </>
+            )}
             <hr className="my-2" />
             <div className="flex gap-2">
               {locales.map((l: Locale) => (
@@ -116,16 +154,37 @@ export function Navbar() {
               ))}
             </div>
             <hr className="my-2" />
-            <Link href="/signin" className="block py-2 text-gray-600 font-medium" onClick={() => setMobileOpen(false)}>
-              {t.nav.signIn}
-            </Link>
-            <Link
-              href="/signup"
-              className="block text-center bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium"
-              onClick={() => setMobileOpen(false)}
-            >
-              {t.nav.signUp}
-            </Link>
+            {user ? (
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 py-2">
+                  <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
+                    <span className="text-indigo-700 font-semibold text-sm">
+                      {user.name.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                  <span className="text-sm font-medium text-gray-700">{user.name}</span>
+                </div>
+                <button
+                  onClick={() => { handleLogout(); setMobileOpen(false); }}
+                  className="block w-full text-left py-2 text-red-600 font-medium"
+                >
+                  {t.auth.logout}
+                </button>
+              </div>
+            ) : (
+              <>
+                <Link href="/signin" className="block py-2 text-gray-600 font-medium" onClick={() => setMobileOpen(false)}>
+                  {t.nav.signIn}
+                </Link>
+                <Link
+                  href="/signup"
+                  className="block text-center bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {t.nav.signUp}
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}

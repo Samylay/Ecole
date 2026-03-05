@@ -4,6 +4,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { CourseCard } from "@/components/CourseCard";
 import { useLocale } from "@/lib/locale-context";
+import { useAuth } from "@/lib/auth-context";
 import { courses, subjectColors, subjectIcons, Subject } from "@/lib/data";
 import Link from "next/link";
 import { useState } from "react";
@@ -12,6 +13,7 @@ const subjects: Subject[] = ["math", "physics", "biology"];
 
 export default function HomePage() {
   const { t } = useLocale();
+  const { user } = useAuth();
   const [activeSubject, setActiveSubject] = useState<Subject | "all">("all");
 
   const filteredCourses =
@@ -31,15 +33,27 @@ export default function HomePage() {
             <p className="mt-6 text-lg md:text-xl text-indigo-100 leading-relaxed">
               {t.home.hero.subtitle}
             </p>
-            <Link
-              href="#courses"
-              className="mt-8 inline-flex items-center gap-2 bg-white text-indigo-700 px-6 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition-colors"
-            >
-              {t.home.hero.cta}
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
+            {user ? (
+              <Link
+                href="/my-courses"
+                className="mt-8 inline-flex items-center gap-2 bg-white text-indigo-700 px-6 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition-colors"
+              >
+                {t.course.continueLearning}
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            ) : (
+              <Link
+                href="/signin"
+                className="mt-8 inline-flex items-center gap-2 bg-white text-indigo-700 px-6 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition-colors"
+              >
+                {t.home.hero.cta}
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            )}
           </div>
         </div>
       </section>
@@ -72,62 +86,90 @@ export default function HomePage() {
             const icon = subjectIcons[subject];
             const count = courses.filter((c) => c.subject === subject).length;
             return (
-              <button
+              <div
                 key={subject}
+                className={`${colors.bg} rounded-xl p-6 text-left hover:shadow-md transition-all duration-300 hover:-translate-y-1 border border-transparent hover:border-gray-200 ${user ? "cursor-pointer" : ""}`}
                 onClick={() => {
-                  setActiveSubject(subject);
-                  document.getElementById("courses")?.scrollIntoView({ behavior: "smooth" });
+                  if (user) {
+                    setActiveSubject(subject);
+                    document.getElementById("courses")?.scrollIntoView({ behavior: "smooth" });
+                  }
                 }}
-                className={`${colors.bg} rounded-xl p-6 text-left hover:shadow-md transition-all duration-300 hover:-translate-y-1 border border-transparent hover:border-gray-200`}
               >
                 <span className="text-4xl">{icon}</span>
                 <h3 className={`text-xl font-bold ${colors.text} mt-3`}>{t.subjects[subject]}</h3>
                 <p className="text-gray-500 mt-1">
                   {count} {t.course.lessons.toLowerCase()}
                 </p>
-              </button>
+              </div>
             );
           })}
         </div>
       </section>
 
-      {/* Courses */}
-      <section id="courses" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">{t.home.popularCourses}</h2>
-          <div className="flex gap-2 flex-wrap">
-            <button
-              onClick={() => setActiveSubject("all")}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                activeSubject === "all"
-                  ? "bg-indigo-600 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
-            >
-              {t.home.viewAll}
-            </button>
-            {subjects.map((subject) => (
+      {/* Courses - only visible when logged in */}
+      {user ? (
+        <section id="courses" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">{t.home.popularCourses}</h2>
+            <div className="flex gap-2 flex-wrap">
               <button
-                key={subject}
-                onClick={() => setActiveSubject(subject)}
+                onClick={() => setActiveSubject("all")}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  activeSubject === subject
-                    ? `${subjectColors[subject].accent} text-white`
+                  activeSubject === "all"
+                    ? "bg-indigo-600 text-white"
                     : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                 }`}
               >
-                {subjectIcons[subject]} {t.subjects[subject]}
+                {t.home.viewAll}
               </button>
+              {subjects.map((subject) => (
+                <button
+                  key={subject}
+                  onClick={() => setActiveSubject(subject)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                    activeSubject === subject
+                      ? `${subjectColors[subject].accent} text-white`
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  }`}
+                >
+                  {subjectIcons[subject]} {t.subjects[subject]}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredCourses.map((course) => (
+              <CourseCard key={course.id} course={course} />
             ))}
           </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCourses.map((course) => (
-            <CourseCard key={course.id} course={course} />
-          ))}
-        </div>
-      </section>
+        </section>
+      ) : (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="text-center py-12 bg-white rounded-2xl border border-gray-200 shadow-sm">
+            <svg className="w-16 h-16 text-indigo-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">{t.auth.loginToAccess}</h3>
+            <p className="text-gray-500 mb-6">{t.home.hero.subtitle}</p>
+            <div className="flex items-center justify-center gap-4">
+              <Link
+                href="/signin"
+                className="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
+              >
+                {t.auth.signIn}
+              </Link>
+              <Link
+                href="/signup"
+                className="border border-indigo-600 text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition-colors"
+              >
+                {t.auth.signUp}
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       <Footer />
     </div>
