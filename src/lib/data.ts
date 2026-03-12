@@ -71,8 +71,8 @@ export const instructors: Instructor[] = [
       ar: "أستاذ رياضيات بخبرة 15 سنة في التدريس بالمتوسط والثانوي. شغوف بالبيداغوجيا وطرق التعلم الحديثة، يجعل الرياضيات في متناول الجميع.",
     },
     expertise: "math",
-    courseCount: 3,
-    studentCount: 5730,
+    courseCount: 2,
+    studentCount: 3840,
     rating: 4.8,
   },
   {
@@ -114,7 +114,7 @@ export const instructors: Instructor[] = [
     },
     expertise: "biology",
     courseCount: 3,
-    studentCount: 5680,
+    studentCount: 5430,
     rating: 4.8,
   },
 ];
@@ -265,12 +265,12 @@ export const courses: Course[] = [
     },
     thumbnail: "/thumbnails/math-geometry.svg",
     instructor: {
-      name: "Pr. John Smith",
-      avatar: "/avatars/john.svg",
+      name: "Pr. Robert Johnson",
+      avatar: "/avatars/robert.svg",
       bio: {
-        fr: "Professeur de math\u00e9matiques avec 15 ans d'exp\u00e9rience",
-        en: "Mathematics teacher with 15 years of experience",
-        ar: "\u0623\u0633\u062A\u0627\u0630 \u0631\u064A\u0627\u0636\u064A\u0627\u062A \u0628\u062E\u0628\u0631\u0629 15 \u0633\u0646\u0629",
+        fr: "Professeur de math\u00e9matiques sp\u00e9cialiste en analyse et alg\u00e8bre",
+        en: "Mathematics professor specializing in analysis and algebra",
+        ar: "\u0623\u0633\u062A\u0627\u0630 \u0631\u064A\u0627\u0636\u064A\u0627\u062A \u0645\u062A\u062E\u0635\u0635 \u0641\u064A \u0627\u0644\u062A\u062D\u0644\u064A\u0644 \u0648\u0627\u0644\u062C\u0628\u0631",
       },
     },
     instructorId: "robert-johnson",
