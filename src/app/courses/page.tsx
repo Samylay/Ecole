@@ -69,7 +69,7 @@ export default function CoursesPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-
+      <main id="main-content">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6 animate-fade-in-up">
@@ -208,6 +208,7 @@ export default function CoursesPage() {
         )}
       </div>
 
+      </main>
       <Footer />
     </div>
   );

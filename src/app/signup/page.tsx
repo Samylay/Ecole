@@ -1,11 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { useLocale } from "@/lib/locale-context";
 import { useProgress } from "@/lib/progress-context";
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function getPasswordStrength(password: string): "weak" | "medium" | "strong" {
+  let score = 0;
+  if (password.length >= 8) score++;
+  if (password.length >= 12) score++;
+  if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++;
+  if (/\d/.test(password)) score++;
+  if (/[^a-zA-Z0-9]/.test(password)) score++;
+  if (score <= 2) return "weak";
+  if (score <= 3) return "medium";
+  return "strong";
+}
 
 export default function SignUpPage() {
   const { t } = useLocale();
@@ -14,14 +28,72 @@ export default function SignUpPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+  function markTouched(field: string) {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+  }
+
+  const emailError = useMemo(() => {
+    if (!touched.email || !email) return "";
+    if (!EMAIL_REGEX.test(email)) return t.auth.emailInvalid;
+    return "";
+  }, [email, touched.email, t.auth.emailInvalid]);
+
+  const passwordStrength = useMemo(() => {
+    if (!password) return null;
+    return getPasswordStrength(password);
+  }, [password]);
+
+  const confirmPasswordError = useMemo(() => {
+    if (!touched.confirmPassword || !confirmPassword) return "";
+    if (password !== confirmPassword) return t.auth.passwordsNoMatch;
+    return "";
+  }, [password, confirmPassword, touched.confirmPassword, t.auth.passwordsNoMatch]);
+
+  const nameError = useMemo(() => {
+    if (!touched.name || name) return "";
+    return t.auth.required;
+  }, [name, touched.name, t.auth.required]);
+
+  const isFormValid = useMemo(() => {
+    return (
+      name.trim() !== "" &&
+      EMAIL_REGEX.test(email) &&
+      password.length >= 1 &&
+      password === confirmPassword
+    );
+  }, [name, email, password, confirmPassword]);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (name && email && password) {
+    if (isFormValid) {
       login(name, email);
       router.push("/");
     }
   }
+
+  const strengthConfig = {
+    weak: { label: t.auth.passwordWeak, color: "bg-red-500", width: "w-1/3" },
+    medium: { label: t.auth.passwordMedium, color: "bg-yellow-500", width: "w-2/3" },
+    strong: { label: t.auth.passwordStrong, color: "bg-green-500", width: "w-full" },
+  };
+
+  const EyeIcon = ({ open }: { open: boolean }) =>
+    open ? (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+      </svg>
+    ) : (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 012.31-3.814M6.938 6.937A9.966 9.966 0 0112 5c4.478 0 8.268 2.943 9.542 7a9.969 9.969 0 01-4.043 5.063M15 12a3 3 0 01-6 0" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 3l18 18" />
+      </svg>
+    );
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -37,55 +109,158 @@ export default function SignUpPage() {
               <h1 className="text-2xl font-bold text-gray-900">{t.auth.signUp}</h1>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+              {/* Full Name */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t.auth.fullName}</label>
+                <label htmlFor="signup-name" className="block text-sm font-medium text-gray-700 mb-1">
+                  {t.auth.fullName}
+                </label>
                 <input
+                  id="signup-name"
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+                  onBlur={() => markTouched("name")}
+                  aria-label={t.auth.fullName}
+                  aria-invalid={!!nameError}
+                  aria-describedby={nameError ? "name-error" : undefined}
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all ${
+                    nameError ? "border-red-400" : "border-gray-300"
+                  }`}
                   required
                 />
+                {nameError && (
+                  <p id="name-error" className="mt-1 text-sm text-red-600" role="alert">
+                    {nameError}
+                  </p>
+                )}
               </div>
 
+              {/* Email */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t.auth.email}</label>
+                <label htmlFor="signup-email" className="block text-sm font-medium text-gray-700 mb-1">
+                  {t.auth.email}
+                </label>
                 <input
+                  id="signup-email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+                  onBlur={() => markTouched("email")}
+                  aria-label={t.auth.email}
+                  aria-invalid={!!emailError}
+                  aria-describedby={emailError ? "email-error" : undefined}
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all ${
+                    emailError ? "border-red-400" : "border-gray-300"
+                  }`}
                   placeholder="email@example.com"
                   required
                 />
+                {emailError && (
+                  <p id="email-error" className="mt-1 text-sm text-red-600" role="alert">
+                    {emailError}
+                  </p>
+                )}
               </div>
 
+              {/* Password */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t.auth.password}</label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
-                  placeholder="********"
-                  required
-                />
+                <label htmlFor="signup-password" className="block text-sm font-medium text-gray-700 mb-1">
+                  {t.auth.password}
+                </label>
+                <div className="relative">
+                  <input
+                    id="signup-password"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    onBlur={() => markTouched("password")}
+                    aria-label={t.auth.password}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all pr-12"
+                    placeholder="********"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 flex items-center pr-3 hover:opacity-75 transition-opacity"
+                    aria-label={t.auth.showPassword}
+                    tabIndex={-1}
+                  >
+                    <EyeIcon open={showPassword} />
+                  </button>
+                </div>
+                {/* Password strength indicator */}
+                {password && passwordStrength && (
+                  <div className="mt-2">
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full rounded-full transition-all duration-300 ${strengthConfig[passwordStrength].color} ${strengthConfig[passwordStrength].width}`}
+                        />
+                      </div>
+                      <span
+                        className={`text-xs font-medium ${
+                          passwordStrength === "weak"
+                            ? "text-red-600"
+                            : passwordStrength === "medium"
+                            ? "text-yellow-600"
+                            : "text-green-600"
+                        }`}
+                      >
+                        {strengthConfig[passwordStrength].label}
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
 
+              {/* Confirm Password */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t.auth.confirmPassword}</label>
-                <input
-                  type="password"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
-                  placeholder="********"
-                  required
-                />
+                <label htmlFor="signup-confirm-password" className="block text-sm font-medium text-gray-700 mb-1">
+                  {t.auth.confirmPassword}
+                </label>
+                <div className="relative">
+                  <input
+                    id="signup-confirm-password"
+                    type={showConfirmPassword ? "text" : "password"}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    onBlur={() => markTouched("confirmPassword")}
+                    aria-label={t.auth.confirmPassword}
+                    aria-invalid={!!confirmPasswordError}
+                    aria-describedby={confirmPasswordError ? "confirm-password-error" : undefined}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all pr-12 ${
+                      confirmPasswordError ? "border-red-400" : "border-gray-300"
+                    }`}
+                    placeholder="********"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute inset-y-0 right-0 flex items-center pr-3 hover:opacity-75 transition-opacity"
+                    aria-label={t.auth.showPassword}
+                    tabIndex={-1}
+                  >
+                    <EyeIcon open={showConfirmPassword} />
+                  </button>
+                </div>
+                {confirmPasswordError && (
+                  <p id="confirm-password-error" className="mt-1 text-sm text-red-600" role="alert">
+                    {confirmPasswordError}
+                  </p>
+                )}
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-all active:scale-[0.98]"
+                disabled={!isFormValid}
+                className={`w-full py-3 rounded-lg font-semibold transition-all active:scale-[0.98] ${
+                  isFormValid
+                    ? "bg-indigo-600 text-white hover:bg-indigo-700"
+                    : "bg-indigo-300 text-white cursor-not-allowed"
+                }`}
               >
                 {t.auth.signUp}
               </button>

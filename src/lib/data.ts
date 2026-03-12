@@ -17,6 +17,17 @@ export type Chapter = {
   lessons: Lesson[];
 };
 
+export type Instructor = {
+  id: string;
+  name: string;
+  avatar: string;
+  bio: { fr: string; en: string; ar: string };
+  expertise: Subject;
+  courseCount: number;
+  studentCount: number;
+  rating: number;
+};
+
 export type Course = {
   id: string;
   subject: Subject;
@@ -29,6 +40,7 @@ export type Course = {
     avatar: string;
     bio: { fr: string; en: string; ar: string };
   };
+  instructorId: string;
   totalLessons: number;
   totalHours: number;
   studentCount: number;
@@ -47,6 +59,65 @@ export const subjectIcons: Record<Subject, string> = {
   physics: "\u269B",
   biology: "\u{1F9EC}",
 };
+
+export const instructors: Instructor[] = [
+  {
+    id: "karim-benali",
+    name: "Pr. Karim Benali",
+    avatar: "KB",
+    bio: {
+      fr: "Professeur de mathématiques avec 15 ans d'expérience dans l'enseignement au collège et au lycée. Passionné par la pédagogie et les nouvelles méthodes d'apprentissage, il rend les mathématiques accessibles à tous.",
+      en: "Mathematics teacher with 15 years of experience teaching middle and high school. Passionate about pedagogy and new learning methods, he makes mathematics accessible to everyone.",
+      ar: "أستاذ رياضيات بخبرة 15 سنة في التدريس بالمتوسط والثانوي. شغوف بالبيداغوجيا وطرق التعلم الحديثة، يجعل الرياضيات في متناول الجميع.",
+    },
+    expertise: "math",
+    courseCount: 2,
+    studentCount: 4230,
+    rating: 4.8,
+  },
+  {
+    id: "youssef-elmahdi",
+    name: "Pr. Youssef El Mahdi",
+    avatar: "YM",
+    bio: {
+      fr: "Agrégé de mathématiques et ancien élève de l'École Normale Supérieure. Spécialiste en analyse et en algèbre avancée, il prépare les élèves aux concours et examens avec rigueur et clarté.",
+      en: "Mathematics professor with an agrégation degree and former student of the École Normale Supérieure. Specialist in analysis and advanced algebra, he prepares students for competitions and exams with rigor and clarity.",
+      ar: "أستاذ رياضيات حاصل على شهادة التبريز وخريج المدرسة العليا للأساتذة. متخصص في التحليل والجبر المتقدم، يحضر الطلاب للمسابقات والامتحانات بدقة ووضوح.",
+    },
+    expertise: "math",
+    courseCount: 1,
+    studentCount: 1890,
+    rating: 4.7,
+  },
+  {
+    id: "amina-tazi",
+    name: "Dr. Amina Tazi",
+    avatar: "AT",
+    bio: {
+      fr: "Docteure en physique de l'Université Mohammed V, avec 10 ans d'enseignement. Spécialisée en mécanique et électricité, elle utilise des expériences pratiques pour illustrer les concepts théoriques.",
+      en: "PhD in Physics from Mohammed V University, with 10 years of teaching experience. Specialized in mechanics and electricity, she uses practical experiments to illustrate theoretical concepts.",
+      ar: "دكتورة في الفيزياء من جامعة محمد الخامس، بخبرة 10 سنوات في التدريس. متخصصة في الميكانيكا والكهرباء، تستخدم التجارب العملية لتوضيح المفاهيم النظرية.",
+    },
+    expertise: "physics",
+    courseCount: 2,
+    studentCount: 4680,
+    rating: 4.9,
+  },
+  {
+    id: "fatima-zahra",
+    name: "Pr. Fatima Zahra",
+    avatar: "FZ",
+    bio: {
+      fr: "Professeure de biologie passionnée par la pédagogie et la vulgarisation scientifique. Avec 12 ans d'expérience, elle rend la biologie vivante grâce à des cours interactifs et des illustrations détaillées.",
+      en: "Biology teacher passionate about pedagogy and science communication. With 12 years of experience, she brings biology to life through interactive lessons and detailed illustrations.",
+      ar: "أستاذة أحياء شغوفة بالبيداغوجيا والتبسيط العلمي. بخبرة 12 سنة، تجعل الأحياء حية من خلال دروس تفاعلية ورسوم توضيحية مفصلة.",
+    },
+    expertise: "biology",
+    courseCount: 2,
+    studentCount: 4230,
+    rating: 4.8,
+  },
+];
 
 export const courses: Course[] = [
   {
@@ -73,6 +144,7 @@ export const courses: Course[] = [
         ar: "\u0623\u0633\u062A\u0627\u0630 \u0631\u064A\u0627\u0636\u064A\u0627\u062A \u0628\u062E\u0628\u0631\u0629 15 \u0633\u0646\u0629",
       },
     },
+    instructorId: "karim-benali",
     totalLessons: 12,
     totalHours: 8,
     studentCount: 2340,
@@ -201,6 +273,7 @@ export const courses: Course[] = [
         ar: "\u0623\u0633\u062A\u0627\u0630 \u0631\u064A\u0627\u0636\u064A\u0627\u062A \u0628\u062E\u0628\u0631\u0629 15 \u0633\u0646\u0629",
       },
     },
+    instructorId: "youssef-elmahdi",
     totalLessons: 10,
     totalHours: 7,
     studentCount: 1890,
@@ -273,6 +346,7 @@ export const courses: Course[] = [
         ar: "\u062F\u0643\u062A\u0648\u0631\u0629 \u0641\u064A \u0627\u0644\u0641\u064A\u0632\u064A\u0627\u0621\u060C 10 \u0633\u0646\u0648\u0627\u062A \u062A\u062F\u0631\u064A\u0633",
       },
     },
+    instructorId: "amina-tazi",
     totalLessons: 15,
     totalHours: 10,
     studentCount: 3120,
@@ -386,6 +460,7 @@ export const courses: Course[] = [
         ar: "\u062F\u0643\u062A\u0648\u0631\u0629 \u0641\u064A \u0627\u0644\u0641\u064A\u0632\u064A\u0627\u0621\u060C 10 \u0633\u0646\u0648\u0627\u062A \u062A\u062F\u0631\u064A\u0633",
       },
     },
+    instructorId: "amina-tazi",
     totalLessons: 8,
     totalHours: 5,
     studentCount: 1560,
@@ -458,6 +533,7 @@ export const courses: Course[] = [
         ar: "\u0623\u0633\u062A\u0627\u0630\u0629 \u0623\u062D\u064A\u0627\u0621\u060C \u0634\u063A\u0648\u0641\u0629 \u0628\u0627\u0644\u0628\u064A\u062F\u0627\u063A\u0648\u062C\u064A\u0627",
       },
     },
+    instructorId: "fatima-zahra",
     totalLessons: 10,
     totalHours: 6,
     studentCount: 2780,
@@ -530,6 +606,7 @@ export const courses: Course[] = [
         ar: "\u0623\u0633\u062A\u0627\u0630\u0629 \u0623\u062D\u064A\u0627\u0621\u060C \u0634\u063A\u0648\u0641\u0629 \u0628\u0627\u0644\u0628\u064A\u062F\u0627\u063A\u0648\u062C\u064A\u0627",
       },
     },
+    instructorId: "fatima-zahra",
     totalLessons: 12,
     totalHours: 8,
     studentCount: 1450,
@@ -600,4 +677,12 @@ export function getLesson(courseId: string, lessonId: string) {
 
 export function getAllLessons(course: Course): Lesson[] {
   return course.chapters.flatMap((ch) => ch.lessons);
+}
+
+export function getInstructor(id: string): Instructor | undefined {
+  return instructors.find((i) => i.id === id);
+}
+
+export function getCoursesByInstructor(instructorId: string): Course[] {
+  return courses.filter((c) => c.instructorId === instructorId);
 }

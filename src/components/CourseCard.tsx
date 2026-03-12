@@ -13,7 +13,7 @@ export function CourseCard({ course }: { course: Course }) {
   const levelName = t.levels[course.level];
 
   return (
-    <Link href={`/course/${course.id}`} className="group">
+    <Link href={`/course/${course.id}`} className="group" aria-label={course.title[locale]}>
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
         {/* Thumbnail */}
         <div className={`${colors.accent} h-40 flex items-center justify-center relative`}>

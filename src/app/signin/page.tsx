@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { useLocale } from "@/lib/locale-context";
 import { useProgress } from "@/lib/progress-context";
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function SignInPage() {
   const { t } = useLocale();
@@ -13,6 +15,19 @@ export default function SignInPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+  function markTouched(field: string) {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+  }
+
+  const emailError = useMemo(() => {
+    if (!touched.email || !email) return "";
+    if (!EMAIL_REGEX.test(email)) return t.auth.emailInvalid;
+    return "";
+  }, [email, touched.email, t.auth.emailInvalid]);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -22,6 +37,19 @@ export default function SignInPage() {
       router.push("/");
     }
   }
+
+  const EyeIcon = ({ open }: { open: boolean }) =>
+    open ? (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+      </svg>
+    ) : (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 012.31-3.814M6.938 6.937A9.966 9.966 0 0112 5c4.478 0 8.268 2.943 9.542 7a9.969 9.969 0 01-4.043 5.063M15 12a3 3 0 01-6 0" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 3l18 18" />
+      </svg>
+    );
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -37,32 +65,75 @@ export default function SignInPage() {
               <h1 className="text-2xl font-bold text-gray-900">{t.auth.signIn}</h1>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+              {/* Email */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t.auth.email}</label>
+                <label htmlFor="signin-email" className="block text-sm font-medium text-gray-700 mb-1">
+                  {t.auth.email}
+                </label>
                 <input
+                  id="signin-email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+                  onBlur={() => markTouched("email")}
+                  aria-label={t.auth.email}
+                  aria-invalid={!!emailError}
+                  aria-describedby={emailError ? "signin-email-error" : undefined}
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all ${
+                    emailError ? "border-red-400" : "border-gray-300"
+                  }`}
                   placeholder="email@example.com"
                   required
                 />
+                {emailError && (
+                  <p id="signin-email-error" className="mt-1 text-sm text-red-600" role="alert">
+                    {emailError}
+                  </p>
+                )}
               </div>
 
+              {/* Password */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t.auth.password}</label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
-                  placeholder="********"
-                  required
-                />
+                <label htmlFor="signin-password" className="block text-sm font-medium text-gray-700 mb-1">
+                  {t.auth.password}
+                </label>
+                <div className="relative">
+                  <input
+                    id="signin-password"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    aria-label={t.auth.password}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all pr-12"
+                    placeholder="********"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 flex items-center pr-3 hover:opacity-75 transition-opacity"
+                    aria-label={t.auth.showPassword}
+                    tabIndex={-1}
+                  >
+                    <EyeIcon open={showPassword} />
+                  </button>
+                </div>
               </div>
 
-              <div className="text-right">
+              {/* Remember me + Forgot password row */}
+              <div className="flex items-center justify-between">
+                <label htmlFor="remember-me" className="flex items-center gap-2 cursor-pointer select-none">
+                  <input
+                    id="remember-me"
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    aria-label={t.auth.rememberMe}
+                  />
+                  <span className="text-sm text-gray-600">{t.auth.rememberMe}</span>
+                </label>
                 <button type="button" className="text-sm text-indigo-600 hover:text-indigo-700 font-medium">
                   {t.auth.forgotPassword}
                 </button>

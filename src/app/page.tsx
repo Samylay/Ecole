@@ -60,6 +60,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
+      <main id="main-content">
 
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 text-white relative overflow-hidden">
@@ -205,6 +206,25 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* How It Works */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 text-center mb-12">{t.home.howItWorks}</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {t.home.howItWorksSteps.map((step, i) => (
+            <div key={i} className="relative text-center animate-fade-in-up" style={{ animationDelay: `${i * 0.15}s`, animationFillMode: "both" }}>
+              <div className="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-lg font-bold">
+                {i + 1}
+              </div>
+              {i < t.home.howItWorksSteps.length - 1 && (
+                <div className="hidden md:block absolute top-6 left-[calc(50%+2rem)] w-[calc(100%-4rem)] h-0.5 bg-indigo-200" />
+              )}
+              <h3 className="font-semibold text-gray-900 mb-2">{step.title}</h3>
+              <p className="text-sm text-gray-500 leading-relaxed max-w-xs mx-auto">{step.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Testimonials */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-900 text-center mb-12">{t.home.testimonials}</h2>
@@ -247,6 +267,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      </main>
       <Footer />
     </div>
   );

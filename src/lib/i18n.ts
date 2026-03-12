@@ -25,6 +25,7 @@ type TranslationKeys = {
     signUp: string;
     signOut: string;
     search: string;
+    instructors: string;
   };
   home: {
     hero: {
@@ -38,6 +39,8 @@ type TranslationKeys = {
     whyUs: string;
     whyUsItems: { title: string; desc: string }[];
     testimonials: string;
+    howItWorks: string;
+    howItWorksSteps: { title: string; desc: string }[];
     stats: {
       students: string;
       courses: string;
@@ -131,6 +134,8 @@ type TranslationKeys = {
     passwordsNoMatch: string;
     emailInvalid: string;
     required: string;
+    showPassword: string;
+    rememberMe: string;
   };
   dashboard: {
     title: string;
@@ -169,6 +174,16 @@ type TranslationKeys = {
     lessonCompleted: string;
     welcomeBack: string;
   };
+  instructor: {
+    title: string;
+    bio: string;
+    courses: string;
+    students: string;
+    rating: string;
+    viewProfile: string;
+    expertise: string;
+    allInstructors: string;
+  };
 };
 
 const translations: Record<Locale, TranslationKeys> = {
@@ -182,6 +197,7 @@ const translations: Record<Locale, TranslationKeys> = {
       signUp: "Inscription",
       signOut: "Déconnexion",
       search: "Rechercher des cours...",
+      instructors: "Enseignants",
     },
     home: {
       hero: {
@@ -201,6 +217,12 @@ const translations: Record<Locale, TranslationKeys> = {
         { title: "Suivi de progression", desc: "Suivez votre avancement en temps réel" },
       ],
       testimonials: "Ce que disent nos étudiants",
+      howItWorks: "Comment ça marche ?",
+      howItWorksSteps: [
+        { title: "Inscrivez-vous", desc: "Créez votre compte gratuitement en quelques secondes" },
+        { title: "Choisissez un cours", desc: "Explorez notre catalogue et inscrivez-vous au cours de votre choix" },
+        { title: "Apprenez à votre rythme", desc: "Suivez les vidéos, complétez les quiz et téléchargez les documents" },
+      ],
       stats: {
         students: "Étudiants",
         courses: "Cours",
@@ -294,6 +316,8 @@ const translations: Record<Locale, TranslationKeys> = {
       passwordsNoMatch: "Les mots de passe ne correspondent pas",
       emailInvalid: "Email invalide",
       required: "Ce champ est requis",
+      showPassword: "Afficher le mot de passe",
+      rememberMe: "Se souvenir de moi",
     },
     dashboard: {
       title: "Tableau de bord",
@@ -332,6 +356,16 @@ const translations: Record<Locale, TranslationKeys> = {
       lessonCompleted: "Leçon terminée !",
       welcomeBack: "Bon retour",
     },
+    instructor: {
+      title: "Nos enseignants",
+      bio: "Biographie",
+      courses: "Cours",
+      students: "Étudiants",
+      rating: "Évaluation",
+      viewProfile: "Voir le profil",
+      expertise: "Expertise",
+      allInstructors: "Tous les enseignants",
+    },
   },
   en: {
     nav: {
@@ -343,6 +377,7 @@ const translations: Record<Locale, TranslationKeys> = {
       signUp: "Sign Up",
       signOut: "Sign Out",
       search: "Search courses...",
+      instructors: "Instructors",
     },
     home: {
       hero: {
@@ -362,6 +397,12 @@ const translations: Record<Locale, TranslationKeys> = {
         { title: "Progress tracking", desc: "Track your advancement in real-time" },
       ],
       testimonials: "What our students say",
+      howItWorks: "How it works",
+      howItWorksSteps: [
+        { title: "Sign up", desc: "Create your free account in seconds" },
+        { title: "Choose a course", desc: "Browse our catalog and enroll in the course of your choice" },
+        { title: "Learn at your pace", desc: "Watch videos, complete quizzes, and download materials" },
+      ],
       stats: {
         students: "Students",
         courses: "Courses",
@@ -455,6 +496,8 @@ const translations: Record<Locale, TranslationKeys> = {
       passwordsNoMatch: "Passwords do not match",
       emailInvalid: "Invalid email",
       required: "This field is required",
+      showPassword: "Show password",
+      rememberMe: "Remember me",
     },
     dashboard: {
       title: "Dashboard",
@@ -493,6 +536,16 @@ const translations: Record<Locale, TranslationKeys> = {
       lessonCompleted: "Lesson completed!",
       welcomeBack: "Welcome back",
     },
+    instructor: {
+      title: "Our Instructors",
+      bio: "Biography",
+      courses: "Courses",
+      students: "Students",
+      rating: "Rating",
+      viewProfile: "View Profile",
+      expertise: "Expertise",
+      allInstructors: "All Instructors",
+    },
   },
   ar: {
     nav: {
@@ -504,6 +557,7 @@ const translations: Record<Locale, TranslationKeys> = {
       signUp: "إنشاء حساب",
       signOut: "تسجيل الخروج",
       search: "ابحث عن دروس...",
+      instructors: "الأساتذة",
     },
     home: {
       hero: {
@@ -523,6 +577,12 @@ const translations: Record<Locale, TranslationKeys> = {
         { title: "تتبع التقدم", desc: "تابع تقدمك في الوقت الحقيقي" },
       ],
       testimonials: "ماذا يقول طلابنا",
+      howItWorks: "كيف يعمل؟",
+      howItWorksSteps: [
+        { title: "سجّل حسابك", desc: "أنشئ حسابك المجاني في ثوانٍ" },
+        { title: "اختر دورة", desc: "تصفح كتالوجنا وسجّل في الدورة التي تختارها" },
+        { title: "تعلّم بوتيرتك", desc: "شاهد الفيديوهات، أكمل الاختبارات وحمّل المستندات" },
+      ],
       stats: {
         students: "طلاب",
         courses: "دروس",
@@ -616,6 +676,8 @@ const translations: Record<Locale, TranslationKeys> = {
       passwordsNoMatch: "كلمات المرور غير متطابقة",
       emailInvalid: "بريد إلكتروني غير صالح",
       required: "هذا الحقل مطلوب",
+      showPassword: "إظهار كلمة المرور",
+      rememberMe: "تذكرني",
     },
     dashboard: {
       title: "لوحة التحكم",
@@ -653,6 +715,16 @@ const translations: Record<Locale, TranslationKeys> = {
       enrollSuccess: "تم التسجيل بنجاح!",
       lessonCompleted: "تم إكمال الحصة!",
       welcomeBack: "مرحباً بعودتك",
+    },
+    instructor: {
+      title: "أساتذتنا",
+      bio: "السيرة الذاتية",
+      courses: "الدورات",
+      students: "الطلاب",
+      rating: "التقييم",
+      viewProfile: "عرض الملف الشخصي",
+      expertise: "التخصص",
+      allInstructors: "جميع الأساتذة",
     },
   },
 };

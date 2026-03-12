@@ -27,7 +27,9 @@ export function Navbar() {
   }, []);
 
   return (
-    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <>
+    <a href="#main-content" className="skip-to-content">Skip to content</a>
+    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50" aria-label="Main navigation">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center gap-4">
           {/* Logo */}
@@ -53,6 +55,9 @@ export function Navbar() {
             </Link>
             <Link href="/my-courses" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors text-sm">
               {t.nav.myCourses}
+            </Link>
+            <Link href="/instructors" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors text-sm">
+              {t.nav.instructors}
             </Link>
           </div>
 
@@ -161,6 +166,9 @@ export function Navbar() {
             <Link href="/my-courses" className="block py-2 text-gray-600 font-medium" onClick={() => setMobileOpen(false)}>
               {t.nav.myCourses}
             </Link>
+            <Link href="/instructors" className="block py-2 text-gray-600 font-medium" onClick={() => setMobileOpen(false)}>
+              {t.nav.instructors}
+            </Link>
             <hr className="my-2" />
             <div className="flex gap-2">
               {locales.map((l: Locale) => (
@@ -207,5 +215,6 @@ export function Navbar() {
         </div>
       )}
     </nav>
+    </>
   );
 }

@@ -25,6 +25,8 @@ export function Footer() {
           <div>
             <h3 className="text-white font-semibold mb-4">Layaida</h3>
             <ul className="space-y-2">
+              <li><Link href="/courses" className="hover:text-white transition-colors">{t.nav.courses}</Link></li>
+              <li><Link href="/instructors" className="hover:text-white transition-colors">{t.nav.instructors}</Link></li>
               <li><Link href="/" className="hover:text-white transition-colors">{t.footer.about}</Link></li>
               <li><Link href="/" className="hover:text-white transition-colors">{t.footer.contact}</Link></li>
             </ul>

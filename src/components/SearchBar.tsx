@@ -33,28 +33,35 @@ export function SearchBar() {
   }, []);
 
   return (
-    <div ref={ref} className="relative w-full max-w-md">
+    <div ref={ref} className="relative w-full max-w-md" role="search">
       <div className="relative">
         <svg
           className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
+          aria-hidden="true"
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
         <input
-          type="text"
+          type="search"
           value={query}
           onChange={(e) => { setQuery(e.target.value); setOpen(true); }}
           onFocus={() => setOpen(true)}
           placeholder={t.nav.search}
+          aria-label={t.nav.search}
+          role="combobox"
+          aria-expanded={open && query.length >= 2}
+          aria-controls="search-results"
+          aria-autocomplete="list"
           className="w-full pl-10 pr-4 py-2 bg-gray-100 border border-transparent rounded-lg text-sm focus:bg-white focus:border-indigo-300 focus:ring-2 focus:ring-indigo-100 outline-none transition-all"
         />
         {query && (
           <button
             onClick={() => { setQuery(""); setOpen(false); }}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            aria-label="Clear search"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -65,7 +72,7 @@ export function SearchBar() {
 
       {/* Results Dropdown */}
       {open && query.length >= 2 && (
-        <div className="absolute top-full mt-2 w-full bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden animate-scale-in">
+        <div id="search-results" role="listbox" className="absolute top-full mt-2 w-full bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden animate-scale-in">
           {results.length > 0 ? (
             <div className="max-h-80 overflow-y-auto">
               {results.map((course) => (
