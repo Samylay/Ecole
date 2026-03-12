@@ -19,7 +19,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
 
   if (!course) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="flex flex-col min-h-screen bg-gray-50">
         <Navbar />
         <div className="max-w-7xl mx-auto px-4 py-20 text-center">
           <h1 className="text-2xl font-bold text-gray-900">{t.course.notFound}</h1>
@@ -38,7 +38,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
   const relatedCourses = getCoursesBySubject(course.subject).filter((c) => c.id !== courseId).slice(0, 3);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-gray-50">
       <Navbar />
 
       {/* Breadcrumb */}

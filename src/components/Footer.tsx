@@ -27,8 +27,8 @@ export function Footer() {
             <ul className="space-y-2">
               <li><Link href="/courses" className="hover:text-white transition-colors">{t.nav.courses}</Link></li>
               <li><Link href="/instructors" className="hover:text-white transition-colors">{t.nav.instructors}</Link></li>
-              <li><Link href="/" className="hover:text-white transition-colors">{t.footer.about}</Link></li>
-              <li><Link href="/" className="hover:text-white transition-colors">{t.footer.contact}</Link></li>
+              <li><Link href="/about" className="hover:text-white transition-colors">{t.footer.about}</Link></li>
+              <li><Link href="/faq" className="hover:text-white transition-colors">FAQ</Link></li>
             </ul>
           </div>
 
@@ -37,6 +37,7 @@ export function Footer() {
             <ul className="space-y-2">
               <li><Link href="/" className="hover:text-white transition-colors">{t.footer.terms}</Link></li>
               <li><Link href="/" className="hover:text-white transition-colors">{t.footer.privacy}</Link></li>
+              <li><Link href="/" className="hover:text-white transition-colors">{t.footer.contact}</Link></li>
             </ul>
           </div>
         </div>

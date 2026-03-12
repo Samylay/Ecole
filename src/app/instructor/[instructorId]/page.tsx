@@ -15,14 +15,17 @@ export default function InstructorPage({ params }: { params: Promise<{ instructo
 
   if (!instructor) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="flex flex-col min-h-screen bg-gray-50">
         <Navbar />
-        <div className="max-w-7xl mx-auto px-4 py-20 text-center">
-          <h1 className="text-2xl font-bold text-gray-900">{t.course.notFound}</h1>
-          <Link href="/instructors" className="text-indigo-600 mt-4 inline-block">
-            {t.instructor.allInstructors}
-          </Link>
+        <div className="flex-grow flex items-center justify-center px-4 py-20">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-900">{t.course.notFound}</h1>
+            <Link href="/instructors" className="text-indigo-600 mt-4 inline-block">
+              {t.instructor.allInstructors}
+            </Link>
+          </div>
         </div>
+        <Footer />
       </div>
     );
   }
@@ -33,7 +36,7 @@ export default function InstructorPage({ params }: { params: Promise<{ instructo
   const subjectName = t.subjects[instructor.expertise];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-gray-50">
       <Navbar />
 
       {/* Breadcrumb */}

@@ -19,7 +19,7 @@ const featureIcons = [
 
 const testimonials = [
   {
-    name: "Yasmine B.",
+    name: "Alice W.",
     role: { fr: "Lycéenne, Terminale", en: "High School Senior", ar: "طالبة ثانوية" },
     text: {
       fr: "Grâce à Layaida, j'ai amélioré ma moyenne en maths de 4 points. Les vidéos sont claires et les quiz m'aident à retenir.",
@@ -29,7 +29,7 @@ const testimonials = [
     rating: 5,
   },
   {
-    name: "Mehdi K.",
+    name: "Tom K.",
     role: { fr: "Collégien, 3ème", en: "Middle Schooler", ar: "طالب متوسط" },
     text: {
       fr: "La physique me semblait impossible avant. Maintenant je comprends les lois de Newton et j'ai eu 16/20 au dernier contrôle !",
@@ -39,12 +39,42 @@ const testimonials = [
     rating: 5,
   },
   {
-    name: "Sara M.",
+    name: "Sarah M.",
     role: { fr: "Lycéenne, Première", en: "High School Junior", ar: "طالبة ثانوية" },
     text: {
       fr: "J'adore le fait que les cours soient en 3 langues. Je peux étudier en arabe et vérifier ma compréhension en français.",
       en: "I love that courses are in 3 languages. I can study in Arabic and verify my understanding in French.",
       ar: "أحب أن الدروس بثلاث لغات. أستطيع الدراسة بالعربية والتحقق من فهمي بالفرنسية.",
+    },
+    rating: 4,
+  },
+  {
+    name: "Mike R.",
+    role: { fr: "Lycéen, Terminale", en: "High School Senior", ar: "طالب ثانوي" },
+    text: {
+      fr: "Les exercices interactifs m'ont permis de mieux comprendre la biologie. Je me sens beaucoup plus confiant pour mes examens.",
+      en: "The interactive exercises helped me understand biology much better. I feel so much more confident for my exams.",
+      ar: "التمارين التفاعلية ساعدتني على فهم البيولوجيا بشكل أفضل. أشعر بثقة أكبر بكثير لامتحاناتي.",
+    },
+    rating: 5,
+  },
+  {
+    name: "Lisa T.",
+    role: { fr: "Collégienne, 4ème", en: "Middle Schooler", ar: "طالبة متوسط" },
+    text: {
+      fr: "Cette plateforme a changé ma façon d'étudier. Les cours sont bien structurés et je peux apprendre à mon propre rythme.",
+      en: "This platform changed the way I study. The courses are well structured and I can learn at my own pace.",
+      ar: "غيّرت هذه المنصة طريقتي في الدراسة. الدروس منظمة جيداً وأستطيع التعلم بالسرعة التي تناسبني.",
+    },
+    rating: 5,
+  },
+  {
+    name: "David H.",
+    role: { fr: "Lycéen, Première", en: "High School Junior", ar: "طالب ثانوي" },
+    text: {
+      fr: "Les professeurs expliquent vraiment bien. J'ai enfin réussi à comprendre les maths grâce aux vidéos détaillées.",
+      en: "The teachers explain things really well. I finally managed to understand math thanks to the detailed videos.",
+      ar: "المعلمون يشرحون بشكل ممتاز. أخيراً تمكنت من فهم الرياضيات بفضل الفيديوهات المفصلة.",
     },
     rating: 4,
   },
@@ -58,9 +88,9 @@ export default function HomePage() {
     activeSubject === "all" ? courses : courses.filter((c) => c.subject === activeSubject);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-gray-50">
       <Navbar />
-      <main id="main-content">
+      <main id="main-content" className="flex-grow">
 
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 text-white relative overflow-hidden">

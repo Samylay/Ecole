@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 import { useLocale } from "@/lib/locale-context";
 import { useProgress } from "@/lib/progress-context";
 
@@ -96,10 +97,10 @@ export default function SignUpPage() {
     );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-gray-50">
       <Navbar />
 
-      <div className="flex items-center justify-center px-4 py-16">
+      <div className="flex-grow flex items-center justify-center px-4 py-16">
         <div className="w-full max-w-md animate-fade-in-up">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
             <div className="text-center mb-8">
@@ -299,6 +300,7 @@ export default function SignUpPage() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

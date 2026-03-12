@@ -10,8 +10,9 @@ export default function InstructorsPage() {
   const { t } = useLocale();
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-gray-50">
       <Navbar />
+      <main id="main-content" className="flex-grow">
 
       {/* Breadcrumb */}
       <div className="bg-white border-b border-gray-200">
@@ -107,6 +108,7 @@ export default function InstructorsPage() {
           })}
         </div>
       </section>
+      </main>
 
       <Footer />
     </div>

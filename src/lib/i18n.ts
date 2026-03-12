@@ -26,6 +26,8 @@ type TranslationKeys = {
     signOut: string;
     search: string;
     instructors: string;
+    faq: string;
+    about: string;
   };
   home: {
     hero: {
@@ -184,6 +186,29 @@ type TranslationKeys = {
     expertise: string;
     allInstructors: string;
   };
+  faq: {
+    title: string;
+    subtitle: string;
+    items: { q: string; a: string }[];
+    cta: string;
+    ctaDesc: string;
+    ctaButton: string;
+  };
+  about: {
+    title: string;
+    subtitle: string;
+    mission: string;
+    missionDesc: string;
+    values: { title: string; desc: string }[];
+    valuesTitle: string;
+    team: string;
+    teamDesc: string;
+    teamRoles: { role: string; desc: string }[];
+    cta: string;
+    ctaDesc: string;
+    ctaButton: string;
+    statsTitle: string;
+  };
 };
 
 const translations: Record<Locale, TranslationKeys> = {
@@ -198,6 +223,8 @@ const translations: Record<Locale, TranslationKeys> = {
       signOut: "Déconnexion",
       search: "Rechercher des cours...",
       instructors: "Enseignants",
+      faq: "FAQ",
+      about: "À propos",
     },
     home: {
       hero: {
@@ -366,6 +393,50 @@ const translations: Record<Locale, TranslationKeys> = {
       expertise: "Expertise",
       allInstructors: "Tous les enseignants",
     },
+    faq: {
+      title: "Questions fréquemment posées",
+      subtitle: "Trouvez les réponses aux questions les plus courantes sur Layaida",
+      items: [
+        { q: "Comment s'inscrire sur Layaida ?", a: "L'inscription est simple et rapide. Cliquez sur le bouton \"Inscription\" en haut de la page, remplissez le formulaire avec votre nom, email et mot de passe, et votre compte sera créé instantanément. Vous pouvez aussi vous inscrire avec votre compte Google." },
+        { q: "Est-ce que Layaida est gratuit ?", a: "Oui, Layaida est entièrement gratuit ! Tous les cours, vidéos, quiz et documents sont accessibles sans aucun frais. Notre mission est de rendre l'éducation de qualité accessible à tous." },
+        { q: "Quelles matières sont disponibles ?", a: "Nous proposons actuellement des cours en mathématiques, physique et biologie pour les niveaux collège et lycée. Chaque matière comprend des cours structurés avec des vidéos, des exercices pratiques et des documents à télécharger." },
+        { q: "Comment suivre ma progression ?", a: "Votre tableau de bord personnel affiche votre progression en temps réel. Vous pouvez voir les leçons terminées, le temps d'étude accumulé, votre série d'étude quotidienne et votre progression globale pour chaque cours." },
+        { q: "Puis-je étudier en plusieurs langues ?", a: "Absolument ! Layaida est une plateforme multilingue. Vous pouvez basculer entre le français, l'anglais et l'arabe à tout moment grâce au sélecteur de langue dans la barre de navigation." },
+        { q: "Y a-t-il des certificats ?", a: "Oui, vous recevez un certificat de réussite lorsque vous terminez un cours. Ce certificat atteste de votre achèvement du programme et peut être téléchargé en format PDF." },
+        { q: "Comment contacter le support ?", a: "Vous pouvez nous contacter via la page de contact accessible depuis le pied de page. Notre équipe de support répond généralement dans les 24 heures. Vous pouvez aussi nous écrire directement par email." },
+        { q: "À quelle fréquence de nouveaux cours sont-ils ajoutés ?", a: "Nous ajoutons régulièrement de nouveaux cours et mettons à jour le contenu existant. Notre équipe pédagogique travaille continuellement pour enrichir notre catalogue avec des cours pertinents et de qualité." },
+        { q: "Puis-je télécharger les supports de cours ?", a: "Oui, chaque cours propose des documents PDF que vous pouvez télécharger et consulter hors ligne. Ces documents incluent des résumés de cours, des exercices supplémentaires et des fiches de révision." },
+        { q: "Quels appareils sont supportés ?", a: "Layaida est accessible depuis n'importe quel appareil disposant d'un navigateur web : ordinateurs, tablettes et smartphones. La plateforme est entièrement responsive et s'adapte à toutes les tailles d'écran." },
+      ],
+      cta: "Vous avez d'autres questions ?",
+      ctaDesc: "Rejoignez Layaida dès maintenant et commencez votre parcours d'apprentissage gratuitement.",
+      ctaButton: "Commencer gratuitement",
+    },
+    about: {
+      title: "À propos de Layaida",
+      subtitle: "Découvrez notre mission et nos valeurs",
+      mission: "Notre Mission",
+      missionDesc: "Layaida a pour mission de démocratiser l'accès à une éducation de qualité pour tous les élèves du collège et du lycée. Nous croyons que chaque étudiant mérite des ressources pédagogiques excellentes, accessibles gratuitement et dans sa langue maternelle. Notre plateforme offre des cours structurés, des vidéos explicatives, des quiz interactifs et des documents téléchargeables pour accompagner chaque élève vers la réussite scolaire.",
+      valuesTitle: "Nos Valeurs",
+      values: [
+        { title: "Accessibilité", desc: "L'éducation de qualité doit être accessible à tous, partout et à tout moment, sans barrière financière ni géographique." },
+        { title: "Qualité", desc: "Nos cours sont conçus par des enseignants expérimentés et respectent les programmes scolaires officiels pour garantir un apprentissage efficace." },
+        { title: "Multilinguisme", desc: "Nous proposons nos contenus en français, anglais et arabe pour servir une communauté d'apprenants diverse et multiculturelle." },
+        { title: "Innovation", desc: "Nous utilisons les dernières technologies éducatives pour offrir une expérience d'apprentissage interactive, engageante et personnalisée." },
+      ],
+      team: "Notre Équipe",
+      teamDesc: "Layaida est portée par une équipe passionnée de professionnels dédiés à l'éducation et à la technologie.",
+      teamRoles: [
+        { role: "Fondateurs & Direction", desc: "Visionnaires passionnés par l'éducation accessible, ils guident la stratégie et la croissance de la plateforme." },
+        { role: "Équipe Pédagogique", desc: "Enseignants expérimentés qui conçoivent, révisent et enrichissent les cours pour garantir la qualité du contenu." },
+        { role: "Développeurs", desc: "Ingénieurs talentueux qui construisent et améliorent la plateforme pour offrir la meilleure expérience utilisateur." },
+        { role: "Support & Communauté", desc: "Équipe dédiée à l'accompagnement des étudiants et à l'animation de la communauté Layaida." },
+      ],
+      cta: "Rejoignez l'aventure Layaida",
+      ctaDesc: "Commencez votre parcours d'apprentissage dès aujourd'hui et rejoignez des milliers d'étudiants qui réussissent avec Layaida.",
+      ctaButton: "S'inscrire gratuitement",
+      statsTitle: "Layaida en chiffres",
+    },
   },
   en: {
     nav: {
@@ -378,6 +449,8 @@ const translations: Record<Locale, TranslationKeys> = {
       signOut: "Sign Out",
       search: "Search courses...",
       instructors: "Instructors",
+      faq: "FAQ",
+      about: "About",
     },
     home: {
       hero: {
@@ -546,6 +619,50 @@ const translations: Record<Locale, TranslationKeys> = {
       expertise: "Expertise",
       allInstructors: "All Instructors",
     },
+    faq: {
+      title: "Frequently Asked Questions",
+      subtitle: "Find answers to the most common questions about Layaida",
+      items: [
+        { q: "How do I sign up for Layaida?", a: "Signing up is quick and easy. Click the \"Sign Up\" button at the top of the page, fill in the form with your name, email, and password, and your account will be created instantly. You can also sign up using your Google account." },
+        { q: "Is Layaida free?", a: "Yes, Layaida is completely free! All courses, videos, quizzes, and documents are accessible at no cost. Our mission is to make quality education accessible to everyone." },
+        { q: "What subjects are available?", a: "We currently offer courses in mathematics, physics, and biology for middle and high school levels. Each subject includes structured courses with videos, practical exercises, and downloadable documents." },
+        { q: "How can I track my progress?", a: "Your personal dashboard displays your progress in real-time. You can see completed lessons, accumulated study time, your daily study streak, and your overall progress for each course." },
+        { q: "Can I study in multiple languages?", a: "Absolutely! Layaida is a multilingual platform. You can switch between French, English, and Arabic at any time using the language selector in the navigation bar." },
+        { q: "Are there certificates?", a: "Yes, you receive a certificate of completion when you finish a course. This certificate confirms your completion of the program and can be downloaded as a PDF." },
+        { q: "How do I contact support?", a: "You can reach us through the contact page accessible from the footer. Our support team typically responds within 24 hours. You can also write to us directly by email." },
+        { q: "How often are new courses added?", a: "We regularly add new courses and update existing content. Our educational team works continuously to enrich our catalog with relevant, high-quality courses." },
+        { q: "Can I download course materials?", a: "Yes, each course offers PDF documents that you can download and view offline. These documents include course summaries, additional exercises, and revision sheets." },
+        { q: "What devices are supported?", a: "Layaida is accessible from any device with a web browser: computers, tablets, and smartphones. The platform is fully responsive and adapts to all screen sizes." },
+      ],
+      cta: "Still have questions?",
+      ctaDesc: "Join Layaida now and start your learning journey for free.",
+      ctaButton: "Get started for free",
+    },
+    about: {
+      title: "About Layaida",
+      subtitle: "Discover our mission and values",
+      mission: "Our Mission",
+      missionDesc: "Layaida's mission is to democratize access to quality education for all middle and high school students. We believe every student deserves excellent educational resources, freely accessible and in their native language. Our platform offers structured courses, explanatory videos, interactive quizzes, and downloadable documents to support every student on their path to academic success.",
+      valuesTitle: "Our Values",
+      values: [
+        { title: "Accessibility", desc: "Quality education should be accessible to everyone, everywhere, and at any time, without financial or geographical barriers." },
+        { title: "Quality", desc: "Our courses are designed by experienced teachers and follow official school curricula to ensure effective learning." },
+        { title: "Multilingualism", desc: "We offer our content in French, English, and Arabic to serve a diverse and multicultural community of learners." },
+        { title: "Innovation", desc: "We use the latest educational technologies to deliver an interactive, engaging, and personalized learning experience." },
+      ],
+      team: "Our Team",
+      teamDesc: "Layaida is driven by a passionate team of professionals dedicated to education and technology.",
+      teamRoles: [
+        { role: "Founders & Leadership", desc: "Visionaries passionate about accessible education, guiding the platform's strategy and growth." },
+        { role: "Educational Team", desc: "Experienced teachers who design, review, and enrich courses to ensure content quality." },
+        { role: "Developers", desc: "Talented engineers who build and improve the platform to deliver the best user experience." },
+        { role: "Support & Community", desc: "A dedicated team supporting students and nurturing the Layaida community." },
+      ],
+      cta: "Join the Layaida adventure",
+      ctaDesc: "Start your learning journey today and join thousands of students succeeding with Layaida.",
+      ctaButton: "Sign up for free",
+      statsTitle: "Layaida in numbers",
+    },
   },
   ar: {
     nav: {
@@ -558,6 +675,8 @@ const translations: Record<Locale, TranslationKeys> = {
       signOut: "تسجيل الخروج",
       search: "ابحث عن دروس...",
       instructors: "الأساتذة",
+      faq: "الأسئلة الشائعة",
+      about: "حول",
     },
     home: {
       hero: {
@@ -725,6 +844,50 @@ const translations: Record<Locale, TranslationKeys> = {
       viewProfile: "عرض الملف الشخصي",
       expertise: "التخصص",
       allInstructors: "جميع الأساتذة",
+    },
+    faq: {
+      title: "الأسئلة الشائعة",
+      subtitle: "اعثر على إجابات للأسئلة الأكثر شيوعاً حول لعيدة",
+      items: [
+        { q: "كيف أسجل في لعيدة؟", a: "التسجيل سهل وسريع. انقر على زر \"إنشاء حساب\" في أعلى الصفحة، واملأ النموذج باسمك وبريدك الإلكتروني وكلمة المرور، وسيتم إنشاء حسابك فوراً. يمكنك أيضاً التسجيل باستخدام حساب جوجل الخاص بك." },
+        { q: "هل لعيدة مجانية؟", a: "نعم، لعيدة مجانية بالكامل! جميع الدروس والفيديوهات والاختبارات والوثائق متاحة بدون أي تكلفة. مهمتنا هي جعل التعليم الجيد متاحاً للجميع." },
+        { q: "ما هي المواد المتاحة؟", a: "نقدم حالياً دروساً في الرياضيات والفيزياء والأحياء لمستويات المتوسط والثانوي. تتضمن كل مادة دروساً منظمة مع فيديوهات وتمارين عملية ووثائق قابلة للتحميل." },
+        { q: "كيف أتابع تقدمي؟", a: "تعرض لوحة التحكم الشخصية تقدمك في الوقت الحقيقي. يمكنك رؤية الدروس المكتملة ووقت الدراسة المتراكم وسلسلة دراستك اليومية وتقدمك العام في كل دورة." },
+        { q: "هل يمكنني الدراسة بعدة لغات؟", a: "بالتأكيد! لعيدة منصة متعددة اللغات. يمكنك التبديل بين الفرنسية والإنجليزية والعربية في أي وقت باستخدام محدد اللغة في شريط التنقل." },
+        { q: "هل توجد شهادات؟", a: "نعم، تحصل على شهادة إتمام عند إنهاء دورة. تؤكد هذه الشهادة إكمالك للبرنامج ويمكن تحميلها بصيغة PDF." },
+        { q: "كيف أتواصل مع الدعم؟", a: "يمكنك التواصل معنا عبر صفحة الاتصال المتاحة من أسفل الصفحة. يستجيب فريق الدعم عادة خلال 24 ساعة. يمكنك أيضاً مراسلتنا مباشرة عبر البريد الإلكتروني." },
+        { q: "كم مرة تُضاف دورات جديدة؟", a: "نضيف بانتظام دورات جديدة ونحدث المحتوى الحالي. يعمل فريقنا التعليمي باستمرار لإثراء كتالوجنا بدورات ذات جودة عالية وذات صلة." },
+        { q: "هل يمكنني تحميل مواد الدورة؟", a: "نعم، تقدم كل دورة وثائق PDF يمكنك تحميلها والاطلاع عليها بدون اتصال. تتضمن هذه الوثائق ملخصات الدروس وتمارين إضافية وأوراق مراجعة." },
+        { q: "ما الأجهزة المدعومة؟", a: "لعيدة متاحة من أي جهاز يحتوي على متصفح ويب: حواسيب، أجهزة لوحية وهواتف ذكية. المنصة متجاوبة بالكامل وتتكيف مع جميع أحجام الشاشات." },
+      ],
+      cta: "لديك أسئلة أخرى؟",
+      ctaDesc: "انضم إلى لعيدة الآن وابدأ رحلة التعلم مجاناً.",
+      ctaButton: "ابدأ مجاناً",
+    },
+    about: {
+      title: "حول لعيدة",
+      subtitle: "اكتشف مهمتنا وقيمنا",
+      mission: "مهمتنا",
+      missionDesc: "تتمثل مهمة لعيدة في تسهيل الوصول إلى تعليم جيد لجميع طلاب المتوسط والثانوي. نؤمن بأن كل طالب يستحق موارد تعليمية ممتازة، متاحة مجاناً وبلغته الأم. توفر منصتنا دروساً منظمة وفيديوهات توضيحية واختبارات تفاعلية ووثائق قابلة للتحميل لمرافقة كل طالب نحو النجاح الدراسي.",
+      valuesTitle: "قيمنا",
+      values: [
+        { title: "إمكانية الوصول", desc: "يجب أن يكون التعليم الجيد متاحاً للجميع، في كل مكان وفي أي وقت، بدون حواجز مالية أو جغرافية." },
+        { title: "الجودة", desc: "صُممت دروسنا من قبل معلمين ذوي خبرة وتتبع المناهج الدراسية الرسمية لضمان تعلم فعّال." },
+        { title: "تعدد اللغات", desc: "نقدم محتوانا بالفرنسية والإنجليزية والعربية لخدمة مجتمع متنوع ومتعدد الثقافات من المتعلمين." },
+        { title: "الابتكار", desc: "نستخدم أحدث التقنيات التعليمية لتقديم تجربة تعلم تفاعلية وجذابة وشخصية." },
+      ],
+      team: "فريقنا",
+      teamDesc: "يقود لعيدة فريق شغوف من المحترفين المكرسين للتعليم والتكنولوجيا.",
+      teamRoles: [
+        { role: "المؤسسون والإدارة", desc: "أصحاب رؤية شغوفون بالتعليم المتاح، يوجهون استراتيجية ونمو المنصة." },
+        { role: "الفريق التعليمي", desc: "معلمون ذوو خبرة يصممون ويراجعون ويثرون الدروس لضمان جودة المحتوى." },
+        { role: "المطورون", desc: "مهندسون موهوبون يبنون ويحسنون المنصة لتقديم أفضل تجربة مستخدم." },
+        { role: "الدعم والمجتمع", desc: "فريق مخصص لدعم الطلاب وتنشيط مجتمع لعيدة." },
+      ],
+      cta: "انضم إلى مغامرة لعيدة",
+      ctaDesc: "ابدأ رحلة التعلم اليوم وانضم إلى آلاف الطلاب الذين ينجحون مع لعيدة.",
+      ctaButton: "سجل مجاناً",
+      statsTitle: "لعيدة بالأرقام",
     },
   },
 };
