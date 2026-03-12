@@ -1,18 +1,34 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { useLocale } from "@/lib/locale-context";
+import { useProgress } from "@/lib/progress-context";
 
 export default function SignUpPage() {
   const { t } = useLocale();
+  const { login } = useProgress();
+  const router = useRouter();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (name && email && password) {
+      login(name, email);
+      router.push("/");
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
 
       <div className="flex items-center justify-center px-4 py-16">
-        <div className="w-full max-w-md">
+        <div className="w-full max-w-md animate-fade-in-up">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
             <div className="text-center mb-8">
               <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center mx-auto mb-4">
@@ -21,12 +37,15 @@ export default function SignUpPage() {
               <h1 className="text-2xl font-bold text-gray-900">{t.auth.signUp}</h1>
             </div>
 
-            <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">{t.auth.fullName}</label>
                 <input
                   type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+                  required
                 />
               </div>
 
@@ -34,8 +53,11 @@ export default function SignUpPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">{t.auth.email}</label>
                 <input
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
                   placeholder="email@example.com"
+                  required
                 />
               </div>
 
@@ -43,8 +65,11 @@ export default function SignUpPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">{t.auth.password}</label>
                 <input
                   type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
                   placeholder="********"
+                  required
                 />
               </div>
 
@@ -54,12 +79,13 @@ export default function SignUpPage() {
                   type="password"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
                   placeholder="********"
+                  required
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
+                className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-all active:scale-[0.98]"
               >
                 {t.auth.signUp}
               </button>
@@ -75,7 +101,10 @@ export default function SignUpPage() {
                 </div>
               </div>
 
-              <button className="mt-4 w-full flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-3 hover:bg-gray-50 transition-colors">
+              <button
+                onClick={() => { login("Google User", "user@gmail.com"); router.push("/"); }}
+                className="mt-4 w-full flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-3 hover:bg-gray-50 transition-colors"
+              >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
                   <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />

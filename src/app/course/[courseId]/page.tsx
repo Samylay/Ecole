@@ -5,14 +5,15 @@ import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { useLocale } from "@/lib/locale-context";
+import { useProgress } from "@/lib/progress-context";
 import { getCourse, subjectColors, subjectIcons, getAllLessons } from "@/lib/data";
-import { useState } from "react";
 
 export default function CoursePage({ params }: { params: Promise<{ courseId: string }> }) {
   const { courseId } = use(params);
   const { locale, t } = useLocale();
-  const [enrolled, setEnrolled] = useState(false);
+  const { enroll, isEnrolled, isLessonCompleted, getCompletedLessonCount } = useProgress();
   const course = getCourse(courseId);
+  const enrolled = isEnrolled(courseId);
 
   if (!course) {
     return (
@@ -28,16 +29,38 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
 
   const colors = subjectColors[course.subject];
   const allLessons = getAllLessons(course);
+  const completedCount = getCompletedLessonCount(courseId);
+  const progressPercent = allLessons.length > 0 ? Math.round((completedCount / allLessons.length) * 100) : 0;
+
+  // Find the next uncompleted lesson
+  const nextLesson = allLessons.find((l) => !isLessonCompleted(courseId, l.id)) || allLessons[0];
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
 
+      {/* Breadcrumb */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <nav className="flex items-center gap-2 text-sm text-gray-500">
+            <Link href="/" className="hover:text-indigo-600 transition-colors">{t.nav.home}</Link>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+            <Link href="/#courses" className="hover:text-indigo-600 transition-colors">{t.subjects[course.subject]}</Link>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+            <span className="text-gray-900 font-medium truncate">{course.title[locale]}</span>
+          </nav>
+        </div>
+      </div>
+
       {/* Course Header */}
       <section className={`${colors.accent} text-white`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex flex-col lg:flex-row gap-8">
-            <div className="flex-1">
+            <div className="flex-1 animate-fade-in-up">
               <div className="flex items-center gap-2 mb-4">
                 <span className="bg-white/20 text-sm px-3 py-1 rounded-full">
                   {subjectIcons[course.subject]} {t.subjects[course.subject]}
@@ -82,29 +105,49 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
             </div>
 
             {/* Enroll Card */}
-            <div className="lg:w-80">
+            <div className="lg:w-80 animate-scale-in">
               <div className="bg-white rounded-xl p-6 text-gray-900 shadow-lg">
                 {enrolled ? (
                   <>
-                    <div className="text-center mb-4">
-                      <span className="inline-flex items-center gap-2 text-green-600 font-semibold">
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        {t.course.enrolled}
-                      </span>
+                    {/* Progress */}
+                    <div className="mb-4">
+                      <div className="flex items-center justify-between text-sm mb-2">
+                        <span className="text-gray-500">{t.course.progress}</span>
+                        <span className="font-semibold text-indigo-600">{progressPercent}%</span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2.5">
+                        <div
+                          className="bg-indigo-600 h-2.5 rounded-full progress-bar"
+                          style={{ width: `${progressPercent}%` }}
+                        />
+                      </div>
+                      <p className="text-xs text-gray-400 mt-1">
+                        {completedCount}/{allLessons.length} {t.course.lessons}
+                      </p>
                     </div>
+
+                    {progressPercent === 100 ? (
+                      <div className="text-center py-2 mb-3">
+                        <span className="inline-flex items-center gap-2 text-green-600 font-semibold text-lg">
+                          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          {t.course.completed} !
+                        </span>
+                      </div>
+                    ) : null}
+
                     <Link
-                      href={`/course/${course.id}/lesson/${allLessons[0]?.id}`}
+                      href={`/course/${course.id}/lesson/${nextLesson?.id}`}
                       className="block w-full text-center bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
                     >
-                      {t.course.startLearning}
+                      {completedCount > 0 ? t.course.continueLearning : t.course.startLearning}
                     </Link>
                   </>
                 ) : (
                   <button
-                    onClick={() => setEnrolled(true)}
-                    className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
+                    onClick={() => enroll(courseId)}
+                    className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-all active:scale-[0.98]"
                   >
                     {t.course.enrollFree}
                   </button>
@@ -134,7 +177,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
         <h2 className="text-2xl font-bold text-gray-900 mb-6">{t.course.curriculum}</h2>
         <div className="space-y-4">
           {course.chapters.map((chapter, chIdx) => (
-            <div key={chapter.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div key={chapter.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden animate-fade-in-up" style={{ animationDelay: `${chIdx * 0.1}s`, animationFillMode: "both" }}>
               <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
                 <h3 className="font-semibold text-gray-900">
                   {chIdx + 1}. {chapter.title[locale]}
@@ -144,35 +187,50 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                 </p>
               </div>
               <div className="divide-y divide-gray-100">
-                {chapter.lessons.map((lesson, lIdx) => (
-                  <Link
-                    key={lesson.id}
-                    href={enrolled ? `/course/${course.id}/lesson/${lesson.id}` : "#"}
-                    className={`flex items-center gap-4 px-6 py-4 ${enrolled ? "hover:bg-gray-50 cursor-pointer" : "opacity-75 cursor-default"} transition-colors`}
-                    onClick={(e) => { if (!enrolled) e.preventDefault(); }}
-                  >
-                    <div className="w-8 h-8 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center text-sm font-medium flex-shrink-0">
-                      {lIdx + 1}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium text-gray-900 truncate">{lesson.title[locale]}</p>
-                      <p className="text-sm text-gray-500 truncate">{lesson.description[locale]}</p>
-                    </div>
-                    <div className="flex items-center gap-3 text-sm text-gray-400 flex-shrink-0">
-                      {lesson.documents && lesson.documents.length > 0 && (
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                      )}
-                      <span>{lesson.duration}</span>
-                      {!enrolled && (
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                        </svg>
-                      )}
-                    </div>
-                  </Link>
-                ))}
+                {chapter.lessons.map((lesson, lIdx) => {
+                  const lessonDone = isLessonCompleted(courseId, lesson.id);
+                  return (
+                    <Link
+                      key={lesson.id}
+                      href={enrolled ? `/course/${course.id}/lesson/${lesson.id}` : "#"}
+                      className={`flex items-center gap-4 px-6 py-4 ${enrolled ? "hover:bg-gray-50 cursor-pointer" : "opacity-75 cursor-default"} transition-colors group`}
+                      onClick={(e) => { if (!enrolled) e.preventDefault(); }}
+                    >
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium flex-shrink-0 transition-colors ${
+                        lessonDone
+                          ? "bg-green-100 text-green-600"
+                          : "bg-indigo-50 text-indigo-600 group-hover:bg-indigo-100"
+                      }`}>
+                        {lessonDone ? (
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                        ) : (
+                          lIdx + 1
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className={`font-medium truncate ${lessonDone ? "text-green-700" : "text-gray-900"}`}>
+                          {lesson.title[locale]}
+                        </p>
+                        <p className="text-sm text-gray-500 truncate">{lesson.description[locale]}</p>
+                      </div>
+                      <div className="flex items-center gap-3 text-sm text-gray-400 flex-shrink-0">
+                        {lesson.documents && lesson.documents.length > 0 && (
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                        )}
+                        <span>{lesson.duration}</span>
+                        {!enrolled && (
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                          </svg>
+                        )}
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           ))}
