@@ -8,6 +8,7 @@ import { useProgress } from "@/lib/progress-context";
 import { getLesson, getAllLessons } from "@/lib/data";
 import { getQuiz } from "@/lib/quiz-data";
 import { QuizComponent } from "@/components/QuizComponent";
+import { LessonNotes } from "@/components/LessonNotes";
 
 export default function LessonPage({
   params,
@@ -27,8 +28,8 @@ export default function LessonPage({
       <div className="min-h-screen bg-gray-50">
         <Navbar />
         <div className="max-w-7xl mx-auto px-4 py-20 text-center">
-          <h1 className="text-2xl font-bold text-gray-900">Lesson not found</h1>
-          <Link href="/" className="text-indigo-600 mt-4 inline-block">Go home</Link>
+          <h1 className="text-2xl font-bold text-gray-900">{t.lesson.notFound}</h1>
+          <Link href="/" className="text-indigo-600 mt-4 inline-block">{t.course.goHome}</Link>
         </div>
       </div>
     );
@@ -150,6 +151,9 @@ export default function LessonPage({
                   </div>
                 </div>
               )}
+
+              {/* Notes */}
+              <LessonNotes courseId={courseId} lessonId={lessonId} />
 
               {/* Quiz */}
               {quiz && <QuizComponent quiz={quiz} />}

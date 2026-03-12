@@ -105,10 +105,10 @@ export function Navbar() {
                       {t.nav.myCourses}
                     </Link>
                     <Link href="/dashboard" onClick={() => setUserMenuOpen(false)} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                      Dashboard
+                      {t.nav.dashboard}
                     </Link>
                     <button onClick={() => { logout(); setUserMenuOpen(false); }} className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">
-                      {locale === "ar" ? "تسجيل الخروج" : locale === "fr" ? "Déconnexion" : "Sign Out"}
+                      {t.nav.signOut}
                     </button>
                   </div>
                 )}
@@ -186,7 +186,7 @@ export function Navbar() {
                   </div>
                 </div>
                 <button onClick={() => { logout(); setMobileOpen(false); }} className="block w-full text-left py-2 text-red-600 font-medium">
-                  {locale === "ar" ? "تسجيل الخروج" : locale === "fr" ? "Déconnexion" : "Sign Out"}
+                  {t.nav.signOut}
                 </button>
               </>
             ) : (

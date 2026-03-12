@@ -6,12 +6,14 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { useLocale } from "@/lib/locale-context";
 import { useProgress } from "@/lib/progress-context";
-import { getCourse, subjectColors, subjectIcons, getAllLessons } from "@/lib/data";
+import { getCourse, subjectColors, subjectIcons, getAllLessons, getCoursesBySubject } from "@/lib/data";
+import { ReviewSection } from "@/components/ReviewSection";
+import { Certificate } from "@/components/Certificate";
 
 export default function CoursePage({ params }: { params: Promise<{ courseId: string }> }) {
   const { courseId } = use(params);
   const { locale, t } = useLocale();
-  const { enroll, isEnrolled, isLessonCompleted, getCompletedLessonCount } = useProgress();
+  const { user, enroll, isEnrolled, isLessonCompleted, getCompletedLessonCount } = useProgress();
   const course = getCourse(courseId);
   const enrolled = isEnrolled(courseId);
 
@@ -20,8 +22,8 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
       <div className="min-h-screen bg-gray-50">
         <Navbar />
         <div className="max-w-7xl mx-auto px-4 py-20 text-center">
-          <h1 className="text-2xl font-bold text-gray-900">Course not found</h1>
-          <Link href="/" className="text-indigo-600 mt-4 inline-block">Go home</Link>
+          <h1 className="text-2xl font-bold text-gray-900">{t.course.notFound}</h1>
+          <Link href="/" className="text-indigo-600 mt-4 inline-block">{t.course.goHome}</Link>
         </div>
       </div>
     );
@@ -32,8 +34,8 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
   const completedCount = getCompletedLessonCount(courseId);
   const progressPercent = allLessons.length > 0 ? Math.round((completedCount / allLessons.length) * 100) : 0;
 
-  // Find the next uncompleted lesson
   const nextLesson = allLessons.find((l) => !isLessonCompleted(courseId, l.id)) || allLessons[0];
+  const relatedCourses = getCoursesBySubject(course.subject).filter((c) => c.id !== courseId).slice(0, 3);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -236,6 +238,41 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
           ))}
         </div>
       </section>
+
+      {/* Certificate */}
+      {enrolled && progressPercent === 100 && user.isLoggedIn && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+          <Certificate
+            courseName={course.title[locale]}
+            studentName={user.name}
+            completionDate={new Date().toLocaleDateString(locale === "ar" ? "ar-SA" : locale === "fr" ? "fr-FR" : "en-US")}
+            courseId={course.id}
+          />
+        </section>
+      )}
+
+      {/* Reviews */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <ReviewSection />
+      </section>
+
+      {/* Related Courses */}
+      {relatedCourses.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">{t.course.relatedCourses}</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {relatedCourses.map((rc) => (
+              <Link key={rc.id} href={`/course/${rc.id}`} className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md transition-all hover:-translate-y-0.5">
+                <div className={`${subjectColors[rc.subject].accent} h-24 rounded-lg flex items-center justify-center text-3xl text-white/30 mb-3`}>
+                  {subjectIcons[rc.subject]}
+                </div>
+                <h3 className="font-semibold text-gray-900 text-sm">{rc.title[locale]}</h3>
+                <p className="text-xs text-gray-500 mt-1">{rc.instructor.name}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       <Footer />
     </div>

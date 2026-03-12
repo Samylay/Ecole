@@ -6,7 +6,7 @@ import { useLocale } from "@/lib/locale-context";
 import { courses, subjectIcons } from "@/lib/data";
 
 export function SearchBar() {
-  const { locale } = useLocale();
+  const { locale, t } = useLocale();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -48,7 +48,7 @@ export function SearchBar() {
           value={query}
           onChange={(e) => { setQuery(e.target.value); setOpen(true); }}
           onFocus={() => setOpen(true)}
-          placeholder={locale === "ar" ? "ابحث عن دروس..." : locale === "fr" ? "Rechercher des cours..." : "Search courses..."}
+          placeholder={t.nav.search}
           className="w-full pl-10 pr-4 py-2 bg-gray-100 border border-transparent rounded-lg text-sm focus:bg-white focus:border-indigo-300 focus:ring-2 focus:ring-indigo-100 outline-none transition-all"
         />
         {query && (
@@ -85,7 +85,7 @@ export function SearchBar() {
             </div>
           ) : (
             <div className="px-4 py-6 text-center text-sm text-gray-500">
-              {locale === "ar" ? "لا توجد نتائج" : locale === "fr" ? "Aucun résultat" : "No results found"}
+              {t.courses.noResults}
             </div>
           )}
         </div>

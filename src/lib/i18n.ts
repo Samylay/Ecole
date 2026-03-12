@@ -4,9 +4,9 @@ export const locales: Locale[] = ["fr", "en", "ar"];
 export const defaultLocale: Locale = "fr";
 
 export const localeNames: Record<Locale, string> = {
-  fr: "Fran\u00e7ais",
+  fr: "Français",
   en: "English",
-  ar: "\u0627\u0644\u0639\u0631\u0628\u064A\u0629",
+  ar: "العربية",
 };
 
 export const localeDirection: Record<Locale, "ltr" | "rtl"> = {
@@ -20,8 +20,11 @@ type TranslationKeys = {
     home: string;
     courses: string;
     myCourses: string;
+    dashboard: string;
     signIn: string;
     signUp: string;
+    signOut: string;
+    search: string;
   };
   home: {
     hero: {
@@ -32,12 +35,29 @@ type TranslationKeys = {
     subjects: string;
     popularCourses: string;
     viewAll: string;
+    whyUs: string;
+    whyUsItems: { title: string; desc: string }[];
+    testimonials: string;
     stats: {
       students: string;
       courses: string;
       lessons: string;
       teachers: string;
     };
+  };
+  courses: {
+    title: string;
+    subtitle: string;
+    allSubjects: string;
+    allLevels: string;
+    sortBy: string;
+    popular: string;
+    newest: string;
+    rating: string;
+    showing: string;
+    results: string;
+    noResults: string;
+    noResultsDesc: string;
   };
   course: {
     lessons: string;
@@ -55,6 +75,18 @@ type TranslationKeys = {
     completed: string;
     documents: string;
     downloadPdf: string;
+    reviews: string;
+    writeReview: string;
+    submitReview: string;
+    reviewPlaceholder: string;
+    relatedCourses: string;
+    prerequisites: string;
+    whatYouLearn: string;
+    notFound: string;
+    goHome: string;
+    certificate: string;
+    certificateDesc: string;
+    downloadCertificate: string;
   };
   lesson: {
     next: string;
@@ -63,6 +95,11 @@ type TranslationKeys = {
     markedComplete: string;
     resources: string;
     backToCourse: string;
+    notes: string;
+    notesPlaceholder: string;
+    saveNote: string;
+    noteSaved: string;
+    notFound: string;
   };
   subjects: {
     math: string;
@@ -88,6 +125,27 @@ type TranslationKeys = {
     hasAccount: string;
     orContinueWith: string;
     google: string;
+    passwordWeak: string;
+    passwordMedium: string;
+    passwordStrong: string;
+    passwordsNoMatch: string;
+    emailInvalid: string;
+    required: string;
+  };
+  dashboard: {
+    title: string;
+    welcome: string;
+    overview: string;
+    enrolledCourses: string;
+    lessonsCompleted: string;
+    timeSpent: string;
+    streak: string;
+    days: string;
+    overallProgress: string;
+    continueLearning: string;
+    noActivity: string;
+    exploreCourses: string;
+    recentActivity: string;
   };
   footer: {
     about: string;
@@ -95,6 +153,21 @@ type TranslationKeys = {
     terms: string;
     privacy: string;
     tagline: string;
+  };
+  common: {
+    loading: string;
+    error: string;
+    retry: string;
+    cancel: string;
+    save: string;
+    delete: string;
+    edit: string;
+    close: string;
+    back: string;
+    of: string;
+    enrollSuccess: string;
+    lessonCompleted: string;
+    welcomeBack: string;
   };
 };
 
@@ -104,30 +177,55 @@ const translations: Record<Locale, TranslationKeys> = {
       home: "Accueil",
       courses: "Cours",
       myCourses: "Mes Cours",
+      dashboard: "Tableau de bord",
       signIn: "Connexion",
       signUp: "Inscription",
+      signOut: "Déconnexion",
+      search: "Rechercher des cours...",
     },
     home: {
       hero: {
-        title: "Apprends mieux, r\u00e9ussis plus",
+        title: "Apprends mieux, réussis plus",
         subtitle:
-          "Des cours de qualit\u00e9 en maths, physique et biologie pour le coll\u00e8ge et le lyc\u00e9e. Vid\u00e9os, exercices et documents pour r\u00e9ussir tes examens.",
+          "Des cours de qualité en maths, physique et biologie pour le collège et le lycée. Vidéos, exercices et documents pour réussir tes examens.",
         cta: "Explorer les cours",
       },
-      subjects: "Mati\u00e8res",
+      subjects: "Matières",
       popularCourses: "Cours populaires",
       viewAll: "Voir tout",
+      whyUs: "Pourquoi Layaida ?",
+      whyUsItems: [
+        { title: "Cours structurés", desc: "Programme organisé par chapitre avec progression claire" },
+        { title: "Quiz interactifs", desc: "Testez vos connaissances après chaque leçon" },
+        { title: "Multilingue", desc: "Contenu disponible en français, anglais et arabe" },
+        { title: "Suivi de progression", desc: "Suivez votre avancement en temps réel" },
+      ],
+      testimonials: "Ce que disent nos étudiants",
       stats: {
-        students: "\u00c9tudiants",
+        students: "Étudiants",
         courses: "Cours",
-        lessons: "Le\u00e7ons",
+        lessons: "Leçons",
         teachers: "Enseignants",
       },
     },
+    courses: {
+      title: "Tous les cours",
+      subtitle: "Explorez notre catalogue de cours pour le collège et le lycée",
+      allSubjects: "Toutes les matières",
+      allLevels: "Tous les niveaux",
+      sortBy: "Trier par",
+      popular: "Populaire",
+      newest: "Récent",
+      rating: "Note",
+      showing: "Affichage de",
+      results: "résultats",
+      noResults: "Aucun cours trouvé",
+      noResultsDesc: "Essayez de modifier vos filtres",
+    },
     course: {
-      lessons: "le\u00e7ons",
+      lessons: "leçons",
       hours: "heures",
-      students: "\u00e9tudiants",
+      students: "étudiants",
       level: "Niveau",
       instructor: "Enseignant",
       description: "Description",
@@ -137,29 +235,46 @@ const translations: Record<Locale, TranslationKeys> = {
       startLearning: "Commencer",
       continueLearning: "Continuer",
       progress: "Progression",
-      completed: "Termin\u00e9",
+      completed: "Terminé",
       documents: "Documents",
-      downloadPdf: "T\u00e9l\u00e9charger PDF",
+      downloadPdf: "Télécharger PDF",
+      reviews: "Avis",
+      writeReview: "Écrire un avis",
+      submitReview: "Publier",
+      reviewPlaceholder: "Partagez votre expérience avec ce cours...",
+      relatedCourses: "Cours similaires",
+      prerequisites: "Prérequis",
+      whatYouLearn: "Ce que vous apprendrez",
+      notFound: "Cours introuvable",
+      goHome: "Retour à l'accueil",
+      certificate: "Certificat de réussite",
+      certificateDesc: "Félicitations ! Vous avez terminé ce cours.",
+      downloadCertificate: "Télécharger le certificat",
     },
     lesson: {
       next: "Suivant",
-      previous: "Pr\u00e9c\u00e9dent",
-      markComplete: "Marquer comme termin\u00e9",
-      markedComplete: "Termin\u00e9 \u2713",
+      previous: "Précédent",
+      markComplete: "Marquer comme terminé",
+      markedComplete: "Terminé ✓",
       resources: "Ressources",
       backToCourse: "Retour au cours",
+      notes: "Mes notes",
+      notesPlaceholder: "Prenez des notes pour cette leçon...",
+      saveNote: "Enregistrer",
+      noteSaved: "Note enregistrée",
+      notFound: "Leçon introuvable",
     },
     subjects: {
-      math: "Math\u00e9matiques",
+      math: "Mathématiques",
       physics: "Physique",
       biology: "Biologie",
     },
     levels: {
-      middle: "Coll\u00e8ge",
-      high: "Lyc\u00e9e",
-      beginner: "D\u00e9butant",
-      intermediate: "Interm\u00e9diaire",
-      advanced: "Avanc\u00e9",
+      middle: "Collège",
+      high: "Lycée",
+      beginner: "Débutant",
+      intermediate: "Intermédiaire",
+      advanced: "Avancé",
     },
     auth: {
       signIn: "Connexion",
@@ -168,18 +283,54 @@ const translations: Record<Locale, TranslationKeys> = {
       password: "Mot de passe",
       confirmPassword: "Confirmer le mot de passe",
       fullName: "Nom complet",
-      forgotPassword: "Mot de passe oubli\u00e9 ?",
+      forgotPassword: "Mot de passe oublié ?",
       noAccount: "Pas encore de compte ?",
-      hasAccount: "D\u00e9j\u00e0 un compte ?",
+      hasAccount: "Déjà un compte ?",
       orContinueWith: "Ou continuer avec",
       google: "Google",
+      passwordWeak: "Faible",
+      passwordMedium: "Moyen",
+      passwordStrong: "Fort",
+      passwordsNoMatch: "Les mots de passe ne correspondent pas",
+      emailInvalid: "Email invalide",
+      required: "Ce champ est requis",
+    },
+    dashboard: {
+      title: "Tableau de bord",
+      welcome: "Bienvenue",
+      overview: "Aperçu",
+      enrolledCourses: "Cours inscrits",
+      lessonsCompleted: "Leçons terminées",
+      timeSpent: "Temps d'étude",
+      streak: "Série d'étude",
+      days: "jours",
+      overallProgress: "Progression globale",
+      continueLearning: "Continuer l'apprentissage",
+      noActivity: "Commencez à apprendre pour voir votre progression !",
+      exploreCourses: "Explorer les cours",
+      recentActivity: "Activité récente",
     },
     footer: {
-      about: "\u00c0 propos",
+      about: "À propos",
       contact: "Contact",
       terms: "Conditions",
-      privacy: "Confidentialit\u00e9",
-      tagline: "La plateforme d'apprentissage pour r\u00e9ussir",
+      privacy: "Confidentialité",
+      tagline: "La plateforme d'apprentissage pour réussir",
+    },
+    common: {
+      loading: "Chargement...",
+      error: "Une erreur est survenue",
+      retry: "Réessayer",
+      cancel: "Annuler",
+      save: "Enregistrer",
+      delete: "Supprimer",
+      edit: "Modifier",
+      close: "Fermer",
+      back: "Retour",
+      of: "sur",
+      enrollSuccess: "Inscription réussie !",
+      lessonCompleted: "Leçon terminée !",
+      welcomeBack: "Bon retour",
     },
   },
   en: {
@@ -187,8 +338,11 @@ const translations: Record<Locale, TranslationKeys> = {
       home: "Home",
       courses: "Courses",
       myCourses: "My Courses",
+      dashboard: "Dashboard",
       signIn: "Sign In",
       signUp: "Sign Up",
+      signOut: "Sign Out",
+      search: "Search courses...",
     },
     home: {
       hero: {
@@ -200,12 +354,34 @@ const translations: Record<Locale, TranslationKeys> = {
       subjects: "Subjects",
       popularCourses: "Popular Courses",
       viewAll: "View all",
+      whyUs: "Why Layaida?",
+      whyUsItems: [
+        { title: "Structured courses", desc: "Organized curriculum with clear progression" },
+        { title: "Interactive quizzes", desc: "Test your knowledge after each lesson" },
+        { title: "Multilingual", desc: "Content available in French, English, and Arabic" },
+        { title: "Progress tracking", desc: "Track your advancement in real-time" },
+      ],
+      testimonials: "What our students say",
       stats: {
         students: "Students",
         courses: "Courses",
         lessons: "Lessons",
         teachers: "Teachers",
       },
+    },
+    courses: {
+      title: "All Courses",
+      subtitle: "Explore our course catalog for middle and high school",
+      allSubjects: "All subjects",
+      allLevels: "All levels",
+      sortBy: "Sort by",
+      popular: "Popular",
+      newest: "Newest",
+      rating: "Rating",
+      showing: "Showing",
+      results: "results",
+      noResults: "No courses found",
+      noResultsDesc: "Try adjusting your filters",
     },
     course: {
       lessons: "lessons",
@@ -223,14 +399,31 @@ const translations: Record<Locale, TranslationKeys> = {
       completed: "Completed",
       documents: "Documents",
       downloadPdf: "Download PDF",
+      reviews: "Reviews",
+      writeReview: "Write a review",
+      submitReview: "Submit",
+      reviewPlaceholder: "Share your experience with this course...",
+      relatedCourses: "Related courses",
+      prerequisites: "Prerequisites",
+      whatYouLearn: "What you'll learn",
+      notFound: "Course not found",
+      goHome: "Go home",
+      certificate: "Certificate of completion",
+      certificateDesc: "Congratulations! You have completed this course.",
+      downloadCertificate: "Download certificate",
     },
     lesson: {
       next: "Next",
       previous: "Previous",
       markComplete: "Mark as complete",
-      markedComplete: "Completed \u2713",
+      markedComplete: "Completed ✓",
       resources: "Resources",
       backToCourse: "Back to course",
+      notes: "My notes",
+      notesPlaceholder: "Take notes for this lesson...",
+      saveNote: "Save",
+      noteSaved: "Note saved",
+      notFound: "Lesson not found",
     },
     subjects: {
       math: "Mathematics",
@@ -256,6 +449,27 @@ const translations: Record<Locale, TranslationKeys> = {
       hasAccount: "Already have an account?",
       orContinueWith: "Or continue with",
       google: "Google",
+      passwordWeak: "Weak",
+      passwordMedium: "Medium",
+      passwordStrong: "Strong",
+      passwordsNoMatch: "Passwords do not match",
+      emailInvalid: "Invalid email",
+      required: "This field is required",
+    },
+    dashboard: {
+      title: "Dashboard",
+      welcome: "Welcome",
+      overview: "Overview",
+      enrolledCourses: "Enrolled Courses",
+      lessonsCompleted: "Lessons Completed",
+      timeSpent: "Study Time",
+      streak: "Study Streak",
+      days: "days",
+      overallProgress: "Overall Progress",
+      continueLearning: "Continue Learning",
+      noActivity: "Start learning to see your progress here!",
+      exploreCourses: "Explore Courses",
+      recentActivity: "Recent Activity",
     },
     footer: {
       about: "About",
@@ -264,88 +478,181 @@ const translations: Record<Locale, TranslationKeys> = {
       privacy: "Privacy",
       tagline: "The learning platform for success",
     },
+    common: {
+      loading: "Loading...",
+      error: "An error occurred",
+      retry: "Retry",
+      cancel: "Cancel",
+      save: "Save",
+      delete: "Delete",
+      edit: "Edit",
+      close: "Close",
+      back: "Back",
+      of: "of",
+      enrollSuccess: "Successfully enrolled!",
+      lessonCompleted: "Lesson completed!",
+      welcomeBack: "Welcome back",
+    },
   },
   ar: {
     nav: {
-      home: "\u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629",
-      courses: "\u0627\u0644\u062F\u0631\u0648\u0633",
-      myCourses: "\u062F\u0631\u0648\u0633\u064A",
-      signIn: "\u062A\u0633\u062C\u064A\u0644 \u0627\u0644\u062F\u062E\u0648\u0644",
-      signUp: "\u0625\u0646\u0634\u0627\u0621 \u062D\u0633\u0627\u0628",
+      home: "الرئيسية",
+      courses: "الدروس",
+      myCourses: "دروسي",
+      dashboard: "لوحة التحكم",
+      signIn: "تسجيل الدخول",
+      signUp: "إنشاء حساب",
+      signOut: "تسجيل الخروج",
+      search: "ابحث عن دروس...",
     },
     home: {
       hero: {
-        title: "\u062A\u0639\u0644\u0651\u0645 \u0623\u0641\u0636\u0644\u060C \u0623\u0646\u062C\u0632 \u0623\u0643\u062B\u0631",
+        title: "تعلّم أفضل، أنجز أكثر",
         subtitle:
-          "\u062F\u0631\u0648\u0633 \u0639\u0627\u0644\u064A\u0629 \u0627\u0644\u062C\u0648\u062F\u0629 \u0641\u064A \u0627\u0644\u0631\u064A\u0627\u0636\u064A\u0627\u062A \u0648\u0627\u0644\u0641\u064A\u0632\u064A\u0627\u0621 \u0648\u0627\u0644\u0623\u062D\u064A\u0627\u0621 \u0644\u0644\u0645\u062A\u0648\u0633\u0637 \u0648\u0627\u0644\u062B\u0627\u0646\u0648\u064A. \u0641\u064A\u062F\u064A\u0648\u0647\u0627\u062A\u060C \u062A\u0645\u0627\u0631\u064A\u0646 \u0648\u0648\u062B\u0627\u0626\u0642 \u0644\u0644\u0646\u062C\u0627\u062D \u0641\u064A \u0627\u0645\u062A\u062D\u0627\u0646\u0627\u062A\u0643.",
-        cta: "\u0627\u0633\u062A\u0643\u0634\u0641 \u0627\u0644\u062F\u0631\u0648\u0633",
+          "دروس عالية الجودة في الرياضيات والفيزياء والأحياء للمتوسط والثانوي. فيديوهات، تمارين ووثائق للنجاح في امتحاناتك.",
+        cta: "استكشف الدروس",
       },
-      subjects: "\u0627\u0644\u0645\u0648\u0627\u062F",
-      popularCourses: "\u0627\u0644\u062F\u0631\u0648\u0633 \u0627\u0644\u0634\u0627\u0626\u0639\u0629",
-      viewAll: "\u0639\u0631\u0636 \u0627\u0644\u0643\u0644",
+      subjects: "المواد",
+      popularCourses: "الدروس الشائعة",
+      viewAll: "عرض الكل",
+      whyUs: "لماذا لعيدة؟",
+      whyUsItems: [
+        { title: "دروس منظمة", desc: "برنامج منظم بفصول مع تقدم واضح" },
+        { title: "اختبارات تفاعلية", desc: "اختبر معرفتك بعد كل حصة" },
+        { title: "متعدد اللغات", desc: "محتوى متاح بالفرنسية والإنجليزية والعربية" },
+        { title: "تتبع التقدم", desc: "تابع تقدمك في الوقت الحقيقي" },
+      ],
+      testimonials: "ماذا يقول طلابنا",
       stats: {
-        students: "\u0637\u0644\u0627\u0628",
-        courses: "\u062F\u0631\u0648\u0633",
-        lessons: "\u062D\u0635\u0635",
-        teachers: "\u0623\u0633\u0627\u062A\u0630\u0629",
+        students: "طلاب",
+        courses: "دروس",
+        lessons: "حصص",
+        teachers: "أساتذة",
       },
+    },
+    courses: {
+      title: "جميع الدروس",
+      subtitle: "استكشف كتالوج الدروس للمتوسط والثانوي",
+      allSubjects: "جميع المواد",
+      allLevels: "جميع المستويات",
+      sortBy: "ترتيب حسب",
+      popular: "شائع",
+      newest: "الأحدث",
+      rating: "التقييم",
+      showing: "عرض",
+      results: "نتائج",
+      noResults: "لا توجد دروس",
+      noResultsDesc: "حاول تعديل عوامل التصفية",
     },
     course: {
-      lessons: "\u062D\u0635\u0635",
-      hours: "\u0633\u0627\u0639\u0627\u062A",
-      students: "\u0637\u0644\u0627\u0628",
-      level: "\u0627\u0644\u0645\u0633\u062A\u0648\u0649",
-      instructor: "\u0627\u0644\u0623\u0633\u062A\u0627\u0630",
-      description: "\u0627\u0644\u0648\u0635\u0641",
-      curriculum: "\u0627\u0644\u0628\u0631\u0646\u0627\u0645\u062C",
-      enrollFree: "\u0633\u062C\u0644 \u0645\u062C\u0627\u0646\u0627\u064B",
-      enrolled: "\u0645\u0633\u062C\u0644",
-      startLearning: "\u0627\u0628\u062F\u0623 \u0627\u0644\u062A\u0639\u0644\u0645",
-      continueLearning: "\u0627\u0633\u062A\u0645\u0631",
-      progress: "\u0627\u0644\u062A\u0642\u062F\u0645",
-      completed: "\u0645\u0643\u062A\u0645\u0644",
-      documents: "\u0627\u0644\u0648\u062B\u0627\u0626\u0642",
-      downloadPdf: "\u062A\u062D\u0645\u064A\u0644 PDF",
+      lessons: "حصص",
+      hours: "ساعات",
+      students: "طلاب",
+      level: "المستوى",
+      instructor: "الأستاذ",
+      description: "الوصف",
+      curriculum: "البرنامج",
+      enrollFree: "سجل مجاناً",
+      enrolled: "مسجل",
+      startLearning: "ابدأ التعلم",
+      continueLearning: "استمر",
+      progress: "التقدم",
+      completed: "مكتمل",
+      documents: "الوثائق",
+      downloadPdf: "تحميل PDF",
+      reviews: "التقييمات",
+      writeReview: "اكتب تقييماً",
+      submitReview: "نشر",
+      reviewPlaceholder: "شارك تجربتك مع هذا الدرس...",
+      relatedCourses: "دروس مشابهة",
+      prerequisites: "المتطلبات السابقة",
+      whatYouLearn: "ماذا ستتعلم",
+      notFound: "الدرس غير موجود",
+      goHome: "العودة للرئيسية",
+      certificate: "شهادة إتمام",
+      certificateDesc: "تهانينا! لقد أكملت هذا الدرس.",
+      downloadCertificate: "تحميل الشهادة",
     },
     lesson: {
-      next: "\u0627\u0644\u062A\u0627\u0644\u064A",
-      previous: "\u0627\u0644\u0633\u0627\u0628\u0642",
-      markComplete: "\u0639\u0644\u0651\u0645 \u0643\u0645\u0643\u062A\u0645\u0644",
-      markedComplete: "\u0645\u0643\u062A\u0645\u0644 \u2713",
-      resources: "\u0627\u0644\u0645\u0648\u0627\u0631\u062F",
-      backToCourse: "\u0627\u0644\u0639\u0648\u062F\u0629 \u0644\u0644\u062F\u0631\u0633",
+      next: "التالي",
+      previous: "السابق",
+      markComplete: "علّم كمكتمل",
+      markedComplete: "مكتمل ✓",
+      resources: "الموارد",
+      backToCourse: "العودة للدرس",
+      notes: "ملاحظاتي",
+      notesPlaceholder: "دوّن ملاحظاتك لهذه الحصة...",
+      saveNote: "حفظ",
+      noteSaved: "تم حفظ الملاحظة",
+      notFound: "الحصة غير موجودة",
     },
     subjects: {
-      math: "\u0627\u0644\u0631\u064A\u0627\u0636\u064A\u0627\u062A",
-      physics: "\u0627\u0644\u0641\u064A\u0632\u064A\u0627\u0621",
-      biology: "\u0627\u0644\u0623\u062D\u064A\u0627\u0621",
+      math: "الرياضيات",
+      physics: "الفيزياء",
+      biology: "الأحياء",
     },
     levels: {
-      middle: "\u0627\u0644\u0645\u062A\u0648\u0633\u0637",
-      high: "\u0627\u0644\u062B\u0627\u0646\u0648\u064A",
-      beginner: "\u0645\u0628\u062A\u062F\u0626",
-      intermediate: "\u0645\u062A\u0648\u0633\u0637",
-      advanced: "\u0645\u062A\u0642\u062F\u0645",
+      middle: "المتوسط",
+      high: "الثانوي",
+      beginner: "مبتدئ",
+      intermediate: "متوسط",
+      advanced: "متقدم",
     },
     auth: {
-      signIn: "\u062A\u0633\u062C\u064A\u0644 \u0627\u0644\u062F\u062E\u0648\u0644",
-      signUp: "\u0625\u0646\u0634\u0627\u0621 \u062D\u0633\u0627\u0628",
-      email: "\u0627\u0644\u0628\u0631\u064A\u062F \u0627\u0644\u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A",
-      password: "\u0643\u0644\u0645\u0629 \u0627\u0644\u0645\u0631\u0648\u0631",
-      confirmPassword: "\u062A\u0623\u0643\u064A\u062F \u0643\u0644\u0645\u0629 \u0627\u0644\u0645\u0631\u0648\u0631",
-      fullName: "\u0627\u0644\u0627\u0633\u0645 \u0627\u0644\u0643\u0627\u0645\u0644",
-      forgotPassword: "\u0646\u0633\u064A\u062A \u0643\u0644\u0645\u0629 \u0627\u0644\u0645\u0631\u0648\u0631\u061F",
-      noAccount: "\u0644\u064A\u0633 \u0644\u062F\u064A\u0643 \u062D\u0633\u0627\u0628\u061F",
-      hasAccount: "\u0644\u062F\u064A\u0643 \u062D\u0633\u0627\u0628 \u0628\u0627\u0644\u0641\u0639\u0644\u061F",
-      orContinueWith: "\u0623\u0648 \u062A\u0627\u0628\u0639 \u0628\u0640",
-      google: "\u062C\u0648\u062C\u0644",
+      signIn: "تسجيل الدخول",
+      signUp: "إنشاء حساب",
+      email: "البريد الإلكتروني",
+      password: "كلمة المرور",
+      confirmPassword: "تأكيد كلمة المرور",
+      fullName: "الاسم الكامل",
+      forgotPassword: "نسيت كلمة المرور؟",
+      noAccount: "ليس لديك حساب؟",
+      hasAccount: "لديك حساب بالفعل؟",
+      orContinueWith: "أو تابع بـ",
+      google: "جوجل",
+      passwordWeak: "ضعيف",
+      passwordMedium: "متوسط",
+      passwordStrong: "قوي",
+      passwordsNoMatch: "كلمات المرور غير متطابقة",
+      emailInvalid: "بريد إلكتروني غير صالح",
+      required: "هذا الحقل مطلوب",
+    },
+    dashboard: {
+      title: "لوحة التحكم",
+      welcome: "مرحباً",
+      overview: "نظرة عامة",
+      enrolledCourses: "الدروس المسجلة",
+      lessonsCompleted: "الحصص المكتملة",
+      timeSpent: "وقت الدراسة",
+      streak: "سلسلة الدراسة",
+      days: "أيام",
+      overallProgress: "التقدم الإجمالي",
+      continueLearning: "واصل التعلم",
+      noActivity: "ابدأ التعلم لرؤية تقدمك هنا!",
+      exploreCourses: "استكشف الدروس",
+      recentActivity: "النشاط الأخير",
     },
     footer: {
-      about: "\u062D\u0648\u0644",
-      contact: "\u0627\u062A\u0635\u0644 \u0628\u0646\u0627",
-      terms: "\u0627\u0644\u0634\u0631\u0648\u0637",
-      privacy: "\u0627\u0644\u062E\u0635\u0648\u0635\u064A\u0629",
-      tagline: "\u0645\u0646\u0635\u0629 \u0627\u0644\u062A\u0639\u0644\u0645 \u0644\u0644\u0646\u062C\u0627\u062D",
+      about: "حول",
+      contact: "اتصل بنا",
+      terms: "الشروط",
+      privacy: "الخصوصية",
+      tagline: "منصة التعلم للنجاح",
+    },
+    common: {
+      loading: "جاري التحميل...",
+      error: "حدث خطأ",
+      retry: "إعادة المحاولة",
+      cancel: "إلغاء",
+      save: "حفظ",
+      delete: "حذف",
+      edit: "تعديل",
+      close: "إغلاق",
+      back: "رجوع",
+      of: "من",
+      enrollSuccess: "تم التسجيل بنجاح!",
+      lessonCompleted: "تم إكمال الحصة!",
+      welcomeBack: "مرحباً بعودتك",
     },
   },
 };
