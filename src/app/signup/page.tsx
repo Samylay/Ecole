@@ -45,13 +45,17 @@ export default function SignUpPage() {
     }
 
     setLoading(true);
-    const result = await signup(name, email, password);
-    setLoading(false);
-
-    if (result.success) {
-      router.push("/my-courses");
-    } else {
-      setError(errorMessages[result.error || ""] || t.auth.missingFields);
+    try {
+      const result = await signup(name, email, password);
+      if (result.success) {
+        router.push("/my-courses");
+      } else {
+        setError(errorMessages[result.error || ""] || t.auth.missingFields);
+      }
+    } catch {
+      setError(t.auth.missingFields);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,63 +63,77 @@ export default function SignUpPage() {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
 
-      <div className="flex items-center justify-center px-4 py-16">
+      <main className="flex items-center justify-center px-4 py-16">
         <div className="w-full max-w-md">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
             <div className="text-center mb-8">
-              <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center mx-auto mb-4" aria-hidden="true">
                 <span className="text-white font-bold text-xl">L</span>
               </div>
               <h1 className="text-2xl font-bold text-gray-900">{t.auth.signUp}</h1>
             </div>
 
             {error && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm" role="alert">
                 {error}
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4" noValidate>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t.auth.fullName}</label>
+                <label htmlFor="signup-name" className="block text-sm font-medium text-gray-700 mb-1">{t.auth.fullName}</label>
                 <input
+                  id="signup-name"
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+                  autoComplete="name"
+                  required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t.auth.email}</label>
+                <label htmlFor="signup-email" className="block text-sm font-medium text-gray-700 mb-1">{t.auth.email}</label>
                 <input
+                  id="signup-email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
                   placeholder="email@example.com"
+                  autoComplete="email"
+                  required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t.auth.password}</label>
+                <label htmlFor="signup-password" className="block text-sm font-medium text-gray-700 mb-1">{t.auth.password}</label>
                 <input
+                  id="signup-password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
                   placeholder="********"
+                  autoComplete="new-password"
+                  minLength={6}
+                  required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{t.auth.confirmPassword}</label>
+                <label htmlFor="signup-confirm-password" className="block text-sm font-medium text-gray-700 mb-1">{t.auth.confirmPassword}</label>
                 <input
+                  id="signup-confirm-password"
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
                   placeholder="********"
+                  autoComplete="new-password"
+                  minLength={6}
+                  required
                 />
               </div>
 
@@ -138,8 +156,8 @@ export default function SignUpPage() {
                 </div>
               </div>
 
-              <button className="mt-4 w-full flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-3 hover:bg-gray-50 transition-colors">
-                <svg className="w-5 h-5" viewBox="0 0 24 24">
+              <button className="mt-4 w-full flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-3 hover:bg-gray-50 transition-colors" type="button">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" aria-hidden="true">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
                   <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
                   <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
@@ -157,7 +175,7 @@ export default function SignUpPage() {
             </p>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

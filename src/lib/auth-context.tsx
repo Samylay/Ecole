@@ -35,33 +35,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = async (email: string, password: string) => {
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-    const data = await res.json();
-    if (data.success) {
-      setUser(data.user);
-      localStorage.setItem("layaida_user", JSON.stringify(data.user));
-      return { success: true };
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim().toLowerCase(), password }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setUser(data.user);
+        localStorage.setItem("layaida_user", JSON.stringify(data.user));
+        return { success: true };
+      }
+      return { success: false, error: data.error };
+    } catch {
+      return { success: false, error: "network_error" };
     }
-    return { success: false, error: data.error };
   };
 
   const signup = async (name: string, email: string, password: string) => {
-    const res = await fetch("/api/auth/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password }),
-    });
-    const data = await res.json();
-    if (data.success) {
-      setUser(data.user);
-      localStorage.setItem("layaida_user", JSON.stringify(data.user));
-      return { success: true };
+    try {
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name.trim(), email: email.trim().toLowerCase(), password }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setUser(data.user);
+        localStorage.setItem("layaida_user", JSON.stringify(data.user));
+        return { success: true };
+      }
+      return { success: false, error: data.error };
+    } catch {
+      return { success: false, error: "network_error" };
     }
-    return { success: false, error: data.error };
   };
 
   const logout = () => {
