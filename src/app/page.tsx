@@ -23,6 +23,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
 
+      <main>
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
@@ -39,7 +40,7 @@ export default function HomePage() {
                 className="mt-8 inline-flex items-center gap-2 bg-white text-indigo-700 px-6 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition-colors"
               >
                 {t.course.continueLearning}
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
@@ -49,7 +50,7 @@ export default function HomePage() {
                 className="mt-8 inline-flex items-center gap-2 bg-white text-indigo-700 px-6 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition-colors"
               >
                 {t.home.hero.cta}
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
@@ -89,14 +90,23 @@ export default function HomePage() {
               <div
                 key={subject}
                 className={`${colors.bg} rounded-xl p-6 text-left hover:shadow-md transition-all duration-300 hover:-translate-y-1 border border-transparent hover:border-gray-200 ${user ? "cursor-pointer" : ""}`}
+                role={user ? "button" : undefined}
+                tabIndex={user ? 0 : undefined}
                 onClick={() => {
                   if (user) {
                     setActiveSubject(subject);
                     document.getElementById("courses")?.scrollIntoView({ behavior: "smooth" });
                   }
                 }}
+                onKeyDown={(e) => {
+                  if (user && (e.key === "Enter" || e.key === " ")) {
+                    e.preventDefault();
+                    setActiveSubject(subject);
+                    document.getElementById("courses")?.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
               >
-                <span className="text-4xl">{icon}</span>
+                <span className="text-4xl" aria-hidden="true">{icon}</span>
                 <h3 className={`text-xl font-bold ${colors.text} mt-3`}>{t.subjects[subject]}</h3>
                 <p className="text-gray-500 mt-1">
                   {count} {t.course.lessons.toLowerCase()}
@@ -148,7 +158,7 @@ export default function HomePage() {
       ) : (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center py-12 bg-white rounded-2xl border border-gray-200 shadow-sm">
-            <svg className="w-16 h-16 text-indigo-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-16 h-16 text-indigo-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
             <h3 className="text-xl font-bold text-gray-900 mb-2">{t.auth.loginToAccess}</h3>
@@ -170,6 +180,7 @@ export default function HomePage() {
           </div>
         </section>
       )}
+      </main>
 
       <Footer />
     </div>

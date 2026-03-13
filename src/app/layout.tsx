@@ -1,10 +1,28 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
-  title: "Layaida - Apprends mieux, r\u00e9ussis plus",
-  description: "Plateforme d'apprentissage pour le coll\u00e8ge et le lyc\u00e9e. Cours de maths, physique et biologie.",
+  title: {
+    default: "Layaida - Apprends mieux, réussis plus",
+    template: "%s | Layaida",
+  },
+  description: "Plateforme d'apprentissage pour le collège et le lycée. Cours de maths, physique et biologie.",
+  keywords: ["éducation", "cours en ligne", "mathématiques", "physique", "biologie", "collège", "lycée"],
+  authors: [{ name: "Layaida" }],
+  openGraph: {
+    type: "website",
+    locale: "fr_FR",
+    siteName: "Layaida",
+    title: "Layaida - Apprends mieux, réussis plus",
+    description: "Plateforme d'apprentissage pour le collège et le lycée.",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#4F46E5",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

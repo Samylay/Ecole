@@ -7,20 +7,27 @@ const USERS = [
 ];
 
 export async function POST(request: Request) {
-  const { email, password } = await request.json();
+  try {
+    const body = await request.json();
+    const { email, password } = body;
 
-  if (!email || !password) {
-    return NextResponse.json({ success: false, error: "missing_fields" }, { status: 400 });
+    if (!email || !password || typeof email !== "string" || typeof password !== "string") {
+      return NextResponse.json({ success: false, error: "missing_fields" }, { status: 400 });
+    }
+
+    const trimmedEmail = email.trim().toLowerCase();
+
+    const user = USERS.find((u) => u.email === trimmedEmail && u.password === password);
+
+    if (!user) {
+      return NextResponse.json({ success: false, error: "invalid_credentials" }, { status: 401 });
+    }
+
+    return NextResponse.json({
+      success: true,
+      user: { name: user.name, email: user.email },
+    });
+  } catch {
+    return NextResponse.json({ success: false, error: "invalid_request" }, { status: 400 });
   }
-
-  const user = USERS.find((u) => u.email === email && u.password === password);
-
-  if (!user) {
-    return NextResponse.json({ success: false, error: "invalid_credentials" }, { status: 401 });
-  }
-
-  return NextResponse.json({
-    success: true,
-    user: { name: user.name, email: user.email },
-  });
 }
