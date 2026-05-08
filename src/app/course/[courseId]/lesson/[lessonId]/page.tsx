@@ -1,10 +1,13 @@
 "use client";
 
-import { use, useState } from "react";
+import { use, useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { useLocale } from "@/lib/locale-context";
+import { useAuth } from "@/lib/auth-context";
 import { getLesson, getAllLessons } from "@/lib/data";
+import { isLessonCompleted, toggleLessonCompleted } from "@/lib/progress";
 
 export default function LessonPage({
   params,
@@ -13,9 +16,29 @@ export default function LessonPage({
 }) {
   const { courseId, lessonId } = use(params);
   const { locale, t } = useLocale();
+  const { user, isLoading } = useAuth();
+  const router = useRouter();
   const [completed, setCompleted] = useState(false);
 
+  useEffect(() => {
+    if (!isLoading && !user) {
+      router.push("/signin");
+    }
+  }, [user, isLoading, router]);
+
+  useEffect(() => {
+    setCompleted(isLessonCompleted(courseId, lessonId));
+  }, [courseId, lessonId]);
+
   const result = getLesson(courseId, lessonId);
+
+  if (isLoading || !user) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   if (!result) {
     return (
@@ -70,7 +93,11 @@ export default function LessonPage({
 
               <div className="flex items-center gap-4 mt-6">
                 <button
-                  onClick={() => setCompleted(!completed)}
+                  onClick={() => {
+                    const next = !completed;
+                    toggleLessonCompleted(courseId, lessonId, next);
+                    setCompleted(next);
+                  }}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
                     completed
                       ? "bg-green-600 text-white"

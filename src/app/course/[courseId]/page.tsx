@@ -1,18 +1,40 @@
 "use client";
 
-import { use } from "react";
+import { use, useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { useLocale } from "@/lib/locale-context";
+import { useAuth } from "@/lib/auth-context";
 import { getCourse, subjectColors, subjectIcons, getAllLessons } from "@/lib/data";
-import { useState } from "react";
+import { isEnrolled, enroll } from "@/lib/progress";
 
 export default function CoursePage({ params }: { params: Promise<{ courseId: string }> }) {
   const { courseId } = use(params);
   const { locale, t } = useLocale();
+  const { user, isLoading } = useAuth();
+  const router = useRouter();
   const [enrolled, setEnrolled] = useState(false);
   const course = getCourse(courseId);
+
+  useEffect(() => {
+    if (!isLoading && !user) {
+      router.push("/signin");
+    }
+  }, [user, isLoading, router]);
+
+  useEffect(() => {
+    setEnrolled(isEnrolled(courseId));
+  }, [courseId]);
+
+  if (isLoading || !user) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   if (!course) {
     return (
@@ -103,7 +125,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                   </>
                 ) : (
                   <button
-                    onClick={() => setEnrolled(true)}
+                    onClick={() => { enroll(courseId); setEnrolled(true); }}
                     className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
                   >
                     {t.course.enrollFree}
