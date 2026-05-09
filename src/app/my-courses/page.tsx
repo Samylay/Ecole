@@ -7,7 +7,7 @@ import { Footer } from "@/components/Footer";
 import { CourseCard } from "@/components/CourseCard";
 import { useLocale } from "@/lib/locale-context";
 import { useAuth } from "@/lib/auth-context";
-import { getCourse, Course } from "@/lib/data";
+import { getCourse, getAllLessons, Course } from "@/lib/data";
 import { getEnrolledCourseIds, getCourseProgress } from "@/lib/progress";
 import Link from "next/link";
 
@@ -31,7 +31,7 @@ export default function MyCoursesPage() {
 
     const pm: Record<string, number> = {};
     for (const course of enrolled) {
-      pm[course.id] = getCourseProgress(course.id, course.totalLessons);
+      pm[course.id] = getCourseProgress(course.id, getAllLessons(course).length);
     }
     setProgressMap(pm);
   }, []);

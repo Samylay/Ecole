@@ -12,12 +12,21 @@ import { useState } from "react";
 const subjects: Subject[] = ["math", "physics", "biology"];
 
 export default function HomePage() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
   const { user } = useAuth();
   const [activeSubject, setActiveSubject] = useState<Subject | "all">("all");
+  const [search, setSearch] = useState("");
 
-  const filteredCourses =
-    activeSubject === "all" ? courses : courses.filter((c) => c.subject === activeSubject);
+  const filteredCourses = courses.filter((c) => {
+    const matchesSubject = activeSubject === "all" || c.subject === activeSubject;
+    const q = search.toLowerCase();
+    const matchesSearch =
+      !q ||
+      c.title[locale].toLowerCase().includes(q) ||
+      c.description[locale].toLowerCase().includes(q) ||
+      t.subjects[c.subject].toLowerCase().includes(q);
+    return matchesSubject && matchesSearch;
+  });
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -122,6 +131,20 @@ export default function HomePage() {
         <section id="courses" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900">{t.home.popularCourses}</h2>
+            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+              <div className="relative">
+                <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input
+                  type="search"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Rechercher..."
+                  className="pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full sm:w-48"
+                  aria-label="Search courses"
+                />
+              </div>
             <div className="flex gap-2 flex-wrap">
               <button
                 onClick={() => setActiveSubject("all")}
@@ -147,13 +170,23 @@ export default function HomePage() {
                 </button>
               ))}
             </div>
+            </div>
           </div>
 
+          {filteredCourses.length === 0 ? (
+            <div className="text-center py-16 text-gray-400">
+              <svg className="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <p className="text-lg font-medium text-gray-500">Aucun cours trouvé</p>
+            </div>
+          ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredCourses.map((course) => (
               <CourseCard key={course.id} course={course} />
             ))}
           </div>
+          )}
         </section>
       ) : (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">

@@ -49,6 +49,17 @@ export function toggleLessonCompleted(courseId: string, lessonId: string, comple
   localStorage.setItem(COMPLETION_KEY, JSON.stringify(completions));
 }
 
+export function getCompletedLessonIds(courseId: string): Set<string> {
+  const completions = readCompleted();
+  const result = new Set<string>();
+  for (const key of Object.keys(completions)) {
+    if (completions[key] && key.startsWith(`${courseId}:`)) {
+      result.add(key.slice(courseId.length + 1));
+    }
+  }
+  return result;
+}
+
 export function getCourseProgress(courseId: string, totalLessons: number): number {
   if (totalLessons === 0) return 0;
   const completions = readCompleted();

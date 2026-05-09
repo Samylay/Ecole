@@ -7,7 +7,7 @@ import { Navbar } from "@/components/Navbar";
 import { useLocale } from "@/lib/locale-context";
 import { useAuth } from "@/lib/auth-context";
 import { getLesson, getAllLessons } from "@/lib/data";
-import { isLessonCompleted, toggleLessonCompleted } from "@/lib/progress";
+import { isLessonCompleted, toggleLessonCompleted, getCompletedLessonIds } from "@/lib/progress";
 
 export default function LessonPage({
   params,
@@ -19,6 +19,7 @@ export default function LessonPage({
   const { user, isLoading } = useAuth();
   const router = useRouter();
   const [completed, setCompleted] = useState(false);
+  const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -28,6 +29,7 @@ export default function LessonPage({
 
   useEffect(() => {
     setCompleted(isLessonCompleted(courseId, lessonId));
+    setCompletedIds(getCompletedLessonIds(courseId));
   }, [courseId, lessonId]);
 
   const result = getLesson(courseId, lessonId);
@@ -97,6 +99,7 @@ export default function LessonPage({
                     const next = !completed;
                     toggleLessonCompleted(courseId, lessonId, next);
                     setCompleted(next);
+                    setCompletedIds(getCompletedLessonIds(courseId));
                   }}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
                     completed
@@ -188,24 +191,34 @@ export default function LessonPage({
                     <div className="px-4 py-2 bg-gray-750 text-xs font-semibold text-gray-400 uppercase tracking-wider">
                       {chapter.title[locale]}
                     </div>
-                    {chapter.lessons.map((l) => (
-                      <Link
-                        key={l.id}
-                        href={`/course/${courseId}/lesson/${l.id}`}
-                        className={`flex items-center gap-3 px-4 py-3 text-sm transition-colors ${
-                          l.id === lessonId
-                            ? "bg-indigo-600/20 text-indigo-400 border-l-2 border-indigo-500"
-                            : "text-gray-400 hover:bg-gray-700 hover:text-white"
-                        }`}
-                      >
-                        <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span className="truncate">{l.title[locale]}</span>
-                        <span className="text-xs text-gray-500 ml-auto flex-shrink-0">{l.duration}</span>
-                      </Link>
-                    ))}
+                    {chapter.lessons.map((l) => {
+                      const isDone = completedIds.has(l.id);
+                      const isCurrent = l.id === lessonId;
+                      return (
+                        <Link
+                          key={l.id}
+                          href={`/course/${courseId}/lesson/${l.id}`}
+                          className={`flex items-center gap-3 px-4 py-3 text-sm transition-colors ${
+                            isCurrent
+                              ? "bg-indigo-600/20 text-indigo-400 border-l-2 border-indigo-500"
+                              : "text-gray-400 hover:bg-gray-700 hover:text-white"
+                          }`}
+                        >
+                          {isDone ? (
+                            <svg className="w-4 h-4 flex-shrink-0 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                            </svg>
+                          ) : (
+                            <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                          )}
+                          <span className="truncate">{l.title[locale]}</span>
+                          <span className="text-xs text-gray-500 ml-auto flex-shrink-0">{l.duration}</span>
+                        </Link>
+                      );
+                    })}
                   </div>
                 ))}
               </div>
