@@ -2874,6 +2874,270 @@ export const quizzes: Record<string, Record<string, QuizQuestion[]>> = {
       },
     ],
   },
+  "biology-human-body-102": {
+    ch1: [
+      {
+        id: "q1",
+        question: {
+          fr: "Où commence la digestion des aliments ?",
+          en: "Where does food digestion begin?",
+          ar: "أين تبدأ عملية هضم الطعام؟",
+        },
+        options: [
+          { fr: "Dans l'estomac", en: "In the stomach", ar: "في المعدة" },
+          { fr: "Dans la bouche", en: "In the mouth", ar: "في الفم" },
+          { fr: "Dans l'intestin", en: "In the intestine", ar: "في الأمعاء" },
+          { fr: "Dans le foie", en: "In the liver", ar: "في الكبد" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "La digestion commence dans la bouche avec la mastication et la salive.",
+          en: "Digestion begins in the mouth with chewing and saliva.",
+          ar: "يبدأ الهضم في الفم بالمضغ واللعاب.",
+        },
+        lessonId: "l1",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "Quel organe du système nerveux coordonne les décisions et les mouvements du corps ?",
+          en: "Which organ of the nervous system coordinates decisions and body movements?",
+          ar: "أي عضو في الجهاز العصبي ينسق القرارات وحركات الجسم؟",
+        },
+        options: [
+          { fr: "Le cœur", en: "The heart", ar: "القلب" },
+          { fr: "Le cerveau", en: "The brain", ar: "الدماغ" },
+          { fr: "Le poumon", en: "The lung", ar: "الرئة" },
+          { fr: "L'estomac", en: "The stomach", ar: "المعدة" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Le cerveau, via les neurones et la moelle épinière, coordonne les décisions et les mouvements.",
+          en: "The brain, via neurons and the spinal cord, coordinates decisions and movements.",
+          ar: "ينسق الدماغ، عبر الخلايا العصبية والحبل الشوكي، القرارات والحركات.",
+        },
+        lessonId: "l2",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "Que permettent les articulations ?",
+          en: "What do joints allow?",
+          ar: "ماذا تتيح المفاصل؟",
+        },
+        options: [
+          { fr: "La digestion des aliments", en: "Food digestion", ar: "هضم الطعام" },
+          { fr: "Le mouvement entre deux os", en: "Movement between two bones", ar: "الحركة بين عظمتين" },
+          { fr: "La circulation du sang", en: "Blood circulation", ar: "الدورة الدموية" },
+          { fr: "La respiration", en: "Breathing", ar: "التنفس" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Les articulations relient deux os et permettent le mouvement du squelette.",
+          en: "Joints connect two bones and allow the skeleton to move.",
+          ar: "تصل المفاصل بين عظمتين وتتيح حركة الهيكل العظمي.",
+        },
+        lessonId: "l3",
+      },
+    ],
+    ch2: [
+      {
+        id: "q1",
+        question: {
+          fr: "Quel organe pompe le sang dans tout le corps ?",
+          en: "Which organ pumps blood throughout the body?",
+          ar: "أي عضو يضخ الدم في جميع أنحاء الجسم؟",
+        },
+        options: [
+          { fr: "Le foie", en: "The liver", ar: "الكبد" },
+          { fr: "Le cœur", en: "The heart", ar: "القلب" },
+          { fr: "Le rein", en: "The kidney", ar: "الكلية" },
+          { fr: "L'estomac", en: "The stomach", ar: "المعدة" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Le cœur est une pompe musculaire qui fait circuler le sang dans tout l'organisme.",
+          en: "The heart is a muscular pump that circulates blood throughout the body.",
+          ar: "القلب مضخة عضلية تُجري الدم في كامل الجسم.",
+        },
+        lessonId: "l4",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "Où se déroulent les échanges gazeux (O₂/CO₂) dans le système respiratoire ?",
+          en: "Where do gas exchanges (O₂/CO₂) occur in the respiratory system?",
+          ar: "أين تحدث تبادلات الغازات (O₂/CO₂) في الجهاز التنفسي؟",
+        },
+        options: [
+          { fr: "Dans la trachée", en: "In the trachea", ar: "في القصبة الهوائية" },
+          { fr: "Dans les alvéoles pulmonaires", en: "In the pulmonary alveoli", ar: "في الأسناخ الرئوية" },
+          { fr: "Dans le nez", en: "In the nose", ar: "في الأنف" },
+          { fr: "Dans le larynx", en: "In the larynx", ar: "في الحنجرة" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Les échanges gazeux ont lieu dans les alvéoles pulmonaires, où l'oxygène passe dans le sang et le CO₂ en sort.",
+          en: "Gas exchange happens in the pulmonary alveoli, where oxygen enters the blood and CO₂ leaves it.",
+          ar: "تحدث تبادلات الغازات في الأسناخ الرئوية، حيث يدخل الأكسجين إلى الدم ويخرج منه ثاني أكسيد الكربون.",
+        },
+        lessonId: "l5",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "Le rôle principal du système immunitaire est de…",
+          en: "The main role of the immune system is to…",
+          ar: "الدور الرئيسي للجهاز المناعي هو…",
+        },
+        options: [
+          { fr: "digérer les aliments", en: "digest food", ar: "هضم الطعام" },
+          { fr: "défendre le corps contre les agents pathogènes", en: "defend the body against pathogens", ar: "الدفاع عن الجسم ضد مسببات الأمراض" },
+          { fr: "pomper le sang", en: "pump blood", ar: "ضخ الدم" },
+          { fr: "transporter l'oxygène", en: "transport oxygen", ar: "نقل الأكسجين" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Le système immunitaire protège l'organisme en identifiant et en détruisant les agents pathogènes (virus, bactéries).",
+          en: "The immune system protects the body by identifying and destroying pathogens (viruses, bacteria).",
+          ar: "يحمي الجهاز المناعي الجسم بتحديد وتدمير مسببات الأمراض (الفيروسات والبكتيريا).",
+        },
+        lessonId: "l6",
+      },
+    ],
+  },
+  "biology-genetics-301": {
+    ch1: [
+      {
+        id: "q1",
+        question: {
+          fr: "Sur quelle plante Mendel a-t-il mené ses expériences fondatrices ?",
+          en: "Which plant did Mendel use for his founding experiments?",
+          ar: "على أي نبات أجرى مندل تجاربه التأسيسية؟",
+        },
+        options: [
+          { fr: "Le blé", en: "Wheat", ar: "القمح" },
+          { fr: "Le petit pois", en: "The pea plant", ar: "البازلاء" },
+          { fr: "Le maïs", en: "Corn", ar: "الذرة" },
+          { fr: "La tomate", en: "The tomato", ar: "الطماطم" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Mendel a étudié l'hérédité en croisant des plants de petits pois aux caractères variés.",
+          en: "Mendel studied heredity by crossing pea plants with varied traits.",
+          ar: "درس مندل الوراثة بتهجين نباتات البازلاء ذات الصفات المتنوعة.",
+        },
+        lessonId: "l1",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "Un allèle dominant s'exprime…",
+          en: "A dominant allele is expressed…",
+          ar: "يُعبَّر عن الأليل السائد…",
+        },
+        options: [
+          { fr: "seulement à l'état homozygote", en: "only in the homozygous state", ar: "فقط في الحالة المتماثلة الزيجوت" },
+          { fr: "même en présence d'un seul exemplaire", en: "even with just one copy present", ar: "حتى مع وجود نسخة واحدة منه" },
+          { fr: "jamais", en: "never", ar: "أبداً" },
+          { fr: "uniquement chez les femelles", en: "only in females", ar: "فقط عند الإناث" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Un allèle dominant masque l'allèle récessif et s'exprime dès qu'il est présent, même en un seul exemplaire.",
+          en: "A dominant allele masks the recessive allele and is expressed as soon as it is present, even as a single copy.",
+          ar: "يحجب الأليل السائد الأليل المتنحي ويُعبَّر عنه بمجرد وجوده، حتى في نسخة واحدة.",
+        },
+        lessonId: "l2",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "À quoi sert un tableau de Punnett ?",
+          en: "What is a Punnett square used for?",
+          ar: "ما فائدة مربع بانيت؟",
+        },
+        options: [
+          { fr: "Mesurer la taille des cellules", en: "Measure cell size", ar: "قياس حجم الخلايا" },
+          { fr: "Prédire les combinaisons possibles chez la descendance", en: "Predict possible offspring combinations", ar: "التنبؤ بالتركيبات الممكنة لدى النسل" },
+          { fr: "Calculer l'âge d'un organisme", en: "Calculate an organism's age", ar: "حساب عمر كائن حي" },
+          { fr: "Observer l'ADN au microscope", en: "Observe DNA under a microscope", ar: "مراقبة الحمض النووي تحت المجهر" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Le tableau de Punnett croise les allèles des parents pour prédire les génotypes possibles de la descendance.",
+          en: "The Punnett square crosses parental alleles to predict the offspring's possible genotypes.",
+          ar: "يقاطع مربع بانيت أليلات الأبوين للتنبؤ بالأنماط الجينية الممكنة للنسل.",
+        },
+        lessonId: "l3",
+      },
+    ],
+    ch2: [
+      {
+        id: "q1",
+        question: {
+          fr: "L'ADN a la forme d'une…",
+          en: "DNA has the shape of a…",
+          ar: "للحمض النووي شكل…",
+        },
+        options: [
+          { fr: "sphère", en: "sphere", ar: "كرة" },
+          { fr: "double hélice", en: "double helix", ar: "لولب مزدوج" },
+          { fr: "ligne droite simple", en: "single straight line", ar: "خط مستقيم بسيط" },
+          { fr: "étoile", en: "star", ar: "نجمة" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "L'ADN est composé de deux brins enroulés en double hélice, reliés par des bases azotées.",
+          en: "DNA is made of two strands wound into a double helix, connected by nitrogenous bases.",
+          ar: "يتكون الحمض النووي من شريطين ملتفين على شكل لولب مزدوج، مرتبطين بقواعد نيتروجينية.",
+        },
+        lessonId: "l4",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "La réplication de l'ADN permet…",
+          en: "DNA replication allows…",
+          ar: "يتيح تضاعف الحمض النووي…",
+        },
+        options: [
+          { fr: "de copier l'ADN avant la division cellulaire", en: "copying DNA before cell division", ar: "نسخ الحمض النووي قبل انقسام الخلية" },
+          { fr: "de détruire l'ADN", en: "destroying DNA", ar: "تدمير الحمض النووي" },
+          { fr: "de fabriquer des protéines directement", en: "directly making proteins", ar: "تصنيع البروتينات مباشرة" },
+          { fr: "de changer le nombre de chromosomes", en: "changing the chromosome number", ar: "تغيير عدد الصبغيات" },
+        ],
+        correctIndex: 0,
+        explanation: {
+          fr: "La réplication copie l'ADN pour que chaque nouvelle cellule reçoive une copie complète du matériel génétique.",
+          en: "Replication copies DNA so each new cell receives a full copy of the genetic material.",
+          ar: "يقوم التضاعف بنسخ الحمض النووي حتى تحصل كل خلية جديدة على نسخة كاملة من المادة الوراثية.",
+        },
+        lessonId: "l5",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "Une mutation génétique est…",
+          en: "A genetic mutation is…",
+          ar: "الطفرة الجينية هي…",
+        },
+        options: [
+          { fr: "un changement dans la séquence d'ADN", en: "a change in the DNA sequence", ar: "تغير في تسلسل الحمض النووي" },
+          { fr: "une maladie contagieuse uniquement", en: "only a contagious disease", ar: "مرض معدٍ فقط" },
+          { fr: "un type de cellule", en: "a type of cell", ar: "نوع من الخلايا" },
+          { fr: "une méthode de reproduction", en: "a method of reproduction", ar: "طريقة تكاثر" },
+        ],
+        correctIndex: 0,
+        explanation: {
+          fr: "Une mutation est une modification de la séquence d'ADN, qui peut être neutre, bénéfique ou nuisible.",
+          en: "A mutation is a change in the DNA sequence, which can be neutral, beneficial, or harmful.",
+          ar: "الطفرة هي تغير في تسلسل الحمض النووي، يمكن أن يكون محايداً أو مفيداً أو ضاراً.",
+        },
+        lessonId: "l6",
+      },
+    ],
+  },
 };
 
 export function getQuiz(courseId: string, chapterId: string): QuizQuestion[] | null {
