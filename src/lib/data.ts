@@ -1487,6 +1487,137 @@ export const quizzes: Record<string, Record<string, QuizQuestion[]>> = {
         lessonId: "l4",
       },
     ],
+    ch3: [
+      {
+        id: "q1",
+        question: {
+          fr: "Un système d'équations à deux inconnues possède deux équations. Que cherche-t-on à trouver ?",
+          en: "A system of equations with two unknowns has two equations. What are we trying to find?",
+          ar: "نظام معادلتين بمجهولين يحتوي على معادلتين. ماذا نبحث عنه؟",
+        },
+        options: [
+          { fr: "Une seule valeur", en: "A single value", ar: "قيمة واحدة" },
+          { fr: "Le couple (x, y) qui vérifie les deux équations", en: "The pair (x, y) that satisfies both equations", ar: "الزوج (x, y) الذي يحقق المعادلتين" },
+          { fr: "La somme des deux équations", en: "The sum of the two equations", ar: "مجموع المعادلتين" },
+          { fr: "Le produit des deux équations", en: "The product of the two equations", ar: "جداء المعادلتين" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Résoudre un système, c'est trouver le couple (x, y) qui satisfait simultanément les deux équations.",
+          en: "Solving a system means finding the pair (x, y) that satisfies both equations at once.",
+          ar: "حل النظام يعني إيجاد الزوج (x, y) الذي يحقق المعادلتين في آن واحد.",
+        },
+        lessonId: "l6",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "Système : y = 2x et x + y = 9. Par substitution, que devient la deuxième équation ?",
+          en: "System: y = 2x and x + y = 9. By substitution, what does the second equation become?",
+          ar: "النظام: y = 2x و x + y = 9. بالتعويض، ماذا تصبح المعادلة الثانية؟",
+        },
+        options: [
+          { fr: "x + 2x = 9", en: "x + 2x = 9", ar: "x + 2x = 9" },
+          { fr: "2x + 9 = x", en: "2x + 9 = x", ar: "2x + 9 = x" },
+          { fr: "x − 2x = 9", en: "x − 2x = 9", ar: "x − 2x = 9" },
+          { fr: "x = 9", en: "x = 9", ar: "x = 9" },
+        ],
+        correctIndex: 0,
+        explanation: {
+          fr: "On remplace y par 2x dans la deuxième équation : x + 2x = 9, soit 3x = 9 donc x = 3.",
+          en: "Replace y with 2x in the second equation: x + 2x = 9, so 3x = 9 and x = 3.",
+          ar: "نعوض y بـ 2x في المعادلة الثانية: x + 2x = 9، إذن 3x = 9 وبالتالي x = 3.",
+        },
+        lessonId: "l7",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "Système : x + y = 10 et x − y = 2. En additionnant les deux équations, on obtient…",
+          en: "System: x + y = 10 and x − y = 2. Adding the two equations gives…",
+          ar: "النظام: x + y = 10 و x − y = 2. بجمع المعادلتين نحصل على…",
+        },
+        options: [
+          { fr: "2x = 12", en: "2x = 12", ar: "2x = 12" },
+          { fr: "2y = 12", en: "2y = 12", ar: "2y = 12" },
+          { fr: "x = 8", en: "x = 8", ar: "x = 8" },
+          { fr: "2x = 8", en: "2x = 8", ar: "2x = 8" },
+        ],
+        correctIndex: 0,
+        explanation: {
+          fr: "Les termes en y s'éliminent : (x + y) + (x − y) = 10 + 2, soit 2x = 12, donc x = 6.",
+          en: "The y terms cancel out: (x + y) + (x − y) = 10 + 2, so 2x = 12, giving x = 6.",
+          ar: "تُحذف حدود y: (x + y) + (x − y) = 10 + 2، إذن 2x = 12، وبالتالي x = 6.",
+        },
+        lessonId: "l8",
+      },
+    ],
+    ch4: [
+      {
+        id: "q1",
+        question: {
+          fr: "Que signifie le symbole ≤ ?",
+          en: "What does the symbol ≤ mean?",
+          ar: "ماذا يعني الرمز ≤؟",
+        },
+        options: [
+          { fr: "Strictement inférieur", en: "Strictly less than", ar: "أصغر تماماً" },
+          { fr: "Inférieur ou égal", en: "Less than or equal to", ar: "أصغر أو يساوي" },
+          { fr: "Supérieur ou égal", en: "Greater than or equal to", ar: "أكبر أو يساوي" },
+          { fr: "Différent de", en: "Not equal to", ar: "لا يساوي" },
+
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "≤ signifie « inférieur ou égal à » : la valeur peut être égale à la borne.",
+          en: "≤ means “less than or equal to”: the value can equal the bound.",
+          ar: "≤ يعني « أصغر أو يساوي »: يمكن أن تساوي القيمة الحد.",
+        },
+        lessonId: "l9",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "Que se passe-t-il quand on multiplie les deux côtés d'une inégalité par un nombre négatif ?",
+          en: "What happens when you multiply both sides of an inequality by a negative number?",
+          ar: "ماذا يحدث عند ضرب طرفي متراجحة في عدد سالب؟",
+        },
+        options: [
+          { fr: "Rien ne change", en: "Nothing changes", ar: "لا شيء يتغير" },
+          { fr: "Le sens de l'inégalité s'inverse", en: "The inequality sign flips", ar: "تنعكس جهة المتراجحة" },
+          { fr: "L'inégalité devient une égalité", en: "The inequality becomes an equality", ar: "تصبح المتراجحة مساواة" },
+          { fr: "L'inégalité disparaît", en: "The inequality disappears", ar: "تختفي المتراجحة" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Multiplier ou diviser par un nombre négatif inverse le sens de l'inégalité.",
+          en: "Multiplying or dividing by a negative number flips the direction of the inequality.",
+          ar: "الضرب أو القسمة على عدد سالب يعكس جهة المتراجحة.",
+        },
+        lessonId: "l10",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "Résous : −2x > 6",
+          en: "Solve: −2x > 6",
+          ar: "حل: −2x > 6",
+        },
+        options: [
+          { fr: "x > −3", en: "x > −3", ar: "x > −3" },
+          { fr: "x < −3", en: "x < −3", ar: "x < −3" },
+          { fr: "x > 3", en: "x > 3", ar: "x > 3" },
+          { fr: "x < 3", en: "x < 3", ar: "x < 3" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "On divise par −2 et on inverse le sens : x < 6 / (−2) = −3.",
+          en: "Divide by −2 and flip the sign: x < 6 / (−2) = −3.",
+          ar: "نقسم على −2 ونعكس الجهة: x < 6 / (−2) = −3.",
+        },
+        lessonId: "l10",
+      },
+    ],
   },
   "physics-mechanics-101": {
     ch1: [
@@ -1552,6 +1683,136 @@ export const quizzes: Record<string, Record<string, QuizQuestion[]>> = {
           ar: "ع = م / ز = 100 / 20 = 5 م/ث.",
         },
         lessonId: "l2",
+      },
+    ],
+    ch2: [
+      {
+        id: "q1",
+        question: {
+          fr: "Selon la première loi de Newton (principe d'inertie), un objet au repos…",
+          en: "According to Newton's first law (principle of inertia), an object at rest…",
+          ar: "حسب قانون نيوتن الأول (مبدأ القصور الذاتي)، الجسم الساكن…",
+        },
+        options: [
+          { fr: "accélère spontanément", en: "spontaneously accelerates", ar: "يتسارع تلقائياً" },
+          { fr: "reste au repos sauf force extérieure", en: "stays at rest unless acted on by an external force", ar: "يبقى ساكناً ما لم تؤثر عليه قوة خارجية" },
+          { fr: "se met toujours en mouvement", en: "always starts moving", ar: "يتحرك دائماً" },
+          { fr: "perd de la masse", en: "loses mass", ar: "يفقد كتلته" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Le principe d'inertie dit qu'un objet garde son état de repos ou de mouvement rectiligne uniforme tant qu'aucune force extérieure ne s'exerce sur lui.",
+          en: "The principle of inertia states an object keeps its state of rest or uniform motion unless an external force acts on it.",
+          ar: "ينص مبدأ القصور الذاتي على أن الجسم يحافظ على سكونه أو حركته المستقيمة المنتظمة ما لم تؤثر عليه قوة خارجية.",
+        },
+        lessonId: "l3",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "D'après F = ma, si on double la masse à force constante, l'accélération…",
+          en: "According to F = ma, if mass doubles at constant force, acceleration…",
+          ar: "حسب F = ma، إذا تضاعفت الكتلة عند قوة ثابتة، فإن التسارع…",
+        },
+        options: [
+          { fr: "double", en: "doubles", ar: "يتضاعف" },
+          { fr: "est divisée par deux", en: "is halved", ar: "ينقسم على اثنين" },
+          { fr: "ne change pas", en: "stays the same", ar: "لا يتغير" },
+          { fr: "devient nulle", en: "becomes zero", ar: "يصبح معدوماً" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "a = F / m : si m double et F reste constante, a est divisée par deux.",
+          en: "a = F / m: if m doubles and F stays constant, a is halved.",
+          ar: "a = F / m: إذا تضاعفت m وبقيت F ثابتة، ينقسم a على اثنين.",
+        },
+        lessonId: "l4",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "Une force de 10 N accélère une masse de 2 kg. Quelle est l'accélération ?",
+          en: "A 10 N force accelerates a 2 kg mass. What is the acceleration?",
+          ar: "قوة قدرها 10 نيوتن تسارع كتلة قدرها 2 كغ. ما هو التسارع؟",
+        },
+        options: [
+          { fr: "2 m/s²", en: "2 m/s²", ar: "2 م/ث²" },
+          { fr: "5 m/s²", en: "5 m/s²", ar: "5 م/ث²" },
+          { fr: "20 m/s²", en: "20 m/s²", ar: "20 م/ث²" },
+          { fr: "0.2 m/s²", en: "0.2 m/s²", ar: "0.2 م/ث²" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "a = F / m = 10 / 2 = 5 m/s².",
+          en: "a = F / m = 10 / 2 = 5 m/s².",
+          ar: "a = F / m = 10 / 2 = 5 م/ث².",
+        },
+        lessonId: "l4",
+      },
+    ],
+    ch3: [
+      {
+        id: "q1",
+        question: {
+          fr: "Le travail d'une force s'exprime en…",
+          en: "The work of a force is expressed in…",
+          ar: "يُعبَّر عن شغل قوة بـ…",
+        },
+        options: [
+          { fr: "Newtons (N)", en: "Newtons (N)", ar: "نيوتن (N)" },
+          { fr: "Joules (J)", en: "Joules (J)", ar: "جول (J)" },
+          { fr: "Watts (W)", en: "Watts (W)", ar: "واط (W)" },
+          { fr: "mètres (m)", en: "meters (m)", ar: "متر (m)" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Le travail (force × déplacement) se mesure en Joules, l'unité d'énergie.",
+          en: "Work (force × displacement) is measured in Joules, the unit of energy.",
+          ar: "يُقاس الشغل (القوة × الإزاحة) بالجول، وهي وحدة الطاقة.",
+        },
+        lessonId: "l5",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "L'énergie cinétique d'un objet dépend de…",
+          en: "The kinetic energy of an object depends on…",
+          ar: "تعتمد الطاقة الحركية لجسم على…",
+        },
+        options: [
+          { fr: "sa couleur", en: "its color", ar: "لونه" },
+          { fr: "sa masse et sa vitesse", en: "its mass and velocity", ar: "كتلته وسرعته" },
+          { fr: "sa température", en: "its temperature", ar: "درجة حرارته" },
+          { fr: "son volume uniquement", en: "its volume only", ar: "حجمه فقط" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "L'énergie cinétique vaut ½mv² : elle dépend de la masse et du carré de la vitesse.",
+          en: "Kinetic energy is ½mv²: it depends on mass and the square of velocity.",
+          ar: "الطاقة الحركية تساوي ½mv²: تعتمد على الكتلة ومربع السرعة.",
+        },
+        lessonId: "l6",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "L'énergie potentielle gravitationnelle augmente quand…",
+          en: "Gravitational potential energy increases when…",
+          ar: "تزداد الطاقة الكامنة الثقالية عندما…",
+        },
+        options: [
+          { fr: "l'objet descend", en: "the object goes down", ar: "ينزل الجسم" },
+          { fr: "l'objet monte en altitude", en: "the object rises in altitude", ar: "يرتفع الجسم" },
+          { fr: "l'objet ralentit", en: "the object slows down", ar: "يبطئ الجسم" },
+          { fr: "l'objet reste immobile au sol", en: "the object stays still on the ground", ar: "يبقى الجسم ساكناً على الأرض" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "L'énergie potentielle gravitationnelle (mgh) augmente avec la hauteur h.",
+          en: "Gravitational potential energy (mgh) increases with height h.",
+          ar: "تزداد الطاقة الكامنة الثقالية (mgh) مع الارتفاع h.",
+        },
+        lessonId: "l7",
       },
     ],
   },
