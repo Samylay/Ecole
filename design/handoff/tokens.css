@@ -1,0 +1,99 @@
+/* Layaida design tokens — "Nord Campus"
+   Drop-in replacement for the :root block in src/app/globals.css.
+   Tailwind 4: expose via @theme so utilities like bg-primary work. */
+
+@import "tailwindcss";
+
+@theme {
+  /* Neutrals (cool, blue-tinted) */
+  --color-bg: #F3F5F9;
+  --color-surface: #FFFFFF;
+  --color-mist: #DCE1EC;
+  --color-border: #E0E5EE;
+  --color-border-soft: #E8ECF3;
+  --color-muted: #6F7890;
+  --color-slate: #4D5670;
+  --color-ink: #20263A;
+  --color-faint: #8A94A4;
+
+  /* Brand */
+  --color-primary: #5B5BD6;
+  --color-primary-hover: #4747B8;
+  --color-primary-soft: #E6E6FA;
+
+  /* Semantic */
+  --color-success: #35A071;
+  --color-success-soft: #E2F3EB;
+  --color-warning: #C98A2E;
+  --color-warning-soft: #F7ECD9;
+  --color-error: #D14D5D;
+  --color-error-soft: #FDEAEA;
+  --color-info: #3F7AD9;
+
+  /* Subjects — oklch siblings: solid oklch(0.58 0.14 H), tint oklch(0.94 0.03 H).
+     New subject = pick a new hue (chimie 55, info 210, …). */
+  --color-math: #3F7AD9;        /* hue 255 */
+  --color-math-soft: #E3EDFB;
+  --color-math-deep: #2C5AA8;
+  --color-physics: #9256D9;     /* hue 300 */
+  --color-physics-soft: #F0E7FB;
+  --color-physics-deep: #6F3AA8;
+  --color-biology: #35A071;     /* hue 160 */
+  --color-biology-soft: #E2F3EB;
+  --color-biology-deep: #237552;
+
+  /* Type — swap Inter/Tajawal for Plex pair */
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  --font-arabic: "IBM Plex Sans Arabic", "IBM Plex Sans", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  /* Radius */
+  --radius-chip: 8px;
+  --radius-input: 12px;
+  --radius-card: 16px;
+  --radius-pill: 999px;
+
+  /* Elevation */
+  --shadow-card: 0 1px 4px rgba(32, 38, 58, 0.06);
+  --shadow-lift: 0 4px 16px rgba(32, 38, 58, 0.10);
+  --shadow-modal: 0 8px 28px rgba(32, 38, 58, 0.16);
+  --shadow-primary: 0 2px 8px rgba(91, 91, 214, 0.30);
+}
+
+/* Dark mode — same variable names, remapped */
+.dark {
+  --color-bg: #161A28;
+  --color-surface: #202638;
+  --color-mist: #303850;
+  --color-border: #303850;
+  --color-border-soft: #2A3148;
+  --color-muted: #8F97B8;
+  --color-slate: #AAB2C8;
+  --color-ink: #E8EBF4;
+  --color-faint: #6B7590;
+  --color-primary: #7C7CEA;
+  --color-primary-hover: #9494F0;
+  --color-primary-soft: #2A2A4E;
+  /* subject tints: oklch(0.30 0.05 H) */
+  --color-math-soft: #1D2A42;
+  --color-physics-soft: #2A2140;
+  --color-biology-soft: #1A3229;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background-color: var(--color-bg);
+}
+
+[dir="rtl"] body,
+:lang(ar) {
+  font-family: var(--font-arabic);
+  letter-spacing: 0;
+  line-height: 1.7; /* Arabic gets +0.2 line-height */
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}

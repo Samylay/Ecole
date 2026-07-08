@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>body{margin:0;background:#e9edf3;font-family:'IBM Plex Sans',system-ui,sans-serif;color:#20263a}a{color:#5b5bd6}a:hover{color:#4747b8}</style>
+</helmet>
+
+<!-- ================================================================ -->
+<!-- 01 · DESIGN SYSTEM -->
+<!-- ================================================================ -->
+<section data-screen-label="01 Design System" style="padding:48px 52px;display:flex;flex-direction:column;gap:28px;border-bottom:1px solid #d5dae4">
+  <div style="display:flex;align-items:center;gap:14px">
+    <span style="font:500 11px 'IBM Plex Mono',monospace;background:#20263a;color:#fff;padding:4px 10px;border-radius:6px">01</span>
+    <h2 style="margin:0;font:600 22px 'IBM Plex Sans',sans-serif;color:#20263a">Design system — « Nord Campus »</h2>
+    <span style="font:400 12px 'IBM Plex Sans',sans-serif;color:#6f7890">calm &amp; focused · cool neutrals · violet accent · Plex Sans / Plex Sans Arabic</span>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+
+    <!-- brand -->
+    <div style="width:340px;background:#fff;border-radius:16px;box-shadow:0 1px 4px rgba(32,38,58,.06);padding:24px;display:flex;flex-direction:column;gap:18px">
+      <div style="font:500 10px 'IBM Plex Mono',monospace;color:#6f7890;text-transform:uppercase;letter-spacing:.08em">Brand</div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <img src="assets/logo.png" alt="Logo Layaida" style="width:64px;height:64px;border-radius:16px;object-fit:cover">
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <div style="font:600 26px/1 'IBM Plex Sans',sans-serif;color:#20263a">layaida</div>
+          <div style="font:500 19px/1.2 'IBM Plex Sans Arabic',sans-serif;color:#20263a" dir="rtl">العيايدة</div>
+        </div>
+      </div>
+      <div style="font:400 12px/1.6 'IBM Plex Sans',sans-serif;color:#6f7890">Wordmark: Plex Sans 600 lowercase. Arabic: Plex Sans Arabic 500. Logo mark used at 32–64px, always on white or mist. Voice: encouraging, second person («&nbsp;tu&nbsp;»), never childish.</div>
+    </div>
+
+    <!-- color tokens -->
+    <div style="width:640px;background:#fff;border-radius:16px;box-shadow:0 1px 4px rgba(32,38,58,.06);padding:24px;display:flex;flex-direction:column;gap:14px">
+      <div style="font:500 10px 'IBM Plex Mono',monospace;color:#6f7890;text-transform:uppercase;letter-spacing:.08em">Color tokens — light / dark</div>
+      <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px">
+        <div style="display:flex;flex-direction:column;gap:4px"><div style="height:44px;border-radius:10px;background:#f3f5f9;border:1px solid #e0e5ee"></div><div style="font:500 9px 'IBM Plex Mono',monospace;color:#4d5670">--bg<br>#F3F5F9</div></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><div style="height:44px;border-radius:10px;background:#ffffff;border:1px solid #e0e5ee"></div><div style="font:500 9px 'IBM Plex Mono',monospace;color:#4d5670">--surface<br>#FFFFFF</div></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><div style="height:44px;border-radius:10px;background:#dce1ec"></div><div style="font:500 9px 'IBM Plex Mono',monospace;color:#4d5670">--mist<br>#DCE1EC</div></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><div style="height:44px;border-radius:10px;background:#6f7890"></div><div style="font:500 9px 'IBM Plex Mono',monospace;color:#4d5670">--muted<br>#6F7890</div></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><div style="height:44px;border-radius:10px;background:#4d5670"></div><div style="font:500 9px 'IBM Plex Mono',monospace;color:#4d5670">--slate<br>#4D5670</div></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><div style="height:44px;border-radius:10px;background:#20263a"></div><div style="font:500 9px 'IBM Plex Mono',monospace;color:#4d5670">--ink<br>#20263A</div></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><div style="height:44px;border-radius:10px;background:#5b5bd6"></div><div style="font:500 9px 'IBM Plex Mono',monospace;color:#4d5670">--primary<br>#5B5BD6</div></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><div style="height:44px;border-radius:10px;background:#e6e6fa"></div><div style="font:500 9px 'IBM Plex Mono',monospace;color:#4d5670">--primary-soft<br>#E6E6FA</div></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><div style="height:44px;border-radius:10px;background:#35a071"></div><div style="font:500 9px 'IBM Plex Mono',monospace;color:#4d5670">--success<br>#35A071</div></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><div style="height:44px;border-radius:10px;background:#c98a2e"></div><div style="font:500 9px 'IBM Plex Mono',monospace;color:#4d5670">--warning<br>#C98A2E</div></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><div style="height:44px;border-radius:10px;background:#d14d5d"></div><div style="font:500 9px 'IBM Plex Mono',monospace;color:#4d5670">--error<br>#D14D5D</div></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><div style="height:44px;border-radius:10px;background:#3f7ad9"></div><div style="font:500 9px 'IBM Plex Mono',monospace;color:#4d5670">--info<br>#3F7AD9</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding-top:4px">
+        <div style="display:flex;align-items:center;gap:8px;background:#e3edfb;border-radius:10px;padding:8px 12px"><div style="width:18px;height:18px;border-radius:50%;background:#3f7ad9"></div><div style="font:500 11px 'IBM Plex Sans',sans-serif;color:#2c5aa8">Maths — hue 255</div></div>
+        <div style="display:flex;align-items:center;gap:8px;background:#f0e7fb;border-radius:10px;padding:8px 12px"><div style="width:18px;height:18px;border-radius:50%;background:#9256d9"></div><div style="font:500 11px 'IBM Plex Sans',sans-serif;color:#6f3aa8">Physique — hue 300</div></div>
+        <div style="display:flex;align-items:center;gap:8px;background:#e2f3eb;border-radius:10px;padding:8px 12px"><div style="width:18px;height:18px;border-radius:50%;background:#35a071"></div><div style="font:500 11px 'IBM Plex Sans',sans-serif;color:#237552">Biologie — hue 160</div></div>
+      </div>
+      <div style="font:400 11px/1.6 'IBM Plex Sans',sans-serif;color:#6f7890">Subjects are oklch siblings — <span style="font-family:'IBM Plex Mono',monospace;font-size:10px">oklch(0.58 0.14 H)</span> solid + <span style="font-family:'IBM Plex Mono',monospace;font-size:10px">oklch(0.94 0.03 H)</span> tint. New subject = new hue (Chimie 55, Info 210…). Dark mode: --bg #161A28, --surface #202638, --mist #303850, text #E8EBF4, --primary lifts to #7C7CEA; tints become <span style="font-family:'IBM Plex Mono',monospace;font-size:10px">oklch(0.30 0.05 H)</span>.</div>
+    </div>
+
+    <!-- typography -->
+    <div style="width:520px;background:#fff;border-radius:16px;box-shadow:0 1px 4px rgba(32,38,58,.06);padding:24px;display:flex;flex-direction:column;gap:12px">
+      <div style="font:500 10px 'IBM Plex Mono',monospace;color:#6f7890;text-transform:uppercase;letter-spacing:.08em">Typography — Latin ↔ Arabic</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px"><span style="font:600 30px/1.2 'IBM Plex Sans',sans-serif;color:#20263a">Titre display</span><span style="font:600 30px/1.5 'IBM Plex Sans Arabic',sans-serif;color:#20263a" dir="rtl">عنوان كبير</span><span style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4">display 30/600</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px"><span style="font:600 22px/1.3 'IBM Plex Sans',sans-serif;color:#20263a">Titre de page</span><span style="font:600 22px/1.5 'IBM Plex Sans Arabic',sans-serif;color:#20263a" dir="rtl">عنوان الصفحة</span><span style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4">h1 22/600</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px"><span style="font:600 17px/1.4 'IBM Plex Sans',sans-serif;color:#20263a">Titre de carte</span><span style="font:600 17px/1.5 'IBM Plex Sans Arabic',sans-serif;color:#20263a" dir="rtl">عنوان البطاقة</span><span style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4">h2 17/600</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px"><span style="font:400 15px/1.6 'IBM Plex Sans',sans-serif;color:#4d5670">Texte courant, lisible et calme.</span><span style="font:400 15px/1.8 'IBM Plex Sans Arabic',sans-serif;color:#4d5670" dir="rtl">نص أساسي، واضح وهادئ.</span><span style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4">body 15/400</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px"><span style="font:500 13px/1.5 'IBM Plex Sans',sans-serif;color:#6f7890">Libellé secondaire</span><span style="font:500 13px/1.7 'IBM Plex Sans Arabic',sans-serif;color:#6f7890" dir="rtl">تسمية ثانوية</span><span style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4">small 13/500</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px"><span style="font:500 11px 'IBM Plex Mono',monospace;color:#6f7890;letter-spacing:.05em">12 LEÇONS · 4H30 · 62%</span><span style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4">stats: mono 11/500</span></div>
+      </div>
+      <div style="font:400 11px/1.6 'IBM Plex Sans',sans-serif;color:#6f7890;border-top:1px solid #e0e5ee;padding-top:10px">Arabic gets +0.2 line-height and no letter-spacing. Same rem scale both scripts; <span style="font-family:'IBM Plex Mono',monospace;font-size:10px">font-family</span> swaps via <span style="font-family:'IBM Plex Mono',monospace;font-size:10px">:lang(ar)</span>. No tight tracking anywhere — friendly, not compressed.</div>
+    </div>
+
+    <!-- spacing / radius / elevation -->
+    <div style="width:340px;background:#fff;border-radius:16px;box-shadow:0 1px 4px rgba(32,38,58,.06);padding:24px;display:flex;flex-direction:column;gap:16px">
+      <div style="font:500 10px 'IBM Plex Mono',monospace;color:#6f7890;text-transform:uppercase;letter-spacing:.08em">Space · Radius · Elevation</div>
+      <div style="display:flex;align-items:flex-end;gap:8px">
+        <div style="width:4px;height:4px;background:#5b5bd6;border-radius:1px"></div><div style="width:8px;height:8px;background:#5b5bd6;border-radius:2px"></div><div style="width:12px;height:12px;background:#5b5bd6;border-radius:2px"></div><div style="width:16px;height:16px;background:#5b5bd6;border-radius:3px"></div><div style="width:24px;height:24px;background:#5b5bd6;border-radius:4px"></div><div style="width:32px;height:32px;background:#5b5bd6;border-radius:5px"></div><div style="width:48px;height:48px;background:#5b5bd6;border-radius:6px"></div>
+        <div style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4;margin-left:6px">4-base: 4·8·12·16·24·32·48</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <div style="width:56px;height:40px;background:#e6e6fa;border-radius:8px;display:grid;place-items:center;font:500 9px 'IBM Plex Mono',monospace;color:#4747b8">8</div>
+        <div style="width:56px;height:40px;background:#e6e6fa;border-radius:12px;display:grid;place-items:center;font:500 9px 'IBM Plex Mono',monospace;color:#4747b8">12</div>
+        <div style="width:56px;height:40px;background:#e6e6fa;border-radius:16px;display:grid;place-items:center;font:500 9px 'IBM Plex Mono',monospace;color:#4747b8">16</div>
+        <div style="width:56px;height:40px;background:#e6e6fa;border-radius:20px;display:grid;place-items:center;font:500 9px 'IBM Plex Mono',monospace;color:#4747b8">pill</div>
+        <div style="font:400 10px/1.4 'IBM Plex Mono',monospace;color:#8a94a4">chip·input·card·btn</div>
+      </div>
+      <div style="display:flex;gap:14px">
+        <div style="flex:1;height:56px;background:#fff;border:1px solid #e0e5ee;border-radius:12px;display:grid;place-items:center;font:400 9.5px 'IBM Plex Mono',monospace;color:#8a94a4">e0 border</div>
+        <div style="flex:1;height:56px;background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(32,38,58,.08);display:grid;place-items:center;font:400 9.5px 'IBM Plex Mono',monospace;color:#8a94a4">e1 card</div>
+        <div style="flex:1;height:56px;background:#fff;border-radius:12px;box-shadow:0 8px 28px rgba(32,38,58,.16);display:grid;place-items:center;font:400 9.5px 'IBM Plex Mono',monospace;color:#8a94a4">e2 modal</div>
+      </div>
+      <div style="font:400 11px/1.6 'IBM Plex Sans',sans-serif;color:#6f7890">Icons: 24px rounded-stroke (Lucide style), 2px weight, never filled except active nav. Motion: 180ms ease-out; respects <span style="font-family:'IBM Plex Mono',monospace;font-size:10px">prefers-reduced-motion</span>.</div>
+    </div>
+
+    <!-- buttons & inputs -->
+    <div style="width:420px;background:#fff;border-radius:16px;box-shadow:0 1px 4px rgba(32,38,58,.06);padding:24px;display:flex;flex-direction:column;gap:14px">
+      <div style="font:500 10px 'IBM Plex Mono',monospace;color:#6f7890;text-transform:uppercase;letter-spacing:.08em">Buttons &amp; Inputs</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+        <div style="height:44px;padding:0 22px;display:grid;place-items:center;background:#5b5bd6;color:#fff;border-radius:22px;font:600 14px 'IBM Plex Sans',sans-serif;box-shadow:0 2px 8px rgba(91,91,214,.3)">Primaire</div>
+        <div style="height:44px;padding:0 22px;display:grid;place-items:center;background:#4747b8;color:#fff;border-radius:22px;font:600 14px 'IBM Plex Sans',sans-serif">hover</div>
+        <div style="height:44px;padding:0 20px;display:grid;place-items:center;background:#e6e6fa;color:#4747b8;border-radius:22px;font:600 14px 'IBM Plex Sans',sans-serif">Secondaire</div>
+        <div style="height:44px;padding:0 18px;display:grid;place-items:center;color:#4d5670;border-radius:22px;font:600 14px 'IBM Plex Sans',sans-serif">Ghost</div>
+        <div style="height:44px;padding:0 20px;display:grid;place-items:center;background:#dce1ec;color:#8a94a4;border-radius:22px;font:600 14px 'IBM Plex Sans',sans-serif">Désactivé</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <div style="height:36px;padding:0 16px;display:grid;place-items:center;background:#5b5bd6;color:#fff;border-radius:18px;font:600 13px 'IBM Plex Sans',sans-serif">Petit 36</div>
+        <div style="height:44px;padding:0 22px;display:grid;place-items:center;background:#5b5bd6;color:#fff;border-radius:22px;font:600 14px 'IBM Plex Sans',sans-serif;outline:2px solid #20263a;outline-offset:2px">Focus visible</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="height:48px;display:flex;align-items:center;padding:0 16px;background:#fff;border:1.5px solid #dce1ec;border-radius:12px;font:400 14px 'IBM Plex Sans',sans-serif;color:#8a94a4">adresse@email.com</div>
+        <div style="height:48px;display:flex;align-items:center;padding:0 16px;background:#fff;border:2px solid #5b5bd6;border-radius:12px;font:400 14px 'IBM Plex Sans',sans-serif;color:#20263a;box-shadow:0 0 0 3px #e6e6fa">focus|</div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="height:48px;display:flex;align-items:center;padding:0 16px;background:#fff;border:2px solid #d14d5d;border-radius:12px;font:400 14px 'IBM Plex Sans',sans-serif;color:#20263a">motdepasse</div>
+          <div style="font:500 12px 'IBM Plex Sans',sans-serif;color:#d14d5d">8 caractères minimum.</div>
+        </div>
+      </div>
+      <div style="font:400 11px/1.6 'IBM Plex Sans',sans-serif;color:#6f7890">All targets ≥44px. Focus: 2px ink outline, 2px offset (WCAG AA). Hover darkens one step; press scales 0.98.</div>
+    </div>
+
+    <!-- course card + lesson rows -->
+    <div style="width:420px;background:#fff;border-radius:16px;box-shadow:0 1px 4px rgba(32,38,58,.06);padding:24px;display:flex;flex-direction:column;gap:14px">
+      <div style="font:500 10px 'IBM Plex Mono',monospace;color:#6f7890;text-transform:uppercase;letter-spacing:.08em">Course card · Lesson rows</div>
+      <div style="width:250px;background:#fff;border:1px solid #e8ecf3;border-radius:16px;overflow:hidden;box-shadow:0 1px 4px rgba(32,38,58,.06)">
+        <div style="height:110px;background:repeating-linear-gradient(45deg,#e3edfb,#e3edfb 10px,#ddе8f8 10px,#dde8f8 20px);background-color:#e3edfb;display:grid;place-items:center;position:relative">
+          <span style="font:400 10px 'IBM Plex Mono',monospace;color:#3f7ad9">image du cours</span>
+          <span style="position:absolute;top:10px;left:10px;font:600 10px 'IBM Plex Sans',sans-serif;color:#2c5aa8;background:#fff;padding:3px 10px;border-radius:10px">Maths · 3ᵉ</span>
+        </div>
+        <div style="padding:14px;display:flex;flex-direction:column;gap:8px">
+          <div style="font:600 15px/1.3 'IBM Plex Sans',sans-serif;color:#20263a">Fonctions affines</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:22px;height:22px;border-radius:50%;background:#dce1ec;display:grid;place-items:center;font:600 9px 'IBM Plex Sans',sans-serif;color:#4d5670">SK</div>
+            <span style="font:400 12px 'IBM Plex Sans',sans-serif;color:#6f7890">Mme S. Karim</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font:500 10.5px 'IBM Plex Mono',monospace;color:#8a94a4"><span>12 leçons · 4h30</span><span style="color:#c98a2e">★ 4.8 (126)</span></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="display:flex;align-items:center;gap:12px;height:52px;padding:0 14px;background:#f3f5f9;border-radius:12px">
+          <div style="width:26px;height:26px;border-radius:50%;background:#35a071;display:grid;place-items:center;color:#fff;font:600 12px sans-serif">✓</div>
+          <div style="flex:1;font:500 13.5px 'IBM Plex Sans',sans-serif;color:#6f7890;text-decoration:line-through">1. Découvrir la fonction affine</div>
+          <span style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4">08:24</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;height:52px;padding:0 14px;background:#e6e6fa;border-radius:12px;border:1.5px solid #5b5bd6">
+          <div style="width:26px;height:26px;border-radius:50%;background:#5b5bd6;display:grid;place-items:center;color:#fff;font:600 10px sans-serif">▶</div>
+          <div style="flex:1;font:600 13.5px 'IBM Plex Sans',sans-serif;color:#20263a">2. Coefficient directeur</div>
+          <span style="font:400 10px 'IBM Plex Mono',monospace;color:#4747b8">12:10</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;height:52px;padding:0 14px;background:#fff;border:1px solid #e8ecf3;border-radius:12px">
+          <div style="width:26px;height:26px;border-radius:50%;border:1.5px solid #dce1ec;display:grid;place-items:center;color:#8a94a4;font:500 11px sans-serif">3</div>
+          <div style="flex:1;font:500 13.5px 'IBM Plex Sans',sans-serif;color:#20263a">Représentation graphique</div>
+          <span style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4">09:47</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;height:52px;padding:0 14px;background:#fff;border:1px dashed #dce1ec;border-radius:12px;opacity:.7">
+          <div style="width:26px;height:26px;border-radius:50%;background:#dce1ec;display:grid;place-items:center;color:#6f7890;font:500 10px sans-serif">🔒</div>
+          <div style="flex:1;font:500 13.5px 'IBM Plex Sans',sans-serif;color:#8a94a4">Quiz du chapitre</div>
+        </div>
+      </div>
+      <div style="font:400 11px/1.6 'IBM Plex Sans',sans-serif;color:#6f7890">Card hover: lift to e2 + title turns primary. Rows: done / active / default / locked. Whole row is the tap target.</div>
+    </div>
+
+    <!-- progress, badges, tabs -->
+    <div style="width:420px;background:#fff;border-radius:16px;box-shadow:0 1px 4px rgba(32,38,58,.06);padding:24px;display:flex;flex-direction:column;gap:16px">
+      <div style="font:500 10px 'IBM Plex Mono',monospace;color:#6f7890;text-transform:uppercase;letter-spacing:.08em">Progress · Badges · Tabs</div>
+      <div style="display:flex;align-items:center;gap:18px">
+        <div style="width:56px;height:56px;border-radius:50%;background:conic-gradient(#5b5bd6 0 62%,#dce1ec 62% 100%);display:grid;place-items:center"><div style="width:42px;height:42px;border-radius:50%;background:#fff;display:grid;place-items:center;font:600 12px 'IBM Plex Mono',monospace;color:#20263a">62%</div></div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:6px">
+          <div style="height:8px;border-radius:4px;background:#dce1ec;overflow:hidden"><div style="width:62%;height:100%;border-radius:4px;background:#5b5bd6"></div></div>
+          <div style="height:8px;border-radius:4px;background:#dce1ec;overflow:hidden"><div style="width:100%;height:100%;border-radius:4px;background:#35a071"></div></div>
+        </div>
+        <div style="display:flex;gap:4px">
+          <div style="width:8px;height:22px;border-radius:4px;background:#5b5bd6"></div><div style="width:8px;height:22px;border-radius:4px;background:#5b5bd6"></div><div style="width:8px;height:22px;border-radius:4px;background:#5b5bd6"></div><div style="width:8px;height:22px;border-radius:4px;background:#dce1ec"></div><div style="width:8px;height:22px;border-radius:4px;background:#dce1ec"></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <span style="font:600 11px 'IBM Plex Sans',sans-serif;color:#2c5aa8;background:#e3edfb;padding:4px 12px;border-radius:12px">Maths</span>
+        <span style="font:600 11px 'IBM Plex Sans',sans-serif;color:#6f3aa8;background:#f0e7fb;padding:4px 12px;border-radius:12px">Physique</span>
+        <span style="font:600 11px 'IBM Plex Sans',sans-serif;color:#237552;background:#e2f3eb;padding:4px 12px;border-radius:12px">Biologie</span>
+        <span style="font:600 11px 'IBM Plex Sans',sans-serif;color:#237552;background:#e2f3eb;padding:4px 12px;border-radius:12px">✓ Terminé</span>
+        <span style="font:600 11px 'IBM Plex Sans',sans-serif;color:#96661c;background:#f7ecd9;padding:4px 12px;border-radius:12px">Nouveau</span>
+        <span style="font:600 11px 'IBM Plex Sans',sans-serif;color:#fff;background:#5b5bd6;padding:4px 12px;border-radius:12px">🔥 7 jours</span>
+      </div>
+      <div style="display:flex;gap:4px;background:#eef1f7;border-radius:22px;padding:4px;width:fit-content">
+        <div style="height:36px;padding:0 18px;display:grid;place-items:center;background:#fff;border-radius:18px;font:600 13px 'IBM Plex Sans',sans-serif;color:#20263a;box-shadow:0 1px 3px rgba(32,38,58,.1)">Tous</div>
+        <div style="height:36px;padding:0 18px;display:grid;place-items:center;border-radius:18px;font:600 13px 'IBM Plex Sans',sans-serif;color:#6f7890">Collège</div>
+        <div style="height:36px;padding:0 18px;display:grid;place-items:center;border-radius:18px;font:600 13px 'IBM Plex Sans',sans-serif;color:#6f7890">Lycée</div>
+      </div>
+      <div style="font:400 11px/1.6 'IBM Plex Sans',sans-serif;color:#6f7890">Ring for identity moments (dashboard), bar for lists, segments for weekly goals. Streak badge is the only «&nbsp;game&nbsp;» element — kept quiet.</div>
+    </div>
+
+    <!-- toast / modal / empty / skeleton -->
+    <div style="width:420px;background:#fff;border-radius:16px;box-shadow:0 1px 4px rgba(32,38,58,.06);padding:24px;display:flex;flex-direction:column;gap:14px">
+      <div style="font:500 10px 'IBM Plex Mono',monospace;color:#6f7890;text-transform:uppercase;letter-spacing:.08em">Toast · Modal · Empty · Skeleton</div>
+      <div style="display:flex;align-items:center;gap:10px;background:#20263a;color:#fff;border-radius:14px;padding:12px 16px;box-shadow:0 8px 28px rgba(32,38,58,.25)">
+        <div style="width:24px;height:24px;border-radius:50%;background:#35a071;display:grid;place-items:center;font:600 12px sans-serif">✓</div>
+        <div style="flex:1;font:500 13px 'IBM Plex Sans',sans-serif">Leçon terminée — bien joué !</div>
+        <div style="font:600 12px 'IBM Plex Sans',sans-serif;color:#a5aef0">Suivant</div>
+      </div>
+      <div style="background:#f3f5f9;border-radius:14px;padding:16px;display:grid;place-items:center">
+        <div style="width:280px;background:#fff;border-radius:16px;box-shadow:0 8px 28px rgba(32,38,58,.16);padding:20px;display:flex;flex-direction:column;gap:10px">
+          <div style="font:600 15px 'IBM Plex Sans',sans-serif;color:#20263a">Quitter le quiz ?</div>
+          <div style="font:400 12.5px/1.5 'IBM Plex Sans',sans-serif;color:#6f7890">Tes réponses ne seront pas enregistrées.</div>
+          <div style="display:flex;gap:8px;justify-content:flex-end">
+            <div style="height:38px;padding:0 16px;display:grid;place-items:center;color:#4d5670;font:600 13px 'IBM Plex Sans',sans-serif;border-radius:19px">Rester</div>
+            <div style="height:38px;padding:0 16px;display:grid;place-items:center;background:#d14d5d;color:#fff;font:600 13px 'IBM Plex Sans',sans-serif;border-radius:19px">Quitter</div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px">
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;background:#f3f5f9;border-radius:14px;padding:18px 12px;text-align:center">
+          <div style="width:44px;height:44px;border-radius:50%;background:#e6e6fa;display:grid;place-items:center;font:600 18px 'IBM Plex Sans',sans-serif;color:#5b5bd6">?</div>
+          <div style="font:600 13px 'IBM Plex Sans',sans-serif;color:#20263a">Aucun résultat</div>
+          <div style="font:400 11px/1.4 'IBM Plex Sans',sans-serif;color:#6f7890">Essaie «&nbsp;fractions&nbsp;» ou retire un filtre.</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#fff;border:1px solid #e8ecf3;border-radius:14px;padding:14px">
+          <div style="height:56px;border-radius:10px;background:linear-gradient(90deg,#eef1f7,#e4e9f2,#eef1f7)"></div>
+          <div style="height:12px;width:75%;border-radius:6px;background:#eef1f7"></div>
+          <div style="height:12px;width:50%;border-radius:6px;background:#eef1f7"></div>
+        </div>
+      </div>
+      <div style="font:400 11px/1.6 'IBM Plex Sans',sans-serif;color:#6f7890">Toast: ink pill, bottom center, 4s, action optional. Skeleton: 1.4s shimmer, disabled under reduced-motion. Empty states always suggest an action.</div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================================================================ -->
+<!-- 02 · HOME -->
+<!-- ================================================================ -->
+<section data-screen-label="02 Home" style="padding:48px 52px;display:flex;flex-direction:column;gap:24px;border-bottom:1px solid #d5dae4">
+  <div style="display:flex;align-items:center;gap:14px">
+    <span style="font:500 11px 'IBM Plex Mono',monospace;background:#20263a;color:#fff;padding:4px 10px;border-radius:6px">02</span>
+    <h2 style="margin:0;font:600 22px 'IBM Plex Sans',sans-serif">Accueil (visiteur)</h2>
+    <span style="font:400 12px 'IBM Plex Sans',sans-serif;color:#6f7890">hero calme sur mist, recherche centrale, matières en tuiles teintées — plus de dégradé indigo</span>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+
+    <!-- desktop home -->
+    <div style="flex:none;width:1180px;background:#f3f5f9;border-radius:20px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08)">
+      <!-- nav -->
+      <div style="display:flex;align-items:center;gap:24px;padding:0 32px;height:68px;background:#fff;border-bottom:1px solid #eef1f7">
+        <div style="display:flex;align-items:center;gap:10px"><img src="assets/logo.png" alt="" style="width:32px;height:32px;border-radius:8px;object-fit:cover"><span style="font:600 19px 'IBM Plex Sans',sans-serif">layaida</span></div>
+        <div style="display:flex;gap:6px;margin-left:8px">
+          <span style="height:38px;display:grid;place-items:center;padding:0 14px;border-radius:19px;font:600 13.5px 'IBM Plex Sans',sans-serif;color:#20263a;background:#eef1f7">Cours</span>
+          <span style="height:38px;display:grid;place-items:center;padding:0 14px;border-radius:19px;font:600 13.5px 'IBM Plex Sans',sans-serif;color:#6f7890">Enseignants</span>
+          <span style="height:38px;display:grid;place-items:center;padding:0 14px;border-radius:19px;font:600 13.5px 'IBM Plex Sans',sans-serif;color:#6f7890">Tarifs</span>
+        </div>
+        <div style="flex:1"></div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="height:38px;display:grid;place-items:center;padding:0 12px;border-radius:19px;font:600 12px 'IBM Plex Mono',monospace;color:#4d5670;border:1px solid #dce1ec">FR ▾</span>
+          <span style="height:40px;display:grid;place-items:center;padding:0 16px;font:600 13.5px 'IBM Plex Sans',sans-serif;color:#4d5670">Se connecter</span>
+          <span style="height:44px;display:grid;place-items:center;padding:0 22px;background:#5b5bd6;color:#fff;border-radius:22px;font:600 14px 'IBM Plex Sans',sans-serif;box-shadow:0 2px 8px rgba(91,91,214,.3)">S'inscrire</span>
+        </div>
+      </div>
+      <!-- hero -->
+      <div style="display:grid;grid-template-columns:1.1fr .9fr;gap:48px;padding:64px 64px 56px;align-items:center">
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <span style="width:fit-content;font:600 11px 'IBM Plex Sans',sans-serif;color:#4747b8;background:#e6e6fa;padding:5px 14px;border-radius:12px">Collège &amp; lycée · fr · en · ar</span>
+          <h1 style="margin:0;font:600 44px/1.15 'IBM Plex Sans',sans-serif;color:#20263a;text-wrap:pretty">Comprends enfin tes cours de sciences.</h1>
+          <p style="margin:0;font:400 16.5px/1.6 'IBM Plex Sans',sans-serif;color:#4d5670;max-width:44ch">Des leçons en vidéo par de vrais profs, des exercices corrigés et un suivi de progression — en français, anglais et arabe.</p>
+          <div style="display:flex;align-items:center;height:56px;background:#fff;border-radius:28px;padding:6px 6px 6px 22px;box-shadow:0 2px 10px rgba(32,38,58,.08);max-width:460px;gap:12px">
+            <span style="font:400 15px 'IBM Plex Sans',sans-serif;color:#8a94a4;flex:1">Cherche un chapitre, ex. «&nbsp;fractions&nbsp;»</span>
+            <span style="height:44px;padding:0 20px;display:grid;place-items:center;background:#5b5bd6;color:#fff;border-radius:22px;font:600 14px 'IBM Plex Sans',sans-serif">Chercher</span>
+          </div>
+          <div style="display:flex;gap:20px;font:500 12px 'IBM Plex Mono',monospace;color:#6f7890"><span>240+ leçons</span><span>18 profs</span><span>12 000 élèves</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div style="grid-column:1/-1;height:120px;border-radius:16px;background:repeating-linear-gradient(45deg,#e6e6fa,#e6e6fa 12px,#ededfc 12px,#ededfc 24px);display:grid;place-items:center"><span style="font:400 10px 'IBM Plex Mono',monospace;color:#5b5bd6">photo élèves / hero illustration</span></div>
+          <div style="background:#e3edfb;border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:8px"><div style="width:30px;height:30px;border-radius:10px;background:#3f7ad9;color:#fff;display:grid;place-items:center;font:700 15px 'IBM Plex Sans',sans-serif">∑</div><div style="font:600 15px 'IBM Plex Sans',sans-serif;color:#2c5aa8">Maths</div><div style="font:400 11px 'IBM Plex Mono',monospace;color:#6b87b4">96 leçons</div></div>
+          <div style="background:#f0e7fb;border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:8px"><div style="width:30px;height:30px;border-radius:10px;background:#9256d9;color:#fff;display:grid;place-items:center;font:700 15px 'IBM Plex Sans',sans-serif">⚛</div><div style="font:600 15px 'IBM Plex Sans',sans-serif;color:#6f3aa8">Physique</div><div style="font:400 11px 'IBM Plex Mono',monospace;color:#9679b8">78 leçons</div></div>
+          <div style="grid-column:1/-1;background:#e2f3eb;border-radius:16px;padding:18px;display:flex;align-items:center;gap:12px"><div style="width:30px;height:30px;border-radius:10px;background:#35a071;color:#fff;display:grid;place-items:center;font:700 15px 'IBM Plex Sans',sans-serif">❋</div><div><div style="font:600 15px 'IBM Plex Sans',sans-serif;color:#237552">Biologie</div><div style="font:400 11px 'IBM Plex Mono',monospace;color:#6ba189">66 leçons</div></div></div>
+        </div>
+      </div>
+      <!-- course row -->
+      <div style="padding:0 64px 56px;display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between">
+          <h3 style="margin:0;font:600 22px 'IBM Plex Sans',sans-serif">Cours populaires</h3>
+          <span style="font:600 13.5px 'IBM Plex Sans',sans-serif;color:#5b5bd6">Tout le catalogue →</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:18px">
+          <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;overflow:hidden">
+            <div style="height:120px;background:repeating-linear-gradient(45deg,#e3edfb,#e3edfb 12px,#eaf1fc 12px,#eaf1fc 24px);display:grid;place-items:center;position:relative"><span style="font:400 10px 'IBM Plex Mono',monospace;color:#3f7ad9">image</span><span style="position:absolute;top:10px;left:10px;font:600 10px 'IBM Plex Sans',sans-serif;color:#2c5aa8;background:#fff;padding:3px 10px;border-radius:10px">Maths · 3ᵉ</span></div>
+            <div style="padding:14px;display:flex;flex-direction:column;gap:6px"><div style="font:600 15px/1.3 'IBM Plex Sans',sans-serif">Fonctions affines</div><div style="font:400 12px 'IBM Plex Sans',sans-serif;color:#6f7890">Mme S. Karim</div><div style="display:flex;justify-content:space-between;font:500 10.5px 'IBM Plex Mono',monospace;color:#8a94a4"><span>12 leçons · 4h30</span><span style="color:#c98a2e">★ 4.8</span></div></div>
+          </div>
+          <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;overflow:hidden">
+            <div style="height:120px;background:repeating-linear-gradient(45deg,#f0e7fb,#f0e7fb 12px,#f4edfc 12px,#f4edfc 24px);display:grid;place-items:center;position:relative"><span style="font:400 10px 'IBM Plex Mono',monospace;color:#9256d9">image</span><span style="position:absolute;top:10px;left:10px;font:600 10px 'IBM Plex Sans',sans-serif;color:#6f3aa8;background:#fff;padding:3px 10px;border-radius:10px">Physique · 2de</span></div>
+            <div style="padding:14px;display:flex;flex-direction:column;gap:6px"><div style="font:600 15px/1.3 'IBM Plex Sans',sans-serif">Forces et mouvement</div><div style="font:400 12px 'IBM Plex Sans',sans-serif;color:#6f7890">M. Y. Benali</div><div style="display:flex;justify-content:space-between;font:500 10.5px 'IBM Plex Mono',monospace;color:#8a94a4"><span>15 leçons · 6h10</span><span style="color:#c98a2e">★ 4.9</span></div></div>
+          </div>
+          <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;overflow:hidden">
+            <div style="height:120px;background:repeating-linear-gradient(45deg,#e2f3eb,#e2f3eb 12px,#e9f6f0 12px,#e9f6f0 24px);display:grid;place-items:center;position:relative"><span style="font:400 10px 'IBM Plex Mono',monospace;color:#35a071">image</span><span style="position:absolute;top:10px;left:10px;font:600 10px 'IBM Plex Sans',sans-serif;color:#237552;background:#fff;padding:3px 10px;border-radius:10px">Biologie · 1re</span></div>
+            <div style="padding:14px;display:flex;flex-direction:column;gap:6px"><div style="font:600 15px/1.3 'IBM Plex Sans',sans-serif">Génétique : les bases</div><div style="font:400 12px 'IBM Plex Sans',sans-serif;color:#6f7890">Dr A. Mansouri</div><div style="display:flex;justify-content:space-between;font:500 10.5px 'IBM Plex Mono',monospace;color:#8a94a4"><span>10 leçons · 3h45</span><span style="color:#c98a2e">★ 4.7</span></div></div>
+          </div>
+          <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;overflow:hidden">
+            <div style="height:120px;background:repeating-linear-gradient(45deg,#e3edfb,#e3edfb 12px,#eaf1fc 12px,#eaf1fc 24px);display:grid;place-items:center;position:relative"><span style="font:400 10px 'IBM Plex Mono',monospace;color:#3f7ad9">image</span><span style="position:absolute;top:10px;left:10px;font:600 10px 'IBM Plex Sans',sans-serif;color:#2c5aa8;background:#fff;padding:3px 10px;border-radius:10px">Maths · Tle</span></div>
+            <div style="padding:14px;display:flex;flex-direction:column;gap:6px"><div style="font:600 15px/1.3 'IBM Plex Sans',sans-serif">Dérivées et limites</div><div style="font:400 12px 'IBM Plex Sans',sans-serif;color:#6f7890">Mme S. Karim</div><div style="display:flex;justify-content:space-between;font:500 10.5px 'IBM Plex Mono',monospace;color:#8a94a4"><span>18 leçons · 7h20</span><span style="color:#c98a2e">★ 4.8</span></div></div>
+          </div>
+        </div>
+      </div>
+      <!-- footer -->
+      <div style="background:#20263a;color:#aab2c8;padding:32px 64px;display:flex;justify-content:space-between;align-items:center">
+        <div style="display:flex;align-items:center;gap:10px"><img src="assets/logo.png" alt="" style="width:28px;height:28px;border-radius:7px;object-fit:cover"><span style="font:600 16px 'IBM Plex Sans',sans-serif;color:#fff">layaida</span><span style="font:500 13px 'IBM Plex Sans Arabic',sans-serif" dir="rtl">العيايدة</span></div>
+        <div style="display:flex;gap:24px;font:500 12.5px 'IBM Plex Sans',sans-serif"><span>Cours</span><span>Enseignants</span><span>Aide</span><span>Confidentialité</span></div>
+        <div style="font:400 11px 'IBM Plex Mono',monospace">fr · en · ar</div>
+      </div>
+    </div>
+
+    <!-- mobile home -->
+    <div style="flex:none;width:390px;background:#f3f5f9;border-radius:28px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08)">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px 6px">
+        <div style="display:flex;align-items:center;gap:8px"><img src="assets/logo.png" alt="" style="width:30px;height:30px;border-radius:8px;object-fit:cover"><span style="font:600 18px 'IBM Plex Sans',sans-serif">layaida</span></div>
+        <div style="display:flex;gap:8px;align-items:center"><span style="height:36px;display:grid;place-items:center;padding:0 12px;border-radius:18px;font:600 11px 'IBM Plex Mono',monospace;color:#4d5670;border:1px solid #dce1ec">FR ▾</span><span style="height:40px;display:grid;place-items:center;padding:0 16px;background:#5b5bd6;color:#fff;border-radius:20px;font:600 13px 'IBM Plex Sans',sans-serif">S'inscrire</span></div>
+      </div>
+      <div style="padding:18px 20px 8px;display:flex;flex-direction:column;gap:14px">
+        <h1 style="margin:0;font:600 28px/1.2 'IBM Plex Sans',sans-serif;text-wrap:pretty">Comprends enfin tes cours de sciences.</h1>
+        <div style="display:flex;align-items:center;height:52px;background:#fff;border-radius:26px;padding:6px 6px 6px 18px;box-shadow:0 2px 10px rgba(32,38,58,.08);gap:10px">
+          <span style="font:400 14px 'IBM Plex Sans',sans-serif;color:#8a94a4;flex:1">Cherche un chapitre…</span>
+          <span style="width:40px;height:40px;display:grid;place-items:center;background:#5b5bd6;color:#fff;border-radius:20px;font:600 15px sans-serif">→</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+          <div style="background:#e3edfb;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:6px"><div style="width:26px;height:26px;border-radius:8px;background:#3f7ad9;color:#fff;display:grid;place-items:center;font:700 13px 'IBM Plex Sans',sans-serif">∑</div><div style="font:600 13px 'IBM Plex Sans',sans-serif;color:#2c5aa8">Maths</div></div>
+          <div style="background:#f0e7fb;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:6px"><div style="width:26px;height:26px;border-radius:8px;background:#9256d9;color:#fff;display:grid;place-items:center;font:700 13px 'IBM Plex Sans',sans-serif">⚛</div><div style="font:600 13px 'IBM Plex Sans',sans-serif;color:#6f3aa8">Physique</div></div>
+          <div style="background:#e2f3eb;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:6px"><div style="width:26px;height:26px;border-radius:8px;background:#35a071;color:#fff;display:grid;place-items:center;font:700 13px 'IBM Plex Sans',sans-serif">❋</div><div style="font:600 13px 'IBM Plex Sans',sans-serif;color:#237552">Biologie</div></div>
+        </div>
+      </div>
+      <div style="padding:14px 20px 24px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><h3 style="margin:0;font:600 17px 'IBM Plex Sans',sans-serif">Cours populaires</h3><span style="font:600 12.5px 'IBM Plex Sans',sans-serif;color:#5b5bd6">Tout voir →</span></div>
+        <div style="display:flex;gap:12px;padding:12px;background:#fff;border:1px solid #e8ecf3;border-radius:16px;align-items:center">
+          <div style="width:76px;height:58px;border-radius:10px;background:repeating-linear-gradient(45deg,#e3edfb,#e3edfb 8px,#eaf1fc 8px,#eaf1fc 16px);display:grid;place-items:center;flex:none"><span style="font:400 8px 'IBM Plex Mono',monospace;color:#3f7ad9">img</span></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:3px"><span style="width:fit-content;font:600 9.5px 'IBM Plex Sans',sans-serif;color:#2c5aa8;background:#e3edfb;padding:2px 8px;border-radius:8px">Maths · 3ᵉ</span><div style="font:600 14px 'IBM Plex Sans',sans-serif">Fonctions affines</div><div style="font:400 10.5px 'IBM Plex Mono',monospace;color:#8a94a4">12 leçons · 4h30 · ★ 4.8</div></div>
+        </div>
+        <div style="display:flex;gap:12px;padding:12px;background:#fff;border:1px solid #e8ecf3;border-radius:16px;align-items:center">
+          <div style="width:76px;height:58px;border-radius:10px;background:repeating-linear-gradient(45deg,#f0e7fb,#f0e7fb 8px,#f4edfc 8px,#f4edfc 16px);display:grid;place-items:center;flex:none"><span style="font:400 8px 'IBM Plex Mono',monospace;color:#9256d9">img</span></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:3px"><span style="width:fit-content;font:600 9.5px 'IBM Plex Sans',sans-serif;color:#6f3aa8;background:#f0e7fb;padding:2px 8px;border-radius:8px">Physique · 2de</span><div style="font:600 14px 'IBM Plex Sans',sans-serif">Forces et mouvement</div><div style="font:400 10.5px 'IBM Plex Mono',monospace;color:#8a94a4">15 leçons · 6h10 · ★ 4.9</div></div>
+        </div>
+        <div style="display:flex;gap:12px;padding:12px;background:#fff;border:1px solid #e8ecf3;border-radius:16px;align-items:center">
+          <div style="width:76px;height:58px;border-radius:10px;background:repeating-linear-gradient(45deg,#e2f3eb,#e2f3eb 8px,#e9f6f0 8px,#e9f6f0 16px);display:grid;place-items:center;flex:none"><span style="font:400 8px 'IBM Plex Mono',monospace;color:#35a071">img</span></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:3px"><span style="width:fit-content;font:600 9.5px 'IBM Plex Sans',sans-serif;color:#237552;background:#e2f3eb;padding:2px 8px;border-radius:8px">Biologie · 1re</span><div style="font:600 14px 'IBM Plex Sans',sans-serif">Génétique : les bases</div><div style="font:400 10.5px 'IBM Plex Mono',monospace;color:#8a94a4">10 leçons · 3h45 · ★ 4.7</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div style="font:400 12px/1.7 'IBM Plex Sans',sans-serif;color:#6f7890;max-width:110ch"><b style="color:#20263a">Interactions.</b> Search focuses with the primary ring; subject tiles lift + deepen tint on hover and route to the catalog pre-filtered. Course cards lift to e2, title → primary. Nav pills get mist background on hover. Sticky nav shrinks to 56px on scroll with a hairline shadow.</div>
+</section>
+
+<!-- ================================================================ -->
+<!-- 03 · AUTH -->
+<!-- ================================================================ -->
+<section data-screen-label="03 Auth" style="padding:48px 52px;display:flex;flex-direction:column;gap:24px;border-bottom:1px solid #d5dae4">
+  <div style="display:flex;align-items:center;gap:14px">
+    <span style="font:500 11px 'IBM Plex Mono',monospace;background:#20263a;color:#fff;padding:4px 10px;border-radius:6px">03</span>
+    <h2 style="margin:0;font:600 22px 'IBM Plex Sans',sans-serif">Connexion / Inscription</h2>
+    <span style="font:400 12px 'IBM Plex Sans',sans-serif;color:#6f7890">une seule carte, ton chaleureux, choix du rôle à l'inscription</span>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+
+    <!-- mobile sign in -->
+    <div style="flex:none;width:390px;background:#f3f5f9;border-radius:28px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08)">
+      <div style="padding:48px 24px 40px;display:flex;flex-direction:column;gap:22px;align-items:center">
+        <img src="assets/logo.png" alt="" style="width:56px;height:56px;border-radius:14px;object-fit:cover">
+        <div style="text-align:center;display:flex;flex-direction:column;gap:6px">
+          <h1 style="margin:0;font:600 24px 'IBM Plex Sans',sans-serif">Content de te revoir !</h1>
+          <div style="font:400 14px 'IBM Plex Sans',sans-serif;color:#6f7890">Connecte-toi pour reprendre tes leçons.</div>
+        </div>
+        <div style="width:100%;display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 12.5px 'IBM Plex Sans',sans-serif;color:#4d5670">Email</label><div style="height:48px;display:flex;align-items:center;padding:0 16px;background:#fff;border:1.5px solid #dce1ec;border-radius:12px;font:400 14px 'IBM Plex Sans',sans-serif;color:#8a94a4">nadia@email.com</div></div>
+          <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 12.5px 'IBM Plex Sans',sans-serif;color:#4d5670">Mot de passe</label><div style="height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:#fff;border:1.5px solid #dce1ec;border-radius:12px"><span style="font:400 14px 'IBM Plex Sans',sans-serif;color:#20263a">••••••••</span><span style="font:600 12px 'IBM Plex Sans',sans-serif;color:#6f7890">Afficher</span></div></div>
+          <div style="font:600 12.5px 'IBM Plex Sans',sans-serif;color:#5b5bd6;text-align:right">Mot de passe oublié ?</div>
+          <div style="height:52px;display:grid;place-items:center;background:#5b5bd6;color:#fff;border-radius:26px;font:600 15px 'IBM Plex Sans',sans-serif;box-shadow:0 2px 8px rgba(91,91,214,.3)">Se connecter</div>
+        </div>
+        <div style="font:400 13px 'IBM Plex Sans',sans-serif;color:#6f7890">Pas encore de compte ? <span style="font-weight:600;color:#5b5bd6">S'inscrire</span></div>
+      </div>
+    </div>
+
+    <!-- mobile sign up -->
+    <div style="flex:none;width:390px;background:#f3f5f9;border-radius:28px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08)">
+      <div style="padding:40px 24px 36px;display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center">
+          <img src="assets/logo.png" alt="" style="width:48px;height:48px;border-radius:12px;object-fit:cover">
+          <h1 style="margin:8px 0 0;font:600 24px 'IBM Plex Sans',sans-serif">Crée ton compte</h1>
+          <div style="font:400 14px 'IBM Plex Sans',sans-serif;color:#6f7890">2 minutes, et c'est gratuit pour commencer.</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px;background:#e6e6fa;border:2px solid #5b5bd6;border-radius:14px"><span style="font:600 20px sans-serif">🎓</span><span style="font:600 13px 'IBM Plex Sans',sans-serif;color:#4747b8">Je suis élève</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px;background:#fff;border:1.5px solid #dce1ec;border-radius:14px"><span style="font:600 20px sans-serif">👤</span><span style="font:600 13px 'IBM Plex Sans',sans-serif;color:#4d5670">Je suis parent</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="height:48px;display:flex;align-items:center;padding:0 16px;background:#fff;border:1.5px solid #dce1ec;border-radius:12px;font:400 14px 'IBM Plex Sans',sans-serif;color:#8a94a4">Prénom et nom</div>
+          <div style="height:48px;display:flex;align-items:center;padding:0 16px;background:#fff;border:1.5px solid #dce1ec;border-radius:12px;font:400 14px 'IBM Plex Sans',sans-serif;color:#8a94a4">Email</div>
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <div style="height:48px;display:flex;align-items:center;padding:0 16px;background:#fff;border:1.5px solid #dce1ec;border-radius:12px;font:400 14px 'IBM Plex Sans',sans-serif;color:#20263a">••••••</div>
+            <div style="display:flex;gap:4px;align-items:center"><div style="flex:1;height:4px;border-radius:2px;background:#c98a2e"></div><div style="flex:1;height:4px;border-radius:2px;background:#c98a2e"></div><div style="flex:1;height:4px;border-radius:2px;background:#dce1ec"></div><span style="font:500 10.5px 'IBM Plex Sans',sans-serif;color:#96661c;margin-left:4px">Moyen</span></div>
+          </div>
+          <div style="height:52px;display:grid;place-items:center;background:#5b5bd6;color:#fff;border-radius:26px;font:600 15px 'IBM Plex Sans',sans-serif;box-shadow:0 2px 8px rgba(91,91,214,.3)">Continuer</div>
+          <div style="font:400 11px/1.5 'IBM Plex Sans',sans-serif;color:#8a94a4;text-align:center">En continuant, tu acceptes les <span style="color:#5b5bd6">conditions d'utilisation</span>.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- desktop sign in -->
+    <div style="flex:none;width:840px;background:#f3f5f9;border-radius:20px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08);display:grid;grid-template-columns:1fr 1fr">
+      <div style="background:#20263a;padding:44px;display:flex;flex-direction:column;justify-content:space-between;gap:24px">
+        <div style="display:flex;align-items:center;gap:10px"><img src="assets/logo.png" alt="" style="width:32px;height:32px;border-radius:8px;object-fit:cover"><span style="font:600 18px 'IBM Plex Sans',sans-serif;color:#fff">layaida</span></div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="font:600 28px/1.3 'IBM Plex Sans',sans-serif;color:#fff;text-wrap:pretty">«&nbsp;J'ai enfin compris les dérivées grâce aux vidéos de Mme Karim.&nbsp;»</div>
+          <div style="display:flex;align-items:center;gap:10px"><div style="width:34px;height:34px;border-radius:50%;background:#4d5670;display:grid;place-items:center;color:#fff;font:600 12px 'IBM Plex Sans',sans-serif">R</div><div style="font:400 12.5px 'IBM Plex Sans',sans-serif;color:#aab2c8">Rayan, Terminale — Lyon</div></div>
+        </div>
+        <div style="font:400 11px 'IBM Plex Mono',monospace;color:#6b7590">fr · en · ar — même compte, trois langues</div>
+      </div>
+      <div style="padding:44px;display:flex;flex-direction:column;gap:16px;justify-content:center;background:#fff">
+        <h1 style="margin:0;font:600 24px 'IBM Plex Sans',sans-serif">Se connecter</h1>
+        <div style="height:48px;display:flex;align-items:center;padding:0 16px;border:1.5px solid #dce1ec;border-radius:12px;font:400 14px 'IBM Plex Sans',sans-serif;color:#8a94a4">Email</div>
+        <div style="height:48px;display:flex;align-items:center;padding:0 16px;border:1.5px solid #dce1ec;border-radius:12px;font:400 14px 'IBM Plex Sans',sans-serif;color:#8a94a4">Mot de passe</div>
+        <div style="height:50px;display:grid;place-items:center;background:#5b5bd6;color:#fff;border-radius:25px;font:600 14.5px 'IBM Plex Sans',sans-serif;box-shadow:0 2px 8px rgba(91,91,214,.3)">Se connecter</div>
+        <div style="font:400 13px 'IBM Plex Sans',sans-serif;color:#6f7890;text-align:center">Pas de compte ? <span style="font-weight:600;color:#5b5bd6">S'inscrire</span></div>
+      </div>
+    </div>
+
+  </div>
+  <div style="font:400 12px/1.7 'IBM Plex Sans',sans-serif;color:#6f7890;max-width:110ch"><b style="color:#20263a">Interactions.</b> Inline validation on blur (error border + message, never a toast). Password strength meter fills live. Role cards toggle like radios; «élève» continues to onboarding, «parent» to child-linking. Submit shows an in-button spinner, fields stay editable.</div>
+</section>
+
+<!-- ================================================================ -->
+<!-- 04 · ONBOARDING -->
+<!-- ================================================================ -->
+<section data-screen-label="04 Onboarding" style="padding:48px 52px;display:flex;flex-direction:column;gap:24px;border-bottom:1px solid #d5dae4">
+  <div style="display:flex;align-items:center;gap:14px">
+    <span style="font:500 11px 'IBM Plex Mono',monospace;background:#20263a;color:#fff;padding:4px 10px;border-radius:6px">04</span>
+    <h2 style="margin:0;font:600 22px 'IBM Plex Sans',sans-serif">Onboarding élève — 3 étapes</h2>
+    <span style="font:400 12px 'IBM Plex Sans',sans-serif;color:#6f7890">niveau → matières → objectif hebdo · barre de progression en haut, «Passer» toujours visible</span>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+
+    <!-- step 1 level -->
+    <div style="flex:none;width:390px;background:#f3f5f9;border-radius:28px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08)">
+      <div style="padding:20px 24px 36px;display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="flex:1;display:flex;gap:6px"><div style="flex:1;height:5px;border-radius:3px;background:#5b5bd6"></div><div style="flex:1;height:5px;border-radius:3px;background:#dce1ec"></div><div style="flex:1;height:5px;border-radius:3px;background:#dce1ec"></div></div>
+          <span style="font:600 12.5px 'IBM Plex Sans',sans-serif;color:#8a94a4">Passer</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <h1 style="margin:0;font:600 24px/1.25 'IBM Plex Sans',sans-serif">Tu es en quelle classe ?</h1>
+          <div style="font:400 13.5px 'IBM Plex Sans',sans-serif;color:#6f7890">On adaptera les cours à ton programme.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="font:600 12px 'IBM Plex Mono',monospace;color:#8a94a4;text-transform:uppercase;letter-spacing:.06em">Collège</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+              <div style="height:48px;display:grid;place-items:center;background:#fff;border:1.5px solid #dce1ec;border-radius:12px;font:600 14px 'IBM Plex Sans',sans-serif;color:#4d5670">6ᵉ</div>
+              <div style="height:48px;display:grid;place-items:center;background:#fff;border:1.5px solid #dce1ec;border-radius:12px;font:600 14px 'IBM Plex Sans',sans-serif;color:#4d5670">5ᵉ</div>
+              <div style="height:48px;display:grid;place-items:center;background:#fff;border:1.5px solid #dce1ec;border-radius:12px;font:600 14px 'IBM Plex Sans',sans-serif;color:#4d5670">4ᵉ</div>
+              <div style="height:48px;display:grid;place-items:center;background:#e6e6fa;border:2px solid #5b5bd6;border-radius:12px;font:600 14px 'IBM Plex Sans',sans-serif;color:#4747b8">3ᵉ</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="font:600 12px 'IBM Plex Mono',monospace;color:#8a94a4;text-transform:uppercase;letter-spacing:.06em">Lycée</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+              <div style="height:48px;display:grid;place-items:center;background:#fff;border:1.5px solid #dce1ec;border-radius:12px;font:600 14px 'IBM Plex Sans',sans-serif;color:#4d5670">2de</div>
+              <div style="height:48px;display:grid;place-items:center;background:#fff;border:1.5px solid #dce1ec;border-radius:12px;font:600 14px 'IBM Plex Sans',sans-serif;color:#4d5670">1re</div>
+              <div style="height:48px;display:grid;place-items:center;background:#fff;border:1.5px solid #dce1ec;border-radius:12px;font:600 14px 'IBM Plex Sans',sans-serif;color:#4d5670">Tle</div>
+            </div>
+          </div>
+        </div>
+        <div style="height:52px;display:grid;place-items:center;background:#5b5bd6;color:#fff;border-radius:26px;font:600 15px 'IBM Plex Sans',sans-serif;box-shadow:0 2px 8px rgba(91,91,214,.3);margin-top:8px">Continuer</div>
+      </div>
+    </div>
+
+    <!-- step 2 subjects -->
+    <div style="flex:none;width:390px;background:#f3f5f9;border-radius:28px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08)">
+      <div style="padding:20px 24px 36px;display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="font:600 13px 'IBM Plex Sans',sans-serif;color:#6f7890">←</span>
+          <div style="flex:1;display:flex;gap:6px"><div style="flex:1;height:5px;border-radius:3px;background:#5b5bd6"></div><div style="flex:1;height:5px;border-radius:3px;background:#5b5bd6"></div><div style="flex:1;height:5px;border-radius:3px;background:#dce1ec"></div></div>
+          <span style="font:600 12.5px 'IBM Plex Sans',sans-serif;color:#8a94a4">Passer</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <h1 style="margin:0;font:600 24px/1.25 'IBM Plex Sans',sans-serif">Quelles matières veux-tu travailler ?</h1>
+          <div style="font:400 13.5px 'IBM Plex Sans',sans-serif;color:#6f7890">Choisis-en une ou plusieurs.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;gap:14px;padding:16px;background:#e3edfb;border:2px solid #3f7ad9;border-radius:16px"><div style="width:40px;height:40px;border-radius:12px;background:#3f7ad9;color:#fff;display:grid;place-items:center;font:700 19px 'IBM Plex Sans',sans-serif">∑</div><div style="flex:1"><div style="font:600 15px 'IBM Plex Sans',sans-serif;color:#2c5aa8">Maths</div><div style="font:400 11.5px 'IBM Plex Sans',sans-serif;color:#6b87b4">96 leçons pour la 3ᵉ</div></div><div style="width:24px;height:24px;border-radius:50%;background:#3f7ad9;color:#fff;display:grid;place-items:center;font:600 12px sans-serif">✓</div></div>
+          <div style="display:flex;align-items:center;gap:14px;padding:16px;background:#fff;border:1.5px solid #dce1ec;border-radius:16px"><div style="width:40px;height:40px;border-radius:12px;background:#f0e7fb;color:#9256d9;display:grid;place-items:center;font:700 19px 'IBM Plex Sans',sans-serif">⚛</div><div style="flex:1"><div style="font:600 15px 'IBM Plex Sans',sans-serif">Physique</div><div style="font:400 11.5px 'IBM Plex Sans',sans-serif;color:#8a94a4">54 leçons pour la 3ᵉ</div></div><div style="width:24px;height:24px;border-radius:50%;border:1.5px solid #dce1ec"></div></div>
+          <div style="display:flex;align-items:center;gap:14px;padding:16px;background:#e2f3eb;border:2px solid #35a071;border-radius:16px"><div style="width:40px;height:40px;border-radius:12px;background:#35a071;color:#fff;display:grid;place-items:center;font:700 19px 'IBM Plex Sans',sans-serif">❋</div><div style="flex:1"><div style="font:600 15px 'IBM Plex Sans',sans-serif;color:#237552">Biologie</div><div style="font:400 11.5px 'IBM Plex Sans',sans-serif;color:#6ba189">42 leçons pour la 3ᵉ</div></div><div style="width:24px;height:24px;border-radius:50%;background:#35a071;color:#fff;display:grid;place-items:center;font:600 12px sans-serif">✓</div></div>
+        </div>
+        <div style="height:52px;display:grid;place-items:center;background:#5b5bd6;color:#fff;border-radius:26px;font:600 15px 'IBM Plex Sans',sans-serif;box-shadow:0 2px 8px rgba(91,91,214,.3);margin-top:8px">Continuer (2 matières)</div>
+      </div>
+    </div>
+
+    <!-- step 3 goal -->
+    <div style="flex:none;width:390px;background:#f3f5f9;border-radius:28px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08)">
+      <div style="padding:20px 24px 36px;display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="font:600 13px 'IBM Plex Sans',sans-serif;color:#6f7890">←</span>
+          <div style="flex:1;display:flex;gap:6px"><div style="flex:1;height:5px;border-radius:3px;background:#5b5bd6"></div><div style="flex:1;height:5px;border-radius:3px;background:#5b5bd6"></div><div style="flex:1;height:5px;border-radius:3px;background:#5b5bd6"></div></div>
+          <span style="font:600 12.5px 'IBM Plex Sans',sans-serif;color:#8a94a4">Passer</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <h1 style="margin:0;font:600 24px/1.25 'IBM Plex Sans',sans-serif">Ton objectif par semaine ?</h1>
+          <div style="font:400 13.5px 'IBM Plex Sans',sans-serif;color:#6f7890">Tu pourras le changer à tout moment.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;background:#fff;border:1.5px solid #dce1ec;border-radius:16px"><div><div style="font:600 15px 'IBM Plex Sans',sans-serif">Tranquille</div><div style="font:400 11.5px 'IBM Plex Sans',sans-serif;color:#8a94a4">2 leçons / semaine</div></div><div style="width:24px;height:24px;border-radius:50%;border:1.5px solid #dce1ec"></div></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;background:#e6e6fa;border:2px solid #5b5bd6;border-radius:16px"><div><div style="font:600 15px 'IBM Plex Sans',sans-serif;color:#4747b8">Régulier</div><div style="font:400 11.5px 'IBM Plex Sans',sans-serif;color:#7a7ac2">4 leçons / semaine — recommandé</div></div><div style="width:24px;height:24px;border-radius:50%;background:#5b5bd6;color:#fff;display:grid;place-items:center;font:600 12px sans-serif">✓</div></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;background:#fff;border:1.5px solid #dce1ec;border-radius:16px"><div><div style="font:600 15px 'IBM Plex Sans',sans-serif">Intensif</div><div style="font:400 11.5px 'IBM Plex Sans',sans-serif;color:#8a94a4">7 leçons / semaine</div></div><div style="width:24px;height:24px;border-radius:50%;border:1.5px solid #dce1ec"></div></div>
+        </div>
+        <div style="background:#fff;border-radius:16px;padding:14px 18px;display:flex;align-items:center;gap:12px;border:1px solid #e8ecf3">
+          <div style="width:36px;height:36px;border-radius:50%;background:#e6e6fa;display:grid;place-items:center;font:600 16px sans-serif">🔔</div>
+          <div style="flex:1;font:500 12.5px/1.4 'IBM Plex Sans',sans-serif;color:#4d5670">Rappel le soir vers 18h ?</div>
+          <div style="width:44px;height:26px;border-radius:13px;background:#5b5bd6;position:relative"><div style="position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#fff"></div></div>
+        </div>
+        <div style="height:52px;display:grid;place-items:center;background:#5b5bd6;color:#fff;border-radius:26px;font:600 15px 'IBM Plex Sans',sans-serif;box-shadow:0 2px 8px rgba(91,91,214,.3)">C'est parti 🎯</div>
+      </div>
+    </div>
+
+  </div>
+  <div style="font:400 12px/1.7 'IBM Plex Sans',sans-serif;color:#6f7890;max-width:110ch"><b style="color:#20263a">Interactions.</b> Steps slide horizontally (180ms; fade only under reduced-motion). Selection is instant — no per-step submit. «Passer» applies safe defaults (3ᵉ, all subjects, Régulier). Final CTA lands on the dashboard with a welcome toast.</div>
+</section>
+
+<!-- ================================================================ -->
+<!-- 05 · DASHBOARD -->
+<!-- ================================================================ -->
+<section data-screen-label="05 Dashboard" style="padding:48px 52px;display:flex;flex-direction:column;gap:24px;border-bottom:1px solid #d5dae4">
+  <div style="display:flex;align-items:center;gap:14px">
+    <span style="font:500 11px 'IBM Plex Mono',monospace;background:#20263a;color:#fff;padding:4px 10px;border-radius:6px">05</span>
+    <h2 style="margin:0;font:600 22px 'IBM Plex Sans',sans-serif">Tableau de bord élève</h2>
+    <span style="font:400 12px 'IBM Plex Sans',sans-serif;color:#6f7890">reprendre en 1 tap · objectif hebdo · progression par matière · version arabe RTL miroir</span>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+
+    <!-- mobile dashboard FR -->
+    <div style="flex:none;width:390px;background:#f3f5f9;border-radius:28px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08);display:flex;flex-direction:column">
+      <div style="padding:20px 20px 0;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div><div style="font:400 13px 'IBM Plex Sans',sans-serif;color:#6f7890">Salut Nadia 👋</div><div style="font:600 21px 'IBM Plex Sans',sans-serif">Prête à continuer ?</div></div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font:600 11px 'IBM Plex Sans',sans-serif;color:#fff;background:#5b5bd6;padding:5px 12px;border-radius:12px">🔥 7</span>
+            <div style="width:40px;height:40px;border-radius:50%;background:#dce1ec;display:grid;place-items:center;font:600 14px 'IBM Plex Sans',sans-serif;color:#4d5670">N</div>
+          </div>
+        </div>
+        <!-- continue card -->
+        <div style="background:#20263a;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center"><span style="font:600 10.5px 'IBM Plex Mono',monospace;color:#8f97b8;letter-spacing:.06em">REPRENDRE</span><span style="font:600 10px 'IBM Plex Sans',sans-serif;color:#a5c4f2;background:rgba(63,122,217,.25);padding:3px 10px;border-radius:8px">Maths · Ch.3</span></div>
+          <div style="display:flex;align-items:center;gap:14px">
+            <div style="width:52px;height:52px;border-radius:16px;background:#3f7ad9;display:grid;place-items:center;color:#fff;font:600 20px sans-serif;flex:none">▶</div>
+            <div style="flex:1"><div style="font:600 16px/1.3 'IBM Plex Sans',sans-serif;color:#fff">Coefficient directeur</div><div style="font:400 11.5px 'IBM Plex Mono',monospace;color:#8f97b8">il reste 7 min</div></div>
+          </div>
+          <div style="height:6px;border-radius:3px;background:#3a4159;overflow:hidden"><div style="width:42%;height:100%;border-radius:3px;background:#7c7cea"></div></div>
+        </div>
+        <!-- weekly goal -->
+        <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:14px">
+          <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;justify-content:space-between"><span style="font:600 13.5px 'IBM Plex Sans',sans-serif">Objectif de la semaine</span><span style="font:500 11px 'IBM Plex Mono',monospace;color:#6f7890">3/4 leçons</span></div>
+            <div style="display:flex;gap:5px"><div style="flex:1;height:20px;border-radius:6px;background:#5b5bd6"></div><div style="flex:1;height:20px;border-radius:6px;background:#5b5bd6"></div><div style="flex:1;height:20px;border-radius:6px;background:#5b5bd6"></div><div style="flex:1;height:20px;border-radius:6px;background:#dce1ec"></div></div>
+          </div>
+          <div style="font:400 24px sans-serif">🎯</div>
+        </div>
+        <!-- subject progress -->
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:600 15px 'IBM Plex Sans',sans-serif">Ta progression</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+            <div style="background:#e3edfb;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px"><div style="font:600 12px 'IBM Plex Sans',sans-serif;color:#2c5aa8">Maths</div><div style="width:44px;height:44px;border-radius:50%;background:conic-gradient(#3f7ad9 0 62%,#c8daf3 62% 100%);display:grid;place-items:center"><div style="width:32px;height:32px;border-radius:50%;background:#e3edfb;display:grid;place-items:center;font:600 10px 'IBM Plex Mono',monospace;color:#2c5aa8">62%</div></div></div>
+            <div style="background:#f0e7fb;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px"><div style="font:600 12px 'IBM Plex Sans',sans-serif;color:#6f3aa8">Physique</div><div style="width:44px;height:44px;border-radius:50%;background:conic-gradient(#9256d9 0 35%,#ddccf2 35% 100%);display:grid;place-items:center"><div style="width:32px;height:32px;border-radius:50%;background:#f0e7fb;display:grid;place-items:center;font:600 10px 'IBM Plex Mono',monospace;color:#6f3aa8">35%</div></div></div>
+            <div style="background:#e2f3eb;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px"><div style="font:600 12px 'IBM Plex Sans',sans-serif;color:#237552">Biologie</div><div style="width:44px;height:44px;border-radius:50%;background:conic-gradient(#35a071 0 80%,#c3e5d4 80% 100%);display:grid;place-items:center"><div style="width:32px;height:32px;border-radius:50%;background:#e2f3eb;display:grid;place-items:center;font:600 10px 'IBM Plex Mono',monospace;color:#237552">80%</div></div></div>
+          </div>
+        </div>
+        <!-- recommended -->
+        <div style="display:flex;flex-direction:column;gap:10px;padding-bottom:14px">
+          <div style="font:600 15px 'IBM Plex Sans',sans-serif">Recommandé pour toi</div>
+          <div style="display:flex;align-items:center;gap:12px;padding:12px;background:#fff;border:1px solid #e8ecf3;border-radius:14px"><div style="width:34px;height:34px;border-radius:10px;background:#f0e7fb;color:#9256d9;display:grid;place-items:center;font:700 15px 'IBM Plex Sans',sans-serif">⚛</div><div style="flex:1"><div style="font:600 13.5px 'IBM Plex Sans',sans-serif">La gravitation</div><div style="font:400 10.5px 'IBM Plex Mono',monospace;color:#8a94a4">Physique · 11 min</div></div><span style="font:600 16px sans-serif;color:#8a94a4">›</span></div>
+          <div style="display:flex;align-items:center;gap:12px;padding:12px;background:#fff;border:1px solid #e8ecf3;border-radius:14px"><div style="width:34px;height:34px;border-radius:10px;background:#e2f3eb;color:#35a071;display:grid;place-items:center;font:700 15px 'IBM Plex Sans',sans-serif">❋</div><div style="flex:1"><div style="font:600 13.5px 'IBM Plex Sans',sans-serif">Quiz : la cellule</div><div style="font:400 10.5px 'IBM Plex Mono',monospace;color:#8a94a4">Biologie · 8 questions</div></div><span style="font:600 16px sans-serif;color:#8a94a4">›</span></div>
+        </div>
+      </div>
+      <!-- bottom nav -->
+      <div style="margin-top:auto;display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border-top:1px solid #eef1f7;padding:10px 8px 18px">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:44px;height:28px;border-radius:14px;background:#e6e6fa;display:grid;place-items:center;font:600 14px sans-serif;color:#4747b8">⌂</div><span style="font:600 10px 'IBM Plex Sans',sans-serif;color:#4747b8">Accueil</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:44px;height:28px;display:grid;place-items:center;font:500 14px sans-serif;color:#8a94a4">▦</div><span style="font:500 10px 'IBM Plex Sans',sans-serif;color:#8a94a4">Cours</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:44px;height:28px;display:grid;place-items:center;font:500 14px sans-serif;color:#8a94a4">◎</div><span style="font:500 10px 'IBM Plex Sans',sans-serif;color:#8a94a4">Mes cours</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:44px;height:28px;display:grid;place-items:center;font:500 14px sans-serif;color:#8a94a4">◍</div><span style="font:500 10px 'IBM Plex Sans',sans-serif;color:#8a94a4">Profil</span></div>
+      </div>
+    </div>
+
+    <!-- mobile dashboard AR (RTL mirror) -->
+    <div dir="rtl" lang="ar" style="flex:none;width:390px;background:#f3f5f9;border-radius:28px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08);display:flex;flex-direction:column;font-family:'IBM Plex Sans Arabic',sans-serif">
+      <div style="padding:20px 20px 0;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div><div style="font:400 13px/1.7 'IBM Plex Sans Arabic',sans-serif;color:#6f7890">مرحباً نادية 👋</div><div style="font:600 20px/1.5 'IBM Plex Sans Arabic',sans-serif">جاهزة للمتابعة؟</div></div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font:600 11px 'IBM Plex Sans Arabic',sans-serif;color:#fff;background:#5b5bd6;padding:5px 12px;border-radius:12px">🔥 7</span>
+            <div style="width:40px;height:40px;border-radius:50%;background:#dce1ec;display:grid;place-items:center;font:600 14px 'IBM Plex Sans Arabic',sans-serif;color:#4d5670">ن</div>
+          </div>
+        </div>
+        <div style="background:#20263a;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center"><span style="font:600 11px 'IBM Plex Sans Arabic',sans-serif;color:#8f97b8">تابع الدرس</span><span style="font:600 10.5px 'IBM Plex Sans Arabic',sans-serif;color:#a5c4f2;background:rgba(63,122,217,.25);padding:3px 10px;border-radius:8px">رياضيات · ف٣</span></div>
+          <div style="display:flex;align-items:center;gap:14px">
+            <div style="width:52px;height:52px;border-radius:16px;background:#3f7ad9;display:grid;place-items:center;color:#fff;font:600 20px sans-serif;flex:none;transform:scaleX(-1)">▶</div>
+            <div style="flex:1"><div style="font:600 16px/1.6 'IBM Plex Sans Arabic',sans-serif;color:#fff">المعامل الموجّه</div><div style="font:400 11.5px/1.6 'IBM Plex Sans Arabic',sans-serif;color:#8f97b8">تبقّى ٧ دقائق</div></div>
+          </div>
+          <div style="height:6px;border-radius:3px;background:#3a4159;overflow:hidden;display:flex;justify-content:flex-start"><div style="width:42%;height:100%;border-radius:3px;background:#7c7cea"></div></div>
+        </div>
+        <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:14px">
+          <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;justify-content:space-between"><span style="font:600 13.5px 'IBM Plex Sans Arabic',sans-serif">هدف الأسبوع</span><span style="font:500 11.5px 'IBM Plex Sans Arabic',sans-serif;color:#6f7890">٣/٤ دروس</span></div>
+            <div style="display:flex;gap:5px"><div style="flex:1;height:20px;border-radius:6px;background:#5b5bd6"></div><div style="flex:1;height:20px;border-radius:6px;background:#5b5bd6"></div><div style="flex:1;height:20px;border-radius:6px;background:#5b5bd6"></div><div style="flex:1;height:20px;border-radius:6px;background:#dce1ec"></div></div>
+          </div>
+          <div style="font:400 24px sans-serif">🎯</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:600 15px 'IBM Plex Sans Arabic',sans-serif">تقدّمك</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+            <div style="background:#e3edfb;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px"><div style="font:600 12px 'IBM Plex Sans Arabic',sans-serif;color:#2c5aa8">رياضيات</div><div style="width:44px;height:44px;border-radius:50%;background:conic-gradient(from 0deg at 50% 50%,#c8daf3 0 38%,#3f7ad9 38% 100%);display:grid;place-items:center"><div style="width:32px;height:32px;border-radius:50%;background:#e3edfb;display:grid;place-items:center;font:600 10.5px 'IBM Plex Sans Arabic',sans-serif;color:#2c5aa8">٦٢٪</div></div></div>
+            <div style="background:#f0e7fb;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px"><div style="font:600 12px 'IBM Plex Sans Arabic',sans-serif;color:#6f3aa8">فيزياء</div><div style="width:44px;height:44px;border-radius:50%;background:conic-gradient(from 0deg at 50% 50%,#ddccf2 0 65%,#9256d9 65% 100%);display:grid;place-items:center"><div style="width:32px;height:32px;border-radius:50%;background:#f0e7fb;display:grid;place-items:center;font:600 10.5px 'IBM Plex Sans Arabic',sans-serif;color:#6f3aa8">٣٥٪</div></div></div>
+            <div style="background:#e2f3eb;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px"><div style="font:600 12px 'IBM Plex Sans Arabic',sans-serif;color:#237552">أحياء</div><div style="width:44px;height:44px;border-radius:50%;background:conic-gradient(from 0deg at 50% 50%,#c3e5d4 0 20%,#35a071 20% 100%);display:grid;place-items:center"><div style="width:32px;height:32px;border-radius:50%;background:#e2f3eb;display:grid;place-items:center;font:600 10.5px 'IBM Plex Sans Arabic',sans-serif;color:#237552">٨٠٪</div></div></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;padding-bottom:14px">
+          <div style="font:600 15px 'IBM Plex Sans Arabic',sans-serif">مقترح لك</div>
+          <div style="display:flex;align-items:center;gap:12px;padding:12px;background:#fff;border:1px solid #e8ecf3;border-radius:14px"><div style="width:34px;height:34px;border-radius:10px;background:#f0e7fb;color:#9256d9;display:grid;place-items:center;font:700 15px 'IBM Plex Sans',sans-serif">⚛</div><div style="flex:1"><div style="font:600 13.5px/1.6 'IBM Plex Sans Arabic',sans-serif">الجاذبية</div><div style="font:400 11px/1.6 'IBM Plex Sans Arabic',sans-serif;color:#8a94a4">فيزياء · ١١ دقيقة</div></div><span style="font:600 16px sans-serif;color:#8a94a4">‹</span></div>
+        </div>
+      </div>
+      <div style="margin-top:auto;display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border-top:1px solid #eef1f7;padding:10px 8px 18px">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:44px;height:28px;border-radius:14px;background:#e6e6fa;display:grid;place-items:center;font:600 14px sans-serif;color:#4747b8">⌂</div><span style="font:600 10px 'IBM Plex Sans Arabic',sans-serif;color:#4747b8">الرئيسية</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:44px;height:28px;display:grid;place-items:center;font:500 14px sans-serif;color:#8a94a4">▦</div><span style="font:500 10px 'IBM Plex Sans Arabic',sans-serif;color:#8a94a4">الدروس</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:44px;height:28px;display:grid;place-items:center;font:500 14px sans-serif;color:#8a94a4">◎</div><span style="font:500 10px 'IBM Plex Sans Arabic',sans-serif;color:#8a94a4">دروسي</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:44px;height:28px;display:grid;place-items:center;font:500 14px sans-serif;color:#8a94a4">◍</div><span style="font:500 10px 'IBM Plex Sans Arabic',sans-serif;color:#8a94a4">حسابي</span></div>
+      </div>
+    </div>
+
+    <!-- desktop dashboard -->
+    <div style="flex:none;width:1180px;background:#f3f5f9;border-radius:20px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08)">
+      <div style="display:flex;align-items:center;gap:24px;padding:0 32px;height:64px;background:#fff;border-bottom:1px solid #eef1f7">
+        <div style="display:flex;align-items:center;gap:10px"><img src="assets/logo.png" alt="" style="width:30px;height:30px;border-radius:8px;object-fit:cover"><span style="font:600 18px 'IBM Plex Sans',sans-serif">layaida</span></div>
+        <div style="display:flex;gap:6px"><span style="height:36px;display:grid;place-items:center;padding:0 14px;border-radius:18px;font:600 13px 'IBM Plex Sans',sans-serif;background:#eef1f7">Accueil</span><span style="height:36px;display:grid;place-items:center;padding:0 14px;border-radius:18px;font:600 13px 'IBM Plex Sans',sans-serif;color:#6f7890">Catalogue</span><span style="height:36px;display:grid;place-items:center;padding:0 14px;border-radius:18px;font:600 13px 'IBM Plex Sans',sans-serif;color:#6f7890">Mes cours</span></div>
+        <div style="flex:1"></div>
+        <div style="display:flex;align-items:center;gap:12px"><span style="font:600 11px 'IBM Plex Sans',sans-serif;color:#fff;background:#5b5bd6;padding:5px 12px;border-radius:12px">🔥 7 jours</span><div style="width:38px;height:38px;border-radius:50%;background:#dce1ec;display:grid;place-items:center;font:600 13px 'IBM Plex Sans',sans-serif;color:#4d5670">N</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px;padding:32px">
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <div style="font:600 24px 'IBM Plex Sans',sans-serif">Salut Nadia, prête à continuer ?</div>
+          <div style="background:#20263a;border-radius:20px;padding:24px;display:flex;align-items:center;gap:20px">
+            <div style="width:64px;height:64px;border-radius:18px;background:#3f7ad9;display:grid;place-items:center;color:#fff;font:600 24px sans-serif;flex:none">▶</div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+              <span style="font:600 10.5px 'IBM Plex Mono',monospace;color:#8f97b8;letter-spacing:.06em">REPRENDRE · MATHS CH.3</span>
+              <div style="font:600 19px 'IBM Plex Sans',sans-serif;color:#fff">Coefficient directeur</div>
+              <div style="height:6px;border-radius:3px;background:#3a4159;overflow:hidden;max-width:380px"><div style="width:42%;height:100%;border-radius:3px;background:#7c7cea"></div></div>
+            </div>
+            <div style="height:46px;padding:0 22px;display:grid;place-items:center;background:#fff;color:#20263a;border-radius:23px;font:600 14px 'IBM Plex Sans',sans-serif">Continuer</div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+            <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px"><div style="width:48px;height:48px;border-radius:50%;background:conic-gradient(#3f7ad9 0 62%,#dce8f8 62% 100%);display:grid;place-items:center"><div style="width:35px;height:35px;border-radius:50%;background:#fff;display:grid;place-items:center;font:600 10px 'IBM Plex Mono',monospace">62%</div></div><div><div style="font:600 14px 'IBM Plex Sans',sans-serif;color:#2c5aa8">Maths</div><div style="font:400 11px 'IBM Plex Mono',monospace;color:#8a94a4">18/29 leçons</div></div></div>
+            <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px"><div style="width:48px;height:48px;border-radius:50%;background:conic-gradient(#9256d9 0 35%,#ece1f8 35% 100%);display:grid;place-items:center"><div style="width:35px;height:35px;border-radius:50%;background:#fff;display:grid;place-items:center;font:600 10px 'IBM Plex Mono',monospace">35%</div></div><div><div style="font:600 14px 'IBM Plex Sans',sans-serif;color:#6f3aa8">Physique</div><div style="font:400 11px 'IBM Plex Mono',monospace;color:#8a94a4">7/20 leçons</div></div></div>
+            <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px"><div style="width:48px;height:48px;border-radius:50%;background:conic-gradient(#35a071 0 80%,#def0e7 80% 100%);display:grid;place-items:center"><div style="width:35px;height:35px;border-radius:50%;background:#fff;display:grid;place-items:center;font:600 10px 'IBM Plex Mono',monospace">80%</div></div><div><div style="font:600 14px 'IBM Plex Sans',sans-serif;color:#237552">Biologie</div><div style="font:400 11px 'IBM Plex Mono',monospace;color:#8a94a4">12/15 leçons</div></div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="font:600 17px 'IBM Plex Sans',sans-serif">Recommandé pour toi</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div style="display:flex;align-items:center;gap:12px;padding:14px;background:#fff;border:1px solid #e8ecf3;border-radius:14px"><div style="width:38px;height:38px;border-radius:11px;background:#f0e7fb;color:#9256d9;display:grid;place-items:center;font:700 17px 'IBM Plex Sans',sans-serif">⚛</div><div style="flex:1"><div style="font:600 14px 'IBM Plex Sans',sans-serif">La gravitation</div><div style="font:400 11px 'IBM Plex Mono',monospace;color:#8a94a4">Physique · 11 min</div></div><span style="color:#8a94a4">›</span></div>
+              <div style="display:flex;align-items:center;gap:12px;padding:14px;background:#fff;border:1px solid #e8ecf3;border-radius:14px"><div style="width:38px;height:38px;border-radius:11px;background:#e2f3eb;color:#35a071;display:grid;place-items:center;font:700 17px 'IBM Plex Sans',sans-serif">❋</div><div style="flex:1"><div style="font:600 14px 'IBM Plex Sans',sans-serif">Quiz : la cellule</div><div style="font:400 11px 'IBM Plex Mono',monospace;color:#8a94a4">Biologie · 8 questions</div></div><span style="color:#8a94a4">›</span></div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:600 15px 'IBM Plex Sans',sans-serif">Objectif hebdo</span><span style="font:500 11px 'IBM Plex Mono',monospace;color:#6f7890">3/4</span></div>
+            <div style="display:flex;gap:6px"><div style="flex:1;height:26px;border-radius:8px;background:#5b5bd6"></div><div style="flex:1;height:26px;border-radius:8px;background:#5b5bd6"></div><div style="flex:1;height:26px;border-radius:8px;background:#5b5bd6"></div><div style="flex:1;height:26px;border-radius:8px;background:#dce1ec"></div></div>
+            <div style="font:400 12px/1.5 'IBM Plex Sans',sans-serif;color:#6f7890">Encore 1 leçon avant dimanche — tu y es presque.</div>
+          </div>
+          <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px">
+            <span style="font:600 15px 'IBM Plex Sans',sans-serif">Cette semaine</span>
+            <div style="display:flex;align-items:flex-end;gap:8px;height:64px">
+              <div style="flex:1;height:40%;border-radius:6px 6px 0 0;background:#c9c9f2"></div><div style="flex:1;height:70%;border-radius:6px 6px 0 0;background:#c9c9f2"></div><div style="flex:1;height:25%;border-radius:6px 6px 0 0;background:#c9c9f2"></div><div style="flex:1;height:90%;border-radius:6px 6px 0 0;background:#5b5bd6"></div><div style="flex:1;height:10%;border-radius:6px 6px 0 0;background:#e2e4f2"></div><div style="flex:1;height:10%;border-radius:6px 6px 0 0;background:#e2e4f2"></div><div style="flex:1;height:10%;border-radius:6px 6px 0 0;background:#e2e4f2"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font:400 9.5px 'IBM Plex Mono',monospace;color:#8a94a4"><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
+          </div>
+          <div style="background:#e6e6fa;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:8px">
+            <span style="font:600 15px 'IBM Plex Sans',sans-serif;color:#4747b8">🔥 Série : 7 jours</span>
+            <div style="font:400 12px/1.5 'IBM Plex Sans',sans-serif;color:#5a5aa8">Ton record est 12 jours. Une leçon aujourd'hui pour continuer la série.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div style="font:400 12px/1.7 'IBM Plex Sans',sans-serif;color:#6f7890;max-width:110ch"><b style="color:#20263a">Interactions &amp; RTL.</b> The whole continue-card is one tap target straight into the player. Subject cards route to «Mes cours» filtered. RTL: layout mirrors via CSS logical properties (<span style="font-family:'IBM Plex Mono',monospace;font-size:10px">margin-inline-start</span>…), progress fills right→left, chevrons flip, play glyph mirrors, digits use Eastern Arabic numerals via <span style="font-family:'IBM Plex Mono',monospace;font-size:10px">Intl.NumberFormat('ar')</span>.</div>
+</section>
+
+<!-- ================================================================ -->
+<!-- 06 · CATALOG -->
+<!-- ================================================================ -->
+<section data-screen-label="06 Catalog" style="padding:48px 52px;display:flex;flex-direction:column;gap:24px;border-bottom:1px solid #d5dae4">
+  <div style="display:flex;align-items:center;gap:14px">
+    <span style="font:500 11px 'IBM Plex Mono',monospace;background:#20263a;color:#fff;padding:4px 10px;border-radius:6px">06</span>
+    <h2 style="margin:0;font:600 22px 'IBM Plex Sans',sans-serif">Catalogue &amp; recherche</h2>
+    <span style="font:400 12px 'IBM Plex Sans',sans-serif;color:#6f7890">filtres persistants à gauche (desktop) / bottom-sheet (mobile) · état vide inclus</span>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+
+    <!-- desktop catalog -->
+    <div style="flex:none;width:1180px;background:#f3f5f9;border-radius:20px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08)">
+      <div style="display:flex;align-items:center;gap:24px;padding:0 32px;height:64px;background:#fff;border-bottom:1px solid #eef1f7">
+        <div style="display:flex;align-items:center;gap:10px"><img src="assets/logo.png" alt="" style="width:30px;height:30px;border-radius:8px;object-fit:cover"><span style="font:600 18px 'IBM Plex Sans',sans-serif">layaida</span></div>
+        <div style="flex:1;max-width:420px;height:44px;display:flex;align-items:center;gap:10px;background:#f3f5f9;border-radius:22px;padding:0 18px"><span style="color:#8a94a4">⌕</span><span style="font:400 14px 'IBM Plex Sans',sans-serif;color:#20263a">fonctions<span style="color:#c2c9d6">|</span></span></div>
+        <div style="flex:1"></div>
+        <div style="width:38px;height:38px;border-radius:50%;background:#dce1ec;display:grid;place-items:center;font:600 13px 'IBM Plex Sans',sans-serif;color:#4d5670">N</div>
+      </div>
+      <div style="display:grid;grid-template-columns:260px 1fr;gap:28px;padding:28px 32px">
+        <!-- filters -->
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:600 15px 'IBM Plex Sans',sans-serif">Filtres</span><span style="font:600 12px 'IBM Plex Sans',sans-serif;color:#5b5bd6">Réinitialiser</span></div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="font:600 12px 'IBM Plex Mono',monospace;color:#8a94a4;text-transform:uppercase;letter-spacing:.06em">Matière</div>
+            <div style="display:flex;align-items:center;gap:10px;height:40px"><div style="width:20px;height:20px;border-radius:6px;background:#3f7ad9;display:grid;place-items:center;color:#fff;font:600 11px sans-serif">✓</div><span style="font:500 13.5px 'IBM Plex Sans',sans-serif">Maths</span><span style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4;margin-left:auto">96</span></div>
+            <div style="display:flex;align-items:center;gap:10px;height:40px"><div style="width:20px;height:20px;border-radius:6px;border:1.5px solid #c9d0dd"></div><span style="font:500 13.5px 'IBM Plex Sans',sans-serif;color:#4d5670">Physique</span><span style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4;margin-left:auto">78</span></div>
+            <div style="display:flex;align-items:center;gap:10px;height:40px"><div style="width:20px;height:20px;border-radius:6px;border:1.5px solid #c9d0dd"></div><span style="font:500 13.5px 'IBM Plex Sans',sans-serif;color:#4d5670">Biologie</span><span style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4;margin-left:auto">66</span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="font:600 12px 'IBM Plex Mono',monospace;color:#8a94a4;text-transform:uppercase;letter-spacing:.06em">Niveau</div>
+            <div style="display:flex;gap:4px;background:#eef1f7;border-radius:20px;padding:4px;width:fit-content">
+              <span style="height:32px;padding:0 14px;display:grid;place-items:center;border-radius:16px;font:600 12.5px 'IBM Plex Sans',sans-serif;color:#6f7890">Tous</span>
+              <span style="height:32px;padding:0 14px;display:grid;place-items:center;background:#fff;border-radius:16px;font:600 12.5px 'IBM Plex Sans',sans-serif;box-shadow:0 1px 3px rgba(32,38,58,.1)">Collège</span>
+              <span style="height:32px;padding:0 14px;display:grid;place-items:center;border-radius:16px;font:600 12.5px 'IBM Plex Sans',sans-serif;color:#6f7890">Lycée</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="font:600 12px 'IBM Plex Mono',monospace;color:#8a94a4;text-transform:uppercase;letter-spacing:.06em">Durée</div>
+            <div style="position:relative;height:20px"><div style="position:absolute;top:8px;left:0;right:0;height:4px;border-radius:2px;background:#dce1ec"></div><div style="position:absolute;top:8px;left:10%;right:35%;height:4px;background:#5b5bd6"></div><div style="position:absolute;top:2px;left:10%;width:16px;height:16px;border-radius:50%;background:#fff;border:2.5px solid #5b5bd6"></div><div style="position:absolute;top:2px;right:35%;width:16px;height:16px;border-radius:50%;background:#fff;border:2.5px solid #5b5bd6"></div></div>
+            <div style="display:flex;justify-content:space-between;font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4"><span>1h</span><span>10h+</span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="font:600 12px 'IBM Plex Mono',monospace;color:#8a94a4;text-transform:uppercase;letter-spacing:.06em">Note</div>
+            <div style="display:flex;align-items:center;gap:10px;height:40px"><div style="width:20px;height:20px;border-radius:6px;background:#5b5bd6;display:grid;place-items:center;color:#fff;font:600 11px sans-serif">✓</div><span style="font:500 13.5px 'IBM Plex Sans',sans-serif;color:#c98a2e">★★★★</span><span style="font:400 12px 'IBM Plex Sans',sans-serif;color:#6f7890">et plus</span></div>
+          </div>
+        </div>
+        <!-- results -->
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font:400 13px 'IBM Plex Sans',sans-serif;color:#6f7890">14 cours pour «&nbsp;fonctions&nbsp;»</span>
+            <div style="flex:1"></div>
+            <span style="font:500 12.5px 'IBM Plex Sans',sans-serif;color:#4d5670">Trier : Pertinence ▾</span>
+          </div>
+          <div style="display:flex;gap:8px">
+            <span style="font:600 12px 'IBM Plex Sans',sans-serif;color:#2c5aa8;background:#e3edfb;padding:6px 12px;border-radius:14px">Maths ✕</span>
+            <span style="font:600 12px 'IBM Plex Sans',sans-serif;color:#4d5670;background:#eef1f7;padding:6px 12px;border-radius:14px">Collège ✕</span>
+            <span style="font:600 12px 'IBM Plex Sans',sans-serif;color:#4d5670;background:#eef1f7;padding:6px 12px;border-radius:14px">★ 4+ ✕</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+            <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;overflow:hidden;box-shadow:0 4px 16px rgba(32,38,58,.1)">
+              <div style="height:110px;background:repeating-linear-gradient(45deg,#e3edfb,#e3edfb 12px,#eaf1fc 12px,#eaf1fc 24px);display:grid;place-items:center;position:relative"><span style="font:400 10px 'IBM Plex Mono',monospace;color:#3f7ad9">image</span><span style="position:absolute;top:10px;left:10px;font:600 10px 'IBM Plex Sans',sans-serif;color:#2c5aa8;background:#fff;padding:3px 10px;border-radius:10px">Maths · 3ᵉ</span></div>
+              <div style="padding:14px;display:flex;flex-direction:column;gap:6px"><div style="font:600 15px/1.3 'IBM Plex Sans',sans-serif;color:#5b5bd6">Fonctions affines</div><div style="font:400 12px 'IBM Plex Sans',sans-serif;color:#6f7890">Mme S. Karim</div><div style="display:flex;justify-content:space-between;font:500 10.5px 'IBM Plex Mono',monospace;color:#8a94a4"><span>12 leçons · 4h30</span><span style="color:#c98a2e">★ 4.8</span></div></div>
+            </div>
+            <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;overflow:hidden">
+              <div style="height:110px;background:repeating-linear-gradient(45deg,#e3edfb,#e3edfb 12px,#eaf1fc 12px,#eaf1fc 24px);display:grid;place-items:center;position:relative"><span style="font:400 10px 'IBM Plex Mono',monospace;color:#3f7ad9">image</span><span style="position:absolute;top:10px;left:10px;font:600 10px 'IBM Plex Sans',sans-serif;color:#2c5aa8;background:#fff;padding:3px 10px;border-radius:10px">Maths · 4ᵉ</span></div>
+              <div style="padding:14px;display:flex;flex-direction:column;gap:6px"><div style="font:600 15px/1.3 'IBM Plex Sans',sans-serif">Notion de fonction</div><div style="font:400 12px 'IBM Plex Sans',sans-serif;color:#6f7890">M. Y. Benali</div><div style="display:flex;justify-content:space-between;font:500 10.5px 'IBM Plex Mono',monospace;color:#8a94a4"><span>9 leçons · 3h10</span><span style="color:#c98a2e">★ 4.6</span></div></div>
+            </div>
+            <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;overflow:hidden">
+              <div style="height:110px;background:repeating-linear-gradient(45deg,#e3edfb,#e3edfb 12px,#eaf1fc 12px,#eaf1fc 24px);display:grid;place-items:center;position:relative"><span style="font:400 10px 'IBM Plex Mono',monospace;color:#3f7ad9">image</span><span style="position:absolute;top:10px;left:10px;font:600 10px 'IBM Plex Sans',sans-serif;color:#2c5aa8;background:#fff;padding:3px 10px;border-radius:10px">Maths · 3ᵉ</span></div>
+              <div style="padding:14px;display:flex;flex-direction:column;gap:6px"><div style="font:600 15px/1.3 'IBM Plex Sans',sans-serif">Fonctions linéaires</div><div style="font:400 12px 'IBM Plex Sans',sans-serif;color:#6f7890">Mme S. Karim</div><div style="display:flex;justify-content:space-between;font:500 10.5px 'IBM Plex Mono',monospace;color:#8a94a4"><span>8 leçons · 2h50</span><span style="color:#c98a2e">★ 4.7</span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- mobile catalog + filter sheet -->
+    <div style="flex:none;width:390px;background:#f3f5f9;border-radius:28px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08);position:relative">
+      <div style="padding:18px 20px;display:flex;flex-direction:column;gap:14px;filter:blur(0)">
+        <div style="display:flex;gap:10px;align-items:center">
+          <div style="flex:1;height:44px;display:flex;align-items:center;gap:8px;background:#fff;border-radius:22px;padding:0 16px;border:1px solid #e8ecf3"><span style="color:#8a94a4">⌕</span><span style="font:400 13.5px 'IBM Plex Sans',sans-serif;color:#20263a">fonctions</span></div>
+          <div style="width:44px;height:44px;border-radius:22px;background:#20263a;color:#fff;display:grid;place-items:center;font:500 15px sans-serif">⚙</div>
+        </div>
+        <div style="display:flex;gap:8px;overflow:hidden">
+          <span style="flex:none;font:600 12px 'IBM Plex Sans',sans-serif;color:#2c5aa8;background:#e3edfb;padding:6px 12px;border-radius:14px">Maths ✕</span>
+          <span style="flex:none;font:600 12px 'IBM Plex Sans',sans-serif;color:#4d5670;background:#eef1f7;padding:6px 12px;border-radius:14px">Collège ✕</span>
+        </div>
+        <div style="font:400 12px 'IBM Plex Sans',sans-serif;color:#6f7890">14 cours</div>
+        <div style="display:flex;gap:12px;padding:12px;background:#fff;border:1px solid #e8ecf3;border-radius:16px;align-items:center">
+          <div style="width:76px;height:58px;border-radius:10px;background:repeating-linear-gradient(45deg,#e3edfb,#e3edfb 8px,#eaf1fc 8px,#eaf1fc 16px);flex:none"></div>
+          <div style="flex:1"><div style="font:600 14px 'IBM Plex Sans',sans-serif">Fonctions affines</div><div style="font:400 10.5px 'IBM Plex Mono',monospace;color:#8a94a4">12 leçons · 4h30 · ★ 4.8</div></div>
+        </div>
+      </div>
+      <!-- bottom sheet -->
+      <div style="position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -8px 32px rgba(32,38,58,.18);padding:12px 20px 24px;display:flex;flex-direction:column;gap:16px">
+        <div style="width:40px;height:4px;border-radius:2px;background:#dce1ec;margin:0 auto"></div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:600 17px 'IBM Plex Sans',sans-serif">Filtres</span><span style="font:600 12.5px 'IBM Plex Sans',sans-serif;color:#5b5bd6">Réinitialiser</span></div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="font:600 11.5px 'IBM Plex Mono',monospace;color:#8a94a4;text-transform:uppercase;letter-spacing:.06em">Matière</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span style="height:40px;display:grid;place-items:center;padding:0 16px;font:600 13px 'IBM Plex Sans',sans-serif;color:#2c5aa8;background:#e3edfb;border:1.5px solid #3f7ad9;border-radius:20px">Maths ✓</span>
+            <span style="height:40px;display:grid;place-items:center;padding:0 16px;font:600 13px 'IBM Plex Sans',sans-serif;color:#4d5670;background:#fff;border:1.5px solid #dce1ec;border-radius:20px">Physique</span>
+            <span style="height:40px;display:grid;place-items:center;padding:0 16px;font:600 13px 'IBM Plex Sans',sans-serif;color:#4d5670;background:#fff;border:1.5px solid #dce1ec;border-radius:20px">Biologie</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="font:600 11.5px 'IBM Plex Mono',monospace;color:#8a94a4;text-transform:uppercase;letter-spacing:.06em">Niveau</div>
+          <div style="display:flex;gap:4px;background:#eef1f7;border-radius:22px;padding:4px">
+            <span style="flex:1;height:36px;display:grid;place-items:center;border-radius:18px;font:600 13px 'IBM Plex Sans',sans-serif;color:#6f7890">Tous</span>
+            <span style="flex:1;height:36px;display:grid;place-items:center;background:#fff;border-radius:18px;font:600 13px 'IBM Plex Sans',sans-serif;box-shadow:0 1px 3px rgba(32,38,58,.1)">Collège</span>
+            <span style="flex:1;height:36px;display:grid;place-items:center;border-radius:18px;font:600 13px 'IBM Plex Sans',sans-serif;color:#6f7890">Lycée</span>
+          </div>
+        </div>
+        <div style="height:52px;display:grid;place-items:center;background:#5b5bd6;color:#fff;border-radius:26px;font:600 15px 'IBM Plex Sans',sans-serif">Voir 14 cours</div>
+      </div>
+    </div>
+
+    <!-- empty search state mobile -->
+    <div style="flex:none;width:390px;background:#f3f5f9;border-radius:28px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08)">
+      <div style="padding:18px 20px 40px;display:flex;flex-direction:column;gap:14px">
+        <div style="height:44px;display:flex;align-items:center;gap:8px;background:#fff;border-radius:22px;padding:0 16px;border:1px solid #e8ecf3"><span style="color:#8a94a4">⌕</span><span style="font:400 13.5px 'IBM Plex Sans',sans-serif">trigonométrie 6ᵉ</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:56px 24px;text-align:center">
+          <div style="width:64px;height:64px;border-radius:50%;background:#e6e6fa;display:grid;place-items:center;font:600 26px 'IBM Plex Sans',sans-serif;color:#5b5bd6">?</div>
+          <div style="font:600 17px 'IBM Plex Sans',sans-serif">Aucun cours trouvé</div>
+          <div style="font:400 13px/1.6 'IBM Plex Sans',sans-serif;color:#6f7890;max-width:30ch">La trigonométrie arrive en 3ᵉ. Essaie sans le niveau, ou explore les maths de 6ᵉ.</div>
+          <div style="display:flex;gap:8px;margin-top:6px">
+            <span style="height:44px;display:grid;place-items:center;padding:0 18px;background:#5b5bd6;color:#fff;border-radius:22px;font:600 13.5px 'IBM Plex Sans',sans-serif">Retirer «&nbsp;6ᵉ&nbsp;»</span>
+            <span style="height:44px;display:grid;place-items:center;padding:0 18px;background:#e6e6fa;color:#4747b8;border-radius:22px;font:600 13.5px 'IBM Plex Sans',sans-serif">Maths 6ᵉ</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div style="font:400 12px/1.7 'IBM Plex Sans',sans-serif;color:#6f7890;max-width:110ch"><b style="color:#20263a">Interactions.</b> Filters apply live on desktop (result count animates); on mobile the sheet's CTA carries the live count. Active filters become dismissible chips above results. Search debounced 300ms with skeleton cards while loading. First result card shows the hover state (lift + primary title).</div>
+</section>
+
+<!-- ================================================================ -->
+<!-- 07 · COURSE DETAIL -->
+<!-- ================================================================ -->
+<section data-screen-label="07 Course Detail" style="padding:48px 52px;display:flex;flex-direction:column;gap:24px;border-bottom:1px solid #d5dae4">
+  <div style="display:flex;align-items:center;gap:14px">
+    <span style="font:500 11px 'IBM Plex Mono',monospace;background:#20263a;color:#fff;padding:4px 10px;border-radius:6px">07</span>
+    <h2 style="margin:0;font:600 22px 'IBM Plex Sans',sans-serif">Fiche cours</h2>
+    <span style="font:400 12px 'IBM Plex Sans',sans-serif;color:#6f7890">objectifs, prérequis, programme, avis · CTA sticky sur mobile</span>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+
+    <!-- desktop course detail -->
+    <div style="flex:none;width:1180px;background:#f3f5f9;border-radius:20px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08)">
+      <div style="background:#e3edfb;padding:40px 48px;display:grid;grid-template-columns:1fr 340px;gap:40px;align-items:start">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;gap:8px"><span style="font:600 11px 'IBM Plex Sans',sans-serif;color:#2c5aa8;background:#fff;padding:4px 12px;border-radius:12px">Maths</span><span style="font:600 11px 'IBM Plex Sans',sans-serif;color:#4d5670;background:rgba(255,255,255,.7);padding:4px 12px;border-radius:12px">3ᵉ · Collège</span></div>
+          <h1 style="margin:0;font:600 34px/1.2 'IBM Plex Sans',sans-serif;color:#1b3a66">Fonctions affines</h1>
+          <p style="margin:0;font:400 15px/1.6 'IBM Plex Sans',sans-serif;color:#41598a;max-width:56ch">Des tableaux de valeurs aux représentations graphiques : tout le chapitre du programme de 3ᵉ, expliqué pas à pas avec des exercices corrigés.</p>
+          <div style="display:flex;align-items:center;gap:20px;font:500 12px 'IBM Plex Mono',monospace;color:#41598a"><span style="color:#a06b12">★ 4.8 (126 avis)</span><span>12 leçons</span><span>4h30</span><span>1 842 élèves</span></div>
+          <div style="display:flex;align-items:center;gap:12px;margin-top:6px">
+            <div style="width:44px;height:44px;border-radius:50%;background:#fff;display:grid;place-items:center;font:600 15px 'IBM Plex Sans',sans-serif;color:#2c5aa8">SK</div>
+            <div><div style="font:600 14px 'IBM Plex Sans',sans-serif;color:#1b3a66">Mme Samia Karim</div><div style="font:400 12px 'IBM Plex Sans',sans-serif;color:#41598a">Prof de maths · 14 ans d'expérience</div></div>
+          </div>
+        </div>
+        <div style="background:#fff;border-radius:20px;box-shadow:0 8px 28px rgba(32,38,58,.14);padding:20px;display:flex;flex-direction:column;gap:14px">
+          <div style="height:150px;border-radius:12px;background:repeating-linear-gradient(45deg,#e3edfb,#e3edfb 12px,#eaf1fc 12px,#eaf1fc 24px);display:grid;place-items:center;position:relative"><div style="width:52px;height:52px;border-radius:50%;background:#fff;box-shadow:0 4px 14px rgba(32,38,58,.2);display:grid;place-items:center;color:#5b5bd6;font:600 18px sans-serif">▶</div><span style="position:absolute;bottom:8px;right:10px;font:500 10px 'IBM Plex Mono',monospace;color:#fff;background:rgba(32,38,58,.75);padding:2px 8px;border-radius:6px">Aperçu 1:20</span></div>
+          <div style="height:52px;display:grid;place-items:center;background:#5b5bd6;color:#fff;border-radius:26px;font:600 15px 'IBM Plex Sans',sans-serif;box-shadow:0 2px 8px rgba(91,91,214,.3)">S'inscrire au cours — gratuit</div>
+          <div style="display:flex;flex-direction:column;gap:8px;font:400 12.5px 'IBM Plex Sans',sans-serif;color:#4d5670">
+            <div style="display:flex;gap:8px;align-items:center"><span style="color:#35a071">✓</span>12 vidéos + 8 PDF d'exercices</div>
+            <div style="display:flex;gap:8px;align-items:center"><span style="color:#35a071">✓</span>Quiz corrigés à chaque chapitre</div>
+            <div style="display:flex;gap:8px;align-items:center"><span style="color:#35a071">✓</span>Disponible en fr · en · ar</div>
+          </div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 340px;gap:40px;padding:36px 48px 48px">
+        <div style="display:flex;flex-direction:column;gap:28px">
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <h3 style="margin:0;font:600 19px 'IBM Plex Sans',sans-serif">Ce que tu vas apprendre</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div style="display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid #e8ecf3;border-radius:12px;padding:12px 14px"><span style="color:#35a071;font:600 13px sans-serif">✓</span><span style="font:400 13px/1.5 'IBM Plex Sans',sans-serif;color:#4d5670">Reconnaître une fonction affine et son écriture f(x) = ax + b</span></div>
+              <div style="display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid #e8ecf3;border-radius:12px;padding:12px 14px"><span style="color:#35a071;font:600 13px sans-serif">✓</span><span style="font:400 13px/1.5 'IBM Plex Sans',sans-serif;color:#4d5670">Calculer un coefficient directeur et une ordonnée à l'origine</span></div>
+              <div style="display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid #e8ecf3;border-radius:12px;padding:12px 14px"><span style="color:#35a071;font:600 13px sans-serif">✓</span><span style="font:400 13px/1.5 'IBM Plex Sans',sans-serif;color:#4d5670">Tracer et lire une représentation graphique</span></div>
+              <div style="display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid #e8ecf3;border-radius:12px;padding:12px 14px"><span style="color:#35a071;font:600 13px sans-serif">✓</span><span style="font:400 13px/1.5 'IBM Plex Sans',sans-serif;color:#4d5670">Résoudre des problèmes concrets (tarifs, vitesses…)</span></div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;background:#f7ecd9;border-radius:12px;padding:10px 14px;width:fit-content"><span style="font:600 12px 'IBM Plex Sans',sans-serif;color:#96661c">Prérequis :</span><span style="font:400 12.5px 'IBM Plex Sans',sans-serif;color:#7a5a22">Calcul littéral (4ᵉ) · <span style="text-decoration:underline">revoir le chapitre</span></span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline"><h3 style="margin:0;font:600 19px 'IBM Plex Sans',sans-serif">Programme</h3><span style="font:400 12px 'IBM Plex Mono',monospace;color:#8a94a4">3 chapitres · 12 leçons</span></div>
+            <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;overflow:hidden">
+              <div style="display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid #eef1f7;background:#fafbfd"><span style="font:600 13px 'IBM Plex Sans',sans-serif;color:#5b5bd6">▾</span><span style="flex:1;font:600 14.5px 'IBM Plex Sans',sans-serif">1. Découvrir les fonctions affines</span><span style="font:400 11px 'IBM Plex Mono',monospace;color:#8a94a4">4 leçons · 1h20</span></div>
+              <div style="display:flex;align-items:center;gap:12px;padding:12px 18px 12px 42px;border-bottom:1px solid #f4f6fa"><span style="width:24px;height:24px;border-radius:50%;background:#e6e6fa;color:#5b5bd6;display:grid;place-items:center;font:600 10px sans-serif">▶</span><span style="flex:1;font:500 13.5px 'IBM Plex Sans',sans-serif">Découvrir la fonction affine</span><span style="font:600 10px 'IBM Plex Sans',sans-serif;color:#237552;background:#e2f3eb;padding:2px 8px;border-radius:8px">Aperçu</span><span style="font:400 10.5px 'IBM Plex Mono',monospace;color:#8a94a4">08:24</span></div>
+              <div style="display:flex;align-items:center;gap:12px;padding:12px 18px 12px 42px;border-bottom:1px solid #f4f6fa"><span style="width:24px;height:24px;border-radius:50%;background:#eef1f7;color:#8a94a4;display:grid;place-items:center;font:600 10px sans-serif">▶</span><span style="flex:1;font:500 13.5px 'IBM Plex Sans',sans-serif">Coefficient directeur</span><span style="font:400 10.5px 'IBM Plex Mono',monospace;color:#8a94a4">12:10</span></div>
+              <div style="display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid #eef1f7"><span style="font:600 13px 'IBM Plex Sans',sans-serif;color:#8a94a4">▸</span><span style="flex:1;font:600 14.5px 'IBM Plex Sans',sans-serif;color:#4d5670">2. Représentation graphique</span><span style="font:400 11px 'IBM Plex Mono',monospace;color:#8a94a4">5 leçons · 1h50</span></div>
+              <div style="display:flex;align-items:center;gap:12px;padding:16px 18px"><span style="font:600 13px 'IBM Plex Sans',sans-serif;color:#8a94a4">▸</span><span style="flex:1;font:600 14.5px 'IBM Plex Sans',sans-serif;color:#4d5670">3. Problèmes et applications</span><span style="font:400 11px 'IBM Plex Mono',monospace;color:#8a94a4">3 leçons · 1h20</span></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline"><h3 style="margin:0;font:600 19px 'IBM Plex Sans',sans-serif">Avis des élèves</h3><span style="font:600 13px 'IBM Plex Sans',sans-serif;color:#5b5bd6">Voir les 126 avis</span></div>
+            <div style="display:flex;gap:20px;align-items:center;background:#fff;border:1px solid #e8ecf3;border-radius:16px;padding:18px 20px">
+              <div style="text-align:center"><div style="font:600 36px 'IBM Plex Sans',sans-serif">4.8</div><div style="font:500 12px 'IBM Plex Sans',sans-serif;color:#c98a2e">★★★★★</div><div style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4">126 avis</div></div>
+              <div style="flex:1;display:flex;flex-direction:column;gap:4px">
+                <div style="display:flex;align-items:center;gap:8px"><span style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4;width:8px">5</span><div style="flex:1;height:6px;border-radius:3px;background:#eef1f7"><div style="width:84%;height:100%;border-radius:3px;background:#c98a2e"></div></div></div>
+                <div style="display:flex;align-items:center;gap:8px"><span style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4;width:8px">4</span><div style="flex:1;height:6px;border-radius:3px;background:#eef1f7"><div style="width:11%;height:100%;border-radius:3px;background:#c98a2e"></div></div></div>
+                <div style="display:flex;align-items:center;gap:8px"><span style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4;width:8px">3</span><div style="flex:1;height:6px;border-radius:3px;background:#eef1f7"><div style="width:4%;height:100%;border-radius:3px;background:#c98a2e"></div></div></div>
+                <div style="display:flex;align-items:center;gap:8px"><span style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4;width:8px">2</span><div style="flex:1;height:6px;border-radius:3px;background:#eef1f7"><div style="width:1%;height:100%;border-radius:3px;background:#c98a2e"></div></div></div>
+                <div style="display:flex;align-items:center;gap:8px"><span style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4;width:8px">1</span><div style="flex:1;height:6px;border-radius:3px;background:#eef1f7"><div style="width:0%;height:100%;border-radius:3px;background:#c98a2e"></div></div></div>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:50%;background:#dce1ec;display:grid;place-items:center;font:600 11px 'IBM Plex Sans',sans-serif;color:#4d5670">L</div><div><div style="font:600 13px 'IBM Plex Sans',sans-serif">Lina, 3ᵉ</div><div style="font:500 10px 'IBM Plex Sans',sans-serif;color:#c98a2e">★★★★★ · il y a 2 sem.</div></div></div>
+                <div style="font:400 12.5px/1.6 'IBM Plex Sans',sans-serif;color:#4d5670">Les schémas m'ont enfin fait comprendre le coefficient directeur. Les PDF d'exercices sont super utiles avant un contrôle.</div>
+              </div>
+              <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:50%;background:#dce1ec;display:grid;place-items:center;font:600 11px 'IBM Plex Sans',sans-serif;color:#4d5670">K</div><div><div style="font:600 13px 'IBM Plex Sans',sans-serif">Karim, 3ᵉ</div><div style="font:500 10px 'IBM Plex Sans',sans-serif;color:#c98a2e">★★★★☆ · il y a 1 mois</div></div></div>
+                <div style="font:400 12.5px/1.6 'IBM Plex Sans',sans-serif;color:#4d5670">Explications claires et rythme parfait. J'aurais aimé encore plus de quiz.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+
+    <!-- mobile course detail -->
+    <div style="flex:none;width:390px;background:#f3f5f9;border-radius:28px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08);position:relative">
+      <div style="background:#e3edfb;padding:18px 20px 22px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;justify-content:space-between"><span style="font:600 14px sans-serif;color:#41598a">←</span><span style="font:600 14px sans-serif;color:#41598a">⇪</span></div>
+        <div style="display:flex;gap:8px"><span style="font:600 10.5px 'IBM Plex Sans',sans-serif;color:#2c5aa8;background:#fff;padding:3px 10px;border-radius:10px">Maths · 3ᵉ</span></div>
+        <h1 style="margin:0;font:600 25px/1.2 'IBM Plex Sans',sans-serif;color:#1b3a66">Fonctions affines</h1>
+        <div style="display:flex;gap:14px;font:500 11px 'IBM Plex Mono',monospace;color:#41598a"><span style="color:#a06b12">★ 4.8</span><span>12 leçons</span><span>4h30</span></div>
+        <div style="height:170px;border-radius:14px;background:repeating-linear-gradient(45deg,#d6e4f7,#d6e4f7 12px,#dde9f9 12px,#dde9f9 24px);display:grid;place-items:center"><div style="width:48px;height:48px;border-radius:50%;background:#fff;box-shadow:0 4px 14px rgba(32,38,58,.2);display:grid;place-items:center;color:#5b5bd6;font:600 17px sans-serif">▶</div></div>
+      </div>
+      <div style="padding:18px 20px 90px;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #e8ecf3;border-radius:14px;padding:12px 14px">
+          <div style="width:38px;height:38px;border-radius:50%;background:#e3edfb;display:grid;place-items:center;font:600 13px 'IBM Plex Sans',sans-serif;color:#2c5aa8">SK</div>
+          <div style="flex:1"><div style="font:600 13.5px 'IBM Plex Sans',sans-serif">Mme Samia Karim</div><div style="font:400 11px 'IBM Plex Sans',sans-serif;color:#8a94a4">Prof de maths · 14 ans d'exp.</div></div>
+          <span style="color:#8a94a4">›</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="font:600 15px 'IBM Plex Sans',sans-serif">Ce que tu vas apprendre</div>
+          <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:#35a071;font:600 12px sans-serif">✓</span><span style="font:400 13px/1.5 'IBM Plex Sans',sans-serif;color:#4d5670">Reconnaître f(x) = ax + b et calculer a et b</span></div>
+          <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:#35a071;font:600 12px sans-serif">✓</span><span style="font:400 13px/1.5 'IBM Plex Sans',sans-serif;color:#4d5670">Tracer et lire une représentation graphique</span></div>
+          <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:#35a071;font:600 12px sans-serif">✓</span><span style="font:400 13px/1.5 'IBM Plex Sans',sans-serif;color:#4d5670">Résoudre des problèmes concrets</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:600 15px 'IBM Plex Sans',sans-serif">Programme</span><span style="font:400 10.5px 'IBM Plex Mono',monospace;color:#8a94a4">12 leçons</span></div>
+          <div style="background:#fff;border:1px solid #e8ecf3;border-radius:14px;overflow:hidden">
+            <div style="display:flex;align-items:center;gap:10px;padding:14px;border-bottom:1px solid #f4f6fa"><span style="font:600 12px sans-serif;color:#5b5bd6">▾</span><span style="flex:1;font:600 13.5px 'IBM Plex Sans',sans-serif">1. Découvrir les fonctions affines</span><span style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4">1h20</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:12px 14px 12px 34px;border-bottom:1px solid #f4f6fa"><span style="flex:1;font:500 13px 'IBM Plex Sans',sans-serif">Découvrir la fonction affine</span><span style="font:600 9.5px 'IBM Plex Sans',sans-serif;color:#237552;background:#e2f3eb;padding:2px 8px;border-radius:8px">Aperçu</span></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:14px"><span style="font:600 12px sans-serif;color:#8a94a4">▸</span><span style="flex:1;font:600 13.5px 'IBM Plex Sans',sans-serif;color:#4d5670">2. Représentation graphique</span><span style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4">1h50</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="position:absolute;left:0;right:0;bottom:0;background:rgba(255,255,255,.95);border-top:1px solid #eef1f7;padding:12px 20px 22px;display:flex;gap:10px;align-items:center">
+        <div style="flex:1;height:52px;display:grid;place-items:center;background:#5b5bd6;color:#fff;border-radius:26px;font:600 15px 'IBM Plex Sans',sans-serif;box-shadow:0 2px 8px rgba(91,91,214,.3)">S'inscrire — gratuit</div>
+      </div>
+    </div>
+
+  </div>
+  <div style="font:400 12px/1.7 'IBM Plex Sans',sans-serif;color:#6f7890;max-width:110ch"><b style="color:#20263a">Interactions.</b> Hero tint = subject color. Chapter accordions expand one at a time (height animates 180ms). «Aperçu» lessons play without enrolling. Mobile CTA is sticky; after enrolling it becomes «Commencer la leçon 1». Prerequisite chip links to the earlier course.</div>
+</section>
+
+<!-- ================================================================ -->
+<!-- 08 · LESSON PLAYER -->
+<!-- ================================================================ -->
+<section data-screen-label="08 Lesson Player" style="padding:48px 52px;display:flex;flex-direction:column;gap:24px;border-bottom:1px solid #d5dae4">
+  <div style="display:flex;align-items:center;gap:14px">
+    <span style="font:500 11px 'IBM Plex Mono',monospace;background:#20263a;color:#fff;padding:4px 10px;border-radius:6px">08</span>
+    <h2 style="margin:0;font:600 22px 'IBM Plex Sans',sans-serif">Lecteur de leçon</h2>
+    <span style="font:400 12px 'IBM Plex Sans',sans-serif;color:#6f7890">sidebar chapitres · onglets À propos / Notes / Documents · quiz en fin de chapitre · version arabe RTL</span>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+
+    <!-- desktop player FR -->
+    <div style="flex:none;width:1180px;background:#f3f5f9;border-radius:20px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08)">
+      <div style="display:flex;align-items:center;gap:16px;padding:0 24px;height:56px;background:#fff;border-bottom:1px solid #eef1f7">
+        <span style="font:600 14px sans-serif;color:#6f7890">←</span>
+        <div style="display:flex;flex-direction:column"><span style="font:600 13.5px 'IBM Plex Sans',sans-serif">Fonctions affines</span><span style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4">Maths · 3ᵉ · Mme S. Karim</span></div>
+        <div style="flex:1"></div>
+        <div style="display:flex;align-items:center;gap:10px"><span style="font:500 11px 'IBM Plex Mono',monospace;color:#6f7890">5/12 terminées</span><div style="width:120px;height:6px;border-radius:3px;background:#dce1ec;overflow:hidden"><div style="width:42%;height:100%;background:#5b5bd6"></div></div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 320px">
+        <div style="display:flex;flex-direction:column">
+          <div style="aspect-ratio:16/9;background:#20263a;display:grid;place-items:center;position:relative">
+            <span style="font:400 11px 'IBM Plex Mono',monospace;color:#8f97b8;position:absolute;top:14px;left:16px">vidéo — YouTube embed</span>
+            <div style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.95);display:grid;place-items:center;color:#20263a;font:600 22px sans-serif">▶</div>
+            <div style="position:absolute;bottom:0;left:0;right:0;padding:14px 16px;display:flex;align-items:center;gap:12px">
+              <div style="flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.25)"><div style="width:42%;height:100%;border-radius:2px;background:#7c7cea"></div></div>
+              <span style="font:500 10px 'IBM Plex Mono',monospace;color:#c8cde0">05:07 / 12:10</span>
+            </div>
+          </div>
+          <div style="padding:22px 28px;display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;align-items:flex-start;gap:16px">
+              <div style="flex:1;display:flex;flex-direction:column;gap:4px">
+                <span style="font:500 10.5px 'IBM Plex Mono',monospace;color:#8a94a4">CHAPITRE 1 · LEÇON 2</span>
+                <h1 style="margin:0;font:600 22px 'IBM Plex Sans',sans-serif">Coefficient directeur</h1>
+              </div>
+              <div style="height:44px;padding:0 20px;display:flex;align-items:center;gap:8px;background:#e2f3eb;color:#237552;border-radius:22px;font:600 13.5px 'IBM Plex Sans',sans-serif">✓ Marquer comme terminée</div>
+            </div>
+            <div style="display:flex;gap:2px;border-bottom:1.5px solid #e8ecf3">
+              <span style="padding:10px 16px;font:600 13.5px 'IBM Plex Sans',sans-serif;color:#20263a;border-bottom:2.5px solid #5b5bd6;margin-bottom:-1.5px">À propos</span>
+              <span style="padding:10px 16px;font:600 13.5px 'IBM Plex Sans',sans-serif;color:#6f7890">Mes notes</span>
+              <span style="padding:10px 16px;font:600 13.5px 'IBM Plex Sans',sans-serif;color:#6f7890">Documents <span style="font:600 10px 'IBM Plex Sans',sans-serif;background:#eef1f7;padding:1px 7px;border-radius:8px">2</span></span>
+            </div>
+            <p style="margin:0;font:400 14px/1.7 'IBM Plex Sans',sans-serif;color:#4d5670;max-width:70ch">Dans cette leçon, on apprend à calculer le coefficient directeur d'une fonction affine à partir de deux points, et à comprendre ce qu'il représente : la «&nbsp;pente&nbsp;» de la droite.</p>
+            <div style="display:flex;gap:10px">
+              <div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e8ecf3;border-radius:12px;padding:10px 14px"><span style="width:32px;height:32px;border-radius:8px;background:#fdeaea;color:#d14d5d;display:grid;place-items:center;font:600 10px 'IBM Plex Mono',monospace">PDF</span><div><div style="font:600 12.5px 'IBM Plex Sans',sans-serif">Exercices — coefficient directeur</div><div style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4">420 Ko</div></div><span style="color:#5b5bd6;font:600 13px sans-serif;margin-left:8px">↓</span></div>
+              <div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e8ecf3;border-radius:12px;padding:10px 14px"><span style="width:32px;height:32px;border-radius:8px;background:#fdeaea;color:#d14d5d;display:grid;place-items:center;font:600 10px 'IBM Plex Mono',monospace">PDF</span><div><div style="font:600 12.5px 'IBM Plex Sans',sans-serif">Fiche mémo</div><div style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4">180 Ko</div></div><span style="color:#5b5bd6;font:600 13px sans-serif;margin-left:8px">↓</span></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid #e8ecf3;padding-top:16px">
+              <div style="height:44px;padding:0 18px;display:flex;align-items:center;gap:8px;color:#4d5670;font:600 13.5px 'IBM Plex Sans',sans-serif;border:1.5px solid #dce1ec;border-radius:22px">← Précédente</div>
+              <div style="height:44px;padding:0 20px;display:flex;align-items:center;gap:8px;background:#5b5bd6;color:#fff;border-radius:22px;font:600 13.5px 'IBM Plex Sans',sans-serif;box-shadow:0 2px 8px rgba(91,91,214,.3)">Leçon suivante →</div>
+            </div>
+          </div>
+        </div>
+        <!-- sidebar -->
+        <div style="background:#fff;border-left:1px solid #eef1f7;display:flex;flex-direction:column">
+          <div style="padding:16px 18px;border-bottom:1px solid #eef1f7;font:600 14px 'IBM Plex Sans',sans-serif">Contenu du cours</div>
+          <div style="padding:12px;display:flex;flex-direction:column;gap:6px">
+            <div style="font:600 11px 'IBM Plex Mono',monospace;color:#8a94a4;padding:6px 8px;letter-spacing:.05em">CH.1 — DÉCOUVRIR <span style="color:#35a071">2/4</span></div>
+            <div style="display:flex;align-items:center;gap:10px;height:48px;padding:0 10px;border-radius:10px"><div style="width:22px;height:22px;border-radius:50%;background:#35a071;color:#fff;display:grid;place-items:center;font:600 10px sans-serif">✓</div><span style="flex:1;font:500 12.5px 'IBM Plex Sans',sans-serif;color:#8a94a4">Découvrir la fonction affine</span><span style="font:400 9.5px 'IBM Plex Mono',monospace;color:#b3bac6">08:24</span></div>
+            <div style="display:flex;align-items:center;gap:10px;height:48px;padding:0 10px;border-radius:10px;background:#e6e6fa;border:1.5px solid #5b5bd6"><div style="width:22px;height:22px;border-radius:50%;background:#5b5bd6;color:#fff;display:grid;place-items:center;font:600 9px sans-serif">▶</div><span style="flex:1;font:600 12.5px 'IBM Plex Sans',sans-serif">Coefficient directeur</span><span style="font:400 9.5px 'IBM Plex Mono',monospace;color:#4747b8">12:10</span></div>
+            <div style="display:flex;align-items:center;gap:10px;height:48px;padding:0 10px;border-radius:10px"><div style="width:22px;height:22px;border-radius:50%;border:1.5px solid #dce1ec;display:grid;place-items:center;color:#8a94a4;font:500 10px sans-serif">3</div><span style="flex:1;font:500 12.5px 'IBM Plex Sans',sans-serif">Ordonnée à l'origine</span><span style="font:400 9.5px 'IBM Plex Mono',monospace;color:#b3bac6">07:32</span></div>
+            <div style="display:flex;align-items:center;gap:10px;height:48px;padding:0 10px;border-radius:10px"><div style="width:22px;height:22px;border-radius:50%;border:1.5px solid #dce1ec;display:grid;place-items:center;color:#8a94a4;font:500 10px sans-serif">4</div><span style="flex:1;font:500 12.5px 'IBM Plex Sans',sans-serif">Tableaux de valeurs</span><span style="font:400 9.5px 'IBM Plex Mono',monospace;color:#b3bac6">10:05</span></div>
+            <div style="display:flex;align-items:center;gap:10px;height:48px;padding:0 10px;border-radius:10px;background:#f7ecd9"><div style="width:22px;height:22px;border-radius:50%;background:#c98a2e;color:#fff;display:grid;place-items:center;font:600 10px sans-serif">?</div><span style="flex:1;font:600 12.5px 'IBM Plex Sans',sans-serif;color:#96661c">Quiz du chapitre 1</span><span style="font:400 9.5px 'IBM Plex Mono',monospace;color:#b48a4a">8 q.</span></div>
+            <div style="font:600 11px 'IBM Plex Mono',monospace;color:#8a94a4;padding:10px 8px 6px;letter-spacing:.05em">CH.2 — GRAPHIQUE <span style="color:#b3bac6">0/5</span></div>
+            <div style="display:flex;align-items:center;gap:10px;height:48px;padding:0 10px;border-radius:10px"><div style="width:22px;height:22px;border-radius:50%;border:1.5px solid #dce1ec;display:grid;place-items:center;color:#8a94a4;font:500 10px sans-serif">5</div><span style="flex:1;font:500 12.5px 'IBM Plex Sans',sans-serif">Tracer une droite</span><span style="font:400 9.5px 'IBM Plex Mono',monospace;color:#b3bac6">11:40</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- desktop player AR RTL -->
+    <div dir="rtl" lang="ar" style="flex:none;width:1180px;background:#f3f5f9;border-radius:20px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08);font-family:'IBM Plex Sans Arabic',sans-serif">
+      <div style="display:flex;align-items:center;gap:16px;padding:0 24px;height:56px;background:#fff;border-bottom:1px solid #eef1f7">
+        <span style="font:600 14px sans-serif;color:#6f7890">→</span>
+        <div style="display:flex;flex-direction:column"><span style="font:600 13.5px 'IBM Plex Sans Arabic',sans-serif">الدوال التآلفية</span><span style="font:400 11px/1.5 'IBM Plex Sans Arabic',sans-serif;color:#8a94a4">رياضيات · السنة الثالثة · أ. سامية كريم</span></div>
+        <div style="flex:1"></div>
+        <div style="display:flex;align-items:center;gap:10px"><span style="font:500 11.5px 'IBM Plex Sans Arabic',sans-serif;color:#6f7890">٥/١٢ مكتملة</span><div style="width:120px;height:6px;border-radius:3px;background:#dce1ec;overflow:hidden"><div style="width:42%;height:100%;background:#5b5bd6"></div></div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 320px">
+        <div style="display:flex;flex-direction:column">
+          <div style="aspect-ratio:16/9;background:#20263a;display:grid;place-items:center;position:relative">
+            <span style="font:400 11px/1.5 'IBM Plex Sans Arabic',sans-serif;color:#8f97b8;position:absolute;top:14px;right:16px">فيديو الدرس</span>
+            <div style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.95);display:grid;place-items:center;color:#20263a;font:600 22px sans-serif;transform:scaleX(-1)">▶</div>
+            <div style="position:absolute;bottom:0;left:0;right:0;padding:14px 16px;display:flex;align-items:center;gap:12px">
+              <div style="flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.25);display:flex"><div style="width:42%;height:100%;border-radius:2px;background:#7c7cea"></div></div>
+              <span style="font:500 11px 'IBM Plex Sans Arabic',sans-serif;color:#c8cde0">٠٥:٠٧ / ١٢:١٠</span>
+            </div>
+          </div>
+          <div style="padding:22px 28px;display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;align-items:flex-start;gap:16px">
+              <div style="flex:1;display:flex;flex-direction:column;gap:4px">
+                <span style="font:500 11px/1.5 'IBM Plex Sans Arabic',sans-serif;color:#8a94a4">الفصل ١ · الدرس ٢</span>
+                <h1 style="margin:0;font:600 22px/1.5 'IBM Plex Sans Arabic',sans-serif">المعامل الموجّه</h1>
+              </div>
+              <div style="height:44px;padding:0 20px;display:flex;align-items:center;gap:8px;background:#e2f3eb;color:#237552;border-radius:22px;font:600 13.5px 'IBM Plex Sans Arabic',sans-serif">✓ وضع علامة مكتمل</div>
+            </div>
+            <div style="display:flex;gap:2px;border-bottom:1.5px solid #e8ecf3">
+              <span style="padding:10px 16px;font:600 13.5px 'IBM Plex Sans Arabic',sans-serif;color:#20263a;border-bottom:2.5px solid #5b5bd6;margin-bottom:-1.5px">حول الدرس</span>
+              <span style="padding:10px 16px;font:600 13.5px 'IBM Plex Sans Arabic',sans-serif;color:#6f7890">ملاحظاتي</span>
+              <span style="padding:10px 16px;font:600 13.5px 'IBM Plex Sans Arabic',sans-serif;color:#6f7890">المستندات <span style="font:600 10px 'IBM Plex Sans Arabic',sans-serif;background:#eef1f7;padding:1px 7px;border-radius:8px">٢</span></span>
+            </div>
+            <p style="margin:0;font:400 14px/1.9 'IBM Plex Sans Arabic',sans-serif;color:#4d5670;max-width:70ch">في هذا الدرس نتعلّم كيفية حساب المعامل الموجّه لدالة تآلفية انطلاقاً من نقطتين، وفهم ما يمثّله: «ميل» المستقيم.</p>
+            <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid #e8ecf3;padding-top:16px">
+              <div style="height:44px;padding:0 18px;display:flex;align-items:center;gap:8px;color:#4d5670;font:600 13.5px 'IBM Plex Sans Arabic',sans-serif;border:1.5px solid #dce1ec;border-radius:22px">→ الدرس السابق</div>
+              <div style="height:44px;padding:0 20px;display:flex;align-items:center;gap:8px;background:#5b5bd6;color:#fff;border-radius:22px;font:600 13.5px 'IBM Plex Sans Arabic',sans-serif;box-shadow:0 2px 8px rgba(91,91,214,.3)">الدرس التالي ←</div>
+            </div>
+          </div>
+        </div>
+        <div style="background:#fff;border-left:none;border-right:1px solid #eef1f7;display:flex;flex-direction:column">
+          <div style="padding:16px 18px;border-bottom:1px solid #eef1f7;font:600 14px 'IBM Plex Sans Arabic',sans-serif">محتوى الدورة</div>
+          <div style="padding:12px;display:flex;flex-direction:column;gap:6px">
+            <div style="font:600 11.5px/1.6 'IBM Plex Sans Arabic',sans-serif;color:#8a94a4;padding:6px 8px">الفصل ١ — اكتشاف <span style="color:#35a071">٢/٤</span></div>
+            <div style="display:flex;align-items:center;gap:10px;height:48px;padding:0 10px;border-radius:10px"><div style="width:22px;height:22px;border-radius:50%;background:#35a071;color:#fff;display:grid;place-items:center;font:600 10px sans-serif">✓</div><span style="flex:1;font:500 12.5px 'IBM Plex Sans Arabic',sans-serif;color:#8a94a4">اكتشاف الدالة التآلفية</span><span style="font:400 10px 'IBM Plex Sans Arabic',sans-serif;color:#b3bac6">٠٨:٢٤</span></div>
+            <div style="display:flex;align-items:center;gap:10px;height:48px;padding:0 10px;border-radius:10px;background:#e6e6fa;border:1.5px solid #5b5bd6"><div style="width:22px;height:22px;border-radius:50%;background:#5b5bd6;color:#fff;display:grid;place-items:center;font:600 9px sans-serif;transform:scaleX(-1)">▶</div><span style="flex:1;font:600 12.5px 'IBM Plex Sans Arabic',sans-serif">المعامل الموجّه</span><span style="font:400 10px 'IBM Plex Sans Arabic',sans-serif;color:#4747b8">١٢:١٠</span></div>
+            <div style="display:flex;align-items:center;gap:10px;height:48px;padding:0 10px;border-radius:10px"><div style="width:22px;height:22px;border-radius:50%;border:1.5px solid #dce1ec;display:grid;place-items:center;color:#8a94a4;font:500 10px 'IBM Plex Sans Arabic',sans-serif">٣</div><span style="flex:1;font:500 12.5px 'IBM Plex Sans Arabic',sans-serif">الترتيب عند الأصل</span><span style="font:400 10px 'IBM Plex Sans Arabic',sans-serif;color:#b3bac6">٠٧:٣٢</span></div>
+            <div style="display:flex;align-items:center;gap:10px;height:48px;padding:0 10px;border-radius:10px;background:#f7ecd9"><div style="width:22px;height:22px;border-radius:50%;background:#c98a2e;color:#fff;display:grid;place-items:center;font:600 10px sans-serif">؟</div><span style="flex:1;font:600 12.5px 'IBM Plex Sans Arabic',sans-serif;color:#96661c">اختبار الفصل ١</span><span style="font:400 10px 'IBM Plex Sans Arabic',sans-serif;color:#b48a4a">٨ أسئلة</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- mobile player -->
+    <div style="flex:none;width:390px;background:#f3f5f9;border-radius:28px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08)">
+      <div style="aspect-ratio:16/9;background:#20263a;display:grid;place-items:center;position:relative">
+        <span style="position:absolute;top:12px;left:14px;font:600 13px sans-serif;color:#c8cde0">←</span>
+        <div style="width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.95);display:grid;place-items:center;color:#20263a;font:600 18px sans-serif">▶</div>
+        <div style="position:absolute;bottom:0;left:0;right:0;padding:10px 14px;display:flex;align-items:center;gap:10px"><div style="flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.25)"><div style="width:42%;height:100%;border-radius:2px;background:#7c7cea"></div></div><span style="font:500 9px 'IBM Plex Mono',monospace;color:#c8cde0">05:07</span></div>
+      </div>
+      <div style="padding:16px 20px 24px;display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <span style="font:500 10px 'IBM Plex Mono',monospace;color:#8a94a4">CH.1 · LEÇON 2 · 5/12 ✦</span>
+          <h1 style="margin:0;font:600 19px 'IBM Plex Sans',sans-serif">Coefficient directeur</h1>
+        </div>
+        <div style="display:flex;gap:8px">
+          <div style="flex:1;height:48px;display:grid;place-items:center;background:#e2f3eb;color:#237552;border-radius:24px;font:600 13.5px 'IBM Plex Sans',sans-serif">✓ Terminée</div>
+          <div style="height:48px;padding:0 18px;display:grid;place-items:center;background:#fff;border:1.5px solid #dce1ec;border-radius:24px;font:600 13.5px 'IBM Plex Sans',sans-serif;color:#4d5670">☰ Chapitres</div>
+        </div>
+        <div style="display:flex;gap:2px;border-bottom:1.5px solid #e8ecf3">
+          <span style="padding:9px 12px;font:600 12.5px 'IBM Plex Sans',sans-serif;border-bottom:2.5px solid #5b5bd6;margin-bottom:-1.5px">À propos</span>
+          <span style="padding:9px 12px;font:600 12.5px 'IBM Plex Sans',sans-serif;color:#6f7890">Notes</span>
+          <span style="padding:9px 12px;font:600 12.5px 'IBM Plex Sans',sans-serif;color:#6f7890">Docs (2)</span>
+        </div>
+        <p style="margin:0;font:400 13px/1.65 'IBM Plex Sans',sans-serif;color:#4d5670">Calculer le coefficient directeur à partir de deux points, et comprendre ce qu'il représente.</p>
+        <div style="background:#fff;border:1.5px dashed #c9c9f2;border-radius:14px;padding:12px 14px;font:400 12.5px/1.5 'IBM Plex Sans',sans-serif;color:#8a94a4">✎ Prends une note pendant la vidéo… <span style="font:400 9.5px 'IBM Plex Mono',monospace;color:#b3bac6">horodatée 05:07</span></div>
+        <div style="display:flex;align-items:center;gap:10px;background:#f7ecd9;border-radius:14px;padding:12px 14px">
+          <div style="width:32px;height:32px;border-radius:50%;background:#c98a2e;color:#fff;display:grid;place-items:center;font:600 13px sans-serif">?</div>
+          <div style="flex:1"><div style="font:600 13px 'IBM Plex Sans',sans-serif;color:#96661c">Quiz du chapitre 1</div><div style="font:400 10.5px 'IBM Plex Sans',sans-serif;color:#b48a4a">Débloqué après la leçon 4</div></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;gap:10px">
+          <div style="flex:1;height:48px;display:grid;place-items:center;border:1.5px solid #dce1ec;border-radius:24px;font:600 13px 'IBM Plex Sans',sans-serif;color:#4d5670">← Précédente</div>
+          <div style="flex:1;height:48px;display:grid;place-items:center;background:#5b5bd6;color:#fff;border-radius:24px;font:600 13px 'IBM Plex Sans',sans-serif">Suivante →</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div style="font:400 12px/1.7 'IBM Plex Sans',sans-serif;color:#6f7890;max-width:110ch"><b style="color:#20263a">Interactions &amp; RTL.</b> Sidebar rows are 48px targets; the active row auto-scrolls into view. «Terminée» animates the header bar +1 and toasts; the next lesson auto-advances after 5s (cancellable). Notes are timestamped to the video position. On mobile, «☰ Chapitres» opens the sidebar as a bottom drawer. RTL: sidebar moves to the LEFT, prev/next swap sides and arrows, play glyphs mirror, timestamps use Arabic-Indic digits.</div>
+</section>
+
+<!-- ================================================================ -->
+<!-- 09 · QUIZ -->
+<!-- ================================================================ -->
+<section data-screen-label="09 Quiz" style="padding:48px 52px;display:flex;flex-direction:column;gap:24px;border-bottom:1px solid #d5dae4">
+  <div style="display:flex;align-items:center;gap:14px">
+    <span style="font:500 11px 'IBM Plex Mono',monospace;background:#20263a;color:#fff;padding:4px 10px;border-radius:6px">09</span>
+    <h2 style="margin:0;font:600 22px 'IBM Plex Sans',sans-serif">Quiz — question, feedback, résultats</h2>
+    <span style="font:400 12px 'IBM Plex Sans',sans-serif;color:#6f7890">feedback immédiat après chaque réponse · revoir ses erreurs · rejouer</span>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+
+    <!-- question state -->
+    <div style="flex:none;width:390px;background:#f3f5f9;border-radius:28px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08)">
+      <div style="padding:20px 24px 36px;display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="font:600 13px sans-serif;color:#6f7890">✕</span>
+          <div style="flex:1;height:6px;border-radius:3px;background:#dce1ec;overflow:hidden"><div style="width:37%;height:100%;border-radius:3px;background:#5b5bd6"></div></div>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;color:#6f7890">3/8</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <span style="width:fit-content;font:600 10.5px 'IBM Plex Sans',sans-serif;color:#2c5aa8;background:#e3edfb;padding:3px 10px;border-radius:10px">Quiz · Ch.1</span>
+          <h1 style="margin:0;font:600 21px/1.35 'IBM Plex Sans',sans-serif">Quel est le coefficient directeur de f(x) = 3x − 5 ?</h1>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="min-height:52px;display:flex;align-items:center;padding:0 18px;background:#fff;border:1.5px solid #dce1ec;border-radius:14px;font:500 15px 'IBM Plex Sans',sans-serif;color:#4d5670">−5</div>
+          <div style="min-height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:#e6e6fa;border:2px solid #5b5bd6;border-radius:14px"><span style="font:600 15px 'IBM Plex Sans',sans-serif;color:#4747b8">3</span><div style="width:22px;height:22px;border-radius:50%;background:#5b5bd6;color:#fff;display:grid;place-items:center;font:600 11px sans-serif">✓</div></div>
+          <div style="min-height:52px;display:flex;align-items:center;padding:0 18px;background:#fff;border:1.5px solid #dce1ec;border-radius:14px;font:500 15px 'IBM Plex Sans',sans-serif;color:#4d5670">x</div>
+          <div style="min-height:52px;display:flex;align-items:center;padding:0 18px;background:#fff;border:1.5px solid #dce1ec;border-radius:14px;font:500 15px 'IBM Plex Sans',sans-serif;color:#4d5670">3x</div>
+        </div>
+        <div style="height:52px;display:grid;place-items:center;background:#5b5bd6;color:#fff;border-radius:26px;font:600 15px 'IBM Plex Sans',sans-serif;box-shadow:0 2px 8px rgba(91,91,214,.3)">Valider</div>
+      </div>
+    </div>
+
+    <!-- feedback state (wrong) -->
+    <div style="flex:none;width:390px;background:#f3f5f9;border-radius:28px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08)">
+      <div style="padding:20px 24px 36px;display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="font:600 13px sans-serif;color:#6f7890">✕</span>
+          <div style="flex:1;height:6px;border-radius:3px;background:#dce1ec;overflow:hidden"><div style="width:50%;height:100%;border-radius:3px;background:#5b5bd6"></div></div>
+          <span style="font:500 11px 'IBM Plex Mono',monospace;color:#6f7890">4/8</span>
+        </div>
+        <h1 style="margin:0;font:600 21px/1.35 'IBM Plex Sans',sans-serif">L'ordonnée à l'origine de f(x) = 3x − 5 est…</h1>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="min-height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:#fdeaea;border:2px solid #d14d5d;border-radius:14px"><span style="font:600 15px 'IBM Plex Sans',sans-serif;color:#a83442">3</span><div style="width:22px;height:22px;border-radius:50%;background:#d14d5d;color:#fff;display:grid;place-items:center;font:600 11px sans-serif">✕</div></div>
+          <div style="min-height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:#e2f3eb;border:2px solid #35a071;border-radius:14px"><span style="font:600 15px 'IBM Plex Sans',sans-serif;color:#237552">−5</span><div style="width:22px;height:22px;border-radius:50%;background:#35a071;color:#fff;display:grid;place-items:center;font:600 11px sans-serif">✓</div></div>
+          <div style="min-height:52px;display:flex;align-items:center;padding:0 18px;background:#fff;border:1.5px solid #eef1f7;border-radius:14px;font:500 15px 'IBM Plex Sans',sans-serif;color:#b3bac6">5</div>
+        </div>
+        <div style="background:#fff;border:1px solid #e8ecf3;border-radius:14px;padding:14px 16px;display:flex;gap:12px">
+          <div style="width:30px;height:30px;border-radius:50%;background:#e6e6fa;display:grid;place-items:center;font:600 14px sans-serif;flex:none">💡</div>
+          <div style="font:400 12.5px/1.6 'IBM Plex Sans',sans-serif;color:#4d5670">L'ordonnée à l'origine, c'est <b>b</b> dans f(x) = ax + <b>b</b> — ici b = −5. Revois la <span style="color:#5b5bd6;font-weight:600">leçon 3</span> si besoin.</div>
+        </div>
+        <div style="height:52px;display:grid;place-items:center;background:#20263a;color:#fff;border-radius:26px;font:600 15px 'IBM Plex Sans',sans-serif">Question suivante</div>
+      </div>
+    </div>
+
+    <!-- results state -->
+    <div style="flex:none;width:390px;background:#f3f5f9;border-radius:28px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08)">
+      <div style="padding:40px 24px 36px;display:flex;flex-direction:column;gap:20px;align-items:center">
+        <div style="width:120px;height:120px;border-radius:50%;background:conic-gradient(#35a071 0 75%,#dce1ec 75% 100%);display:grid;place-items:center">
+          <div style="width:94px;height:94px;border-radius:50%;background:#fff;display:grid;place-items:center;flex-direction:column">
+            <div style="text-align:center"><div style="font:600 28px 'IBM Plex Sans',sans-serif;color:#237552">6/8</div><div style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4">75%</div></div>
+          </div>
+        </div>
+        <div style="text-align:center;display:flex;flex-direction:column;gap:6px">
+          <h1 style="margin:0;font:600 23px 'IBM Plex Sans',sans-serif">Bien joué, Nadia !</h1>
+          <div style="font:400 13.5px/1.5 'IBM Plex Sans',sans-serif;color:#6f7890">Chapitre 1 validé. Deux notions à revoir avant le contrôle.</div>
+        </div>
+        <div style="width:100%;display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e8ecf3;border-radius:12px;padding:12px 14px"><span style="width:22px;height:22px;border-radius:50%;background:#fdeaea;color:#d14d5d;display:grid;place-items:center;font:600 11px sans-serif">✕</span><span style="flex:1;font:500 12.5px 'IBM Plex Sans',sans-serif;color:#4d5670">Q4 · Ordonnée à l'origine</span><span style="font:600 11.5px 'IBM Plex Sans',sans-serif;color:#5b5bd6">Revoir →</span></div>
+          <div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e8ecf3;border-radius:12px;padding:12px 14px"><span style="width:22px;height:22px;border-radius:50%;background:#fdeaea;color:#d14d5d;display:grid;place-items:center;font:600 11px sans-serif">✕</span><span style="flex:1;font:500 12.5px 'IBM Plex Sans',sans-serif;color:#4d5670">Q7 · Lecture graphique</span><span style="font:600 11.5px 'IBM Plex Sans',sans-serif;color:#5b5bd6">Revoir →</span></div>
+        </div>
+        <div style="width:100%;display:flex;flex-direction:column;gap:10px">
+          <div style="height:52px;display:grid;place-items:center;background:#5b5bd6;color:#fff;border-radius:26px;font:600 15px 'IBM Plex Sans',sans-serif;box-shadow:0 2px 8px rgba(91,91,214,.3)">Continuer le chapitre 2</div>
+          <div style="height:48px;display:grid;place-items:center;background:#e6e6fa;color:#4747b8;border-radius:24px;font:600 14px 'IBM Plex Sans',sans-serif">Rejouer le quiz</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div style="font:400 12px/1.7 'IBM Plex Sans',sans-serif;color:#6f7890;max-width:110ch"><b style="color:#20263a">Interactions.</b> One question per screen; selection highlights, «Valider» reveals immediate feedback (correct answer always shown in green, explanation card slides in). Progress bar never goes backwards. Exit ✕ opens the confirm modal from the system section. Results ring animates 0→score (skipped under reduced-motion); «Rejouer» reshuffles questions, wrong ones first.</div>
+</section>
+
+<!-- ================================================================ -->
+<!-- 10 · MES COURS · PROFIL & RÉGLAGES -->
+<!-- ================================================================ -->
+<section data-screen-label="10 My Courses + Profile" style="padding:48px 52px;display:flex;flex-direction:column;gap:24px;border-bottom:1px solid #d5dae4">
+  <div style="display:flex;align-items:center;gap:14px">
+    <span style="font:500 11px 'IBM Plex Mono',monospace;background:#20263a;color:#fff;padding:4px 10px;border-radius:6px">10</span>
+    <h2 style="margin:0;font:600 22px 'IBM Plex Sans',sans-serif">Mes cours · Profil &amp; réglages</h2>
+    <span style="font:400 12px 'IBM Plex Sans',sans-serif;color:#6f7890">progression par cours · langue fr/en/ar · thème clair/sombre · notifications</span>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+
+    <!-- my courses mobile -->
+    <div style="flex:none;width:390px;background:#f3f5f9;border-radius:28px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08)">
+      <div style="padding:20px 20px 28px;display:flex;flex-direction:column;gap:16px">
+        <h1 style="margin:0;font:600 22px 'IBM Plex Sans',sans-serif">Mes cours</h1>
+        <div style="display:flex;gap:4px;background:#eef1f7;border-radius:22px;padding:4px">
+          <span style="flex:1;height:36px;display:grid;place-items:center;background:#fff;border-radius:18px;font:600 12.5px 'IBM Plex Sans',sans-serif;box-shadow:0 1px 3px rgba(32,38,58,.1)">En cours (2)</span>
+          <span style="flex:1;height:36px;display:grid;place-items:center;border-radius:18px;font:600 12.5px 'IBM Plex Sans',sans-serif;color:#6f7890">Terminés (1)</span>
+        </div>
+        <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;gap:12px;align-items:center">
+            <div style="width:64px;height:50px;border-radius:10px;background:repeating-linear-gradient(45deg,#e3edfb,#e3edfb 8px,#eaf1fc 8px,#eaf1fc 16px);flex:none"></div>
+            <div style="flex:1"><span style="font:600 9.5px 'IBM Plex Sans',sans-serif;color:#2c5aa8;background:#e3edfb;padding:2px 8px;border-radius:8px">Maths</span><div style="font:600 14.5px 'IBM Plex Sans',sans-serif;margin-top:3px">Fonctions affines</div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;justify-content:space-between;font:500 10.5px 'IBM Plex Mono',monospace;color:#6f7890"><span>5/12 leçons</span><span>42%</span></div>
+            <div style="height:7px;border-radius:4px;background:#dce1ec;overflow:hidden"><div style="width:42%;height:100%;border-radius:4px;background:#3f7ad9"></div></div>
+          </div>
+          <div style="height:44px;display:grid;place-items:center;background:#5b5bd6;color:#fff;border-radius:22px;font:600 13.5px 'IBM Plex Sans',sans-serif">Reprendre — leçon 6</div>
+        </div>
+        <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;gap:12px;align-items:center">
+            <div style="width:64px;height:50px;border-radius:10px;background:repeating-linear-gradient(45deg,#f0e7fb,#f0e7fb 8px,#f4edfc 8px,#f4edfc 16px);flex:none"></div>
+            <div style="flex:1"><span style="font:600 9.5px 'IBM Plex Sans',sans-serif;color:#6f3aa8;background:#f0e7fb;padding:2px 8px;border-radius:8px">Physique</span><div style="font:600 14.5px 'IBM Plex Sans',sans-serif;margin-top:3px">Forces et mouvement</div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;justify-content:space-between;font:500 10.5px 'IBM Plex Mono',monospace;color:#6f7890"><span>2/15 leçons</span><span>13%</span></div>
+            <div style="height:7px;border-radius:4px;background:#dce1ec;overflow:hidden"><div style="width:13%;height:100%;border-radius:4px;background:#9256d9"></div></div>
+          </div>
+          <div style="height:44px;display:grid;place-items:center;background:#eef1f7;color:#4d5670;border-radius:22px;font:600 13.5px 'IBM Plex Sans',sans-serif">Reprendre — leçon 3</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- profile mobile -->
+    <div style="flex:none;width:390px;background:#f3f5f9;border-radius:28px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08)">
+      <div style="padding:20px 20px 30px;display:flex;flex-direction:column;gap:18px">
+        <h1 style="margin:0;font:600 22px 'IBM Plex Sans',sans-serif">Profil</h1>
+        <div style="display:flex;align-items:center;gap:14px;background:#fff;border:1px solid #e8ecf3;border-radius:16px;padding:16px">
+          <div style="width:56px;height:56px;border-radius:50%;background:#dce1ec;display:grid;place-items:center;font:600 20px 'IBM Plex Sans',sans-serif;color:#4d5670;position:relative">N<div style="position:absolute;bottom:-2px;right:-2px;width:22px;height:22px;border-radius:50%;background:#5b5bd6;color:#fff;display:grid;place-items:center;font:500 10px sans-serif;border:2px solid #fff">✎</div></div>
+          <div style="flex:1"><div style="font:600 16px 'IBM Plex Sans',sans-serif">Nadia B.</div><div style="font:400 12px 'IBM Plex Sans',sans-serif;color:#8a94a4">3ᵉ · Collège · nadia@email.com</div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="font:600 12px 'IBM Plex Mono',monospace;color:#8a94a4;text-transform:uppercase;letter-spacing:.06em">Langue de l'app</div>
+          <div style="display:flex;gap:4px;background:#eef1f7;border-radius:24px;padding:4px">
+            <span style="flex:1;height:44px;display:grid;place-items:center;background:#fff;border-radius:22px;font:600 13.5px 'IBM Plex Sans',sans-serif;box-shadow:0 1px 3px rgba(32,38,58,.1)">Français</span>
+            <span style="flex:1;height:44px;display:grid;place-items:center;border-radius:22px;font:600 13.5px 'IBM Plex Sans',sans-serif;color:#6f7890">English</span>
+            <span style="flex:1;height:44px;display:grid;place-items:center;border-radius:22px;font:600 14px 'IBM Plex Sans Arabic',sans-serif;color:#6f7890">العربية</span>
+          </div>
+          <div style="font:400 11px/1.5 'IBM Plex Sans',sans-serif;color:#8a94a4">Choisir العربية bascule toute l'interface en miroir (RTL).</div>
+        </div>
+        <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;overflow:hidden">
+          <div style="display:flex;align-items:center;gap:12px;height:56px;padding:0 16px;border-bottom:1px solid #f4f6fa"><span style="width:32px;height:32px;border-radius:10px;background:#e6e6fa;display:grid;place-items:center;font:500 14px sans-serif">🎨</span><span style="flex:1;font:500 14px 'IBM Plex Sans',sans-serif">Thème</span><span style="font:500 12.5px 'IBM Plex Sans',sans-serif;color:#6f7890">Clair ▾</span></div>
+          <div style="display:flex;align-items:center;gap:12px;height:56px;padding:0 16px;border-bottom:1px solid #f4f6fa"><span style="width:32px;height:32px;border-radius:10px;background:#e6e6fa;display:grid;place-items:center;font:500 14px sans-serif">🔔</span><span style="flex:1;font:500 14px 'IBM Plex Sans',sans-serif">Notifications</span><div style="width:44px;height:26px;border-radius:13px;background:#5b5bd6;position:relative"><div style="position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#fff"></div></div></div>
+          <div style="display:flex;align-items:center;gap:12px;height:56px;padding:0 16px;border-bottom:1px solid #f4f6fa"><span style="width:32px;height:32px;border-radius:10px;background:#e6e6fa;display:grid;place-items:center;font:500 14px sans-serif">🎯</span><span style="flex:1;font:500 14px 'IBM Plex Sans',sans-serif">Objectif hebdo</span><span style="font:500 12.5px 'IBM Plex Sans',sans-serif;color:#6f7890">4 leçons ▾</span></div>
+          <div style="display:flex;align-items:center;gap:12px;height:56px;padding:0 16px"><span style="width:32px;height:32px;border-radius:10px;background:#e6e6fa;display:grid;place-items:center;font:500 14px sans-serif">🔑</span><span style="flex:1;font:500 14px 'IBM Plex Sans',sans-serif">Mot de passe</span><span style="color:#8a94a4">›</span></div>
+        </div>
+        <div style="height:48px;display:grid;place-items:center;color:#d14d5d;font:600 14px 'IBM Plex Sans',sans-serif;border:1.5px solid #f2cdd2;border-radius:24px;background:#fff">Se déconnecter</div>
+      </div>
+    </div>
+
+    <!-- profile desktop (settings) -->
+    <div style="flex:none;width:840px;background:#f3f5f9;border-radius:20px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08)">
+      <div style="display:grid;grid-template-columns:230px 1fr">
+        <div style="background:#fff;border-right:1px solid #eef1f7;padding:24px 14px;display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:10px;padding:0 12px 18px"><div style="width:38px;height:38px;border-radius:50%;background:#dce1ec;display:grid;place-items:center;font:600 13px 'IBM Plex Sans',sans-serif;color:#4d5670">N</div><div><div style="font:600 13.5px 'IBM Plex Sans',sans-serif">Nadia B.</div><div style="font:400 10.5px 'IBM Plex Sans',sans-serif;color:#8a94a4">3ᵉ · Collège</div></div></div>
+          <div style="height:42px;display:flex;align-items:center;padding:0 14px;background:#e6e6fa;border-radius:12px;font:600 13px 'IBM Plex Sans',sans-serif;color:#4747b8">Compte</div>
+          <div style="height:42px;display:flex;align-items:center;padding:0 14px;border-radius:12px;font:500 13px 'IBM Plex Sans',sans-serif;color:#4d5670">Langue &amp; région</div>
+          <div style="height:42px;display:flex;align-items:center;padding:0 14px;border-radius:12px;font:500 13px 'IBM Plex Sans',sans-serif;color:#4d5670">Notifications</div>
+          <div style="height:42px;display:flex;align-items:center;padding:0 14px;border-radius:12px;font:500 13px 'IBM Plex Sans',sans-serif;color:#4d5670">Confidentialité</div>
+        </div>
+        <div style="padding:28px 32px;display:flex;flex-direction:column;gap:18px">
+          <h1 style="margin:0;font:600 20px 'IBM Plex Sans',sans-serif">Compte</h1>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 12.5px 'IBM Plex Sans',sans-serif;color:#4d5670">Prénom et nom</label><div style="height:46px;display:flex;align-items:center;padding:0 16px;background:#fff;border:1.5px solid #dce1ec;border-radius:12px;font:400 13.5px 'IBM Plex Sans',sans-serif">Nadia B.</div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 12.5px 'IBM Plex Sans',sans-serif;color:#4d5670">Email</label><div style="height:46px;display:flex;align-items:center;padding:0 16px;background:#fff;border:1.5px solid #dce1ec;border-radius:12px;font:400 13.5px 'IBM Plex Sans',sans-serif">nadia@email.com</div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 12.5px 'IBM Plex Sans',sans-serif;color:#4d5670">Classe</label><div style="height:46px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:#fff;border:1.5px solid #dce1ec;border-radius:12px;font:400 13.5px 'IBM Plex Sans',sans-serif">3ᵉ — Collège <span style="color:#8a94a4">▾</span></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><label style="font:600 12.5px 'IBM Plex Sans',sans-serif;color:#4d5670">Mot de passe</label><div style="height:46px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:#fff;border:1.5px solid #dce1ec;border-radius:12px;font:400 13.5px 'IBM Plex Sans',sans-serif">••••••••<span style="font:600 12px 'IBM Plex Sans',sans-serif;color:#5b5bd6">Changer</span></div></div>
+          </div>
+          <div style="display:flex;justify-content:flex-end;gap:10px;border-top:1px solid #e8ecf3;padding-top:16px">
+            <div style="height:44px;padding:0 18px;display:grid;place-items:center;color:#4d5670;font:600 13.5px 'IBM Plex Sans',sans-serif">Annuler</div>
+            <div style="height:44px;padding:0 22px;display:grid;place-items:center;background:#5b5bd6;color:#fff;border-radius:22px;font:600 13.5px 'IBM Plex Sans',sans-serif">Enregistrer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div style="font:400 12px/1.7 'IBM Plex Sans',sans-serif;color:#6f7890;max-width:110ch"><b style="color:#20263a">Interactions.</b> Language segmented control applies instantly with a full-app fade (200ms); Arabic flips <span style="font-family:'IBM Plex Mono',monospace;font-size:10px">dir="rtl"</span> at the html root. Theme: Clair / Sombre / Système. Save is disabled until a field changes; success = toast, not modal.</div>
+</section>
+
+<!-- ================================================================ -->
+<!-- 11 · INSTRUCTOR + PARENT -->
+<!-- ================================================================ -->
+<section data-screen-label="11 Instructor + Parent" style="padding:48px 52px;display:flex;flex-direction:column;gap:24px;border-bottom:1px solid #d5dae4">
+  <div style="display:flex;align-items:center;gap:14px">
+    <span style="font:500 11px 'IBM Plex Mono',monospace;background:#20263a;color:#fff;padding:4px 10px;border-radius:6px">11</span>
+    <h2 style="margin:0;font:600 22px 'IBM Plex Sans',sans-serif">Profil enseignant · Vue parent</h2>
+    <span style="font:400 12px 'IBM Plex Sans',sans-serif;color:#6f7890">page publique du prof · résumé de progression pour les parents</span>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+
+    <!-- instructor public profile desktop -->
+    <div style="flex:none;width:840px;background:#f3f5f9;border-radius:20px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08)">
+      <div style="background:#20263a;padding:36px 44px;display:flex;align-items:center;gap:24px">
+        <div style="width:88px;height:88px;border-radius:50%;background:#4d5670;display:grid;place-items:center;font:600 30px 'IBM Plex Sans',sans-serif;color:#fff;border:3px solid rgba(255,255,255,.2)">SK</div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:6px">
+          <h1 style="margin:0;font:600 26px 'IBM Plex Sans',sans-serif;color:#fff">Mme Samia Karim</h1>
+          <div style="font:400 13.5px 'IBM Plex Sans',sans-serif;color:#aab2c8">Professeure de mathématiques · Agrégée · 14 ans d'expérience</div>
+          <div style="display:flex;gap:18px;font:500 11.5px 'IBM Plex Mono',monospace;color:#8f97b8"><span style="color:#e8c78a">★ 4.8</span><span>6 cours</span><span>4 210 élèves</span><span>fr · ar</span></div>
+        </div>
+        <div style="height:46px;padding:0 22px;display:grid;place-items:center;background:#5b5bd6;color:#fff;border-radius:23px;font:600 14px 'IBM Plex Sans',sans-serif">Suivre</div>
+      </div>
+      <div style="padding:28px 44px 36px;display:flex;flex-direction:column;gap:20px">
+        <p style="margin:0;font:400 14px/1.7 'IBM Plex Sans',sans-serif;color:#4d5670;max-width:72ch">J'enseigne les maths au collège depuis 2012. Ma méthode : partir d'un problème concret, construire la notion pas à pas, puis s'entraîner avec des exercices progressifs et corrigés en vidéo.</p>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <h3 style="margin:0;font:600 17px 'IBM Plex Sans',sans-serif">Ses cours</h3>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+            <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;overflow:hidden">
+              <div style="height:90px;background:repeating-linear-gradient(45deg,#e3edfb,#e3edfb 10px,#eaf1fc 10px,#eaf1fc 20px)"></div>
+              <div style="padding:12px;display:flex;flex-direction:column;gap:4px"><div style="font:600 13.5px 'IBM Plex Sans',sans-serif">Fonctions affines</div><div style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4">3ᵉ · 12 leçons · ★ 4.8</div></div>
+            </div>
+            <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;overflow:hidden">
+              <div style="height:90px;background:repeating-linear-gradient(45deg,#e3edfb,#e3edfb 10px,#eaf1fc 10px,#eaf1fc 20px)"></div>
+              <div style="padding:12px;display:flex;flex-direction:column;gap:4px"><div style="font:600 13.5px 'IBM Plex Sans',sans-serif">Dérivées et limites</div><div style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4">Tle · 18 leçons · ★ 4.8</div></div>
+            </div>
+            <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;overflow:hidden">
+              <div style="height:90px;background:repeating-linear-gradient(45deg,#e3edfb,#e3edfb 10px,#eaf1fc 10px,#eaf1fc 20px)"></div>
+              <div style="padding:12px;display:flex;flex-direction:column;gap:4px"><div style="font:600 13.5px 'IBM Plex Sans',sans-serif">Théorème de Thalès</div><div style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4">3ᵉ · 8 leçons · ★ 4.7</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- parent view mobile -->
+    <div style="flex:none;width:390px;background:#f3f5f9;border-radius:28px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08)">
+      <div style="padding:20px 20px 30px;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h1 style="margin:0;font:600 22px 'IBM Plex Sans',sans-serif">Suivi de Nadia</h1>
+          <span style="font:600 11px 'IBM Plex Sans',sans-serif;color:#4d5670;background:#eef1f7;padding:5px 12px;border-radius:12px">Espace parent</span>
+        </div>
+        <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;padding:16px;display:flex;align-items:center;gap:16px">
+          <div style="width:56px;height:56px;border-radius:50%;background:conic-gradient(#5b5bd6 0 62%,#dce1ec 62% 100%);display:grid;place-items:center"><div style="width:42px;height:42px;border-radius:50%;background:#fff;display:grid;place-items:center;font:600 11px 'IBM Plex Mono',monospace">62%</div></div>
+          <div style="flex:1"><div style="font:600 15px 'IBM Plex Sans',sans-serif">Cette semaine : 3 leçons</div><div style="font:400 12px/1.5 'IBM Plex Sans',sans-serif;color:#6f7890">Objectif 4 · série de 7 jours 🔥</div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:600 14px 'IBM Plex Sans',sans-serif">Par matière</div>
+          <div style="background:#fff;border:1px solid #e8ecf3;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:10px"><div style="width:26px;height:26px;border-radius:8px;background:#e3edfb;color:#3f7ad9;display:grid;place-items:center;font:700 13px 'IBM Plex Sans',sans-serif">∑</div><span style="flex:1;font:500 13px 'IBM Plex Sans',sans-serif">Maths</span><span style="font:500 10.5px 'IBM Plex Mono',monospace;color:#6f7890">62%</span><div style="width:90px;height:6px;border-radius:3px;background:#dce1ec"><div style="width:62%;height:100%;border-radius:3px;background:#3f7ad9"></div></div></div>
+            <div style="display:flex;align-items:center;gap:10px"><div style="width:26px;height:26px;border-radius:8px;background:#f0e7fb;color:#9256d9;display:grid;place-items:center;font:700 13px 'IBM Plex Sans',sans-serif">⚛</div><span style="flex:1;font:500 13px 'IBM Plex Sans',sans-serif">Physique</span><span style="font:500 10.5px 'IBM Plex Mono',monospace;color:#6f7890">35%</span><div style="width:90px;height:6px;border-radius:3px;background:#dce1ec"><div style="width:35%;height:100%;border-radius:3px;background:#9256d9"></div></div></div>
+            <div style="display:flex;align-items:center;gap:10px"><div style="width:26px;height:26px;border-radius:8px;background:#e2f3eb;color:#35a071;display:grid;place-items:center;font:700 13px 'IBM Plex Sans',sans-serif">❋</div><span style="flex:1;font:500 13px 'IBM Plex Sans',sans-serif">Biologie</span><span style="font:500 10.5px 'IBM Plex Mono',monospace;color:#6f7890">80%</span><div style="width:90px;height:6px;border-radius:3px;background:#dce1ec"><div style="width:80%;height:100%;border-radius:3px;background:#35a071"></div></div></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:600 14px 'IBM Plex Sans',sans-serif">Activité récente</div>
+          <div style="display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #e8ecf3;border-radius:12px;padding:12px 14px"><span style="width:26px;height:26px;border-radius:50%;background:#e2f3eb;color:#35a071;display:grid;place-items:center;font:600 11px sans-serif">✓</span><div style="flex:1"><div style="font:500 12.5px 'IBM Plex Sans',sans-serif">Quiz Ch.1 réussi — 6/8</div><div style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4">Maths · hier 18:42</div></div></div>
+          <div style="display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #e8ecf3;border-radius:12px;padding:12px 14px"><span style="width:26px;height:26px;border-radius:50%;background:#e6e6fa;color:#5b5bd6;display:grid;place-items:center;font:600 10px sans-serif">▶</span><div style="flex:1"><div style="font:500 12.5px 'IBM Plex Sans',sans-serif">Leçon «&nbsp;Coefficient directeur&nbsp;»</div><div style="font:400 10px 'IBM Plex Mono',monospace;color:#8a94a4">Maths · hier 18:10</div></div></div>
+        </div>
+        <div style="background:#e6e6fa;border-radius:14px;padding:14px 16px;font:400 12.5px/1.6 'IBM Plex Sans',sans-serif;color:#4a4a9e">💬 Nadia progresse bien en biologie. Un coup de pouce en physique cette semaine ferait la différence.</div>
+      </div>
+    </div>
+
+  </div>
+  <div style="font:400 12px/1.7 'IBM Plex Sans',sans-serif;color:#6f7890;max-width:110ch"><b style="color:#20263a">Interactions.</b> Parent space is read-only: no lesson access, weekly email digest optional. «Suivre» subscribes to the teacher's new courses. Teacher dashboard (upload leçons) is a later iteration — say the word and I'll add it.</div>
+</section>
+
+<!-- ================================================================ -->
+<!-- 12 · STATES : 404, OFFLINE, ERROR, LOADING, DARK -->
+<!-- ================================================================ -->
+<section data-screen-label="12 States" style="padding:48px 52px;display:flex;flex-direction:column;gap:24px">
+  <div style="display:flex;align-items:center;gap:14px">
+    <span style="font:500 11px 'IBM Plex Mono',monospace;background:#20263a;color:#fff;padding:4px 10px;border-radius:6px">12</span>
+    <h2 style="margin:0;font:600 22px 'IBM Plex Sans',sans-serif">États — 404 · hors ligne · erreur · chargement · aperçu sombre</h2>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+
+    <!-- 404 -->
+    <div style="flex:none;width:390px;background:#f3f5f9;border-radius:28px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08)">
+      <div style="padding:70px 28px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center">
+        <div style="font:600 64px/1 'IBM Plex Sans',sans-serif;color:#c9c9f2">404</div>
+        <div style="font:600 19px 'IBM Plex Sans',sans-serif">Cette page a séché les cours.</div>
+        <div style="font:400 13px/1.6 'IBM Plex Sans',sans-serif;color:#6f7890;max-width:28ch">Elle n'existe pas ou a été déplacée. Reviens à l'accueil pour continuer.</div>
+        <div style="height:48px;padding:0 24px;display:grid;place-items:center;background:#5b5bd6;color:#fff;border-radius:24px;font:600 14px 'IBM Plex Sans',sans-serif;margin-top:8px">Retour à l'accueil</div>
+      </div>
+    </div>
+
+    <!-- offline -->
+    <div style="flex:none;width:390px;background:#f3f5f9;border-radius:28px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08)">
+      <div style="background:#20263a;color:#fff;padding:10px 20px;display:flex;align-items:center;gap:10px;font:500 12.5px 'IBM Plex Sans',sans-serif"><span style="width:8px;height:8px;border-radius:50%;background:#c98a2e"></span>Hors ligne — reconnexion automatique…</div>
+      <div style="padding:40px 28px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center">
+        <div style="width:64px;height:64px;border-radius:50%;background:#eef1f7;display:grid;place-items:center;font:500 24px sans-serif;color:#8a94a4">⚡</div>
+        <div style="font:600 18px 'IBM Plex Sans',sans-serif">Pas de connexion</div>
+        <div style="font:400 13px/1.6 'IBM Plex Sans',sans-serif;color:#6f7890;max-width:30ch">La vidéo reprendra là où tu t'es arrêté. Tes documents déjà téléchargés restent disponibles.</div>
+        <div style="width:100%;display:flex;flex-direction:column;gap:8px;margin-top:8px">
+          <div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e8ecf3;border-radius:12px;padding:12px 14px"><span style="width:30px;height:30px;border-radius:8px;background:#fdeaea;color:#d14d5d;display:grid;place-items:center;font:600 9px 'IBM Plex Mono',monospace">PDF</span><span style="flex:1;font:500 12.5px 'IBM Plex Sans',sans-serif;text-align:left">Fiche mémo — fonctions</span><span style="font:600 10px 'IBM Plex Sans',sans-serif;color:#237552;background:#e2f3eb;padding:2px 8px;border-radius:8px">Dispo</span></div>
+          <div style="height:48px;display:grid;place-items:center;background:#e6e6fa;color:#4747b8;border-radius:24px;font:600 14px 'IBM Plex Sans',sans-serif">Réessayer</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- error + loading -->
+    <div style="flex:none;width:390px;display:flex;flex-direction:column;gap:24px">
+      <div style="background:#f3f5f9;border-radius:28px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08)">
+        <div style="padding:36px 28px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center">
+          <div style="width:56px;height:56px;border-radius:50%;background:#fdeaea;display:grid;place-items:center;font:600 22px 'IBM Plex Sans',sans-serif;color:#d14d5d">!</div>
+          <div style="font:600 17px 'IBM Plex Sans',sans-serif">Un problème est survenu</div>
+          <div style="font:400 12.5px/1.6 'IBM Plex Sans',sans-serif;color:#6f7890;max-width:30ch">Impossible de charger la leçon. Ce n'est pas de ta faute — réessaie dans un instant.</div>
+          <div style="display:flex;gap:8px;margin-top:4px"><div style="height:44px;padding:0 20px;display:grid;place-items:center;background:#5b5bd6;color:#fff;border-radius:22px;font:600 13px 'IBM Plex Sans',sans-serif">Réessayer</div><div style="height:44px;padding:0 18px;display:grid;place-items:center;color:#4d5670;font:600 13px 'IBM Plex Sans',sans-serif;border:1.5px solid #dce1ec;border-radius:22px">Accueil</div></div>
+        </div>
+      </div>
+      <div style="background:#f3f5f9;border-radius:28px;border:1px solid #e0e5ee;overflow:hidden;box-shadow:0 2px 10px rgba(32,38,58,.08)">
+        <div style="padding:20px;display:flex;flex-direction:column;gap:12px">
+          <div style="height:22px;width:45%;border-radius:8px;background:#e4e9f2"></div>
+          <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;padding:14px;display:flex;gap:12px;align-items:center"><div style="width:64px;height:50px;border-radius:10px;background:#eef1f7;flex:none"></div><div style="flex:1;display:flex;flex-direction:column;gap:6px"><div style="height:12px;width:70%;border-radius:6px;background:#eef1f7"></div><div style="height:10px;width:45%;border-radius:5px;background:#f2f4f9"></div></div></div>
+          <div style="background:#fff;border:1px solid #e8ecf3;border-radius:16px;padding:14px;display:flex;gap:12px;align-items:center"><div style="width:64px;height:50px;border-radius:10px;background:#eef1f7;flex:none"></div><div style="flex:1;display:flex;flex-direction:column;gap:6px"><div style="height:12px;width:60%;border-radius:6px;background:#eef1f7"></div><div style="height:10px;width:40%;border-radius:5px;background:#f2f4f9"></div></div></div>
+          <div style="font:400 10px 'IBM Plex Mono',monospace;color:#b3bac6;text-align:center">skeleton — shimmer 1.4s</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- dark mode preview -->
+    <div style="flex:none;width:390px;background:#161a28;border-radius:28px;border:1px solid #303850;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.3)">
+      <div style="padding:20px 20px 28px;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div><div style="font:400 13px 'IBM Plex Sans',sans-serif;color:#8f97b8">Salut Nadia 👋</div><div style="font:600 21px 'IBM Plex Sans',sans-serif;color:#e8ebf4">Prête à continuer ?</div></div>
+          <span style="font:600 11px 'IBM Plex Sans',sans-serif;color:#fff;background:#7c7cea;padding:5px 12px;border-radius:12px">🔥 7</span>
+        </div>
+        <div style="background:#202638;border:1px solid #303850;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:14px">
+          <span style="font:600 10.5px 'IBM Plex Mono',monospace;color:#6b7590;letter-spacing:.06em">REPRENDRE · MATHS CH.3</span>
+          <div style="display:flex;align-items:center;gap:14px">
+            <div style="width:52px;height:52px;border-radius:16px;background:#3f7ad9;display:grid;place-items:center;color:#fff;font:600 20px sans-serif">▶</div>
+            <div style="flex:1"><div style="font:600 16px 'IBM Plex Sans',sans-serif;color:#e8ebf4">Coefficient directeur</div><div style="font:400 11.5px 'IBM Plex Mono',monospace;color:#6b7590">il reste 7 min</div></div>
+          </div>
+          <div style="height:6px;border-radius:3px;background:#303850;overflow:hidden"><div style="width:42%;height:100%;border-radius:3px;background:#7c7cea"></div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+          <div style="background:#1d2a42;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:6px"><div style="font:600 12px 'IBM Plex Sans',sans-serif;color:#8fb5ec">Maths</div><div style="font:600 15px 'IBM Plex Mono',monospace;color:#e8ebf4">62%</div></div>
+          <div style="background:#2a2140;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:6px"><div style="font:600 12px 'IBM Plex Sans',sans-serif;color:#c0a0ec">Physique</div><div style="font:600 15px 'IBM Plex Mono',monospace;color:#e8ebf4">35%</div></div>
+          <div style="background:#1a3229;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:6px"><div style="font:600 12px 'IBM Plex Sans',sans-serif;color:#82cba8">Bio</div><div style="font:600 15px 'IBM Plex Mono',monospace;color:#e8ebf4">80%</div></div>
+        </div>
+        <div style="height:48px;display:grid;place-items:center;background:#7c7cea;color:#12141f;border-radius:24px;font:600 14px 'IBM Plex Sans',sans-serif">Continuer la leçon</div>
+        <div style="font:400 10.5px/1.6 'IBM Plex Mono',monospace;color:#6b7590;text-align:center">dark tokens: bg #161A28 · surface #202638 · primary #7C7CEA</div>
+      </div>
+    </div>
+
+  </div>
+  <div style="font:400 12px/1.7 'IBM Plex Sans',sans-serif;color:#6f7890;max-width:110ch"><b style="color:#20263a">Notes dev.</b> All tokens map 1:1 to CSS variables (<span style="font-family:'IBM Plex Mono',monospace;font-size:10px">--color-primary</span>, <span style="font-family:'IBM Plex Mono',monospace;font-size:10px">--radius-card</span>…) → Tailwind 4 <span style="font-family:'IBM Plex Mono',monospace;font-size:10px">@theme</span>. Dark mode = re-mapping the same variables under <span style="font-family:'IBM Plex Mono',monospace;font-size:10px">.dark</span>. RTL = logical properties only (<span style="font-family:'IBM Plex Mono',monospace;font-size:10px">ps/pe/ms/me</span> in Tailwind), never left/right utilities.</div>
+</section>
+</x-dc>
+</body>
+</html>
