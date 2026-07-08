@@ -2610,6 +2610,270 @@ export const quizzes: Record<string, Record<string, QuizQuestion[]>> = {
       },
     ],
   },
+  "physics-optics-102": {
+    ch1: [
+      {
+        id: "q1",
+        question: {
+          fr: "La vitesse de la lumière dans le vide est d'environ…",
+          en: "The speed of light in a vacuum is approximately…",
+          ar: "سرعة الضوء في الفراغ تقارب…",
+        },
+        options: [
+          { fr: "300 000 km/s", en: "300,000 km/s", ar: "300 000 كم/ث" },
+          { fr: "300 km/s", en: "300 km/s", ar: "300 كم/ث" },
+          { fr: "3 000 km/s", en: "3,000 km/s", ar: "3 000 كم/ث" },
+          { fr: "30 000 000 km/s", en: "30,000,000 km/s", ar: "30 000 000 كم/ث" },
+        ],
+        correctIndex: 0,
+        explanation: {
+          fr: "La lumière se propage dans le vide à environ 300 000 km/s (c ≈ 3×10⁸ m/s).",
+          en: "Light travels in a vacuum at about 300,000 km/s (c ≈ 3×10⁸ m/s).",
+          ar: "ينتشر الضوء في الفراغ بسرعة تقارب 300 000 كم/ث (c ≈ 3×10⁸ م/ث).",
+        },
+        lessonId: "l1",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "Une ombre se forme parce que la lumière…",
+          en: "A shadow forms because light…",
+          ar: "يتشكل الظل لأن الضوء…",
+        },
+        options: [
+          { fr: "se propage en ligne droite et est bloquée par un objet opaque", en: "travels in a straight line and is blocked by an opaque object", ar: "ينتشر في خط مستقيم ويُحجب بجسم معتم" },
+          { fr: "change de couleur", en: "changes color", ar: "يغيّر لونه" },
+          { fr: "ralentit dans l'air", en: "slows down in air", ar: "يبطئ في الهواء" },
+          { fr: "disparaît la nuit", en: "disappears at night", ar: "يختفي ليلاً" },
+        ],
+        correctIndex: 0,
+        explanation: {
+          fr: "La propagation rectiligne de la lumière explique pourquoi un objet opaque crée une ombre nette.",
+          en: "The rectilinear propagation of light explains why an opaque object casts a sharp shadow.",
+          ar: "يفسر الانتشار المستقيم للضوء لماذا يشكّل جسم معتم ظلاً واضحاً.",
+        },
+        lessonId: "l2",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "Le Soleil est un exemple de source lumineuse…",
+          en: "The Sun is an example of a … light source.",
+          ar: "الشمس مثال على مصدر ضوئي…",
+        },
+        options: [
+          { fr: "secondaire", en: "secondary", ar: "ثانوي" },
+          { fr: "primaire", en: "primary", ar: "أولي" },
+          { fr: "artificielle", en: "artificial", ar: "اصطناعي" },
+          { fr: "inexistante", en: "nonexistent", ar: "غير موجود" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Une source primaire produit sa propre lumière, comme le Soleil ou une ampoule.",
+          en: "A primary source produces its own light, like the Sun or a light bulb.",
+          ar: "المصدر الأولي ينتج ضوءه بنفسه، مثل الشمس أو مصباح.",
+        },
+        lessonId: "l3",
+      },
+    ],
+    ch2: [
+      {
+        id: "q1",
+        question: {
+          fr: "Selon la loi de la réflexion, l'angle d'incidence est…",
+          en: "According to the law of reflection, the angle of incidence is…",
+          ar: "حسب قانون الانعكاس، زاوية السقوط…",
+        },
+        options: [
+          { fr: "toujours nul", en: "always zero", ar: "دائماً معدومة" },
+          { fr: "égal à l'angle de réflexion", en: "equal to the angle of reflection", ar: "تساوي زاوية الانعكاس" },
+          { fr: "toujours 90°", en: "always 90°", ar: "دائماً 90°" },
+          { fr: "le double de l'angle de réflexion", en: "double the angle of reflection", ar: "ضعف زاوية الانعكاس" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "La loi de la réflexion stipule que l'angle d'incidence est toujours égal à l'angle de réflexion.",
+          en: "The law of reflection states the angle of incidence always equals the angle of reflection.",
+          ar: "ينص قانون الانعكاس على أن زاوية السقوط تساوي دائماً زاوية الانعكاس.",
+        },
+        lessonId: "l4",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "La réfraction se produit quand la lumière…",
+          en: "Refraction occurs when light…",
+          ar: "يحدث الانكسار عندما…",
+        },
+        options: [
+          { fr: "reste dans le même milieu", en: "stays in the same medium", ar: "يبقى الضوء في نفس الوسط" },
+          { fr: "change de milieu (air vers eau, par exemple)", en: "changes medium (e.g. air to water)", ar: "يغير الضوء الوسط (من الهواء إلى الماء مثلاً)" },
+          { fr: "s'éteint", en: "goes out", ar: "ينطفئ الضوء" },
+          { fr: "devient sonore", en: "becomes sound", ar: "يتحول إلى صوت" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "La réfraction est le changement de direction de la lumière lorsqu'elle passe d'un milieu à un autre, décrit par la loi de Snell-Descartes.",
+          en: "Refraction is the change in direction of light as it passes from one medium to another, described by Snell-Descartes' law.",
+          ar: "الانكسار هو تغير اتجاه الضوء عند انتقاله من وسط إلى آخر، ويصفه قانون سنيل-ديكارت.",
+        },
+        lessonId: "l5",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "Une lentille convergente fait que des rayons parallèles…",
+          en: "A converging lens makes parallel rays…",
+          ar: "العدسة المقربة تجعل الأشعة المتوازية…",
+        },
+        options: [
+          { fr: "se croisent en un point (le foyer)", en: "meet at a point (the focus)", ar: "تتقاطع في نقطة (البؤرة)" },
+          { fr: "s'écartent davantage", en: "spread out further", ar: "تتباعد أكثر" },
+          { fr: "restent parallèles", en: "stay parallel", ar: "تبقى متوازية" },
+          { fr: "disparaissent", en: "disappear", ar: "تختفي" },
+        ],
+        correctIndex: 0,
+        explanation: {
+          fr: "Une lentille convergente fait converger les rayons lumineux parallèles vers un point unique, le foyer.",
+          en: "A converging lens makes parallel light rays converge to a single point, the focus.",
+          ar: "تجعل العدسة المقربة الأشعة الضوئية المتوازية تتقارب نحو نقطة واحدة، هي البؤرة.",
+        },
+        lessonId: "l6",
+      },
+    ],
+  },
+  "biology-ecology-201": {
+    ch1: [
+      {
+        id: "q1",
+        question: {
+          fr: "Un écosystème est constitué…",
+          en: "An ecosystem consists of…",
+          ar: "يتكون النظام البيئي من…",
+        },
+        options: [
+          { fr: "d'êtres vivants uniquement", en: "living things only", ar: "الكائنات الحية فقط" },
+          { fr: "d'un milieu physique uniquement", en: "the physical environment only", ar: "الوسط الفيزيائي فقط" },
+          { fr: "des êtres vivants et de leur milieu physique en interaction", en: "living things and their physical environment interacting", ar: "الكائنات الحية ووسطها الفيزيائي في تفاعل" },
+          { fr: "de roches uniquement", en: "rocks only", ar: "الصخور فقط" },
+        ],
+        correctIndex: 2,
+        explanation: {
+          fr: "Un écosystème réunit une communauté d'êtres vivants et leur environnement physique, en interaction constante.",
+          en: "An ecosystem combines a community of living things and their physical environment, constantly interacting.",
+          ar: "يجمع النظام البيئي مجتمعاً من الكائنات الحية ووسطها الفيزيائي في تفاعل مستمر.",
+        },
+        lessonId: "l1",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "Dans une chaîne alimentaire, qui est le producteur primaire ?",
+          en: "In a food chain, who is the primary producer?",
+          ar: "في سلسلة غذائية، من هو المنتج الأولي؟",
+        },
+        options: [
+          { fr: "Le lion", en: "The lion", ar: "الأسد" },
+          { fr: "La plante verte (photosynthèse)", en: "The green plant (photosynthesis)", ar: "النبات الأخضر (التمثيل الضوئي)" },
+          { fr: "Le champignon décomposeur", en: "The decomposer fungus", ar: "الفطر المحلل" },
+          { fr: "L'herbivore", en: "The herbivore", ar: "آكل الأعشاب" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Les plantes vertes produisent leur propre matière organique par photosynthèse : elles sont à la base de la chaîne alimentaire.",
+          en: "Green plants produce their own organic matter through photosynthesis: they are at the base of the food chain.",
+          ar: "تنتج النباتات الخضراء مادتها العضوية بنفسها عبر التمثيل الضوئي: فهي قاعدة السلسلة الغذائية.",
+        },
+        lessonId: "l2",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "Que mange un consommateur secondaire dans une chaîne alimentaire ?",
+          en: "What does a secondary consumer eat in a food chain?",
+          ar: "ماذا يأكل المستهلك الثانوي في سلسلة غذائية؟",
+        },
+        options: [
+          { fr: "Des plantes uniquement", en: "Plants only", ar: "النباتات فقط" },
+          { fr: "Des consommateurs primaires (herbivores)", en: "Primary consumers (herbivores)", ar: "المستهلكين الأوليين (آكلي الأعشاب)" },
+          { fr: "Rien, il ne mange pas", en: "Nothing, it doesn't eat", ar: "لا شيء، فهو لا يأكل" },
+          { fr: "Uniquement de la lumière solaire", en: "Only sunlight", ar: "ضوء الشمس فقط" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Un consommateur secondaire (carnivore) se nourrit des consommateurs primaires (herbivores).",
+          en: "A secondary consumer (carnivore) feeds on primary consumers (herbivores).",
+          ar: "يتغذى المستهلك الثانوي (آكل اللحوم) على المستهلكين الأوليين (آكلي الأعشاب).",
+        },
+        lessonId: "l2",
+      },
+    ],
+    ch2: [
+      {
+        id: "q1",
+        question: {
+          fr: "Quel type de pollution affecte particulièrement les océans ?",
+          en: "Which type of pollution particularly affects oceans?",
+          ar: "أي نوع من التلوث يؤثر بشكل خاص على المحيطات؟",
+        },
+        options: [
+          { fr: "La pollution plastique", en: "Plastic pollution", ar: "التلوث بالبلاستيك" },
+          { fr: "La pollution sonore uniquement", en: "Noise pollution only", ar: "التلوث الضوضائي فقط" },
+          { fr: "Aucune pollution ne touche les océans", en: "No pollution affects oceans", ar: "لا يوجد تلوث يمس المحيطات" },
+          { fr: "La pollution lumineuse uniquement", en: "Light pollution only", ar: "التلوث الضوئي فقط" },
+        ],
+        correctIndex: 0,
+        explanation: {
+          fr: "La pollution plastique s'accumule massivement dans les océans et menace la faune marine.",
+          en: "Plastic pollution accumulates massively in oceans and threatens marine wildlife.",
+          ar: "يتراكم التلوث بالبلاستيك بكثافة في المحيطات ويهدد الحياة البحرية.",
+        },
+        lessonId: "l3",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "Quelle est une cause majeure de l'extinction des espèces aujourd'hui ?",
+          en: "What is a major cause of species extinction today?",
+          ar: "ما أحد الأسباب الرئيسية لانقراض الأنواع اليوم؟",
+        },
+        options: [
+          { fr: "La destruction des habitats naturels", en: "Destruction of natural habitats", ar: "تدمير الموائل الطبيعية" },
+          { fr: "Trop de biodiversité", en: "Too much biodiversity", ar: "الكثير من التنوع البيولوجي" },
+          { fr: "Trop d'écosystèmes protégés", en: "Too many protected ecosystems", ar: "الكثير من الأنظمة البيئية المحمية" },
+          { fr: "L'absence de prédateurs", en: "Absence of predators", ar: "غياب المفترسات" },
+        ],
+        correctIndex: 0,
+        explanation: {
+          fr: "La destruction des habitats naturels (déforestation, urbanisation) est l'une des principales causes d'extinction.",
+          en: "Destruction of natural habitats (deforestation, urbanization) is one of the main causes of extinction.",
+          ar: "يعد تدمير الموائل الطبيعية (إزالة الغابات، التمدن) من الأسباب الرئيسية للانقراض.",
+        },
+        lessonId: "l4",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "Le développement durable cherche à concilier…",
+          en: "Sustainable development seeks to balance…",
+          ar: "تسعى التنمية المستدامة إلى التوفيق بين…",
+        },
+        options: [
+          { fr: "économie, société et environnement", en: "economy, society, and environment", ar: "الاقتصاد والمجتمع والبيئة" },
+          { fr: "uniquement le profit à court terme", en: "only short-term profit", ar: "الربح قصير المدى فقط" },
+          { fr: "la pollution et la croissance", en: "pollution and growth", ar: "التلوث والنمو" },
+          { fr: "aucun de ces éléments", en: "none of these", ar: "لا شيء مما سبق" },
+        ],
+        correctIndex: 0,
+        explanation: {
+          fr: "Le développement durable vise un équilibre entre développement économique, bien-être social et préservation de l'environnement.",
+          en: "Sustainable development aims for a balance between economic growth, social well-being, and environmental preservation.",
+          ar: "تهدف التنمية المستدامة إلى تحقيق توازن بين النمو الاقتصادي والرفاه الاجتماعي والحفاظ على البيئة.",
+        },
+        lessonId: "l5",
+      },
+    ],
+  },
 };
 
 export function getQuiz(courseId: string, chapterId: string): QuizQuestion[] | null {
