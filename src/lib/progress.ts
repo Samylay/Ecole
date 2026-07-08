@@ -67,6 +67,72 @@ function read<T>(name: string, fallback: T): T {
 function write(name: string, value: unknown): void {
   if (typeof window === "undefined") return;
   localStorage.setItem(key(name), JSON.stringify(value));
+  scheduleSync();
+}
+
+// ——— Server sync (SQLite mirror, see /api/state) ———
+// localStorage stays the synchronous read path; every write debounces a full
+// namespace push. On login the server copy wins (pullServerState).
+
+const STATE_KEYS = [
+  "enrolled",
+  "completed",
+  "active_days",
+  "weekly_goal",
+  "quiz_attempts",
+  "notes",
+  "prefs",
+  "notifications",
+  "followed_teachers",
+  "activity",
+] as const;
+
+let syncTimer: ReturnType<typeof setTimeout> | null = null;
+
+function scheduleSync(): void {
+  if (typeof window === "undefined") return;
+  if (currentUserId() === "anon") return; // nothing to sync for signed-out visitors
+  if (syncTimer) clearTimeout(syncTimer);
+  syncTimer = setTimeout(pushLocalState, 800);
+}
+
+async function pushLocalState(): Promise<void> {
+  syncTimer = null;
+  const state: Record<string, unknown> = {};
+  for (const name of STATE_KEYS) {
+    const raw = localStorage.getItem(key(name));
+    if (raw !== null) {
+      try {
+        state[name] = JSON.parse(raw);
+      } catch {
+        // skip corrupt local values
+      }
+    }
+  }
+  if (Object.keys(state).length === 0) return;
+  try {
+    await fetch("/api/state", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(state),
+    });
+  } catch {
+    // offline — next write retries; a full reconnect resync is roadmap P2-T3 polish
+  }
+}
+
+export async function pullServerState(email: string): Promise<void> {
+  try {
+    const res = await fetch("/api/state");
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data.success || !data.state) return;
+    for (const [name, value] of Object.entries(data.state as Record<string, unknown>)) {
+      localStorage.setItem(`layaida:${email}:${name}`, JSON.stringify(value));
+    }
+  } catch {
+    // offline: keep local copy
+  }
 }
 
 // One-time migration of pre-redesign global keys into the current user's namespace.

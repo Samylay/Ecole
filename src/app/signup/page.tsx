@@ -65,7 +65,7 @@ export default function SignUpPage() {
     }
     setFormError("");
     setLoading(true);
-    const result = await signup(name, email, password);
+    const result = await signup(name, email, password, role);
     setLoading(false);
     if (result.success) {
       router.push(role === "parent" ? "/parent" : "/onboarding");

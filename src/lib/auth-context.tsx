@@ -1,37 +1,69 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { pullServerState } from "./progress";
 
 export type User = {
   name: string;
   email: string;
+  role: "student" | "parent";
 };
 
 type AuthContextType = {
   user: User | null;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
-  signup: (name: string, email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  signup: (
+    name: string,
+    email: string,
+    password: string,
+    role?: "student" | "parent"
+  ) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
+// Identity cache so src/lib/progress.ts can namespace synchronously; the
+// session itself is an httpOnly cookie — this is not an auth source.
+function cacheIdentity(user: User | null) {
+  if (user) localStorage.setItem("layaida_user", JSON.stringify(user));
+  else localStorage.removeItem("layaida_user");
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Restore session from localStorage on mount
+  // Restore session from the cookie; pull server learner state before
+  // exposing the user so pages read fresh data.
   useEffect(() => {
-    const stored = localStorage.getItem("layaida_user");
-    if (stored) {
+    (async () => {
       try {
-        setUser(JSON.parse(stored));
+        const res = await fetch("/api/auth/me");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && data.user) {
+            cacheIdentity(data.user);
+            await pullServerState(data.user.email);
+            setUser(data.user);
+          }
+        } else {
+          cacheIdentity(null);
+        }
       } catch {
-        localStorage.removeItem("layaida_user");
+        // offline: fall back to cached identity so the app stays usable
+        const cached = localStorage.getItem("layaida_user");
+        if (cached) {
+          try {
+            setUser(JSON.parse(cached));
+          } catch {
+            localStorage.removeItem("layaida_user");
+          }
+        }
       }
-    }
-    setIsLoading(false);
+      setIsLoading(false);
+    })();
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -43,8 +75,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
       const data = await res.json();
       if (data.success) {
+        cacheIdentity(data.user);
+        await pullServerState(data.user.email);
         setUser(data.user);
-        localStorage.setItem("layaida_user", JSON.stringify(data.user));
         return { success: true };
       }
       return { success: false, error: data.error };
@@ -53,17 +86,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const signup = async (name: string, email: string, password: string) => {
+  const signup = async (name: string, email: string, password: string, role: "student" | "parent" = "student") => {
     try {
       const res = await fetch("/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: name.trim(), email: email.trim().toLowerCase(), password }),
+        body: JSON.stringify({ name: name.trim(), email: email.trim().toLowerCase(), password, role }),
       });
       const data = await res.json();
       if (data.success) {
+        cacheIdentity(data.user);
         setUser(data.user);
-        localStorage.setItem("layaida_user", JSON.stringify(data.user));
         return { success: true };
       }
       return { success: false, error: data.error };
@@ -73,8 +106,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = () => {
+    fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
     setUser(null);
-    localStorage.removeItem("layaida_user");
+    cacheIdentity(null);
   };
 
   return (
