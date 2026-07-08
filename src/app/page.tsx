@@ -1,218 +1,121 @@
 "use client";
 
+import { useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Search, ArrowRight } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { CourseCard } from "@/components/CourseCard";
 import { useLocale } from "@/lib/locale-context";
 import { useAuth } from "@/lib/auth-context";
+import { formatNumber } from "@/lib/i18n";
 import { courses, subjectColors, subjectIcons, Subject } from "@/lib/data";
-import Link from "next/link";
-import { useState } from "react";
 
 const subjects: Subject[] = ["math", "physics", "biology"];
 
 export default function HomePage() {
-  const { t, locale } = useLocale();
-  const { user } = useAuth();
-  const [activeSubject, setActiveSubject] = useState<Subject | "all">("all");
-  const [search, setSearch] = useState("");
+  const { t, locale, dir } = useLocale();
+  const { user, isLoading } = useAuth();
+  const router = useRouter();
 
-  const filteredCourses = courses.filter((c) => {
-    const matchesSubject = activeSubject === "all" || c.subject === activeSubject;
-    const q = search.toLowerCase();
-    const matchesSearch =
-      !q ||
-      c.title[locale].toLowerCase().includes(q) ||
-      c.description[locale].toLowerCase().includes(q) ||
-      t.subjects[c.subject].toLowerCase().includes(q);
-    return matchesSubject && matchesSearch;
-  });
+  // Signed-in home is the dashboard.
+  useEffect(() => {
+    if (!isLoading && user) router.replace("/dashboard");
+  }, [user, isLoading, router]);
+
+  const popular = [...courses].sort((a, b) => b.studentCount - a.studentCount).slice(0, 4);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="flex min-h-screen flex-col bg-bg">
+      <a href="#main" className="skip-to-content">
+        Skip to content
+      </a>
       <Navbar />
 
-      <main>
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-800 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-              {t.home.hero.title}
-            </h1>
-            <p className="mt-6 text-lg md:text-xl text-indigo-100 leading-relaxed">
-              {t.home.hero.subtitle}
-            </p>
-            {user ? (
-              <Link
-                href="/my-courses"
-                className="mt-8 inline-flex items-center gap-2 bg-white text-indigo-700 px-6 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition-colors"
-              >
-                {t.course.continueLearning}
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-            ) : (
-              <Link
-                href="/signin"
-                className="mt-8 inline-flex items-center gap-2 bg-white text-indigo-700 px-6 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition-colors"
-              >
-                {t.home.hero.cta}
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-            )}
-          </div>
-        </div>
-      </section>
+      <main id="main" className="flex-1">
+        {/* Hero — mist band with central search pill */}
+        <section className="bg-mist/40">
+          <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 md:py-24">
+            <h1 className="text-[30px] font-semibold leading-tight text-ink md:text-4xl">{t.home.hero.title}</h1>
+            <p className="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed text-slate">{t.home.hero.subtitle}</p>
 
-      {/* Stats */}
-      <section className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {[
-              { value: "12K+", label: t.home.stats.students },
-              { value: "50+", label: t.home.stats.courses },
-              { value: "500+", label: t.home.stats.lessons },
-              { value: "20+", label: t.home.stats.teachers },
-            ].map((stat, i) => (
-              <div key={i}>
-                <div className="text-2xl md:text-3xl font-bold text-indigo-600">{stat.value}</div>
-                <div className="text-gray-500 mt-1">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Subjects */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8">{t.home.subjects}</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {subjects.map((subject) => {
-            const colors = subjectColors[subject];
-            const icon = subjectIcons[subject];
-            const count = courses.filter((c) => c.subject === subject).length;
-            return (
-              <div
-                key={subject}
-                className={`${colors.bg} rounded-xl p-6 text-left hover:shadow-md transition-all duration-300 hover:-translate-y-1 border border-transparent hover:border-gray-200 ${user ? "cursor-pointer" : ""}`}
-                role={user ? "button" : undefined}
-                tabIndex={user ? 0 : undefined}
-                onClick={() => {
-                  if (user) {
-                    setActiveSubject(subject);
-                    document.getElementById("courses")?.scrollIntoView({ behavior: "smooth" });
-                  }
-                }}
-                onKeyDown={(e) => {
-                  if (user && (e.key === "Enter" || e.key === " ")) {
-                    e.preventDefault();
-                    setActiveSubject(subject);
-                    document.getElementById("courses")?.scrollIntoView({ behavior: "smooth" });
-                  }
-                }}
-              >
-                <span className="text-4xl" aria-hidden="true">{icon}</span>
-                <h3 className={`text-xl font-bold ${colors.text} mt-3`}>{t.subjects[subject]}</h3>
-                <p className="text-gray-500 mt-1">
-                  {count} {t.course.lessons.toLowerCase()}
-                </p>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Courses - only visible when logged in */}
-      {user ? (
-        <section id="courses" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">{t.home.popularCourses}</h2>
-            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-              <div className="relative">
-                <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <input
-                  type="search"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Rechercher..."
-                  className="pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full sm:w-48"
-                  aria-label="Search courses"
-                />
-              </div>
-            <div className="flex gap-2 flex-wrap">
+            <form
+              className="relative mx-auto mt-8 max-w-xl"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const q = new FormData(e.currentTarget).get("q");
+                router.push(q ? `/courses?q=${encodeURIComponent(String(q))}` : "/courses");
+              }}
+              role="search"
+            >
+              <Search
+                className="pointer-events-none absolute inset-y-0 start-5 my-auto h-5 w-5 text-faint"
+                aria-hidden="true"
+              />
+              <input
+                type="search"
+                name="q"
+                placeholder={t.home.hero.searchPlaceholder}
+                aria-label={t.common.search}
+                className="h-14 w-full rounded-pill border-[1.5px] border-mist bg-surface pe-14 text-[15px] text-ink shadow-card placeholder:text-faint focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary-soft"
+                style={{ paddingInlineStart: "3.25rem" }}
+              />
               <button
-                onClick={() => setActiveSubject("all")}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  activeSubject === "all"
-                    ? "bg-indigo-600 text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                }`}
+                type="submit"
+                aria-label={t.common.search}
+                className="absolute inset-y-0 end-2 my-auto flex h-10 w-10 items-center justify-center rounded-pill bg-primary text-white shadow-primary transition-colors duration-[180ms] hover:bg-primary-hover"
               >
-                {t.home.viewAll}
+                <ArrowRight className={`h-5 w-5 ${dir === "rtl" ? "-scale-x-100" : ""}`} aria-hidden="true" />
               </button>
-              {subjects.map((subject) => (
-                <button
-                  key={subject}
-                  onClick={() => setActiveSubject(subject)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                    activeSubject === subject
-                      ? `${subjectColors[subject].accent} text-white`
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                  }`}
-                >
-                  {subjectIcons[subject]} {t.subjects[subject]}
-                </button>
-              ))}
-            </div>
-            </div>
+            </form>
           </div>
+        </section>
 
-          {filteredCourses.length === 0 ? (
-            <div className="text-center py-16 text-gray-400">
-              <svg className="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              <p className="text-lg font-medium text-gray-500">Aucun cours trouvé</p>
-            </div>
-          ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredCourses.map((course) => (
+        {/* Subject tiles */}
+        <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+          <h2 className="text-[22px] font-semibold text-ink">{t.home.subjects}</h2>
+          <p className="mt-1 text-[15px] text-muted">{t.home.subjectsSubtitle}</p>
+          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+            {subjects.map((subject) => {
+              const colors = subjectColors[subject];
+              const count = courses.filter((c) => c.subject === subject).length;
+              return (
+                <Link
+                  key={subject}
+                  href={`/courses?subject=${subject}`}
+                  className={`group rounded-card ${colors.bg} border border-transparent p-6 transition-all duration-[180ms] ease-out hover:-translate-y-0.5 hover:border-border hover:shadow-lift`}
+                >
+                  <span className={`text-4xl ${colors.text}`} aria-hidden="true">
+                    {subjectIcons[subject]}
+                  </span>
+                  <h3 className={`mt-3 text-[17px] font-semibold ${colors.text}`}>{t.subjects[subject]}</h3>
+                  <p className="mt-1 text-[13px] text-muted">
+                    {formatNumber(locale, count)} {t.home.coursesCount}
+                  </p>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Popular courses */}
+        <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between">
+            <h2 className="text-[22px] font-semibold text-ink">{t.home.popularCourses}</h2>
+            <Link
+              href="/courses"
+              className="rounded-pill px-4 py-2 text-[13px] font-medium text-primary transition-colors duration-[180ms] hover:bg-primary-soft"
+            >
+              {t.home.viewAll}
+            </Link>
+          </div>
+          <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {popular.map((course) => (
               <CourseCard key={course.id} course={course} />
             ))}
           </div>
-          )}
         </section>
-      ) : (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="text-center py-12 bg-white rounded-2xl border border-gray-200 shadow-sm">
-            <svg className="w-16 h-16 text-indigo-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            </svg>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">{t.auth.loginToAccess}</h3>
-            <p className="text-gray-500 mb-6">{t.home.hero.subtitle}</p>
-            <div className="flex items-center justify-center gap-4">
-              <Link
-                href="/signin"
-                className="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
-              >
-                {t.auth.signIn}
-              </Link>
-              <Link
-                href="/signup"
-                className="border border-indigo-600 text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition-colors"
-              >
-                {t.auth.signUp}
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
       </main>
 
       <Footer />

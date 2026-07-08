@@ -1,13 +1,40 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Navbar } from "@/components/Navbar";
+import {
+  ArrowLeft,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  FileText,
+  Download,
+  Play,
+  ClipboardCheck,
+  List,
+  X,
+  Trash2,
+} from "lucide-react";
 import { useLocale } from "@/lib/locale-context";
 import { useAuth } from "@/lib/auth-context";
-import { getLesson, getAllLessons } from "@/lib/data";
-import { isLessonCompleted, toggleLessonCompleted, getCompletedLessonIds } from "@/lib/progress";
+import { useToast } from "@/components/Toast";
+import { Button } from "@/components/Button";
+import { ProgressBar } from "@/components/Progress";
+import { formatNumber } from "@/lib/i18n";
+import { getLesson, getAllLessons, chapterHasQuiz, subjectColors } from "@/lib/data";
+import {
+  isLessonCompleted,
+  toggleLessonCompleted,
+  getCompletedLessonIds,
+  getNotes,
+  addNote,
+  deleteNote,
+  migrateLegacyProgress,
+  LessonNote,
+} from "@/lib/progress";
+
+type Tab = "about" | "notes" | "documents";
 
 export default function LessonPage({
   params,
@@ -15,217 +42,399 @@ export default function LessonPage({
   params: Promise<{ courseId: string; lessonId: string }>;
 }) {
   const { courseId, lessonId } = use(params);
-  const { locale, t } = useLocale();
+  const { locale, t, dir } = useLocale();
   const { user, isLoading } = useAuth();
   const router = useRouter();
+  const { showToast } = useToast();
+
   const [completed, setCompleted] = useState(false);
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
+  const [tab, setTab] = useState<Tab>("about");
+  const [notes, setNotes] = useState<LessonNote[]>([]);
+  const [noteText, setNoteText] = useState("");
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [countdown, setCountdown] = useState<number | null>(null);
+  const startedAt = useRef(Date.now());
+  const activeRowRef = useRef<HTMLAnchorElement | null>(null);
 
   useEffect(() => {
-    if (!isLoading && !user) {
-      router.push("/signin");
-    }
+    if (!isLoading && !user) router.push("/signin");
   }, [user, isLoading, router]);
 
   useEffect(() => {
+    migrateLegacyProgress();
     setCompleted(isLessonCompleted(courseId, lessonId));
     setCompletedIds(getCompletedLessonIds(courseId));
+    setNotes(getNotes(courseId, lessonId));
+    setTab("about");
+    setCountdown(null);
+    setDrawerOpen(false);
+    startedAt.current = Date.now();
   }, [courseId, lessonId]);
 
+  // Active sidebar row auto-scrolls into view.
+  useEffect(() => {
+    activeRowRef.current?.scrollIntoView({ block: "nearest" });
+  }, [lessonId]);
+
   const result = getLesson(courseId, lessonId);
+  const allLessons = result ? getAllLessons(result.course) : [];
+  const currentIndex = allLessons.findIndex((l) => l.id === lessonId);
+  const nextLesson = currentIndex >= 0 && currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null;
+
+  const goNext = useCallback(() => {
+    if (nextLesson) router.push(`/course/${courseId}/lesson/${nextLesson.id}`);
+  }, [nextLesson, courseId, router]);
+
+  // Auto-advance countdown after marking complete (cancellable).
+  useEffect(() => {
+    if (countdown === null) return;
+    if (countdown <= 0) {
+      goNext();
+      return;
+    }
+    const id = setTimeout(() => setCountdown((c) => (c === null ? null : c - 1)), 1000);
+    return () => clearTimeout(id);
+  }, [countdown, goNext]);
 
   if (isLoading || !user) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+      <div className="flex min-h-screen items-center justify-center bg-bg">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
       </div>
     );
   }
 
   if (!result) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <Navbar />
-        <div className="max-w-7xl mx-auto px-4 py-20 text-center">
-          <h1 className="text-2xl font-bold text-gray-900">Lesson not found</h1>
-          <Link href="/" className="text-indigo-600 mt-4 inline-block">Go home</Link>
-        </div>
+      <div className="flex min-h-screen flex-col items-center justify-center bg-bg px-4 text-center">
+        <h1 className="text-[22px] font-semibold text-ink">{t.states.notFoundTitle}</h1>
+        <Link href="/courses" className="mt-4 font-medium text-primary hover:underline">
+          {t.states.notFoundCta}
+        </Link>
       </div>
     );
   }
 
   const { lesson, course } = result;
-  const allLessons = getAllLessons(course);
-  const currentIndex = allLessons.findIndex((l) => l.id === lessonId);
   const prevLesson = currentIndex > 0 ? allLessons[currentIndex - 1] : null;
-  const nextLesson = currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null;
+  const progress = allLessons.length ? Math.round((completedIds.size / allLessons.length) * 100) : 0;
+  const colors = subjectColors[course.subject];
+
+  const handleMarkComplete = () => {
+    const next = !completed;
+    toggleLessonCompleted(courseId, lessonId, next);
+    setCompleted(next);
+    setCompletedIds(getCompletedLessonIds(courseId));
+    if (next) {
+      showToast(t.lesson.completedToast);
+      if (nextLesson) setCountdown(5);
+    } else {
+      setCountdown(null);
+    }
+  };
+
+  const handleAddNote = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!noteText.trim()) return;
+    // Mock video position: elapsed time on this lesson page.
+    const elapsed = Math.floor((Date.now() - startedAt.current) / 1000);
+    const ts = `${String(Math.floor(elapsed / 60)).padStart(2, "0")}:${String(elapsed % 60).padStart(2, "0")}`;
+    addNote(courseId, lessonId, ts, noteText.trim());
+    setNotes(getNotes(courseId, lessonId));
+    setNoteText("");
+  };
+
+  const PrevChevron = dir === "rtl" ? ChevronRight : ChevronLeft;
+  const NextChevron = dir === "rtl" ? ChevronLeft : ChevronRight;
+
+  const sidebar = (
+    <nav aria-label={t.lesson.chaptersDrawer} className="flex h-full flex-col">
+      <div className="border-b border-border p-4">
+        <Link
+          href={`/course/${courseId}`}
+          className="flex items-center gap-1.5 text-[13px] font-medium text-muted transition-colors hover:text-ink"
+        >
+          <ArrowLeft className={`h-4 w-4 ${dir === "rtl" ? "-scale-x-100" : ""}`} aria-hidden="true" />
+          {t.lesson.backToCourse}
+        </Link>
+        <h2 className="mt-2 truncate text-[15px] font-semibold text-ink">{course.title[locale]}</h2>
+      </div>
+      <div className="flex-1 overflow-y-auto">
+        {course.chapters.map((chapter) => (
+          <div key={chapter.id}>
+            <p className="px-4 pb-1 pt-4 text-[11px] font-semibold uppercase tracking-wide text-faint">
+              {chapter.title[locale]}
+            </p>
+            {chapter.lessons.map((l) => {
+              const isDone = completedIds.has(l.id);
+              const isCurrent = l.id === lessonId;
+              return (
+                <Link
+                  key={l.id}
+                  ref={isCurrent ? activeRowRef : undefined}
+                  href={`/course/${courseId}/lesson/${l.id}`}
+                  aria-current={isCurrent ? "page" : undefined}
+                  onClick={() => setDrawerOpen(false)}
+                  className={`flex min-h-12 items-center gap-3 border-s-2 px-4 py-2 text-[13px] transition-colors duration-[180ms] ${
+                    isCurrent
+                      ? "border-primary bg-primary-soft/50 font-semibold text-primary-hover dark:text-primary"
+                      : "border-transparent text-slate hover:bg-bg"
+                  }`}
+                >
+                  {isDone ? (
+                    <Check className="h-4 w-4 shrink-0 text-success" aria-hidden="true" />
+                  ) : (
+                    <Play className={`h-4 w-4 shrink-0 text-faint ${dir === "rtl" ? "-scale-x-100" : ""}`} aria-hidden="true" />
+                  )}
+                  <span className="min-w-0 flex-1 truncate">{l.title[locale]}</span>
+                  <span className="shrink-0 font-mono text-[11px] text-faint">{l.duration}</span>
+                </Link>
+              );
+            })}
+            {chapterHasQuiz(courseId, chapter.id) && (
+              <Link
+                href={`/course/${courseId}/quiz/${chapter.id}`}
+                onClick={() => setDrawerOpen(false)}
+                className="flex min-h-12 items-center gap-3 border-s-2 border-transparent bg-warning-soft/40 px-4 py-2 text-[13px] font-medium text-ink transition-colors duration-[180ms] hover:bg-warning-soft"
+              >
+                <ClipboardCheck className="h-4 w-4 shrink-0 text-warning" aria-hidden="true" />
+                <span className="flex-1">{t.course.quiz}</span>
+              </Link>
+            )}
+          </div>
+        ))}
+      </div>
+    </nav>
+  );
 
   return (
-    <div className="min-h-screen bg-gray-900">
-      <Navbar />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-sm text-gray-400 mb-4">
-          <Link href={`/course/${courseId}`} className="hover:text-white transition-colors">
-            {course.title[locale]}
+    <div className="flex min-h-screen flex-col bg-bg">
+      {/* Top bar with course progress */}
+      <header className="sticky top-0 z-40 border-b border-border bg-surface">
+        <div className="flex h-14 items-center gap-4 px-4 sm:px-6">
+          <Link
+            href={`/course/${courseId}`}
+            aria-label={t.lesson.backToCourse}
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-pill text-slate transition-colors hover:bg-mist"
+          >
+            <ArrowLeft className={`h-5 w-5 ${dir === "rtl" ? "-scale-x-100" : ""}`} aria-hidden="true" />
           </Link>
-          <span>/</span>
-          <span className="text-white">{lesson.title[locale]}</span>
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-[13px] font-semibold text-ink">{course.title[locale]}</p>
+            <div className="mt-1 flex items-center gap-2">
+              <ProgressBar value={progress} className="max-w-48" label={t.lesson.courseProgress} />
+              <span className="font-mono text-[11px] text-muted">{formatNumber(locale, progress)}%</span>
+            </div>
+          </div>
+          <button
+            onClick={() => setDrawerOpen(true)}
+            className="flex min-h-11 items-center gap-2 rounded-pill px-3 text-[13px] font-medium text-slate transition-colors hover:bg-mist lg:hidden"
+            aria-expanded={drawerOpen}
+          >
+            <List className="h-5 w-5" aria-hidden="true" />
+            {t.lesson.chaptersDrawer}
+          </button>
         </div>
+      </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Main Content */}
-          <div className="lg:col-span-2">
-            {/* Video Player */}
-            <div className="relative bg-black rounded-xl overflow-hidden aspect-video">
+      <div className="mx-auto flex w-full max-w-[1400px] flex-1">
+        {/* Main */}
+        <main className="min-w-0 flex-1 px-4 py-6 sm:px-6">
+          {/* Video */}
+          <div className="overflow-hidden rounded-card bg-ink shadow-card">
+            <div className="relative aspect-video">
               <iframe
                 src={lesson.videoUrl}
-                className="w-full h-full"
+                className="absolute inset-0 h-full w-full"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 title={lesson.title[locale]}
               />
             </div>
-
-            {/* Lesson Info */}
-            <div className="mt-6 bg-gray-800 rounded-xl p-6">
-              <h1 className="text-2xl font-bold text-white">{lesson.title[locale]}</h1>
-              <p className="text-gray-400 mt-2">{lesson.description[locale]}</p>
-
-              <div className="flex items-center gap-4 mt-6">
-                <button
-                  onClick={() => {
-                    const next = !completed;
-                    toggleLessonCompleted(courseId, lessonId, next);
-                    setCompleted(next);
-                    setCompletedIds(getCompletedLessonIds(courseId));
-                  }}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors ${
-                    completed
-                      ? "bg-green-600 text-white"
-                      : "bg-gray-700 text-gray-300 hover:bg-gray-600"
-                  }`}
-                >
-                  {completed ? (
-                    <>
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      {t.lesson.markedComplete}
-                    </>
-                  ) : (
-                    t.lesson.markComplete
-                  )}
-                </button>
-              </div>
-
-              {/* Documents */}
-              {lesson.documents && lesson.documents.length > 0 && (
-                <div className="mt-6 border-t border-gray-700 pt-6">
-                  <h3 className="text-white font-semibold mb-3">{t.lesson.resources}</h3>
-                  <div className="space-y-2">
-                    {lesson.documents.map((doc, i) => (
-                      <div
-                        key={i}
-                        className="flex items-center justify-between bg-gray-700 rounded-lg px-4 py-3"
-                      >
-                        <div className="flex items-center gap-3">
-                          <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                          </svg>
-                          <span className="text-gray-300 text-sm">{doc.name}</span>
-                        </div>
-                        <button className="text-indigo-400 hover:text-indigo-300 text-sm font-medium">
-                          {t.course.downloadPdf}
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Navigation */}
-              <div className="flex justify-between mt-6 pt-6 border-t border-gray-700">
-                {prevLesson ? (
-                  <Link
-                    href={`/course/${courseId}/lesson/${prevLesson.id}`}
-                    className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                    </svg>
-                    {t.lesson.previous}
-                  </Link>
-                ) : <div />}
-                {nextLesson ? (
-                  <Link
-                    href={`/course/${courseId}/lesson/${nextLesson.id}`}
-                    className="flex items-center gap-2 text-indigo-400 hover:text-indigo-300 font-medium transition-colors"
-                  >
-                    {t.lesson.next}
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </Link>
-                ) : <div />}
-              </div>
-            </div>
           </div>
 
-          {/* Sidebar: Course Outline */}
-          <div className="lg:col-span-1">
-            <div className="bg-gray-800 rounded-xl overflow-hidden sticky top-20">
-              <div className="px-4 py-3 bg-gray-700">
-                <Link href={`/course/${courseId}`} className="text-sm text-gray-400 hover:text-white flex items-center gap-1">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                  {t.lesson.backToCourse}
-                </Link>
-                <h2 className="text-white font-semibold mt-1 text-sm">{course.title[locale]}</h2>
-              </div>
-              <div className="max-h-[60vh] overflow-y-auto">
-                {course.chapters.map((chapter) => (
-                  <div key={chapter.id}>
-                    <div className="px-4 py-2 bg-gray-750 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                      {chapter.title[locale]}
-                    </div>
-                    {chapter.lessons.map((l) => {
-                      const isDone = completedIds.has(l.id);
-                      const isCurrent = l.id === lessonId;
-                      return (
-                        <Link
-                          key={l.id}
-                          href={`/course/${courseId}/lesson/${l.id}`}
-                          className={`flex items-center gap-3 px-4 py-3 text-sm transition-colors ${
-                            isCurrent
-                              ? "bg-indigo-600/20 text-indigo-400 border-l-2 border-indigo-500"
-                              : "text-gray-400 hover:bg-gray-700 hover:text-white"
-                          }`}
-                        >
-                          {isDone ? (
-                            <svg className="w-4 h-4 flex-shrink-0 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                            </svg>
-                          ) : (
-                            <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                          )}
-                          <span className="truncate">{l.title[locale]}</span>
-                          <span className="text-xs text-gray-500 ml-auto flex-shrink-0">{l.duration}</span>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                ))}
-              </div>
+          {/* Title + mark complete */}
+          <div className="mt-5 flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <h1 className="text-[22px] font-semibold text-ink">{lesson.title[locale]}</h1>
+              <p className="mt-1 font-mono text-[11px] text-muted">{lesson.duration}</p>
             </div>
+            <Button variant={completed ? "secondary" : "primary"} onClick={handleMarkComplete}>
+              <Check className="h-4 w-4" aria-hidden="true" />
+              {completed ? t.lesson.markedComplete : t.lesson.markComplete}
+            </Button>
+          </div>
+
+          {/* Auto-advance banner */}
+          {countdown !== null && nextLesson && (
+            <div
+              role="status"
+              className="mt-4 flex items-center justify-between rounded-card bg-primary-soft px-5 py-3"
+            >
+              <span className="text-[13px] font-medium text-primary-hover dark:text-primary">
+                {t.lesson.autoAdvance.replace("5", formatNumber(locale, countdown))}
+              </span>
+              <button
+                onClick={() => setCountdown(null)}
+                className="rounded-pill px-3 py-1.5 text-[13px] font-semibold text-primary-hover underline underline-offset-2 dark:text-primary"
+              >
+                {t.lesson.stayHere}
+              </button>
+            </div>
+          )}
+
+          {/* Tabs */}
+          <div role="tablist" aria-label={t.lesson.about} className="mt-6 flex gap-1 border-b border-border">
+            {(
+              [
+                ["about", t.lesson.about],
+                ["notes", t.lesson.myNotes],
+                ["documents", t.lesson.resources],
+              ] as [Tab, string][]
+            ).map(([value, label]) => (
+              <button
+                key={value}
+                role="tab"
+                aria-selected={tab === value}
+                onClick={() => setTab(value)}
+                className={`-mb-px min-h-11 border-b-2 px-4 text-[15px] font-medium transition-colors duration-[180ms] ${
+                  tab === value ? "border-primary text-primary" : "border-transparent text-muted hover:text-ink"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          <div className="py-5">
+            {tab === "about" && <p className="max-w-2xl text-[15px] leading-relaxed text-slate">{lesson.description[locale]}</p>}
+
+            {tab === "notes" && (
+              <div className="max-w-2xl">
+                <form onSubmit={handleAddNote} className="flex gap-3">
+                  <input
+                    value={noteText}
+                    onChange={(e) => setNoteText(e.target.value)}
+                    placeholder={t.lesson.notePlaceholder}
+                    aria-label={t.lesson.addNote}
+                    className="h-12 flex-1 rounded-input border-[1.5px] border-mist bg-surface px-4 text-[15px] text-ink placeholder:text-faint focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary-soft"
+                  />
+                  <Button type="submit" disabled={!noteText.trim()}>
+                    {t.lesson.addNote}
+                  </Button>
+                </form>
+                {notes.length === 0 ? (
+                  <p className="mt-6 text-[15px] text-muted">{t.lesson.noNotes}</p>
+                ) : (
+                  <ul className="mt-5 space-y-3">
+                    {notes.map((note) => (
+                      <li key={note.id} className="flex items-start gap-3 rounded-card border border-border bg-surface p-4">
+                        <span className="rounded-chip bg-primary-soft px-2 py-0.5 font-mono text-[11px] font-medium text-primary-hover dark:text-primary">
+                          {note.timestamp}
+                        </span>
+                        <p className="min-w-0 flex-1 text-[15px] text-slate">{note.text}</p>
+                        <button
+                          onClick={() => {
+                            deleteNote(courseId, lessonId, note.id);
+                            setNotes(getNotes(courseId, lessonId));
+                          }}
+                          aria-label={`${t.common.close} — ${note.timestamp}`}
+                          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-pill text-faint transition-colors hover:bg-error-soft hover:text-error"
+                        >
+                          <Trash2 className="h-4 w-4" aria-hidden="true" />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
+
+            {tab === "documents" && (
+              <div className="max-w-2xl">
+                {!lesson.documents || lesson.documents.length === 0 ? (
+                  <p className="text-[15px] text-muted">{t.lesson.noDocuments}</p>
+                ) : (
+                  <ul className="space-y-3">
+                    {lesson.documents.map((doc, i) => (
+                      <li key={i} className="flex items-center gap-3 rounded-card border border-border bg-surface p-4">
+                        <span className={`flex h-10 w-10 items-center justify-center rounded-input ${colors.bg} ${colors.text}`}>
+                          <FileText className="h-5 w-5" aria-hidden="true" />
+                        </span>
+                        <span className="min-w-0 flex-1 truncate text-[15px] font-medium text-ink">{doc.name}</span>
+                        <a
+                          href={doc.url}
+                          className="flex min-h-11 items-center gap-1.5 rounded-pill px-4 text-[13px] font-semibold text-primary transition-colors hover:bg-primary-soft"
+                        >
+                          <Download className="h-4 w-4" aria-hidden="true" />
+                          {t.course.downloadPdf}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Prev / next */}
+          <div className="mt-2 flex items-center justify-between border-t border-border pt-5">
+            {prevLesson ? (
+              <Link
+                href={`/course/${courseId}/lesson/${prevLesson.id}`}
+                className="flex min-h-11 items-center gap-1.5 rounded-pill px-4 text-[15px] font-medium text-slate transition-colors hover:bg-mist"
+              >
+                <PrevChevron className="h-5 w-5" aria-hidden="true" />
+                {t.lesson.previous}
+              </Link>
+            ) : (
+              <span />
+            )}
+            {nextLesson ? (
+              <Link
+                href={`/course/${courseId}/lesson/${nextLesson.id}`}
+                className="flex min-h-11 items-center gap-1.5 rounded-pill bg-primary px-5 text-[15px] font-semibold text-white shadow-primary transition-colors hover:bg-primary-hover"
+              >
+                {t.lesson.next}
+                <NextChevron className="h-5 w-5" aria-hidden="true" />
+              </Link>
+            ) : (
+              <span />
+            )}
+          </div>
+        </main>
+
+        {/* Desktop sidebar — 320px, at inline-end (flips in RTL automatically) */}
+        <aside className="hidden w-80 shrink-0 border-s border-border bg-surface lg:block">
+          <div className="sticky top-14 h-[calc(100vh-3.5rem)]">{sidebar}</div>
+        </aside>
+      </div>
+
+      {/* Mobile chapters bottom drawer */}
+      {drawerOpen && (
+        <div className="fixed inset-0 z-[60] lg:hidden">
+          <button aria-hidden="true" tabIndex={-1} className="absolute inset-0 bg-ink/40" onClick={() => setDrawerOpen(false)} />
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={t.lesson.chaptersDrawer}
+            className="absolute inset-x-0 bottom-0 flex max-h-[80vh] flex-col rounded-t-card bg-surface shadow-modal"
+          >
+            <div className="flex items-center justify-between border-b border-border px-4 py-3">
+              <h2 className="text-[15px] font-semibold text-ink">{t.lesson.chaptersDrawer}</h2>
+              <button
+                onClick={() => setDrawerOpen(false)}
+                aria-label={t.common.close}
+                className="flex h-11 w-11 items-center justify-center rounded-pill text-slate hover:bg-mist"
+              >
+                <X className="h-5 w-5" aria-hidden="true" />
+              </button>
+            </div>
+            <div className="min-h-0 flex-1 overflow-y-auto">{sidebar}</div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

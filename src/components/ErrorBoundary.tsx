@@ -29,10 +29,11 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         this.props.fallback || (
-          <div className="min-h-[300px] flex items-center justify-center">
-            <div className="text-center p-8">
+          <div className="flex min-h-[300px] items-center justify-center bg-bg">
+            {/* Sits above LocaleProvider — strings can't go through i18n here. */}
+            <div className="p-8 text-center">
               <svg
-                className="w-12 h-12 text-gray-400 mx-auto mb-4"
+                className="mx-auto mb-4 h-12 w-12 text-muted"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -45,10 +46,10 @@ export class ErrorBoundary extends Component<Props, State> {
                   d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"
                 />
               </svg>
-              <p className="text-gray-600 font-medium">Something went wrong</p>
+              <p className="font-medium text-slate">Something went wrong</p>
               <button
                 onClick={() => this.setState({ hasError: false })}
-                className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700 transition-colors"
+                className="mt-4 h-11 rounded-pill bg-primary px-6 text-[13px] font-semibold text-white shadow-primary transition-colors duration-[180ms] hover:bg-primary-hover"
               >
                 Try again
               </button>

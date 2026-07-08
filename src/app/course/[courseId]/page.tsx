@@ -3,230 +3,411 @@
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import {
+  Play,
+  Check,
+  ChevronDown,
+  Star,
+  BookOpen,
+  Clock,
+  Users,
+  FileText,
+  Lock,
+  ClipboardCheck,
+  ArrowUpRight,
+} from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { Badge } from "@/components/Badge";
+import { Button, ButtonLink } from "@/components/Button";
+import { ProgressBar } from "@/components/Progress";
+import { useToast } from "@/components/Toast";
 import { useLocale } from "@/lib/locale-context";
 import { useAuth } from "@/lib/auth-context";
-import { getCourse, subjectColors, subjectIcons, getAllLessons } from "@/lib/data";
-import { isEnrolled, enroll, getCompletedLessonIds } from "@/lib/progress";
+import { formatNumber } from "@/lib/i18n";
+import {
+  getCourse,
+  getCourseExtras,
+  getAllLessons,
+  chapterHasQuiz,
+  subjectColors,
+  subjectIcons,
+  teacherSlug,
+} from "@/lib/data";
+import { isEnrolled, enroll, getCompletedLessonIds, migrateLegacyProgress } from "@/lib/progress";
 
 export default function CoursePage({ params }: { params: Promise<{ courseId: string }> }) {
   const { courseId } = use(params);
-  const { locale, t } = useLocale();
+  const { locale, t, dir } = useLocale();
   const { user, isLoading } = useAuth();
   const router = useRouter();
+  const { showToast } = useToast();
   const [enrolled, setEnrolled] = useState(false);
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
+  const [openChapter, setOpenChapter] = useState<string | null>(null);
   const course = getCourse(courseId);
 
   useEffect(() => {
-    if (!isLoading && !user) {
-      router.push("/signin");
-    }
+    if (!isLoading && !user) router.push("/signin");
   }, [user, isLoading, router]);
 
   useEffect(() => {
+    migrateLegacyProgress();
     setEnrolled(isEnrolled(courseId));
     setCompletedIds(getCompletedLessonIds(courseId));
+    setOpenChapter(getCourse(courseId)?.chapters[0]?.id ?? null);
   }, [courseId]);
 
   if (isLoading || !user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+      <div className="flex min-h-screen items-center justify-center bg-bg">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
       </div>
     );
   }
 
   if (!course) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="flex min-h-screen flex-col bg-bg">
         <Navbar />
-        <div className="max-w-7xl mx-auto px-4 py-20 text-center">
-          <h1 className="text-2xl font-bold text-gray-900">Course not found</h1>
-          <Link href="/" className="text-indigo-600 mt-4 inline-block">Go home</Link>
+        <div className="mx-auto max-w-7xl flex-1 px-4 py-20 text-center">
+          <h1 className="text-[22px] font-semibold text-ink">{t.states.notFoundTitle}</h1>
+          <ButtonLink href="/courses" className="mt-6">
+            {t.states.notFoundCta}
+          </ButtonLink>
         </div>
+        <Footer />
       </div>
     );
   }
 
   const colors = subjectColors[course.subject];
+  const extras = getCourseExtras(course.id);
+  const prerequisite = extras.prerequisiteId ? getCourse(extras.prerequisiteId) : null;
   const allLessons = getAllLessons(course);
+  const firstLesson = allLessons[0];
+  const progress = allLessons.length ? Math.round((completedIds.size / allLessons.length) * 100) : 0;
+  const slug = teacherSlug(course.instructor.name);
+
+  const handleEnroll = () => {
+    enroll(courseId);
+    setEnrolled(true);
+    showToast(t.course.enrolledToast);
+  };
+
+  // Ratings histogram derived from the average (mock data has no per-star counts).
+  const histogram = [5, 4, 3, 2, 1].map((stars) => {
+    const dist = Math.max(0, 1 - Math.abs(course.rating - stars) / 1.6);
+    return { stars, pct: Math.round(dist * 100) };
+  });
+  const histTotal = histogram.reduce((s, h) => s + h.pct, 0) || 1;
+
+  const cta = enrolled ? (
+    <ButtonLink href={`/course/${course.id}/lesson/${firstLesson?.id}`} className="w-full">
+      {completedIds.size > 0 ? t.course.continueLearning : t.course.startFirstLesson}
+    </ButtonLink>
+  ) : (
+    <Button onClick={handleEnroll} className="w-full">
+      {t.course.enrollFree}
+    </Button>
+  );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="flex min-h-screen flex-col bg-bg pb-24 lg:pb-0">
+      <a href="#main" className="skip-to-content">
+        Skip to content
+      </a>
       <Navbar />
 
-      {/* Course Header */}
-      <section className={`${colors.accent} text-white`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="flex flex-col lg:flex-row gap-8">
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="bg-white/20 text-sm px-3 py-1 rounded-full">
-                  {subjectIcons[course.subject]} {t.subjects[course.subject]}
-                </span>
-                <span className="bg-white/20 text-sm px-3 py-1 rounded-full">
-                  {t.levels[course.level]}
-                </span>
-              </div>
-              <h1 className="text-3xl md:text-4xl font-bold">{course.title[locale]}</h1>
-              <p className="mt-4 text-white/80 text-lg leading-relaxed max-w-2xl">
-                {course.description[locale]}
-              </p>
-
-              {/* Instructor */}
-              <div className="flex items-center gap-3 mt-6">
-                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-lg font-bold">
-                  {course.instructor.name[0]}
+      <main id="main" className="flex-1">
+        {/* Subject-tinted hero */}
+        <section className={colors.bg}>
+          <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+            <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
+              <div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge className={`bg-surface ${colors.text}`}>
+                    <span aria-hidden="true">{subjectIcons[course.subject]}</span> {t.subjects[course.subject]}
+                  </Badge>
+                  <Badge className="bg-surface text-slate">{t.levels[course.level]}</Badge>
+                  <Badge className="bg-success-soft text-success">{t.course.free}</Badge>
                 </div>
-                <div>
-                  <p className="font-medium">{course.instructor.name}</p>
-                  <p className="text-white/70 text-sm">{course.instructor.bio[locale]}</p>
+                <h1 className="mt-4 text-[30px] font-semibold leading-tight text-ink">{course.title[locale]}</h1>
+                <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-slate">{course.description[locale]}</p>
+
+                {/* Instructor → public teacher page */}
+                <Link
+                  href={`/teacher/${slug}`}
+                  className="group mt-5 inline-flex items-center gap-3 rounded-pill bg-surface/70 py-1.5 pe-4 ps-1.5 transition-colors duration-[180ms] hover:bg-surface"
+                >
+                  <span className="flex h-9 w-9 items-center justify-center rounded-pill bg-primary-soft text-[15px] font-semibold text-primary-hover dark:text-primary">
+                    {course.instructor.name.replace(/^Pr\.\s*/, "")[0]}
+                  </span>
+                  <span className="text-[13px] font-medium text-ink group-hover:text-primary">
+                    {course.instructor.name}
+                  </span>
+                  <ArrowUpRight className={`h-4 w-4 text-muted ${dir === "rtl" ? "-scale-x-100" : ""}`} aria-hidden="true" />
+                </Link>
+
+                {/* Stats */}
+                <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 text-[13px] text-slate">
+                  <span className="flex items-center gap-1.5">
+                    <BookOpen className="h-4 w-4" aria-hidden="true" />
+                    {formatNumber(locale, course.totalLessons)} {t.course.lessons}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Clock className="h-4 w-4" aria-hidden="true" />
+                    {formatNumber(locale, course.totalHours)} {t.course.hours}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Users className="h-4 w-4" aria-hidden="true" />
+                    {formatNumber(locale, course.studentCount)} {t.course.students}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Star className="h-4 w-4 fill-warning text-warning" aria-hidden="true" />
+                    {formatNumber(locale, course.rating)}
+                  </span>
                 </div>
+
+                {/* Prerequisite chip */}
+                {prerequisite && (
+                  <Link
+                    href={`/course/${prerequisite.id}`}
+                    className="mt-5 inline-flex items-center gap-2 rounded-pill border border-border bg-surface px-4 py-2 text-[13px] font-medium text-slate transition-colors duration-[180ms] hover:border-primary hover:text-primary"
+                  >
+                    <span className="text-muted">{t.course.prerequisite} :</span>
+                    {prerequisite.title[locale]}
+                    <ArrowUpRight className={`h-3.5 w-3.5 ${dir === "rtl" ? "-scale-x-100" : ""}`} aria-hidden="true" />
+                  </Link>
+                )}
               </div>
 
-              {/* Stats row */}
-              <div className="flex flex-wrap items-center gap-6 mt-6 text-white/80">
-                <span className="flex items-center gap-1">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  </svg>
-                  {course.totalLessons} {t.course.lessons}
-                </span>
-                <span>{course.totalHours} {t.course.hours}</span>
-                <span>{course.studentCount.toLocaleString()} {t.course.students}</span>
-                <span className="flex items-center gap-1">
-                  <svg className="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                  {course.rating}
-                </span>
-              </div>
-            </div>
-
-            {/* Enroll Card */}
-            <div className="lg:w-80">
-              <div className="bg-white rounded-xl p-6 text-gray-900 shadow-lg">
-                {enrolled ? (
-                  <>
-                    <div className="text-center mb-4">
-                      <span className="inline-flex items-center gap-2 text-green-600 font-semibold">
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        {t.course.enrolled}
-                      </span>
-                    </div>
-                    <Link
-                      href={`/course/${course.id}/lesson/${allLessons[0]?.id}`}
-                      className="block w-full text-center bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
-                    >
-                      {completedIds.size > 0 ? t.course.continueLearning : t.course.startLearning}
-                    </Link>
-                    {completedIds.size > 0 && (
-                      <div className="mt-3">
-                        <div className="flex justify-between text-xs text-gray-500 mb-1">
-                          <span>{t.course.progress}</span>
-                          <span className="font-medium text-indigo-600">
-                            {Math.round((completedIds.size / allLessons.length) * 100)}%
-                          </span>
+              {/* Preview video card + enroll CTA (desktop) */}
+              <div className="lg:-mb-20">
+                <div className="overflow-hidden rounded-card border border-border bg-surface shadow-lift">
+                  <div className={`relative flex aspect-video items-center justify-center ${colors.bg}`}>
+                    <span className="flex h-14 w-14 items-center justify-center rounded-pill bg-surface/90 shadow-card">
+                      <Play className={`h-6 w-6 ${colors.text} ${dir === "rtl" ? "-scale-x-100" : ""}`} fill="currentColor" aria-hidden="true" />
+                    </span>
+                    <span className="absolute bottom-3 start-3 rounded-chip bg-ink/70 px-2 py-0.5 font-mono text-[11px] text-white">
+                      {t.course.previewVideo}
+                    </span>
+                  </div>
+                  <div className="p-5">
+                    {cta}
+                    {enrolled && completedIds.size > 0 && (
+                      <div className="mt-4">
+                        <div className="mb-1 flex justify-between text-[13px]">
+                          <span className="text-muted">{t.course.progress}</span>
+                          <span className="font-mono font-medium text-primary">{formatNumber(locale, progress)}%</span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-1.5">
-                          <div
-                            className="bg-indigo-600 h-1.5 rounded-full transition-all"
-                            style={{ width: `${Math.round((completedIds.size / allLessons.length) * 100)}%` }}
-                          />
-                        </div>
+                        <ProgressBar value={progress} label={t.course.progress} />
                       </div>
                     )}
-                  </>
-                ) : (
-                  <button
-                    onClick={() => { enroll(courseId); setEnrolled(true); }}
-                    className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
-                  >
-                    {t.course.enrollFree}
-                  </button>
-                )}
-                <div className="mt-4 text-sm text-gray-500 space-y-2">
-                  <div className="flex justify-between">
-                    <span>{t.course.level}</span>
-                    <span className="font-medium text-gray-700">{t.levels[course.level]}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>{t.course.lessons}</span>
-                    <span className="font-medium text-gray-700">{course.totalLessons}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>{t.course.hours}</span>
-                    <span className="font-medium text-gray-700">{course.totalHours}h</span>
+                    <dl className="mt-4 space-y-2 text-[13px]">
+                      <div className="flex justify-between">
+                        <dt className="text-muted">{t.course.level}</dt>
+                        <dd className="font-medium text-ink">{t.levels[course.level]}</dd>
+                      </div>
+                      <div className="flex justify-between">
+                        <dt className="text-muted">{t.course.lessons}</dt>
+                        <dd className="font-mono font-medium text-ink">{formatNumber(locale, course.totalLessons)}</dd>
+                      </div>
+                      <div className="flex justify-between">
+                        <dt className="text-muted">{t.course.hours}</dt>
+                        <dd className="font-mono font-medium text-ink">{formatNumber(locale, course.totalHours)}</dd>
+                      </div>
+                    </dl>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Curriculum */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">{t.course.curriculum}</h2>
-        <div className="space-y-4">
-          {course.chapters.map((chapter, chIdx) => (
-            <div key={chapter.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-              <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
-                <h3 className="font-semibold text-gray-900">
-                  {chIdx + 1}. {chapter.title[locale]}
-                </h3>
-                <p className="text-sm text-gray-500 mt-1">
-                  {chapter.lessons.length} {t.course.lessons}
-                </p>
-              </div>
-              <div className="divide-y divide-gray-100">
-                {chapter.lessons.map((lesson, lIdx) => {
-                  const done = completedIds.has(lesson.id);
-                  return (
-                    <Link
-                      key={lesson.id}
-                      href={enrolled ? `/course/${course.id}/lesson/${lesson.id}` : "#"}
-                      className={`flex items-center gap-4 px-6 py-4 ${enrolled ? "hover:bg-gray-50 cursor-pointer" : "opacity-75 cursor-default"} transition-colors`}
-                      onClick={(e) => { if (!enrolled) e.preventDefault(); }}
-                    >
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium flex-shrink-0 ${done ? "bg-green-100 text-green-600" : "bg-indigo-50 text-indigo-600"}`}>
-                        {done ? (
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                          </svg>
-                        ) : lIdx + 1}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className={`font-medium truncate ${done ? "text-gray-500 line-through" : "text-gray-900"}`}>
-                          {lesson.title[locale]}
-                        </p>
-                        <p className="text-sm text-gray-500 truncate">{lesson.description[locale]}</p>
-                      </div>
-                      <div className="flex items-center gap-3 text-sm text-gray-400 flex-shrink-0">
-                        {lesson.documents && lesson.documents.length > 0 && (
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                          </svg>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-8 py-10 lg:grid-cols-[1fr_360px]">
+            <div className="space-y-10">
+              {/* Ce que tu vas apprendre */}
+              <section aria-labelledby="outcomes-heading">
+                <h2 id="outcomes-heading" className="text-[22px] font-semibold text-ink">
+                  {t.course.whatYouWillLearn}
+                </h2>
+                <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+                  {extras.outcomes.map((outcome, i) => (
+                    <li key={i} className="flex items-start gap-3 rounded-card border border-border bg-surface p-4">
+                      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-pill bg-success-soft text-success">
+                        <Check className="h-3.5 w-3.5" aria-hidden="true" />
+                      </span>
+                      <span className="text-[15px] text-slate">{outcome[locale]}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+
+              {/* Chapter accordion */}
+              <section aria-labelledby="curriculum-heading">
+                <h2 id="curriculum-heading" className="text-[22px] font-semibold text-ink">
+                  {t.course.curriculum}
+                </h2>
+                <div className="mt-4 space-y-3">
+                  {course.chapters.map((chapter, chIdx) => {
+                    const open = openChapter === chapter.id;
+                    const hasQuiz = chapterHasQuiz(course.id, chapter.id);
+                    return (
+                      <div key={chapter.id} className="overflow-hidden rounded-card border border-border bg-surface">
+                        <button
+                          onClick={() => setOpenChapter(open ? null : chapter.id)}
+                          aria-expanded={open}
+                          className="flex min-h-14 w-full items-center gap-4 px-5 py-4 text-start transition-colors duration-[180ms] hover:bg-bg"
+                        >
+                          <span className="font-mono text-[13px] font-medium text-muted">
+                            {formatNumber(locale, chIdx + 1).padStart(2, "0")}
+                          </span>
+                          <span className="flex-1 text-[15px] font-semibold text-ink">{chapter.title[locale]}</span>
+                          <span className="font-mono text-[11px] text-faint">
+                            {formatNumber(locale, chapter.lessons.length)} {t.course.lessons}
+                          </span>
+                          <ChevronDown
+                            className={`h-5 w-5 text-muted transition-transform duration-[180ms] ${open ? "rotate-180" : ""}`}
+                            aria-hidden="true"
+                          />
+                        </button>
+                        {open && (
+                          <div className="border-t border-border-soft">
+                            {chapter.lessons.map((lesson, lIdx) => {
+                              const done = completedIds.has(lesson.id);
+                              const isPreview = chIdx === 0 && lIdx === 0;
+                              const accessible = enrolled || isPreview;
+                              return (
+                                <Link
+                                  key={lesson.id}
+                                  href={accessible ? `/course/${course.id}/lesson/${lesson.id}` : "#"}
+                                  onClick={(e) => {
+                                    if (!accessible) e.preventDefault();
+                                  }}
+                                  className={`flex min-h-12 items-center gap-3 px-5 py-3 transition-colors duration-[180ms] ${
+                                    accessible ? "hover:bg-bg" : "cursor-default opacity-60"
+                                  }`}
+                                >
+                                  <span
+                                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-pill text-[13px] font-medium ${
+                                      done ? "bg-success-soft text-success" : "bg-primary-soft text-primary-hover dark:text-primary"
+                                    }`}
+                                  >
+                                    {done ? <Check className="h-4 w-4" aria-hidden="true" /> : formatNumber(locale, lIdx + 1)}
+                                  </span>
+                                  <span className="min-w-0 flex-1">
+                                    <span className={`block truncate text-[15px] font-medium ${done ? "text-muted" : "text-ink"}`}>
+                                      {lesson.title[locale]}
+                                    </span>
+                                  </span>
+                                  {isPreview && !enrolled && (
+                                    <Badge className="bg-primary-soft text-primary-hover dark:text-primary">{t.course.preview}</Badge>
+                                  )}
+                                  {lesson.documents && lesson.documents.length > 0 && (
+                                    <FileText className="h-4 w-4 shrink-0 text-faint" aria-hidden="true" />
+                                  )}
+                                  <span className="shrink-0 font-mono text-[11px] text-faint">{lesson.duration}</span>
+                                  {!accessible && <Lock className="h-4 w-4 shrink-0 text-faint" aria-hidden="true" />}
+                                </Link>
+                              );
+                            })}
+                            {/* Quiz row in warning tint */}
+                            {hasQuiz && (
+                              <Link
+                                href={enrolled ? `/course/${course.id}/quiz/${chapter.id}` : "#"}
+                                onClick={(e) => {
+                                  if (!enrolled) e.preventDefault();
+                                }}
+                                className={`flex min-h-12 items-center gap-3 bg-warning-soft/50 px-5 py-3 transition-colors duration-[180ms] ${
+                                  enrolled ? "hover:bg-warning-soft" : "cursor-default opacity-60"
+                                }`}
+                              >
+                                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-pill bg-warning-soft text-warning">
+                                  <ClipboardCheck className="h-4 w-4" aria-hidden="true" />
+                                </span>
+                                <span className="flex-1 text-[15px] font-medium text-ink">
+                                  {t.course.quiz} — {chapter.title[locale]}
+                                </span>
+                                {!enrolled && <Lock className="h-4 w-4 shrink-0 text-faint" aria-hidden="true" />}
+                              </Link>
+                            )}
+                          </div>
                         )}
-                        <span>{lesson.duration}</span>
-                        {!enrolled && (
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                          </svg>
-                        )}
                       </div>
-                    </Link>
-                  );
-                })}
-              </div>
+                    );
+                  })}
+                </div>
+              </section>
+
+              {/* Ratings + reviews */}
+              {extras.reviews.length > 0 && (
+                <section aria-labelledby="reviews-heading">
+                  <h2 id="reviews-heading" className="text-[22px] font-semibold text-ink">
+                    {t.course.reviews}
+                  </h2>
+                  <div className="mt-4 grid gap-6 md:grid-cols-[220px_1fr]">
+                    {/* Histogram */}
+                    <div className="rounded-card border border-border bg-surface p-5">
+                      <p className="font-mono text-[30px] font-semibold text-ink">{formatNumber(locale, course.rating)}</p>
+                      <div className="mt-1 flex" aria-label={`${course.rating} / 5`}>
+                        {[1, 2, 3, 4, 5].map((s) => (
+                          <Star
+                            key={s}
+                            className={`h-4 w-4 ${s <= Math.round(course.rating) ? "fill-warning text-warning" : "text-mist"}`}
+                            aria-hidden="true"
+                          />
+                        ))}
+                      </div>
+                      <p className="mt-1 text-[13px] text-muted">
+                        {formatNumber(locale, course.studentCount)} {t.course.ratings}
+                      </p>
+                      <div className="mt-4 space-y-1.5">
+                        {histogram.map((h) => (
+                          <div key={h.stars} className="flex items-center gap-2">
+                            <span className="w-3 font-mono text-[11px] text-muted">{formatNumber(locale, h.stars)}</span>
+                            <div className="h-1.5 flex-1 overflow-hidden rounded-pill bg-mist">
+                              <div
+                                className="h-full rounded-pill bg-warning"
+                                style={{ width: `${Math.round((h.pct / histTotal) * 100) * 2.2}%` }}
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    {/* Review cards */}
+                    <div className="space-y-4">
+                      {extras.reviews.map((review, i) => (
+                        <div key={i} className="rounded-card border border-border bg-surface p-5">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[15px] font-semibold text-ink">{review.author}</span>
+                            <span className="flex" aria-label={`${review.rating} / 5`}>
+                              {[1, 2, 3, 4, 5].map((s) => (
+                                <Star
+                                  key={s}
+                                  className={`h-3.5 w-3.5 ${s <= review.rating ? "fill-warning text-warning" : "text-mist"}`}
+                                  aria-hidden="true"
+                                />
+                              ))}
+                            </span>
+                          </div>
+                          <p className="mt-2 text-[15px] leading-relaxed text-slate">{review.text[locale]}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </section>
+              )}
             </div>
-          ))}
+            <div aria-hidden="true" className="hidden lg:block" />
+          </div>
         </div>
-      </section>
+      </main>
+
+      {/* Sticky mobile CTA */}
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface p-4 lg:hidden">{cta}</div>
 
       <Footer />
     </div>

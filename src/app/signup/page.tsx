@@ -1,165 +1,216 @@
 "use client";
 
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Navbar } from "@/components/Navbar";
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { Mail, Lock, User, GraduationCap, Users, Check } from "lucide-react";
 import { useLocale } from "@/lib/locale-context";
 import { useAuth } from "@/lib/auth-context";
+import { Input } from "@/components/Input";
+import { Button } from "@/components/Button";
+
+type Role = "student" | "parent";
+
+function passwordStrength(pw: string): 0 | 1 | 2 | 3 {
+  if (!pw) return 0;
+  let score = 0;
+  if (pw.length >= 6) score++;
+  if (pw.length >= 10) score++;
+  if (/[0-9]/.test(pw) && /[a-zA-Z]/.test(pw)) score++;
+  return Math.min(score, 3) as 0 | 1 | 2 | 3;
+}
 
 export default function SignUpPage() {
   const { t } = useLocale();
   const { signup } = useAuth();
   const router = useRouter();
-
+  const [role, setRole] = useState<Role>("student");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string | undefined>>({});
+  const [formError, setFormError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const errorMessages: Record<string, string> = {
-    missing_fields: t.auth.missingFields,
-    email_taken: t.auth.emailTaken,
-    weak_password: t.auth.weakPassword,
+  const strength = passwordStrength(password);
+  const strengthLabels = ["", t.auth.strengthWeak, t.auth.strengthMedium, t.auth.strengthStrong];
+  const strengthColors = ["", "bg-error", "bg-warning", "bg-success"];
+
+  const validate = (field: string) => {
+    setFieldErrors((prev) => {
+      const next = { ...prev };
+      if (field === "name") next.name = name.trim() ? undefined : t.auth.missingFields;
+      if (field === "email") next.email = /\S+@\S+\.\S+/.test(email) ? undefined : t.auth.missingFields;
+      if (field === "password") next.password = password.length >= 6 ? undefined : t.auth.weakPassword;
+      if (field === "confirm") next.confirm = confirm === password ? undefined : t.auth.passwordMismatch;
+      return next;
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-
-    if (!name || !email || !password || !confirmPassword) {
-      setError(t.auth.missingFields);
+    if (!name.trim() || !email.trim() || !password) {
+      setFormError(t.auth.missingFields);
       return;
     }
-
-    if (password !== confirmPassword) {
-      setError(t.auth.passwordMismatch);
-      return;
-    }
-
     if (password.length < 6) {
-      setError(t.auth.weakPassword);
+      setFormError(t.auth.weakPassword);
       return;
     }
-
+    if (password !== confirm) {
+      setFormError(t.auth.passwordMismatch);
+      return;
+    }
+    setFormError("");
     setLoading(true);
-    try {
-      const result = await signup(name, email, password);
-      if (result.success) {
-        router.push("/my-courses");
-      } else {
-        setError(errorMessages[result.error || ""] || t.auth.missingFields);
-      }
-    } catch {
-      setError(t.auth.missingFields);
-    } finally {
-      setLoading(false);
+    const result = await signup(name, email, password);
+    setLoading(false);
+    if (result.success) {
+      router.push(role === "parent" ? "/parent" : "/onboarding");
+    } else {
+      setFormError(result.error === "email_taken" ? t.auth.emailTaken : t.auth.invalidCredentials);
     }
   };
 
+  const roles: { value: Role; icon: React.ReactNode; label: string; desc: string }[] = [
+    {
+      value: "student",
+      icon: <GraduationCap className="h-6 w-6" aria-hidden="true" />,
+      label: t.auth.iAmStudent,
+      desc: t.auth.iAmStudentDesc,
+    },
+    {
+      value: "parent",
+      icon: <Users className="h-6 w-6" aria-hidden="true" />,
+      label: t.auth.iAmParent,
+      desc: t.auth.iAmParentDesc,
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
+    <div className="flex min-h-screen items-center justify-center bg-bg px-4 py-10">
+      <div className="w-full max-w-md rounded-card bg-surface p-8 shadow-card">
+        <Link href="/" className="mb-6 flex items-center gap-2" aria-label="Layaida">
+          <Image src="/logo.png" alt="" width={32} height={32} className="rounded-chip" />
+          <span className="text-[17px] font-semibold lowercase text-ink">layaida</span>
+        </Link>
 
-      <main className="flex items-center justify-center px-4 py-16">
-        <div className="w-full max-w-md">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-            <div className="text-center mb-8">
-              <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center mx-auto mb-4" aria-hidden="true">
-                <span className="text-white font-bold text-xl">L</span>
-              </div>
-              <h1 className="text-2xl font-bold text-gray-900">{t.auth.signUp}</h1>
-            </div>
+        <h1 className="text-[22px] font-semibold text-ink">{t.auth.signUpTitle}</h1>
 
-            {error && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm" role="alert">
-                {error}
+        {/* Role cards, toggle like radios */}
+        <fieldset className="mt-5">
+          <legend className="mb-2 text-[13px] font-medium text-slate">{t.auth.whoAreYou}</legend>
+          <div className="grid grid-cols-2 gap-3" role="radiogroup" aria-label={t.auth.whoAreYou}>
+            {roles.map((r) => {
+              const active = role === r.value;
+              return (
+                <button
+                  key={r.value}
+                  type="button"
+                  role="radio"
+                  aria-checked={active}
+                  onClick={() => setRole(r.value)}
+                  className={`relative rounded-card border-[1.5px] p-4 text-start transition-all duration-[180ms] ${
+                    active ? "border-primary bg-primary-soft/50 shadow-card" : "border-mist hover:border-faint"
+                  }`}
+                >
+                  {active && (
+                    <span className="absolute end-2.5 top-2.5 flex h-5 w-5 items-center justify-center rounded-pill bg-primary text-white">
+                      <Check className="h-3.5 w-3.5" aria-hidden="true" />
+                    </span>
+                  )}
+                  <span className={active ? "text-primary" : "text-muted"}>{r.icon}</span>
+                  <span className="mt-2 block text-[15px] font-semibold text-ink">{r.label}</span>
+                  <span className="mt-0.5 block text-[13px] leading-snug text-muted">{r.desc}</span>
+                </button>
+              );
+            })}
+          </div>
+        </fieldset>
+
+        <form onSubmit={handleSubmit} className="mt-5 space-y-4" noValidate>
+          <Input
+            label={t.auth.fullName}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            onBlur={() => validate("name")}
+            error={fieldErrors.name}
+            icon={<User className="h-5 w-5" />}
+            autoComplete="name"
+            required
+          />
+          <Input
+            type="email"
+            label={t.auth.email}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            onBlur={() => validate("email")}
+            error={fieldErrors.email}
+            icon={<Mail className="h-5 w-5" />}
+            autoComplete="email"
+            required
+          />
+          <div>
+            <Input
+              type="password"
+              label={t.auth.password}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onBlur={() => validate("password")}
+              error={fieldErrors.password}
+              icon={<Lock className="h-5 w-5" />}
+              autoComplete="new-password"
+              required
+            />
+            {/* Live strength meter */}
+            {password && (
+              <div className="mt-2 flex items-center gap-3">
+                <div className="flex flex-1 gap-1.5" aria-hidden="true">
+                  {[1, 2, 3].map((step) => (
+                    <div
+                      key={step}
+                      className={`h-1.5 flex-1 rounded-pill transition-colors duration-[180ms] ${
+                        strength >= step ? strengthColors[strength] : "bg-mist"
+                      }`}
+                    />
+                  ))}
+                </div>
+                <span className="text-[13px] font-medium text-muted">{strengthLabels[strength]}</span>
               </div>
             )}
-
-            <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-              <div>
-                <label htmlFor="signup-name" className="block text-sm font-medium text-gray-700 mb-1">{t.auth.fullName}</label>
-                <input
-                  id="signup-name"
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
-                  autoComplete="name"
-                  required
-                />
-              </div>
-
-              <div>
-                <label htmlFor="signup-email" className="block text-sm font-medium text-gray-700 mb-1">{t.auth.email}</label>
-                <input
-                  id="signup-email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
-                  placeholder="email@example.com"
-                  autoComplete="email"
-                  required
-                />
-              </div>
-
-              <div>
-                <label htmlFor="signup-password" className="block text-sm font-medium text-gray-700 mb-1">{t.auth.password}</label>
-                <input
-                  id="signup-password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
-                  placeholder="********"
-                  autoComplete="new-password"
-                  minLength={6}
-                  required
-                />
-              </div>
-
-              <div>
-                <label htmlFor="signup-confirm-password" className="block text-sm font-medium text-gray-700 mb-1">{t.auth.confirmPassword}</label>
-                <input
-                  id="signup-confirm-password"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
-                  placeholder="********"
-                  autoComplete="new-password"
-                  minLength={6}
-                  required
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? (
-                  <svg className="w-5 h-5 animate-spin mx-auto" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-                  </svg>
-                ) : t.auth.signUp}
-              </button>
-            </form>
-
-            <p className="text-center text-sm text-gray-500 mt-6">
-              {t.auth.hasAccount}{" "}
-              <Link href="/signin" className="text-indigo-600 font-medium hover:text-indigo-700">
-                {t.auth.signIn}
-              </Link>
-            </p>
           </div>
-        </div>
-      </main>
+          <Input
+            type="password"
+            label={t.auth.confirmPassword}
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
+            onBlur={() => validate("confirm")}
+            error={fieldErrors.confirm}
+            icon={<Lock className="h-5 w-5" />}
+            autoComplete="new-password"
+            required
+          />
+
+          {formError && (
+            <p role="alert" className="rounded-input bg-error-soft px-4 py-3 text-[13px] font-medium text-error">
+              {formError}
+            </p>
+          )}
+
+          <Button type="submit" loading={loading} className="w-full">
+            {t.auth.signUp}
+          </Button>
+        </form>
+
+        <p className="mt-6 text-center text-[13px] text-muted">
+          {t.auth.hasAccount}{" "}
+          <Link href="/signin" className="font-semibold text-primary hover:underline">
+            {t.auth.signIn}
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }

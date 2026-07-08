@@ -2,92 +2,105 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { BookOpen, Trophy } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { CourseCard } from "@/components/CourseCard";
+import { EmptyState } from "@/components/EmptyState";
+import { ButtonLink } from "@/components/Button";
+import { Segmented } from "@/components/Tabs";
 import { useLocale } from "@/lib/locale-context";
 import { useAuth } from "@/lib/auth-context";
 import { getCourse, getAllLessons, Course } from "@/lib/data";
-import { getEnrolledCourseIds, getCourseProgress } from "@/lib/progress";
-import Link from "next/link";
+import { getEnrolledCourseIds, getCompletedLessonIds, migrateLegacyProgress } from "@/lib/progress";
+
+type TabValue = "inProgress" | "completed";
+type EnrolledCourse = { course: Course; progress: number };
 
 export default function MyCoursesPage() {
   const { t } = useLocale();
   const { user, isLoading } = useAuth();
   const router = useRouter();
-  const [enrolledCourses, setEnrolledCourses] = useState<Course[]>([]);
-  const [progressMap, setProgressMap] = useState<Record<string, number>>({});
+  const [tab, setTab] = useState<TabValue>("inProgress");
+  const [enrolled, setEnrolled] = useState<EnrolledCourse[] | null>(null);
 
   useEffect(() => {
-    if (!isLoading && !user) {
-      router.push("/signin");
-    }
+    if (!isLoading && !user) router.replace("/signin");
   }, [user, isLoading, router]);
 
   useEffect(() => {
-    const ids = getEnrolledCourseIds();
-    const enrolled = ids.map((id) => getCourse(id)).filter(Boolean) as Course[];
-    setEnrolledCourses(enrolled);
+    if (!user) return;
+    migrateLegacyProgress();
+    const items = getEnrolledCourseIds()
+      .map((id) => getCourse(id))
+      .filter((c): c is Course => Boolean(c))
+      .map((course) => {
+        const total = getAllLessons(course).length;
+        const done = getCompletedLessonIds(course.id).size;
+        return { course, progress: total ? Math.round((done / total) * 100) : 0 };
+      });
+    setEnrolled(items);
+  }, [user]);
 
-    const pm: Record<string, number> = {};
-    for (const course of enrolled) {
-      pm[course.id] = getCourseProgress(course.id, getAllLessons(course).length);
-    }
-    setProgressMap(pm);
-  }, []);
-
-  if (isLoading || !user) {
+  if (isLoading || !user || enrolled === null) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+      <div className="flex min-h-screen items-center justify-center bg-bg">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
       </div>
     );
   }
 
+  const inProgress = enrolled.filter((e) => e.progress < 100);
+  const completed = enrolled.filter((e) => e.progress === 100);
+  const visible = tab === "inProgress" ? inProgress : completed;
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="flex min-h-screen flex-col bg-bg">
+      <a href="#main" className="skip-to-content">
+        Skip to content
+      </a>
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">{t.nav.myCourses}</h1>
-          <p className="text-gray-500">
-            {t.auth.welcome}, <span className="font-medium text-gray-900">{user.name}</span>
-          </p>
+      <main id="main" className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <h1 className="text-[22px] font-semibold text-ink">{t.myCourses.title}</h1>
+          <Segmented
+            options={[
+              { value: "inProgress", label: t.myCourses.inProgress },
+              { value: "completed", label: t.myCourses.completedTab },
+            ]}
+            value={tab}
+            onChange={setTab}
+            label={t.myCourses.title}
+          />
         </div>
 
-        {enrolledCourses.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {enrolledCourses.map((course) => {
-              const pct = progressMap[course.id] ?? 0;
-              return (
-                <div key={course.id} className="relative">
-                  <CourseCard course={course} />
-                  <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 rounded-b-xl px-4 py-3">
-                    <div className="flex items-center justify-between text-sm mb-2">
-                      <span className="text-gray-500">{t.course.progress}</span>
-                      <span className="font-medium text-indigo-600">{pct}%</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className="bg-indigo-600 h-2 rounded-full transition-all" style={{ width: `${pct}%` }} />
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="text-center py-20">
-            <svg className="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-            </svg>
-            <p className="text-gray-500 text-lg">No enrolled courses yet</p>
-            <Link href="/" className="mt-4 inline-block text-indigo-600 font-medium hover:text-indigo-700">
-              {t.home.hero.cta}
-            </Link>
-          </div>
-        )}
-      </div>
+        <div className="mt-6">
+          {visible.length === 0 ? (
+            tab === "inProgress" ? (
+              <EmptyState
+                icon={<BookOpen className="h-6 w-6" />}
+                title={t.myCourses.emptyInProgressTitle}
+                body={t.myCourses.emptyInProgressBody}
+                action={<ButtonLink href="/courses">{t.myCourses.browseCatalog}</ButtonLink>}
+              />
+            ) : (
+              <EmptyState
+                icon={<Trophy className="h-6 w-6" />}
+                title={t.myCourses.emptyCompletedTitle}
+                body={t.myCourses.emptyCompletedBody}
+                action={<ButtonLink href="/courses">{t.myCourses.browseCatalog}</ButtonLink>}
+              />
+            )
+          ) : (
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {visible.map(({ course, progress }) => (
+                <CourseCard key={course.id} course={course} progress={progress} />
+              ))}
+            </div>
+          )}
+        </div>
+      </main>
 
       <Footer />
     </div>
