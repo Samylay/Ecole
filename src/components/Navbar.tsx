@@ -2,15 +2,33 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
+import { Globe, Menu, X, LogOut } from "lucide-react";
 import { useLocale } from "@/lib/locale-context";
 import { useAuth } from "@/lib/auth-context";
 import { Locale, localeNames, locales } from "@/lib/i18n";
+import { ButtonLink } from "./Button";
+
+function NavPill({ href, label, active }: { href: string; label: string; active: boolean }) {
+  return (
+    <Link
+      href={href}
+      aria-current={active ? "page" : undefined}
+      className={`rounded-pill px-4 py-2 text-[15px] font-medium transition-colors duration-[180ms] ${
+        active ? "bg-primary-soft text-primary-hover dark:text-primary" : "text-slate hover:bg-mist"
+      }`}
+    >
+      {label}
+    </Link>
+  );
+}
 
 export function Navbar() {
   const { locale, setLocale, t } = useLocale();
   const { user, logout } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
 
@@ -19,58 +37,67 @@ export function Navbar() {
     router.push("/");
   };
 
+  const links = user
+    ? [
+        { href: "/dashboard", label: t.nav.dashboard },
+        { href: "/courses", label: t.nav.courses },
+        { href: "/my-courses", label: t.nav.myCourses },
+        { href: "/profile", label: t.nav.profile },
+      ]
+    : [
+        { href: "/", label: t.nav.home },
+        { href: "/courses", label: t.nav.courses },
+      ];
+
   return (
-    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50" aria-label="Main navigation">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
+    <nav className="sticky top-0 z-50 border-b border-border bg-surface" aria-label="Main navigation">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2" aria-label="Layaida - Home">
-            <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center" aria-hidden="true">
-              <span className="text-white font-bold text-lg">L</span>
-            </div>
-            <span className="text-xl font-bold text-gray-900">Layaida</span>
+          <Link href={user ? "/dashboard" : "/"} className="flex items-center gap-2" aria-label="Layaida">
+            <Image src="/logo.png" alt="" width={32} height={32} className="rounded-chip" />
+            <span className="text-[17px] font-semibold lowercase text-ink">layaida</span>
           </Link>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-8">
-            <Link href="/" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">
-              {t.nav.home}
-            </Link>
-            {user && (
-              <>
-                <Link href="/#courses" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">
-                  {t.nav.courses}
-                </Link>
-                <Link href="/my-courses" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">
-                  {t.nav.myCourses}
-                </Link>
-              </>
-            )}
+          {/* Desktop nav pills */}
+          <div className="hidden items-center gap-1 md:flex">
+            {links.map((link) => (
+              <NavPill key={link.href} href={link.href} label={link.label} active={pathname === link.href} />
+            ))}
           </div>
 
           {/* Right side */}
-          <div className="hidden md:flex items-center gap-4">
-            {/* Language Switcher */}
+          <div className="hidden items-center gap-2 md:flex">
+            {/* Language switcher */}
             <div className="relative">
               <button
                 onClick={() => setLangOpen(!langOpen)}
-                className="flex items-center gap-1 text-sm text-gray-600 hover:text-indigo-600 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors"
+                className="flex min-h-11 items-center gap-1.5 rounded-pill px-3 text-[13px] font-medium text-slate transition-colors duration-[180ms] hover:bg-mist"
                 aria-expanded={langOpen}
                 aria-haspopup="listbox"
                 aria-label={`Language: ${localeNames[locale]}`}
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                </svg>
+                <Globe className="h-4 w-4" aria-hidden="true" />
                 {localeNames[locale]}
               </button>
               {langOpen && (
-                <div className="absolute right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg py-1 min-w-[120px]" role="listbox" aria-label="Select language">
+                <div
+                  className="absolute end-0 mt-1 min-w-[130px] rounded-input border border-border bg-surface py-1 shadow-lift"
+                  role="listbox"
+                  aria-label="Select language"
+                >
                   {locales.map((l: Locale) => (
                     <button
                       key={l}
-                      onClick={() => { setLocale(l); setLangOpen(false); }}
-                      className={`block w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${locale === l ? "text-indigo-600 font-medium" : "text-gray-700"}`}
+                      role="option"
+                      aria-selected={locale === l}
+                      onClick={() => {
+                        setLocale(l);
+                        setLangOpen(false);
+                      }}
+                      className={`block w-full px-4 py-2 text-start text-[13px] transition-colors hover:bg-mist ${
+                        locale === l ? "font-semibold text-primary" : "text-slate"
+                      }`}
                     >
                       {localeNames[l]}
                     </button>
@@ -80,115 +107,100 @@ export function Navbar() {
             </div>
 
             {user ? (
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
-                    <span className="text-indigo-700 font-semibold text-sm">
-                      {user.name.charAt(0).toUpperCase()}
-                    </span>
-                  </div>
-                  <span className="text-sm font-medium text-gray-700">{user.name}</span>
-                </div>
+              <div className="flex items-center gap-2">
+                <Link
+                  href="/profile"
+                  className="flex items-center gap-2 rounded-pill px-2 py-1.5 transition-colors hover:bg-mist"
+                  aria-label={t.nav.profile}
+                >
+                  <span className="flex h-8 w-8 items-center justify-center rounded-pill bg-primary-soft text-[13px] font-semibold text-primary-hover dark:text-primary">
+                    {user.name.charAt(0).toUpperCase()}
+                  </span>
+                  <span className="text-[13px] font-medium text-slate">{user.name}</span>
+                </Link>
                 <button
                   onClick={handleLogout}
-                  className="text-gray-500 hover:text-red-600 font-medium text-sm transition-colors"
+                  className="flex min-h-11 items-center gap-1.5 rounded-pill px-3 text-[13px] font-medium text-muted transition-colors duration-[180ms] hover:bg-error-soft hover:text-error"
                 >
+                  <LogOut className="h-4 w-4" aria-hidden="true" />
                   {t.auth.logout}
                 </button>
               </div>
             ) : (
               <>
-                <Link href="/signin" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">
+                <Link
+                  href="/signin"
+                  className="rounded-pill px-4 py-2 text-[15px] font-medium text-slate transition-colors duration-[180ms] hover:bg-mist"
+                >
                   {t.nav.signIn}
                 </Link>
-                <Link
-                  href="/signup"
-                  className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 font-medium transition-colors"
-                >
-                  {t.nav.signUp}
-                </Link>
+                <ButtonLink href="/signup">{t.nav.signUp}</ButtonLink>
               </>
             )}
           </div>
 
           {/* Mobile hamburger */}
           <button
-            className="md:hidden p-2 text-gray-600"
+            className="flex h-11 w-11 items-center justify-center rounded-pill text-slate transition-colors hover:bg-mist md:hidden"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-expanded={mobileOpen}
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              {mobileOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
+            {mobileOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden border-t border-gray-200 bg-white">
-          <div className="px-4 py-3 space-y-2">
-            <Link href="/" className="block py-2 text-gray-600 font-medium" onClick={() => setMobileOpen(false)}>
-              {t.nav.home}
-            </Link>
-            {user && (
-              <>
-                <Link href="/#courses" className="block py-2 text-gray-600 font-medium" onClick={() => setMobileOpen(false)}>
-                  {t.nav.courses}
-                </Link>
-                <Link href="/my-courses" className="block py-2 text-gray-600 font-medium" onClick={() => setMobileOpen(false)}>
-                  {t.nav.myCourses}
-                </Link>
-              </>
-            )}
-            <hr className="my-2" />
-            <div className="flex gap-2">
+        <div className="border-t border-border bg-surface md:hidden">
+          <div className="space-y-1 px-4 py-3">
+            {links.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`block rounded-input px-3 py-3 text-[15px] font-medium ${
+                  pathname === link.href ? "bg-primary-soft text-primary-hover dark:text-primary" : "text-slate"
+                }`}
+                onClick={() => setMobileOpen(false)}
+              >
+                {link.label}
+              </Link>
+            ))}
+            <hr className="my-2 border-border-soft" />
+            <div className="flex gap-2 px-1">
               {locales.map((l: Locale) => (
                 <button
                   key={l}
-                  onClick={() => { setLocale(l); }}
-                  className={`px-3 py-1 rounded text-sm ${locale === l ? "bg-indigo-100 text-indigo-700" : "text-gray-600"}`}
+                  onClick={() => setLocale(l)}
+                  className={`min-h-11 rounded-pill px-4 text-[13px] font-medium ${
+                    locale === l ? "bg-primary-soft text-primary-hover dark:text-primary" : "text-slate"
+                  }`}
                 >
                   {localeNames[l]}
                 </button>
               ))}
             </div>
-            <hr className="my-2" />
+            <hr className="my-2 border-border-soft" />
             {user ? (
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 py-2">
-                  <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
-                    <span className="text-indigo-700 font-semibold text-sm">
-                      {user.name.charAt(0).toUpperCase()}
-                    </span>
-                  </div>
-                  <span className="text-sm font-medium text-gray-700">{user.name}</span>
-                </div>
-                <button
-                  onClick={() => { handleLogout(); setMobileOpen(false); }}
-                  className="block w-full text-left py-2 text-red-600 font-medium"
-                >
-                  {t.auth.logout}
-                </button>
-              </div>
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setMobileOpen(false);
+                }}
+                className="block w-full rounded-input px-3 py-3 text-start text-[15px] font-medium text-error"
+              >
+                {t.auth.logout}
+              </button>
             ) : (
-              <>
-                <Link href="/signin" className="block py-2 text-gray-600 font-medium" onClick={() => setMobileOpen(false)}>
+              <div className="flex gap-3 px-1 py-2">
+                <ButtonLink href="/signin" variant="secondary" className="flex-1">
                   {t.nav.signIn}
-                </Link>
-                <Link
-                  href="/signup"
-                  className="block text-center bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium"
-                  onClick={() => setMobileOpen(false)}
-                >
+                </ButtonLink>
+                <ButtonLink href="/signup" className="flex-1">
                   {t.nav.signUp}
-                </Link>
-              </>
+                </ButtonLink>
+              </div>
             )}
           </div>
         </div>

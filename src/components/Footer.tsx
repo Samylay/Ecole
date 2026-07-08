@@ -1,47 +1,45 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useLocale } from "@/lib/locale-context";
 
 export function Footer() {
   const { t } = useLocale();
 
+  const links = [
+    { href: "#", label: t.footer.about },
+    { href: "#", label: t.footer.contact },
+    { href: "#", label: t.footer.terms },
+    { href: "#", label: t.footer.privacy },
+  ];
+
   return (
-    <footer className="bg-gray-900 text-gray-300" role="contentinfo">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Brand */}
-          <div className="md:col-span-2">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">L</span>
-              </div>
-              <span className="text-xl font-bold text-white">Layaida</span>
+    <footer className="mt-auto bg-ink text-bg dark:bg-surface dark:text-ink" role="contentinfo">
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
+          <div className="flex items-center gap-3">
+            <Image src="/logo.png" alt="" width={32} height={32} className="rounded-chip bg-surface p-0.5" />
+            <div>
+              <span className="block text-[17px] font-semibold lowercase">layaida</span>
+              <span className="block text-[13px] text-faint">{t.footer.tagline}</span>
             </div>
-            <p className="text-gray-400 max-w-md">{t.footer.tagline}</p>
           </div>
-
-          {/* Links */}
-          <div>
-            <h3 className="text-white font-semibold mb-4">Layaida</h3>
-            <ul className="space-y-2">
-              <li><Link href="/" className="hover:text-white transition-colors">{t.footer.about}</Link></li>
-              <li><Link href="/" className="hover:text-white transition-colors">{t.footer.contact}</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-white font-semibold mb-4">Legal</h3>
-            <ul className="space-y-2">
-              <li><Link href="/" className="hover:text-white transition-colors">{t.footer.terms}</Link></li>
-              <li><Link href="/" className="hover:text-white transition-colors">{t.footer.privacy}</Link></li>
-            </ul>
-          </div>
+          <nav className="flex flex-wrap gap-x-6 gap-y-2" aria-label="Footer">
+            {links.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="text-[13px] font-medium text-faint transition-colors duration-[180ms] hover:text-bg dark:hover:text-ink"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
         </div>
-
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm">
-          &copy; {new Date().getFullYear()} Layaida. All rights reserved.
-        </div>
+        <p className="mt-8 border-t border-faint/30 pt-6 text-[13px] text-faint">
+          © {new Date().getFullYear()} Layaida
+        </p>
       </div>
     </footer>
   );
