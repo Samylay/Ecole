@@ -2281,6 +2281,335 @@ export const quizzes: Record<string, Record<string, QuizQuestion[]>> = {
       },
     ],
   },
+  "math-trigonometry-301": {
+    ch1: [
+      {
+        id: "q1",
+        question: {
+          fr: "Combien de radians y a-t-il dans un tour complet (360°) ?",
+          en: "How many radians are in a full turn (360°)?",
+          ar: "كم راديان في دورة كاملة (360°)؟",
+        },
+        options: [
+          { fr: "π", en: "π", ar: "π" },
+          { fr: "2π", en: "2π", ar: "2π" },
+          { fr: "π/2", en: "π/2", ar: "π/2" },
+          { fr: "360π", en: "360π", ar: "360π" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Un tour complet correspond à 2π radians, soit 360°.",
+          en: "A full turn corresponds to 2π radians, i.e. 360°.",
+          ar: "الدورة الكاملة تقابل 2π راديان، أي 360°.",
+        },
+        lessonId: "l1",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "Sur le cercle unité, quel est le rayon ?",
+          en: "On the unit circle, what is the radius?",
+          ar: "على دائرة الوحدة، ما نصف القطر؟",
+        },
+        options: [
+          { fr: "0", en: "0", ar: "0" },
+          { fr: "1", en: "1", ar: "1" },
+          { fr: "π", en: "π", ar: "π" },
+          { fr: "2", en: "2", ar: "2" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Le cercle unité a par définition un rayon égal à 1.",
+          en: "The unit circle has, by definition, a radius equal to 1.",
+          ar: "دائرة الوحدة نصف قطرها يساوي 1 حسب التعريف.",
+        },
+        lessonId: "l2",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "Sur le cercle trigonométrique, cos(x) et sin(x) correspondent à…",
+          en: "On the trigonometric circle, cos(x) and sin(x) correspond to…",
+          ar: "على الدائرة المثلثية، يقابل cos(x) و sin(x)…",
+        },
+        options: [
+          { fr: "la longueur du rayon", en: "the length of the radius", ar: "طول نصف القطر" },
+          { fr: "l'abscisse et l'ordonnée du point associé à l'angle", en: "the x- and y-coordinates of the point associated with the angle", ar: "الإحداثي السيني والصادي للنقطة المرتبطة بالزاوية" },
+          { fr: "le périmètre du cercle", en: "the circle's perimeter", ar: "محيط الدائرة" },
+          { fr: "l'aire du cercle", en: "the circle's area", ar: "مساحة الدائرة" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Pour un angle x, le point correspondant sur le cercle unité a pour coordonnées (cos(x), sin(x)).",
+          en: "For an angle x, the corresponding point on the unit circle has coordinates (cos(x), sin(x)).",
+          ar: "لزاوية x، للنقطة المقابلة على دائرة الوحدة إحداثيات (cos(x), sin(x)).",
+        },
+        lessonId: "l3",
+      },
+    ],
+    ch2: [
+      {
+        id: "q1",
+        question: {
+          fr: "Quelle est la période de la fonction cosinus ?",
+          en: "What is the period of the cosine function?",
+          ar: "ما دورة دالة جيب التمام؟",
+        },
+        options: [
+          { fr: "π", en: "π", ar: "π" },
+          { fr: "2π", en: "2π", ar: "2π" },
+          { fr: "π/2", en: "π/2", ar: "π/2" },
+          { fr: "4π", en: "4π", ar: "4π" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "La fonction cosinus se répète tous les 2π : c'est sa période.",
+          en: "The cosine function repeats every 2π: that's its period.",
+          ar: "تتكرر دالة جيب التمام كل 2π: وهي دورتها.",
+        },
+        lessonId: "l4",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "La fonction sinus est-elle symétrique par rapport à l'origine ?",
+          en: "Is the sine function symmetric about the origin?",
+          ar: "هل دالة الجيب متناظرة بالنسبة للمبدأ؟",
+        },
+        options: [
+          { fr: "Oui, elle est impaire : sin(−x) = −sin(x)", en: "Yes, it's odd: sin(−x) = −sin(x)", ar: "نعم، إنها فردية: sin(−x) = −sin(x)" },
+          { fr: "Non, elle est paire", en: "No, it's even", ar: "لا، إنها زوجية" },
+          { fr: "Elle n'a aucune symétrie", en: "It has no symmetry", ar: "ليس لها أي تناظر" },
+          { fr: "Elle est symétrique par rapport à l'axe des y", en: "It's symmetric about the y-axis", ar: "متناظرة بالنسبة لمحور y" },
+        ],
+        correctIndex: 0,
+        explanation: {
+          fr: "sin est une fonction impaire : sin(−x) = −sin(x), symétrique par rapport à l'origine.",
+          en: "sin is an odd function: sin(−x) = −sin(x), symmetric about the origin.",
+          ar: "الجيب دالة فردية: sin(−x) = −sin(x)، متناظرة بالنسبة للمبدأ.",
+        },
+        lessonId: "l5",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "La tangente d'un angle est définie comme…",
+          en: "The tangent of an angle is defined as…",
+          ar: "يُعرَّف ظل زاوية بأنه…",
+        },
+        options: [
+          { fr: "sin(x) + cos(x)", en: "sin(x) + cos(x)", ar: "sin(x) + cos(x)" },
+          { fr: "sin(x) / cos(x)", en: "sin(x) / cos(x)", ar: "sin(x) / cos(x)" },
+          { fr: "cos(x) / sin(x)", en: "cos(x) / sin(x)", ar: "cos(x) / sin(x)" },
+          { fr: "sin(x) × cos(x)", en: "sin(x) × cos(x)", ar: "sin(x) × cos(x)" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "tan(x) = sin(x) / cos(x), non définie quand cos(x) = 0.",
+          en: "tan(x) = sin(x) / cos(x), undefined when cos(x) = 0.",
+          ar: "tan(x) = sin(x) / cos(x)، غير معرّفة عندما cos(x) = 0.",
+        },
+        lessonId: "l6",
+      },
+    ],
+    ch3: [
+      {
+        id: "q1",
+        question: {
+          fr: "Combien de solutions a l'équation sin(x) = 0,5 sur [0, 2π[ ?",
+          en: "How many solutions does sin(x) = 0.5 have on [0, 2π[?",
+          ar: "كم حلاً لمعادلة sin(x) = 0.5 على [0, 2π[؟",
+        },
+        options: [
+          { fr: "0", en: "0", ar: "0" },
+          { fr: "1", en: "1", ar: "1" },
+          { fr: "2", en: "2", ar: "2" },
+          { fr: "4", en: "4", ar: "4" },
+        ],
+        correctIndex: 2,
+        explanation: {
+          fr: "sin(x) = 0,5 a deux solutions sur un tour complet (π/6 et 5π/6), car le sinus atteint la même valeur en deux points symétriques.",
+          en: "sin(x) = 0.5 has two solutions over a full turn (π/6 and 5π/6), since sine reaches the same value at two symmetric points.",
+          ar: "لمعادلة sin(x) = 0.5 حلان في دورة كاملة (π/6 و5π/6)، لأن الجيب يبلغ نفس القيمة في نقطتين متناظرتين.",
+        },
+        lessonId: "l7",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "Pour résoudre un problème de géométrie plane avec des angles, quelle branche des mathématiques utilise-t-on ?",
+          en: "To solve a plane geometry problem involving angles, which branch of math is used?",
+          ar: "لحل مسألة في الهندسة المستوية تتضمن زوايا، أي فرع من الرياضيات يُستخدم؟",
+        },
+        options: [
+          { fr: "L'algèbre linéaire", en: "Linear algebra", ar: "الجبر الخطي" },
+          { fr: "La trigonométrie", en: "Trigonometry", ar: "حساب المثلثات" },
+          { fr: "Les statistiques", en: "Statistics", ar: "الإحصاء" },
+          { fr: "L'arithmétique modulaire", en: "Modular arithmetic", ar: "الحساب النمطي" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "La trigonométrie relie angles et longueurs, indispensable pour ces problèmes géométriques.",
+          en: "Trigonometry links angles and lengths, essential for these geometry problems.",
+          ar: "يربط حساب المثلثات بين الزوايا والأطوال، وهو ضروري لهذه المسائل الهندسية.",
+        },
+        lessonId: "l8",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "cos(0) est égal à…",
+          en: "cos(0) equals…",
+          ar: "cos(0) يساوي…",
+        },
+        options: [
+          { fr: "0", en: "0", ar: "0" },
+          { fr: "1", en: "1", ar: "1" },
+          { fr: "−1", en: "−1", ar: "−1" },
+          { fr: "π", en: "π", ar: "π" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "À l'angle 0, le point sur le cercle unité est (1, 0), donc cos(0) = 1.",
+          en: "At angle 0, the point on the unit circle is (1, 0), so cos(0) = 1.",
+          ar: "عند الزاوية 0، تكون النقطة على دائرة الوحدة (1, 0)، إذن cos(0) = 1.",
+        },
+        lessonId: "l7",
+      },
+    ],
+  },
+  "physics-electricity-101": {
+    ch1: [
+      {
+        id: "q1",
+        question: {
+          fr: "Le courant électrique est un déplacement de…",
+          en: "Electric current is a flow of…",
+          ar: "التيار الكهربائي هو انتقال…",
+        },
+        options: [
+          { fr: "chaleur", en: "heat", ar: "الحرارة" },
+          { fr: "charges électriques", en: "electric charges", ar: "الشحنات الكهربائية" },
+          { fr: "lumière", en: "light", ar: "الضوء" },
+          { fr: "sons", en: "sound", ar: "الصوت" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Le courant électrique est un déplacement ordonné de charges électriques (électrons) dans un circuit.",
+          en: "Electric current is an ordered flow of electric charges (electrons) in a circuit.",
+          ar: "التيار الكهربائي هو انتقال منظم للشحنات الكهربائية (الإلكترونات) في دائرة.",
+        },
+        lessonId: "l1",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "Selon la loi d'Ohm U = R × I, si R = 10 Ω et I = 2 A, que vaut U ?",
+          en: "According to Ohm's law U = R × I, if R = 10 Ω and I = 2 A, what is U?",
+          ar: "حسب قانون أوم U = R × I، إذا كانت R = 10 Ω و I = 2 A، فما قيمة U؟",
+        },
+        options: [
+          { fr: "5 V", en: "5 V", ar: "5 V" },
+          { fr: "12 V", en: "12 V", ar: "12 V" },
+          { fr: "20 V", en: "20 V", ar: "20 V" },
+          { fr: "0.2 V", en: "0.2 V", ar: "0.2 V" },
+        ],
+        correctIndex: 2,
+        explanation: {
+          fr: "U = R × I = 10 × 2 = 20 V.",
+          en: "U = R × I = 10 × 2 = 20 V.",
+          ar: "U = R × I = 10 × 2 = 20 V.",
+        },
+        lessonId: "l2",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "Dans la loi d'Ohm, que représente la lettre R ?",
+          en: "In Ohm's law, what does the letter R represent?",
+          ar: "في قانون أوم، ماذا يمثل الحرف R؟",
+        },
+        options: [
+          { fr: "La tension", en: "Voltage", ar: "الجهد" },
+          { fr: "L'intensité", en: "Current", ar: "التيار" },
+          { fr: "La résistance", en: "Resistance", ar: "المقاومة" },
+          { fr: "La puissance", en: "Power", ar: "القدرة" },
+        ],
+        correctIndex: 2,
+        explanation: {
+          fr: "R représente la résistance électrique, mesurée en ohms (Ω).",
+          en: "R represents electrical resistance, measured in ohms (Ω).",
+          ar: "يمثل R المقاومة الكهربائية، وتُقاس بالأوم (Ω).",
+        },
+        lessonId: "l2",
+      },
+    ],
+    ch2: [
+      {
+        id: "q1",
+        question: {
+          fr: "Dans un circuit en série, l'intensité du courant est…",
+          en: "In a series circuit, the current is…",
+          ar: "في دائرة التوالي، شدة التيار…",
+        },
+        options: [
+          { fr: "différente à chaque point", en: "different at every point", ar: "مختلفة في كل نقطة" },
+          { fr: "la même en tout point du circuit", en: "the same at every point in the circuit", ar: "نفسها في كل نقطة من الدائرة" },
+          { fr: "nulle", en: "zero", ar: "معدومة" },
+          { fr: "infinie", en: "infinite", ar: "لانهائية" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "En série, il n'y a qu'un seul chemin pour le courant : l'intensité est la même partout.",
+          en: "In series, there is only one path for the current: the intensity is the same everywhere.",
+          ar: "في التوالي، هناك مسار واحد فقط للتيار: الشدة نفسها في كل مكان.",
+        },
+        lessonId: "l3",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "Dans un circuit en parallèle, la tension aux bornes de chaque branche est…",
+          en: "In a parallel circuit, the voltage across each branch is…",
+          ar: "في دائرة التوازي، الجهد بين طرفي كل فرع…",
+        },
+        options: [
+          { fr: "la même pour toutes les branches", en: "the same for every branch", ar: "نفسه لكل الفروع" },
+          { fr: "différente selon la longueur du fil", en: "different depending on wire length", ar: "مختلف حسب طول السلك" },
+          { fr: "toujours nulle", en: "always zero", ar: "دائماً معدوم" },
+          { fr: "divisée entre les branches", en: "split between branches", ar: "موزع بين الفروع" },
+        ],
+        correctIndex: 0,
+        explanation: {
+          fr: "En parallèle, toutes les branches partagent la même tension aux bornes.",
+          en: "In parallel, all branches share the same voltage across their terminals.",
+          ar: "في التوازي، تتشارك كل الفروع نفس الجهد بين طرفيها.",
+        },
+        lessonId: "l4",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "La puissance électrique P consommée par un appareil se calcule par…",
+          en: "The electrical power P consumed by a device is calculated by…",
+          ar: "تُحسب القدرة الكهربائية P التي يستهلكها جهاز بـ…",
+        },
+        options: [
+          { fr: "P = U + I", en: "P = U + I", ar: "P = U + I" },
+          { fr: "P = U × I", en: "P = U × I", ar: "P = U × I" },
+          { fr: "P = U / I", en: "P = U / I", ar: "P = U / I" },
+          { fr: "P = U − I", en: "P = U − I", ar: "P = U − I" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "La puissance électrique est le produit de la tension par l'intensité : P = U × I (en Watts).",
+          en: "Electrical power is the product of voltage and current: P = U × I (in Watts).",
+          ar: "القدرة الكهربائية هي جداء الجهد في التيار: P = U × I (بالواط).",
+        },
+        lessonId: "l5",
+      },
+    ],
+  },
 };
 
 export function getQuiz(courseId: string, chapterId: string): QuizQuestion[] | null {
