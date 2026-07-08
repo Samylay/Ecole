@@ -1886,6 +1886,400 @@ export const quizzes: Record<string, Record<string, QuizQuestion[]>> = {
         lessonId: "l1",
       },
     ],
+    ch2: [
+      {
+        id: "q1",
+        question: {
+          fr: "Combien de cellules filles produit une mitose ?",
+          en: "How many daughter cells does mitosis produce?",
+          ar: "كم خلية بنت ينتج الانقسام المتساوي؟",
+        },
+        options: [
+          { fr: "1", en: "1", ar: "1" },
+          { fr: "2 identiques", en: "2 identical cells", ar: "2 متطابقتين" },
+          { fr: "4 différentes", en: "4 different cells", ar: "4 مختلفة" },
+          { fr: "0", en: "0", ar: "0" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "La mitose produit 2 cellules filles génétiquement identiques à la cellule mère, utile pour la croissance.",
+          en: "Mitosis produces 2 daughter cells genetically identical to the parent cell, used for growth.",
+          ar: "ينتج الانقسام المتساوي خليتين بنتين متطابقتين وراثياً مع الخلية الأم، وهو مفيد للنمو.",
+        },
+        lessonId: "l3",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "Quel est le rôle principal de la méiose ?",
+          en: "What is the main role of meiosis?",
+          ar: "ما الدور الرئيسي للانقسام المنصف؟",
+        },
+        options: [
+          { fr: "Faire grandir un tissu", en: "Grow tissue", ar: "تنمية نسيج" },
+          { fr: "Réparer une blessure", en: "Repair a wound", ar: "إصلاح جرح" },
+          { fr: "Former les gamètes (cellules reproductrices)", en: "Form gametes (reproductive cells)", ar: "تكوين الأمشاج (الخلايا التناسلية)" },
+          { fr: "Digérer les nutriments", en: "Digest nutrients", ar: "هضم المغذيات" },
+        ],
+        correctIndex: 2,
+        explanation: {
+          fr: "La méiose produit des gamètes (ovules, spermatozoïdes) avec la moitié du nombre de chromosomes.",
+          en: "Meiosis produces gametes (eggs, sperm) with half the number of chromosomes.",
+          ar: "ينتج الانقسام المنصف الأمشاج (البويضات والحيوانات المنوية) بنصف عدد الصبغيات.",
+        },
+        lessonId: "l4",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "Quelles sont les grandes étapes du cycle cellulaire ?",
+          en: "What are the main phases of the cell cycle?",
+          ar: "ما هي المراحل الكبرى لدورة الخلية؟",
+        },
+        options: [
+          { fr: "Interphase, mitose, cytocinèse", en: "Interphase, mitosis, cytokinesis", ar: "الطور البيني، الانقسام، الانتواء" },
+          { fr: "Digestion, respiration, excrétion", en: "Digestion, respiration, excretion", ar: "الهضم، التنفس، الإخراج" },
+          { fr: "Réflexion, réfraction, diffraction", en: "Reflection, refraction, diffraction", ar: "الانعكاس، الانكسار، الحيود" },
+          { fr: "Naissance, croissance, mort", en: "Birth, growth, death", ar: "الولادة، النمو، الموت" },
+        ],
+        correctIndex: 0,
+        explanation: {
+          fr: "Le cycle cellulaire alterne l'interphase (croissance, réplication de l'ADN), la mitose (division du noyau) et la cytocinèse (division du cytoplasme).",
+          en: "The cell cycle alternates interphase (growth, DNA replication), mitosis (nuclear division), and cytokinesis (cytoplasm division).",
+          ar: "تتناوب دورة الخلية بين الطور البيني (النمو وتضاعف الحمض النووي) والانقسام المتساوي (انقسام النواة) والانتواء (انقسام السيتوبلازم).",
+        },
+        lessonId: "l5",
+      },
+    ],
+  },
+  "math-geometry-201": {
+    ch1: [
+      {
+        id: "q1",
+        question: {
+          fr: "Un triangle avec trois côtés de longueurs différentes est appelé…",
+          en: "A triangle with three sides of different lengths is called…",
+          ar: "المثلث الذي أضلاعه الثلاثة مختلفة الأطوال يسمى…",
+        },
+        options: [
+          { fr: "isocèle", en: "isosceles", ar: "متساوي الساقين" },
+          { fr: "équilatéral", en: "equilateral", ar: "متساوي الأضلاع" },
+          { fr: "scalène", en: "scalene", ar: "مختلف الأضلاع" },
+          { fr: "rectangle", en: "right", ar: "قائم الزاوية" },
+        ],
+        correctIndex: 2,
+        explanation: {
+          fr: "Un triangle scalène a trois côtés de longueurs toutes différentes.",
+          en: "A scalene triangle has three sides that are all different lengths.",
+          ar: "المثلث المختلف الأضلاع له ثلاثة أضلاع كلها مختلفة الطول.",
+        },
+        lessonId: "l1",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "Un triangle rectangle a un côté de 3 cm et un autre de 4 cm formant l'angle droit. Quelle est la longueur de l'hypoténuse ?",
+          en: "A right triangle has legs of 3 cm and 4 cm. What is the length of the hypotenuse?",
+          ar: "مثلث قائم الزاوية له ضلعان قائمان طولهما 3 سم و4 سم. ما طول الوتر؟",
+        },
+        options: [
+          { fr: "5 cm", en: "5 cm", ar: "5 سم" },
+          { fr: "7 cm", en: "7 cm", ar: "7 سم" },
+          { fr: "12 cm", en: "12 cm", ar: "12 سم" },
+          { fr: "25 cm", en: "25 cm", ar: "25 سم" },
+        ],
+        correctIndex: 0,
+        explanation: {
+          fr: "Pythagore : hyp² = 3² + 4² = 9 + 16 = 25, donc hyp = 5 cm.",
+          en: "Pythagoras: hyp² = 3² + 4² = 9 + 16 = 25, so hyp = 5 cm.",
+          ar: "فيثاغورس: الوتر² = 3² + 4² = 9 + 16 = 25، إذن الوتر = 5 سم.",
+        },
+        lessonId: "l2",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "Le théorème de Pythagore s'applique à…",
+          en: "The Pythagorean theorem applies to…",
+          ar: "تُطبَّق نظرية فيثاغورس على…",
+        },
+        options: [
+          { fr: "tout triangle", en: "any triangle", ar: "أي مثلث" },
+          { fr: "un triangle rectangle uniquement", en: "a right triangle only", ar: "المثلث القائم فقط" },
+          { fr: "un cercle", en: "a circle", ar: "دائرة" },
+          { fr: "un carré uniquement", en: "a square only", ar: "المربع فقط" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Le théorème de Pythagore relie les côtés d'un triangle rectangle : il ne s'applique qu'à ce cas.",
+          en: "The Pythagorean theorem relates the sides of a right triangle: it only applies to that case.",
+          ar: "تربط نظرية فيثاغورس بين أضلاع المثلث القائم: لا تُطبَّق إلا على هذه الحالة.",
+        },
+        lessonId: "l2",
+      },
+    ],
+    ch2: [
+      {
+        id: "q1",
+        question: {
+          fr: "Comment appelle-t-on un segment reliant le centre d'un cercle à un point du cercle ?",
+          en: "What is a segment connecting a circle's center to a point on the circle called?",
+          ar: "ماذا يسمى القطعة التي تصل مركز الدائرة بنقطة عليها؟",
+        },
+        options: [
+          { fr: "Le diamètre", en: "The diameter", ar: "القطر" },
+          { fr: "Le rayon", en: "The radius", ar: "نصف القطر" },
+          { fr: "La corde", en: "The chord", ar: "الوتر" },
+          { fr: "L'arc", en: "The arc", ar: "القوس" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Le rayon relie le centre à un point du cercle ; le diamètre traverse le cercle de part en part (2 rayons).",
+          en: "The radius connects the center to a point on the circle; the diameter crosses the whole circle (2 radii).",
+          ar: "نصف القطر يصل المركز بنقطة على الدائرة؛ القطر يعبر الدائرة بأكملها (نصفا قطر).",
+        },
+        lessonId: "l3",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "Quelle est l'aire d'un cercle de rayon 4 cm (π ≈ 3,14) ?",
+          en: "What is the area of a circle with radius 4 cm (π ≈ 3.14)?",
+          ar: "ما مساحة دائرة نصف قطرها 4 سم (π ≈ 3.14)؟",
+        },
+        options: [
+          { fr: "≈ 12,56 cm²", en: "≈ 12.56 cm²", ar: "≈ 12.56 سم²" },
+          { fr: "≈ 25,12 cm²", en: "≈ 25.12 cm²", ar: "≈ 25.12 سم²" },
+          { fr: "≈ 50,24 cm²", en: "≈ 50.24 cm²", ar: "≈ 50.24 سم²" },
+          { fr: "≈ 16 cm²", en: "≈ 16 cm²", ar: "≈ 16 سم²" },
+        ],
+        correctIndex: 2,
+        explanation: {
+          fr: "Aire = πr² = 3,14 × 4² = 3,14 × 16 ≈ 50,24 cm².",
+          en: "Area = πr² = 3.14 × 4² = 3.14 × 16 ≈ 50.24 cm².",
+          ar: "المساحة = πr² = 3.14 × 4² = 3.14 × 16 ≈ 50.24 سم².",
+        },
+        lessonId: "l4",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "Le théorème de Thalès permet de calculer…",
+          en: "Thales' theorem allows you to calculate…",
+          ar: "تتيح نظرية طاليس حساب…",
+        },
+        options: [
+          { fr: "des angles uniquement", en: "angles only", ar: "الزوايا فقط" },
+          { fr: "des longueurs dans des configurations de droites parallèles", en: "lengths in configurations with parallel lines", ar: "أطوال في أشكال ذات مستقيمات متوازية" },
+          { fr: "des aires de cercles", en: "circle areas", ar: "مساحات الدوائر" },
+          { fr: "des volumes", en: "volumes", ar: "الحجوم" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Thalès relie les longueurs de segments coupés par des droites parallèles, très utile pour calculer une longueur manquante.",
+          en: "Thales relates the lengths of segments cut by parallel lines, useful for finding a missing length.",
+          ar: "تربط نظرية طاليس بين أطوال القطع المقطوعة بمستقيمات متوازية، وهي مفيدة لحساب طول مجهول.",
+        },
+        lessonId: "l5",
+      },
+    ],
+    ch3: [
+      {
+        id: "q1",
+        question: {
+          fr: "Quels outils utilise-t-on pour des constructions géométriques précises ?",
+          en: "What tools are used for precise geometric constructions?",
+          ar: "ما الأدوات المستخدمة للإنشاءات الهندسية الدقيقة؟",
+        },
+        options: [
+          { fr: "La règle et le compas", en: "Ruler and compass", ar: "المسطرة والبرجل" },
+          { fr: "La calculatrice uniquement", en: "A calculator only", ar: "الآلة الحاسبة فقط" },
+          { fr: "Un rapporteur cassé", en: "A broken protractor", ar: "منقلة مكسورة" },
+          { fr: "Aucun outil", en: "No tools", ar: "بدون أدوات" },
+        ],
+        correctIndex: 0,
+        explanation: {
+          fr: "La règle (non graduée) et le compas permettent des constructions géométriques exactes.",
+          en: "The (ungraduated) ruler and compass allow exact geometric constructions.",
+          ar: "تسمح المسطرة (غير المدرجة) والبرجل بإنشاءات هندسية دقيقة.",
+        },
+        lessonId: "l6",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "Pour résoudre un problème géométrique complexe, il est utile de…",
+          en: "To solve a complex geometry problem, it helps to…",
+          ar: "لحل مسألة هندسية معقدة، من المفيد…",
+        },
+        options: [
+          { fr: "deviner la réponse", en: "guess the answer", ar: "تخمين الجواب" },
+          { fr: "combiner plusieurs théorèmes (Pythagore, Thalès…)", en: "combine several theorems (Pythagoras, Thales…)", ar: "الجمع بين عدة نظريات (فيثاغورس، طاليس…)" },
+          { fr: "ignorer les données", en: "ignore the given data", ar: "تجاهل المعطيات" },
+          { fr: "changer les unités au hasard", en: "randomly change units", ar: "تغيير الوحدات عشوائياً" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Les problèmes complexes combinent souvent plusieurs théorèmes pour arriver à la solution.",
+          en: "Complex problems often combine several theorems to reach the solution.",
+          ar: "غالباً ما تجمع المسائل المعقدة عدة نظريات للوصول إلى الحل.",
+        },
+        lessonId: "l7",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "Un triangle équilatéral a tous ses angles égaux à…",
+          en: "An equilateral triangle has all angles equal to…",
+          ar: "المثلث متساوي الأضلاع له زوايا كلها تساوي…",
+        },
+        options: [
+          { fr: "90°", en: "90°", ar: "90°" },
+          { fr: "45°", en: "45°", ar: "45°" },
+          { fr: "60°", en: "60°", ar: "60°" },
+          { fr: "120°", en: "120°", ar: "120°" },
+        ],
+        correctIndex: 2,
+        explanation: {
+          fr: "La somme des angles d'un triangle vaut 180° ; répartie également, chaque angle vaut 60°.",
+          en: "The angles of a triangle sum to 180°; split equally, each angle is 60°.",
+          ar: "مجموع زوايا المثلث 180°؛ موزعة بالتساوي، كل زاوية تساوي 60°.",
+        },
+        lessonId: "l6",
+      },
+    ],
+  },
+  "math-statistics-102": {
+    ch1: [
+      {
+        id: "q1",
+        question: {
+          fr: "À quoi sert la statistique ?",
+          en: "What is statistics used for?",
+          ar: "لماذا يستخدم الإحصاء؟",
+        },
+        options: [
+          { fr: "À résoudre des équations", en: "To solve equations", ar: "لحل المعادلات" },
+          { fr: "À collecter, organiser et interpréter des données", en: "To collect, organize, and interpret data", ar: "لجمع البيانات وتنظيمها وتفسيرها" },
+          { fr: "À dessiner des figures géométriques", en: "To draw geometric figures", ar: "لرسم أشكال هندسية" },
+          { fr: "À mesurer des angles", en: "To measure angles", ar: "لقياس الزوايا" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "La statistique permet de collecter, organiser et interpréter des données pour en tirer des informations utiles.",
+          en: "Statistics lets you collect, organize, and interpret data to draw useful conclusions.",
+          ar: "يتيح الإحصاء جمع البيانات وتنظيمها وتفسيرها لاستخلاص معلومات مفيدة.",
+        },
+        lessonId: "l1",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "Quel outil visuel représente le mieux la répartition de données par catégories ?",
+          en: "Which visual tool best represents the distribution of data by category?",
+          ar: "أي أداة بصرية تمثل توزيع البيانات حسب الفئات بشكل أفضل؟",
+        },
+        options: [
+          { fr: "Un histogramme ou diagramme", en: "A histogram or diagram", ar: "مدرج تكراري أو مخطط" },
+          { fr: "Une phrase", en: "A sentence", ar: "جملة" },
+          { fr: "Une équation", en: "An equation", ar: "معادلة" },
+          { fr: "Un angle", en: "An angle", ar: "زاوية" },
+        ],
+        correctIndex: 0,
+        explanation: {
+          fr: "Les histogrammes et diagrammes rendent visuelle la répartition de données par catégories.",
+          en: "Histograms and diagrams make the distribution of data by category visual.",
+          ar: "تجعل المدرجات التكرارية والمخططات توزيع البيانات حسب الفئات مرئياً.",
+        },
+        lessonId: "l2",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "Sur 20 élèves, 5 ont eu la note maximale. Quelle est la fréquence relative en pourcentage ?",
+          en: "Out of 20 students, 5 got the top grade. What is the relative frequency as a percentage?",
+          ar: "من بين 20 تلميذاً، حصل 5 على العلامة القصوى. ما التكرار النسبي بالنسبة المئوية؟",
+        },
+        options: [
+          { fr: "5%", en: "5%", ar: "5%" },
+          { fr: "20%", en: "20%", ar: "20%" },
+          { fr: "25%", en: "25%", ar: "25%" },
+          { fr: "50%", en: "50%", ar: "50%" },
+        ],
+        correctIndex: 2,
+        explanation: {
+          fr: "Fréquence relative = 5 / 20 = 0,25, soit 25%.",
+          en: "Relative frequency = 5 / 20 = 0.25, i.e. 25%.",
+          ar: "التكرار النسبي = 5 / 20 = 0.25، أي 25%.",
+        },
+        lessonId: "l3",
+      },
+    ],
+    ch2: [
+      {
+        id: "q1",
+        question: {
+          fr: "Comment calcule-t-on la moyenne arithmétique d'une série ?",
+          en: "How do you calculate the arithmetic mean of a dataset?",
+          ar: "كيف يُحسب المتوسط الحسابي لسلسلة؟",
+        },
+        options: [
+          { fr: "En prenant la valeur la plus fréquente", en: "By taking the most frequent value", ar: "بأخذ القيمة الأكثر تكراراً" },
+          { fr: "En divisant la somme des valeurs par leur nombre", en: "By dividing the sum of values by their count", ar: "بقسمة مجموع القيم على عددها" },
+          { fr: "En prenant la valeur du milieu", en: "By taking the middle value", ar: "بأخذ القيمة الوسطى" },
+          { fr: "En soustrayant le minimum du maximum", en: "By subtracting the minimum from the maximum", ar: "بطرح الأدنى من الأقصى" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "La moyenne arithmétique est la somme de toutes les valeurs divisée par leur nombre.",
+          en: "The arithmetic mean is the sum of all values divided by their count.",
+          ar: "المتوسط الحسابي هو مجموع كل القيم مقسوماً على عددها.",
+        },
+        lessonId: "l4",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "Quel est le mode d'une série de notes : 10, 12, 12, 14, 16 ?",
+          en: "What is the mode of the grade series: 10, 12, 12, 14, 16?",
+          ar: "ما منوال سلسلة العلامات: 10، 12، 12، 14، 16؟",
+        },
+        options: [
+          { fr: "10", en: "10", ar: "10" },
+          { fr: "12", en: "12", ar: "12" },
+          { fr: "14", en: "14", ar: "14" },
+          { fr: "16", en: "16", ar: "16" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Le mode est la valeur la plus fréquente : 12 apparaît deux fois, plus que les autres.",
+          en: "The mode is the most frequent value: 12 appears twice, more than the others.",
+          ar: "المنوال هو القيمة الأكثر تكراراً: 12 يظهر مرتين، أكثر من غيره.",
+        },
+        lessonId: "l5",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "Si on lance une pièce équilibrée, quelle est la probabilité d'obtenir « pile » ?",
+          en: "If you flip a fair coin, what is the probability of getting heads?",
+          ar: "عند رمي قطعة نقود متوازنة، ما احتمال الحصول على « وجه »؟",
+        },
+        options: [
+          { fr: "0", en: "0", ar: "0" },
+          { fr: "1/4", en: "1/4", ar: "1/4" },
+          { fr: "1/2", en: "1/2", ar: "1/2" },
+          { fr: "1", en: "1", ar: "1" },
+        ],
+        correctIndex: 2,
+        explanation: {
+          fr: "Une pièce a deux issues équiprobables (pile ou face), donc la probabilité de chacune est 1/2.",
+          en: "A coin has two equally likely outcomes (heads or tails), so each has probability 1/2.",
+          ar: "لقطعة النقود نتيجتان متساويتان في الاحتمال (وجه أو ظهر)، لذا احتمال كل منهما 1/2.",
+        },
+        lessonId: "l6",
+      },
+    ],
   },
 };
 
