@@ -61,16 +61,30 @@ export default function ProfilePage() {
     { value: "security", label: t.profile.security, icon: <Lock className="h-4 w-4" aria-hidden="true" /> },
   ];
 
-  const handleChangePassword = (e: React.FormEvent) => {
+  const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newPw.length < 6) {
       setPwError(t.auth.weakPassword);
       return;
     }
-    setPwError("");
-    setCurrentPw("");
-    setNewPw("");
-    showToast(t.profile.savedToast);
+    try {
+      const res = await fetch("/api/auth/password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currentPassword: currentPw, newPassword: newPw }),
+      });
+      const data = await res.json();
+      if (!data.success) {
+        setPwError(data.error === "invalid_credentials" ? t.auth.invalidCredentials : t.auth.weakPassword);
+        return;
+      }
+      setPwError("");
+      setCurrentPw("");
+      setNewPw("");
+      showToast(t.profile.savedToast);
+    } catch {
+      setPwError(t.states.errorBody);
+    }
   };
 
   return (

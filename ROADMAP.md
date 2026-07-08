@@ -30,9 +30,9 @@ Goal: make the mock platform indistinguishable from a real one in look and feel.
 
 Goal: multiple real users on one shared source of truth. Everything below changes infra — **queue, never unattended**.
 
-- [ ] **P2-T1 — NEEDS-SAMY: pick the backend** — recommendation: SQLite (better-sqlite3 or Drizzle+libsql) like LifeOS for self-host simplicity, or Postgres in Docker like Flux if multi-device sync matters from day 1. Decide also where it runs (homelab behind tunnel vs VPS).
-- [ ] **P2-T2 — Real auth** — replace the hardcoded users: Auth.js (NextAuth) credentials + email verification, bcrypt hashes, session cookies (httpOnly), CSRF. Parent/student roles persisted. Requires P2-T1.
-- [ ] **P2-T3 — Server-side learner state** — move enrollment/completion/quiz attempts/notes/streak/goal from localStorage to the DB behind API routes; keep localStorage as offline cache with a one-time upload migration (the per-user namespacing in `progress.ts` was designed for this).
+- [x] **P2-T1 — pick the backend** — 2026-07-08, Samy: **SQLite on the homelab** (better-sqlite3, WAL, `data/layaida.db`, `LAYAIDA_DB` override). Done same day.
+- [x] **P2-T2 — Real auth** — 2026-07-08: hand-rolled sessions instead of Auth.js (zero-dep MVP): scrypt hashes via node:crypto, httpOnly 30-day cookie, `/api/auth/{signup,login,logout,me,password}`, roles persisted. Email verification + CSRF hardening deferred to P4-T2.
+- [x] **P2-T3 — Server-side learner state** — 2026-07-08: `learner_state` key/value mirror of the client namespace; `/api/state` GET/PUT; progress.ts debounce-pushes writes, pull-on-login (server wins), offline keeps local copy. Remaining polish: resync-on-reconnect event, conflict strategy beyond server-wins.
 - [ ] **P2-T4 — Course content in the DB + admin CRUD** — courses/chapters/lessons/quizzes as tables; minimal admin screen (Samy-only) to create/edit content in the three languages. `data.ts` becomes the seed script.
 - [ ] **P2-T5 — Parent↔child linking** — real parent accounts linked to a student (invite code at signup, per the design's child-linking flow); parent view reads the child's data server-side, read-only.
 
@@ -40,14 +40,14 @@ Goal: multiple real users on one shared source of truth. Everything below change
 
 Goal: it teaches, not just demos. The YouTube placeholder embed must die.
 
-- [ ] **P3-T1 — NEEDS-SAMY: video strategy** — options: (a) unlisted YouTube embeds (free, fast, least control), (b) Cloudflare Stream (~$5/1k min, signed URLs, matches the existing CF tunnel), (c) self-hosted HLS (ffmpeg + R2/minio). Recommendation: start (a) for the pilot, design URLs so (b) is a column swap.
-- [ ] **P3-T2 — NEEDS-SAMY: pilot curriculum** — pick ONE course (suggestion: Algèbre 3ᵉ, deepest mock data) and produce/collect real lessons end-to-end: videos, PDFs, quizzes. Validates the whole pipeline before scaling content.
+- [x] **P3-T1 — video strategy** — 2026-07-08, Samy: **unlisted YouTube embeds** for the pilot; keep `videoUrl` a plain URL so Cloudflare Stream later is a data swap.
+- [ ] **P3-T2 — pilot curriculum: Algèbre (math-algebra-101)** — 2026-07-08, Samy picked Algèbre. NEEDS-SAMY: produce/collect the real lessons (videos as unlisted YouTube, PDFs, verified quizzes) — content production is on Samy; wiring is on the agents once URLs/files exist.
 - [ ] **P3-T3 — Real documents** — replace `url: "#"` PDFs with actual files served from the app (or R2), with download tracking; keep the design's promise that downloaded docs work offline (service-worker cache).
 - [ ] **P3-T4 — Video progress tracking** — swap elapsed-time note timestamps for real player position (YouTube IFrame API or HLS events); resume-at-position; count a lesson viewed at ≥80% watched.
 
 ## Phase 4 — Launch ops
 
-- [ ] **P4-T1 — NEEDS-SAMY: hosting + domain** — homelab behind the existing Cloudflare tunnel scaffold vs Vercel/VPS; pick the domain; staging + prod.
+- [~] **P4-T1 — hosting + domain** — 2026-07-08, Samy: **homelab for now**. `ecole.service` (systemd, unit in ~/infra/systemd/) runs `next start` on **127.0.0.1:3002** with `LAYAIDA_INSECURE_COOKIE=1` (plain HTTP). Remaining: expose via tailscale serve or the CF tunnel scaffold, pick the public domain, drop the insecure-cookie flag once TLS terminates in front.
 - [ ] **P4-T2 — Hardening** — rate-limit auth routes, security headers (CSP), zod validation at the API boundary, DB backups into the ~/backups rotation, error tracking.
 - [ ] **P4-T3 — Monitoring & standing goal** — blackbox probe + Grafana panel like the other apps; graduate a standing goal in ~/infra/goals (predicate: prod URL 200 + build green) once live.
 - [ ] **P4-T4 — Legal pages** — real Conditions/Confidentialité (footer links are `#`), cookie-less analytics or none, RGPD basics for minors' data (parental consent at signup).
@@ -64,4 +64,5 @@ Goal: it teaches, not just demos. The YouTube placeholder embed must die.
 ## Log
 
 - 2026-07-08: T01 blocked (old roadmap). DESIGN_PROMPT.md was already committed (5a0f56d), but the tree was dirty with the in-flight redesign WIP; the autoloop correctly left it untouched.
+- 2026-07-08 (later) — Decisions from Samy: SQLite on homelab / unlisted YouTube / pilot = Algèbre / host on homelab. P2-T1..T3 implemented + deployed same day: `ecole.service` live on 127.0.0.1:3002, E2E verified (signup/login/logout/password-change, state PUT on one session readable from a fresh login). Judgment call: hand-rolled scrypt+cookie sessions instead of Auth.js — zero new deps, swap possible later; email verification and CSRF deferred to P4-T2. Samy's account seeded with a placeholder password — he must change it in /profile → Sécurité.
 - 2026-07-08 — Full Nord Campus redesign implemented and verified (typecheck+build green, all 14 routes 200). Old roadmap superseded: T01 ✓ (committed), T02 ✓ (locale persisted), T03 ✓ (tokens), T04 ✓ (dark mode), T05 ✓ (/courses), T06 ✓ (/dashboard), T07 ✓ (per-user progress + migration), T08 ✓ (/profile), T09 partially ✓ (quizzes on 4 chapters — completed by P1-T1), T10 ✓ (/teacher/[slug]), T11 ✓ (RTL logical props, grep clean), T12 ✓ (focus rings, ≥44px targets, reduced-motion kill-switch). Roadmap rewritten around the path to production.
