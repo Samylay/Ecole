@@ -17,6 +17,15 @@ export type Chapter = {
   lessons: Lesson[];
 };
 
+export type QuizQuestion = {
+  id: string;
+  question: { fr: string; en: string; ar: string };
+  options: { fr: string; en: string; ar: string }[];
+  correctIndex: number;
+  explanation: { fr: string; en: string; ar: string };
+  lessonId: string; // the lesson the explanation links back to
+};
+
 export type Course = {
   id: string;
   subject: Subject;
@@ -36,10 +45,12 @@ export type Course = {
   chapters: Chapter[];
 };
 
-export const subjectColors: Record<Subject, { bg: string; text: string; accent: string }> = {
-  math: { bg: "bg-blue-50", text: "text-blue-700", accent: "bg-blue-600" },
-  physics: { bg: "bg-purple-50", text: "text-purple-700", accent: "bg-purple-600" },
-  biology: { bg: "bg-green-50", text: "text-green-700", accent: "bg-green-600" },
+// "Nord Campus" subject tokens: bg = soft tint, text = deep (AA on tint), accent = solid.
+// New subject = new oklch hue in globals.css (chimie 55, info 210, …) + a row here.
+export const subjectColors: Record<Subject, { bg: string; text: string; accent: string; stroke: string }> = {
+  math: { bg: "bg-math-soft", text: "text-math-deep dark:text-math", accent: "bg-math", stroke: "text-math" },
+  physics: { bg: "bg-physics-soft", text: "text-physics-deep dark:text-physics", accent: "bg-physics", stroke: "text-physics" },
+  biology: { bg: "bg-biology-soft", text: "text-biology-deep dark:text-biology", accent: "bg-biology", stroke: "text-biology" },
 };
 
 export const subjectIcons: Record<Subject, string> = {
@@ -1340,4 +1351,418 @@ export function getLesson(courseId: string, lessonId: string) {
 
 export function getAllLessons(course: Course): Lesson[] {
   return course.chapters.flatMap((ch) => ch.lessons);
+}
+
+// ——— Chapter quizzes (mock) — keyed by courseId then chapterId ———
+
+export const quizzes: Record<string, Record<string, QuizQuestion[]>> = {
+  "math-algebra-101": {
+    ch1: [
+      {
+        id: "q1",
+        question: {
+          fr: "Dans l'expression 3x + 5, que représente x ?",
+          en: "In the expression 3x + 5, what does x represent?",
+          ar: "في التعبير 3x + 5، ماذا يمثل x؟",
+        },
+        options: [
+          { fr: "Une constante", en: "A constant", ar: "ثابت" },
+          { fr: "Une variable", en: "A variable", ar: "متغير" },
+          { fr: "Un coefficient", en: "A coefficient", ar: "معامل" },
+          { fr: "Une équation", en: "An equation", ar: "معادلة" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "x est une variable : sa valeur peut changer. 3 est le coefficient et 5 la constante.",
+          en: "x is a variable: its value can change. 3 is the coefficient and 5 the constant.",
+          ar: "x متغير: قيمته يمكن أن تتغير. 3 هو المعامل و5 هو الثابت.",
+        },
+        lessonId: "l2",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "Simplifie : 2x + 3x",
+          en: "Simplify: 2x + 3x",
+          ar: "بسّط: 2x + 3x",
+        },
+        options: [
+          { fr: "5x", en: "5x", ar: "5x" },
+          { fr: "6x", en: "6x", ar: "6x" },
+          { fr: "5x²", en: "5x²", ar: "5x²" },
+          { fr: "x⁵", en: "x⁵", ar: "x⁵" },
+        ],
+        correctIndex: 0,
+        explanation: {
+          fr: "On additionne les coefficients des termes semblables : 2 + 3 = 5, donc 5x.",
+          en: "Add the coefficients of like terms: 2 + 3 = 5, so 5x.",
+          ar: "نجمع معاملات الحدود المتشابهة: 2 + 3 = 5، إذن 5x.",
+        },
+        lessonId: "l3",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "Laquelle de ces écritures est une expression algébrique ?",
+          en: "Which of these is an algebraic expression?",
+          ar: "أي من هذه الكتابات تعبير جبري؟",
+        },
+        options: [
+          { fr: "7 = 7", en: "7 = 7", ar: "7 = 7" },
+          { fr: "4y − 2", en: "4y − 2", ar: "4y − 2" },
+          { fr: "≤", en: "≤", ar: "≤" },
+          { fr: "3 < 5", en: "3 < 5", ar: "3 < 5" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "4y − 2 combine une variable, un coefficient et une constante sans signe d'égalité : c'est une expression.",
+          en: "4y − 2 combines a variable, a coefficient and a constant with no equals sign: it's an expression.",
+          ar: "4y − 2 يجمع متغيراً ومعاملاً وثابتاً دون علامة مساواة: إنه تعبير.",
+        },
+        lessonId: "l3",
+      },
+    ],
+    ch2: [
+      {
+        id: "q1",
+        question: {
+          fr: "Résous : x + 7 = 12",
+          en: "Solve: x + 7 = 12",
+          ar: "حل: x + 7 = 12",
+        },
+        options: [
+          { fr: "x = 5", en: "x = 5", ar: "x = 5" },
+          { fr: "x = 19", en: "x = 19", ar: "x = 19" },
+          { fr: "x = −5", en: "x = −5", ar: "x = −5" },
+          { fr: "x = 7", en: "x = 7", ar: "x = 7" },
+        ],
+        correctIndex: 0,
+        explanation: {
+          fr: "On soustrait 7 des deux côtés : x = 12 − 7 = 5.",
+          en: "Subtract 7 from both sides: x = 12 − 7 = 5.",
+          ar: "نطرح 7 من الطرفين: x = 12 − 7 = 5.",
+        },
+        lessonId: "l4",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "Résous : x/3 = 4",
+          en: "Solve: x/3 = 4",
+          ar: "حل: x/3 = 4",
+        },
+        options: [
+          { fr: "x = 12", en: "x = 12", ar: "x = 12" },
+          { fr: "x = 4/3", en: "x = 4/3", ar: "x = 4/3" },
+          { fr: "x = 7", en: "x = 7", ar: "x = 7" },
+          { fr: "x = 1", en: "x = 1", ar: "x = 1" },
+        ],
+        correctIndex: 0,
+        explanation: {
+          fr: "On multiplie les deux côtés par 3 : x = 4 × 3 = 12.",
+          en: "Multiply both sides by 3: x = 4 × 3 = 12.",
+          ar: "نضرب الطرفين في 3: x = 4 × 3 = 12.",
+        },
+        lessonId: "l5",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "2x − 4 = 10. Quelle est la première étape la plus simple ?",
+          en: "2x − 4 = 10. What's the simplest first step?",
+          ar: "2x − 4 = 10. ما أبسط خطوة أولى؟",
+        },
+        options: [
+          { fr: "Diviser par 2", en: "Divide by 2", ar: "القسمة على 2" },
+          { fr: "Ajouter 4 des deux côtés", en: "Add 4 to both sides", ar: "إضافة 4 للطرفين" },
+          { fr: "Soustraire 10", en: "Subtract 10", ar: "طرح 10" },
+          { fr: "Multiplier par x", en: "Multiply by x", ar: "الضرب في x" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "On isole d'abord le terme en x : 2x = 14, puis on divise par 2 pour trouver x = 7.",
+          en: "First isolate the x term: 2x = 14, then divide by 2 to get x = 7.",
+          ar: "نعزل أولاً حد x: أي 2x = 14، ثم نقسم على 2 لنجد x = 7.",
+        },
+        lessonId: "l4",
+      },
+    ],
+  },
+  "physics-mechanics-101": {
+    ch1: [
+      {
+        id: "q1",
+        question: {
+          fr: "Quelle grandeur mesure la variation de la vitesse dans le temps ?",
+          en: "Which quantity measures how velocity changes over time?",
+          ar: "أي كمية تقيس تغير السرعة مع الزمن؟",
+        },
+        options: [
+          { fr: "La position", en: "Position", ar: "الموقع" },
+          { fr: "L'accélération", en: "Acceleration", ar: "التسارع" },
+          { fr: "La masse", en: "Mass", ar: "الكتلة" },
+          { fr: "La distance", en: "Distance", ar: "المسافة" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "L'accélération est la variation de la vitesse par unité de temps (m/s²).",
+          en: "Acceleration is the change in velocity per unit of time (m/s²).",
+          ar: "التسارع هو تغير السرعة لكل وحدة زمن (م/ث²).",
+        },
+        lessonId: "l1",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "En mouvement rectiligne uniforme, la vitesse est…",
+          en: "In uniform linear motion, velocity is…",
+          ar: "في الحركة المستقيمة المنتظمة، السرعة…",
+        },
+        options: [
+          { fr: "croissante", en: "increasing", ar: "متزايدة" },
+          { fr: "constante", en: "constant", ar: "ثابتة" },
+          { fr: "nulle", en: "zero", ar: "معدومة" },
+          { fr: "décroissante", en: "decreasing", ar: "متناقصة" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "« Uniforme » signifie que la vitesse ne change pas : même direction, même valeur.",
+          en: "“Uniform” means the velocity doesn't change: same direction, same value.",
+          ar: "« منتظمة » تعني أن السرعة لا تتغير: نفس الاتجاه ونفس القيمة.",
+        },
+        lessonId: "l2",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "Un objet parcourt 100 m en 20 s à vitesse constante. Sa vitesse est…",
+          en: "An object covers 100 m in 20 s at constant speed. Its speed is…",
+          ar: "جسم يقطع 100 م في 20 ث بسرعة ثابتة. سرعته…",
+        },
+        options: [
+          { fr: "2 m/s", en: "2 m/s", ar: "2 م/ث" },
+          { fr: "5 m/s", en: "5 m/s", ar: "5 م/ث" },
+          { fr: "20 m/s", en: "20 m/s", ar: "20 م/ث" },
+          { fr: "120 m/s", en: "120 m/s", ar: "120 م/ث" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "v = d / t = 100 / 20 = 5 m/s.",
+          en: "v = d / t = 100 / 20 = 5 m/s.",
+          ar: "ع = م / ز = 100 / 20 = 5 م/ث.",
+        },
+        lessonId: "l2",
+      },
+    ],
+  },
+  "biology-cells-101": {
+    ch1: [
+      {
+        id: "q1",
+        question: {
+          fr: "Quel organite est présent dans la cellule végétale mais pas dans la cellule animale ?",
+          en: "Which organelle is present in plant cells but not animal cells?",
+          ar: "أي عضية توجد في الخلية النباتية ولا توجد في الخلية الحيوانية؟",
+        },
+        options: [
+          { fr: "Le noyau", en: "The nucleus", ar: "النواة" },
+          { fr: "Le chloroplaste", en: "The chloroplast", ar: "البلاستيدة الخضراء" },
+          { fr: "La membrane", en: "The membrane", ar: "الغشاء" },
+          { fr: "Le cytoplasme", en: "The cytoplasm", ar: "السيتوبلازم" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Les chloroplastes (photosynthèse) et la paroi cellulaire sont propres à la cellule végétale.",
+          en: "Chloroplasts (photosynthesis) and the cell wall are specific to plant cells.",
+          ar: "البلاستيدات الخضراء (التمثيل الضوئي) والجدار الخلوي خاصان بالخلية النباتية.",
+        },
+        lessonId: "l1",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "Où se trouve l'ADN dans une cellule eucaryote ?",
+          en: "Where is DNA located in a eukaryotic cell?",
+          ar: "أين يوجد الحمض النووي في الخلية حقيقية النواة؟",
+        },
+        options: [
+          { fr: "Dans le cytoplasme", en: "In the cytoplasm", ar: "في السيتوبلازم" },
+          { fr: "Dans le noyau", en: "In the nucleus", ar: "في النواة" },
+          { fr: "Dans la membrane", en: "In the membrane", ar: "في الغشاء" },
+          { fr: "Hors de la cellule", en: "Outside the cell", ar: "خارج الخلية" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "Le noyau contient l'ADN, support de l'information génétique.",
+          en: "The nucleus contains DNA, the carrier of genetic information.",
+          ar: "تحتوي النواة على الحمض النووي، حامل المعلومات الوراثية.",
+        },
+        lessonId: "l2",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "Quel est le rôle de la membrane plasmique ?",
+          en: "What is the role of the plasma membrane?",
+          ar: "ما دور الغشاء البلازمي؟",
+        },
+        options: [
+          { fr: "Fabriquer l'énergie", en: "Produce energy", ar: "إنتاج الطاقة" },
+          {
+            fr: "Contrôler les échanges avec l'extérieur",
+            en: "Control exchanges with the outside",
+            ar: "التحكم في التبادلات مع الخارج",
+          },
+          { fr: "Stocker l'ADN", en: "Store DNA", ar: "تخزين الحمض النووي" },
+          { fr: "Digérer les aliments", en: "Digest food", ar: "هضم الطعام" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "La membrane délimite la cellule et filtre ce qui entre et sort.",
+          en: "The membrane bounds the cell and filters what goes in and out.",
+          ar: "يحدّ الغشاء الخلية ويرشّح ما يدخل ويخرج.",
+        },
+        lessonId: "l1",
+      },
+    ],
+  },
+};
+
+export function getQuiz(courseId: string, chapterId: string): QuizQuestion[] | null {
+  return quizzes[courseId]?.[chapterId] ?? null;
+}
+
+export function chapterHasQuiz(courseId: string, chapterId: string): boolean {
+  return Boolean(quizzes[courseId]?.[chapterId]);
+}
+
+// ——— Course extras: learning outcomes, prerequisites, reviews (mock) ———
+
+export type Review = {
+  author: string;
+  rating: number;
+  text: { fr: string; en: string; ar: string };
+  date: string;
+};
+
+type CourseExtras = {
+  outcomes: { fr: string; en: string; ar: string }[];
+  prerequisiteId?: string;
+  reviews: Review[];
+};
+
+const defaultOutcomes: CourseExtras["outcomes"] = [
+  {
+    fr: "Comprendre les notions clés du chapitre, pas à pas",
+    en: "Understand the chapter's key concepts, step by step",
+    ar: "فهم المفاهيم الأساسية للفصل خطوة بخطوة",
+  },
+  {
+    fr: "T'entraîner avec des exercices corrigés en vidéo",
+    en: "Practice with video-corrected exercises",
+    ar: "التدرب بتمارين مصححة بالفيديو",
+  },
+  {
+    fr: "Préparer tes contrôles avec les fiches PDF",
+    en: "Prepare for tests with the PDF sheets",
+    ar: "التحضير للفروض بملفات PDF",
+  },
+  {
+    fr: "Valider chaque chapitre avec un quiz",
+    en: "Validate each chapter with a quiz",
+    ar: "التحقق من كل فصل باختبار",
+  },
+];
+
+const courseExtras: Record<string, Partial<CourseExtras>> = {
+  "math-algebra-101": {
+    outcomes: [
+      {
+        fr: "Traduire un problème en expression algébrique",
+        en: "Translate a problem into an algebraic expression",
+        ar: "ترجمة مسألة إلى تعبير جبري",
+      },
+      {
+        fr: "Résoudre des équations du premier degré avec méthode",
+        en: "Solve first-degree equations methodically",
+        ar: "حل معادلات الدرجة الأولى بمنهجية",
+      },
+      {
+        fr: "Maîtriser les systèmes d'équations (substitution, élimination)",
+        en: "Master systems of equations (substitution, elimination)",
+        ar: "إتقان أنظمة المعادلات (التعويض والحذف)",
+      },
+      {
+        fr: "Résoudre et représenter des inégalités",
+        en: "Solve and represent inequalities",
+        ar: "حل المتراجحات وتمثيلها",
+      },
+    ],
+    reviews: [
+      {
+        author: "Lina M.",
+        rating: 5,
+        text: {
+          fr: "Les schémas m'ont enfin fait comprendre les équations. Les PDF sont super utiles avant un contrôle.",
+          en: "The diagrams finally made me understand equations. The PDFs are so useful before a test.",
+          ar: "الرسوم جعلتني أفهم المعادلات أخيراً. ملفات PDF مفيدة جداً قبل الفرض.",
+        },
+        date: "2026-05-14",
+      },
+      {
+        author: "Yanis B.",
+        rating: 5,
+        text: {
+          fr: "Le prof explique doucement et refait chaque exemple. J'ai remonté ma moyenne de 3 points.",
+          en: "The teacher explains calmly and reworks every example. My average went up 3 points.",
+          ar: "الأستاذ يشرح بهدوء ويعيد كل مثال. ارتفع معدلي بثلاث نقاط.",
+        },
+        date: "2026-04-02",
+      },
+      {
+        author: "Sara K.",
+        rating: 4,
+        text: {
+          fr: "Très clair. J'aurais aimé encore plus d'exercices sur les systèmes.",
+          en: "Very clear. I'd have liked even more exercises on systems.",
+          ar: "واضح جداً. كنت أتمنى تمارين أكثر عن الأنظمة.",
+        },
+        date: "2026-03-19",
+      },
+    ],
+  },
+  "math-geometry-201": { prerequisiteId: "math-algebra-101" },
+  "math-trigonometry-301": { prerequisiteId: "math-geometry-201" },
+  "physics-optics-102": { prerequisiteId: "physics-mechanics-101" },
+  "biology-ecology-201": { prerequisiteId: "biology-cells-101" },
+};
+
+export function getCourseExtras(courseId: string): CourseExtras {
+  const extras = courseExtras[courseId] ?? {};
+  return {
+    outcomes: extras.outcomes ?? defaultOutcomes,
+    prerequisiteId: extras.prerequisiteId,
+    reviews: extras.reviews ?? [],
+  };
+}
+
+// ——— Teachers (derived from course instructors) ———
+
+export function teacherSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/^(pr|dr|mme|m)\.?\s+/i, "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+export function getTeacher(slug: string) {
+  const taught = courses.filter((c) => teacherSlug(c.instructor.name) === slug);
+  if (taught.length === 0) return null;
+  const { instructor } = taught[0];
+  const studentCount = taught.reduce((sum, c) => sum + c.studentCount, 0);
+  const rating = taught.reduce((sum, c) => sum + c.rating, 0) / taught.length;
+  return { instructor, courses: taught, studentCount, rating };
 }
