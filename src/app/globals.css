@@ -1,18 +1,81 @@
 @import "tailwindcss";
 
-:root {
-  --primary: #4F46E5;
-  --primary-light: #6366F1;
-  --primary-dark: #3730A3;
-  --secondary: #10B981;
-  --accent: #F59E0B;
-  --bg-primary: #FFFFFF;
-  --bg-secondary: #F9FAFB;
-  --bg-tertiary: #F3F4F6;
-  --text-primary: #111827;
-  --text-secondary: #6B7280;
-  --text-muted: #9CA3AF;
-  --border: #E5E7EB;
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Neutrals (cool, blue-tinted) */
+  --color-bg: #f3f5f9;
+  --color-surface: #ffffff;
+  --color-mist: #dce1ec;
+  --color-border: #e0e5ee;
+  --color-border-soft: #e8ecf3;
+  --color-muted: #6f7890;
+  --color-slate: #4d5670;
+  --color-ink: #20263a;
+  --color-faint: #8a94a4;
+
+  /* Brand */
+  --color-primary: #5b5bd6;
+  --color-primary-hover: #4747b8;
+  --color-primary-soft: #e6e6fa;
+
+  /* Semantic */
+  --color-success: #35a071;
+  --color-success-soft: #e2f3eb;
+  --color-warning: #c98a2e;
+  --color-warning-soft: #f7ecd9;
+  --color-error: #d14d5d;
+  --color-error-soft: #fdeaea;
+  --color-info: #3f7ad9;
+
+  /* Subjects — oklch siblings: solid oklch(0.58 0.14 H), tint oklch(0.94 0.03 H).
+     New subject = pick a new hue (chimie 55, info 210, …). */
+  --color-math: #3f7ad9;
+  --color-math-soft: #e3edfb;
+  --color-math-deep: #2c5aa8;
+  --color-physics: #9256d9;
+  --color-physics-soft: #f0e7fb;
+  --color-physics-deep: #6f3aa8;
+  --color-biology: #35a071;
+  --color-biology-soft: #e2f3eb;
+  --color-biology-deep: #237552;
+
+  /* Type */
+  --font-sans: var(--font-plex), system-ui, sans-serif;
+  --font-arabic: var(--font-plex-arabic), var(--font-plex), sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+
+  /* Radius */
+  --radius-chip: 8px;
+  --radius-input: 12px;
+  --radius-card: 16px;
+  --radius-pill: 999px;
+
+  /* Elevation */
+  --shadow-card: 0 1px 4px rgba(32, 38, 58, 0.06);
+  --shadow-lift: 0 4px 16px rgba(32, 38, 58, 0.1);
+  --shadow-modal: 0 8px 28px rgba(32, 38, 58, 0.16);
+  --shadow-primary: 0 2px 8px rgba(91, 91, 214, 0.3);
+}
+
+/* Dark mode — same variable names, remapped */
+.dark {
+  --color-bg: #161a28;
+  --color-surface: #202638;
+  --color-mist: #303850;
+  --color-border: #303850;
+  --color-border-soft: #2a3148;
+  --color-muted: #8f97b8;
+  --color-slate: #aab2c8;
+  --color-ink: #e8ebf4;
+  --color-faint: #6b7590;
+  --color-primary: #7c7cea;
+  --color-primary-hover: #9494f0;
+  --color-primary-soft: #2a2a4e;
+  /* subject tints: oklch(0.30 0.05 H) */
+  --color-math-soft: #1d2a42;
+  --color-physics-soft: #2a2140;
+  --color-biology-soft: #1a3229;
 }
 
 html {
@@ -35,37 +98,62 @@ html {
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  color: var(--text-primary);
-  background-color: var(--bg-secondary);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--color-ink);
+  background-color: var(--color-bg);
 }
 
-[dir="rtl"] {
-  font-family: 'Tajawal', 'Inter', sans-serif;
+[dir="rtl"] body,
+:lang(ar) {
+  font-family: var(--font-arabic);
+  letter-spacing: 0;
+  line-height: 1.7; /* Arabic gets +0.2 line-height */
 }
 
 /* Skip to content link for keyboard accessibility */
 .skip-to-content {
   position: absolute;
   top: -100%;
-  left: 50%;
+  inset-inline-start: 50%;
   transform: translateX(-50%);
   z-index: 100;
   padding: 0.75rem 1.5rem;
-  background: var(--primary);
+  background: var(--color-primary);
   color: white;
   border-radius: 0 0 0.5rem 0.5rem;
   font-weight: 600;
   text-decoration: none;
-  transition: top 0.2s;
+  transition: top 180ms ease-out;
 }
 
 .skip-to-content:focus {
   top: 0;
 }
 
-/* Better focus indicators for keyboard navigation */
 *:focus-visible {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--color-ink);
   outline-offset: 2px;
+}
+
+/* Skeleton shimmer — disabled under reduced-motion via the global kill-switch */
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-mist) 25%,
+    var(--color-border-soft) 50%,
+    var(--color-mist) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
 }

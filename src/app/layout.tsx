@@ -1,6 +1,28 @@
 import type { Metadata, Viewport } from "next";
+import { IBM_Plex_Sans, IBM_Plex_Sans_Arabic, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
+
+const plexSans = IBM_Plex_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-plex",
+  display: "swap",
+});
+
+const plexArabic = IBM_Plex_Sans_Arabic({
+  subsets: ["arabic"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-plex-arabic",
+  display: "swap",
+});
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-plex-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -10,6 +32,7 @@ export const metadata: Metadata = {
   description: "Plateforme d'apprentissage pour le collège et le lycée. Cours de maths, physique et biologie.",
   keywords: ["éducation", "cours en ligne", "mathématiques", "physique", "biologie", "collège", "lycée"],
   authors: [{ name: "Layaida" }],
+  icons: { icon: "/logo.png" },
   openGraph: {
     type: "website",
     locale: "fr_FR",
@@ -22,18 +45,28 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#4F46E5",
+  themeColor: "#5B5BD6",
 };
+
+// Applies the persisted (or system) theme before first paint to avoid a flash.
+const themeScript = `
+(function () {
+  try {
+    var t = localStorage.getItem("layaida_theme");
+    var dark = t === "dark" || ((t === null || t === "system") && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    if (dark) document.documentElement.classList.add("dark");
+    var l = localStorage.getItem("layaida_locale");
+    if (l === "ar") { document.documentElement.lang = "ar"; document.documentElement.dir = "rtl"; }
+    else if (l === "en" || l === "fr") { document.documentElement.lang = l; }
+  } catch (e) {}
+})();
+`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" dir="ltr">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" />
-      </head>
-      <body className="antialiased">
+    <html lang="fr" dir="ltr" suppressHydrationWarning>
+      <body className={`${plexSans.variable} ${plexArabic.variable} ${plexMono.variable} antialiased`}>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <Providers>{children}</Providers>
       </body>
     </html>
