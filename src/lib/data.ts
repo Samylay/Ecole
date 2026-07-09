@@ -93,7 +93,7 @@ export const courses: Course[] = [
             id: "l1",
             title: { fr: "Qu'est-ce que l'algèbre ?", en: "What is Algebra?", ar: "ما هو الجبر؟" },
             duration: "12:30",
-            videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+            videoUrl: "https://www.youtube.com/embed/aqz-KE-bpKQ", // ILLUSTRATIVE placeholder (Big Buck Bunny, CC-BY) pending real Algèbre video production — see ROADMAP P3-T2
             description: {
               fr: "Découvrez les concepts fondamentaux de l'algèbre.",
               en: "Discover the fundamental concepts of algebra.",
@@ -105,7 +105,7 @@ export const courses: Course[] = [
             id: "l2",
             title: { fr: "Variables et constantes", en: "Variables and Constants", ar: "المتغيرات والثوابت" },
             duration: "15:45",
-            videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+            videoUrl: "https://www.youtube.com/embed/aqz-KE-bpKQ", // ILLUSTRATIVE placeholder (Big Buck Bunny, CC-BY) pending real Algèbre video production — see ROADMAP P3-T2
             description: {
               fr: "Apprenez à différencier les variables des constantes.",
               en: "Learn to differentiate variables from constants.",
@@ -116,7 +116,7 @@ export const courses: Course[] = [
             id: "l3",
             title: { fr: "Expressions algébriques", en: "Algebraic Expressions", ar: "التعابير الجبرية" },
             duration: "18:20",
-            videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+            videoUrl: "https://www.youtube.com/embed/aqz-KE-bpKQ", // ILLUSTRATIVE placeholder (Big Buck Bunny, CC-BY) pending real Algèbre video production — see ROADMAP P3-T2
             description: {
               fr: "Maîtrisez la construction et la simplification d'expressions algébriques.",
               en: "Master building and simplifying algebraic expressions.",
@@ -133,7 +133,7 @@ export const courses: Course[] = [
             id: "l4",
             title: { fr: "Résoudre une équation simple", en: "Solving a Simple Equation", ar: "حل معادلة بسيطة" },
             duration: "20:00",
-            videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+            videoUrl: "https://www.youtube.com/embed/aqz-KE-bpKQ", // ILLUSTRATIVE placeholder (Big Buck Bunny, CC-BY) pending real Algèbre video production — see ROADMAP P3-T2
             description: {
               fr: "Techniques pour résoudre des équations du premier degré.",
               en: "Techniques for solving first-degree equations.",
@@ -145,7 +145,7 @@ export const courses: Course[] = [
             id: "l5",
             title: { fr: "Équations avec fractions", en: "Equations with Fractions", ar: "معادلات بالكسور" },
             duration: "22:15",
-            videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+            videoUrl: "https://www.youtube.com/embed/aqz-KE-bpKQ", // ILLUSTRATIVE placeholder (Big Buck Bunny, CC-BY) pending real Algèbre video production — see ROADMAP P3-T2
             description: {
               fr: "Apprenez à résoudre des équations contenant des fractions.",
               en: "Learn to solve equations containing fractions.",
@@ -162,7 +162,7 @@ export const courses: Course[] = [
             id: "l6",
             title: { fr: "Introduction aux systèmes", en: "Introduction to Systems", ar: "مقدمة في الأنظمة" },
             duration: "18:00",
-            videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+            videoUrl: "https://www.youtube.com/embed/aqz-KE-bpKQ", // ILLUSTRATIVE placeholder (Big Buck Bunny, CC-BY) pending real Algèbre video production — see ROADMAP P3-T2
             description: {
               fr: "Comprendre ce qu'est un système d'équations à deux inconnues.",
               en: "Understanding a system of two equations with two unknowns.",
@@ -173,7 +173,7 @@ export const courses: Course[] = [
             id: "l7",
             title: { fr: "Méthode par substitution", en: "Substitution Method", ar: "طريقة التعويض" },
             duration: "20:30",
-            videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+            videoUrl: "https://www.youtube.com/embed/aqz-KE-bpKQ", // ILLUSTRATIVE placeholder (Big Buck Bunny, CC-BY) pending real Algèbre video production — see ROADMAP P3-T2
             description: {
               fr: "Résoudre un système par substitution d'une variable.",
               en: "Solve a system by substituting one variable.",
@@ -185,7 +185,7 @@ export const courses: Course[] = [
             id: "l8",
             title: { fr: "Méthode par élimination", en: "Elimination Method", ar: "طريقة الحذف" },
             duration: "22:00",
-            videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+            videoUrl: "https://www.youtube.com/embed/aqz-KE-bpKQ", // ILLUSTRATIVE placeholder (Big Buck Bunny, CC-BY) pending real Algèbre video production — see ROADMAP P3-T2
             description: {
               fr: "Résoudre un système en éliminant une variable par combinaison.",
               en: "Solve a system by eliminating a variable through combination.",
@@ -202,7 +202,7 @@ export const courses: Course[] = [
             id: "l9",
             title: { fr: "Introduction aux inégalités", en: "Introduction to Inequalities", ar: "مقدمة في المتراجحات" },
             duration: "15:00",
-            videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+            videoUrl: "https://www.youtube.com/embed/aqz-KE-bpKQ", // ILLUSTRATIVE placeholder (Big Buck Bunny, CC-BY) pending real Algèbre video production — see ROADMAP P3-T2
             description: {
               fr: "Les symboles < > ≤ ≥ et leur sens mathématique.",
               en: "The symbols < > ≤ ≥ and their mathematical meaning.",
@@ -213,7 +213,7 @@ export const courses: Course[] = [
             id: "l10",
             title: { fr: "Résoudre des inégalités", en: "Solving Inequalities", ar: "حل المتراجحات" },
             duration: "19:00",
-            videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+            videoUrl: "https://www.youtube.com/embed/aqz-KE-bpKQ", // ILLUSTRATIVE placeholder (Big Buck Bunny, CC-BY) pending real Algèbre video production — see ROADMAP P3-T2
             description: {
               fr: "Techniques pour résoudre et représenter des inégalités.",
               en: "Techniques to solve and represent inequalities.",
