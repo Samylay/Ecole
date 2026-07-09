@@ -3383,7 +3383,145 @@ const courseExtras: Record<string, Partial<CourseExtras>> = {
       },
     ],
   },
-  "physics-optics-102": { prerequisiteId: "physics-mechanics-101" },
+  "physics-mechanics-101": {
+    outcomes: [
+      {
+        fr: "Décrire un mouvement avec vitesse et trajectoire",
+        en: "Describe a motion using speed and trajectory",
+        ar: "وصف حركة باستعمال السرعة والمسار",
+      },
+      {
+        fr: "Appliquer les lois de Newton à des situations concrètes",
+        en: "Apply Newton's laws to concrete situations",
+        ar: "تطبيق قوانين نيوتن على حالات ملموسة",
+      },
+      {
+        fr: "Représenter les forces qui s'exercent sur un objet",
+        en: "Represent the forces acting on an object",
+        ar: "تمثيل القوى المؤثرة على جسم",
+      },
+      {
+        fr: "Calculer le travail et l'énergie mécanique",
+        en: "Calculate work and mechanical energy",
+        ar: "حساب الشغل والطاقة الميكانيكية",
+      },
+    ],
+    reviews: [
+      {
+        author: "Sofia L.",
+        rating: 5,
+        text: {
+          fr: "La Dre Tazi utilise plein d'exemples du quotidien, ça rend la mécanique concrète.",
+          en: "Dr. Tazi uses lots of everyday examples, which makes mechanics feel concrete.",
+          ar: "الدكتورة تازي تستعمل أمثلة يومية كثيرة، مما يجعل الميكانيكا ملموسة.",
+        },
+        date: "2026-04-25",
+      },
+      {
+        author: "Adam Z.",
+        rating: 5,
+        text: {
+          fr: "Les schémas de forces sont hyper clairs, j'ai compris Newton en une vidéo.",
+          en: "The force diagrams are super clear, I understood Newton in one video.",
+          ar: "رسوم القوى واضحة جداً، فهمت قوانين نيوتن في فيديو واحد.",
+        },
+        date: "2026-03-08",
+      },
+    ],
+  },
+  "physics-electricity-101": {
+    outcomes: [
+      {
+        fr: "Distinguer circuit série et circuit dérivation",
+        en: "Distinguish series circuits from parallel circuits",
+        ar: "التمييز بين الدارة على التوالي والدارة على التوازي",
+      },
+      {
+        fr: "Appliquer la loi d'Ohm pour calculer tension, intensité et résistance",
+        en: "Apply Ohm's law to calculate voltage, current and resistance",
+        ar: "تطبيق قانون أوم لحساب التوتر والشدة والمقاومة",
+      },
+      {
+        fr: "Lire et dessiner un schéma électrique normalisé",
+        en: "Read and draw a standard circuit diagram",
+        ar: "قراءة ورسم مخطط كهربائي معياري",
+      },
+      {
+        fr: "Adopter les bons réflexes de sécurité électrique",
+        en: "Adopt correct electrical safety habits",
+        ar: "اتباع قواعد السلامة الكهربائية الصحيحة",
+      },
+    ],
+    reviews: [
+      {
+        author: "Lucas P.",
+        rating: 4,
+        text: {
+          fr: "La loi d'Ohm expliquée avec une analogie de tuyau d'eau, très efficace.",
+          en: "Ohm's law explained with a water-pipe analogy — very effective.",
+          ar: "قانون أوم مشروح بتشبيه أنبوب الماء، فعّال جداً.",
+        },
+        date: "2026-05-01",
+      },
+      {
+        author: "Nour B.",
+        rating: 5,
+        text: {
+          fr: "Les schémas de circuits sont propres et les exercices progressifs.",
+          en: "The circuit diagrams are clean and the exercises build up nicely.",
+          ar: "المخططات واضحة والتمارين متدرجة بشكل جيد.",
+        },
+        date: "2026-02-20",
+      },
+    ],
+  },
+  "physics-optics-102": {
+    prerequisiteId: "physics-mechanics-101",
+    outcomes: [
+      {
+        fr: "Expliquer la propagation rectiligne de la lumière",
+        en: "Explain the rectilinear propagation of light",
+        ar: "شرح الانتشار المستقيمي للضوء",
+      },
+      {
+        fr: "Construire l'image formée par une lentille convergente",
+        en: "Construct the image formed by a converging lens",
+        ar: "إنشاء الصورة المتكونة عبر عدسة مجمّعة",
+      },
+      {
+        fr: "Distinguer réflexion et réfraction de la lumière",
+        en: "Distinguish light reflection from refraction",
+        ar: "التمييز بين انعكاس الضوء وانكساره",
+      },
+      {
+        fr: "Relier les phénomènes optiques au fonctionnement de l'œil",
+        en: "Connect optical phenomena to how the eye works",
+        ar: "ربط الظواهر الضوئية بعمل العين",
+      },
+    ],
+    reviews: [
+      {
+        author: "Manel A.",
+        rating: 5,
+        text: {
+          fr: "Les tracés de rayons lumineux sont animés, ça change tout pour comprendre les lentilles.",
+          en: "The light-ray diagrams are animated, which makes lenses so much easier to grasp.",
+          ar: "رسوم الأشعة الضوئية متحركة، وهذا يسهّل فهم العدسات كثيراً.",
+        },
+        date: "2026-04-12",
+      },
+      {
+        author: "Rayan M.",
+        rating: 4,
+        text: {
+          fr: "Chapitre court mais dense, il faut revoir les vidéos deux fois.",
+          en: "Short but dense chapter — worth watching the videos twice.",
+          ar: "فصل قصير لكنه كثيف، يستحق مشاهدة الفيديوهات مرتين.",
+        },
+        date: "2026-01-30",
+      },
+    ],
+  },
   "biology-ecology-201": { prerequisiteId: "biology-cells-101" },
 };
 
