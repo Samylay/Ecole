@@ -1207,7 +1207,7 @@ const translations: Record<Locale, TranslationKeys> = {
       weakPassword: "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل",
       passwordMismatch: "كلمتا المرور غير متطابقتين",
       signupSuccess: "تم إنشاء الحساب بنجاح!",
-      welcome: "مرحبا",
+      welcome: "مرحباً",
       logout: "تسجيل الخروج",
       loginToAccess: "سجل الدخول للوصول إلى الدروس",
       iAmStudent: "أنا تلميذ",

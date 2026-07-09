@@ -611,7 +611,7 @@ export const courses: Course[] = [
       bio: {
         fr: "Docteure en physique, 10 ans d'enseignement",
         en: "PhD in Physics, 10 years of teaching",
-        ar: "دكتورة في الفيزياء، 10 سنوات تدريس",
+        ar: "دكتورة في الفيزياء، بخبرة 10 سنوات في التدريس",
       },
     },
     totalLessons: 7,
@@ -712,7 +712,7 @@ export const courses: Course[] = [
             description: {
               fr: "L'énergie potentielle gravitationnelle et la conservation de l'énergie.",
               en: "Gravitational potential energy and conservation of energy.",
-              ar: "الطاقة الكامنة الثقالية وانحفاظ الطاقة.",
+              ar: "الطاقة الكامنة الثقالية وحفظ الطاقة.",
             },
           },
         ],
@@ -736,7 +736,7 @@ export const courses: Course[] = [
       bio: {
         fr: "Docteure en physique, 10 ans d'enseignement",
         en: "PhD in Physics, 10 years of teaching",
-        ar: "دكتورة في الفيزياء، 10 سنوات تدريس",
+        ar: "دكتورة في الفيزياء، بخبرة 10 سنوات في التدريس",
       },
     },
     totalLessons: 5,
@@ -832,7 +832,7 @@ export const courses: Course[] = [
       bio: {
         fr: "Docteure en physique, 10 ans d'enseignement",
         en: "PhD in Physics, 10 years of teaching",
-        ar: "دكتورة في الفيزياء، 10 سنوات تدريس",
+        ar: "دكتورة في الفيزياء، بخبرة 10 سنوات في التدريس",
       },
     },
     totalLessons: 6,
@@ -1022,7 +1022,7 @@ export const courses: Course[] = [
     id: "biology-ecology-201",
     subject: "biology",
     level: "high",
-    title: { fr: "Écologie et environnement", en: "Ecology and Environment", ar: "علم البيئة والمحيط" },
+    title: { fr: "Écologie et environnement", en: "Ecology and Environment", ar: "علم البيئة" },
     description: {
       fr: "Étudiez les écosystèmes, la biodiversité et l'impact de l'homme sur l'environnement.",
       en: "Study ecosystems, biodiversity, and human impact on the environment.",
@@ -1225,7 +1225,7 @@ export const courses: Course[] = [
     id: "biology-genetics-301",
     subject: "biology",
     level: "high",
-    title: { fr: "Génétique et hérédité", en: "Genetics and Heredity", ar: "علم الوراثة والتوارث" },
+    title: { fr: "Génétique et hérédité", en: "Genetics and Heredity", ar: "علم الوراثة" },
     description: {
       fr: "Explorez les lois de Mendel, la structure de l'ADN et les mécanismes de l'hérédité.",
       en: "Explore Mendel's laws, DNA structure, and the mechanisms of heredity.",
@@ -3037,7 +3037,7 @@ export const quizzes: Record<string, Record<string, QuizQuestion[]>> = {
           ar: "يُعبَّر عن الأليل السائد…",
         },
         options: [
-          { fr: "seulement à l'état homozygote", en: "only in the homozygous state", ar: "فقط في الحالة المتماثلة الزيجوت" },
+          { fr: "seulement à l'état homozygote", en: "only in the homozygous state", ar: "فقط في حالة التماثل الزيجوتي" },
           { fr: "même en présence d'un seul exemplaire", en: "even with just one copy present", ar: "حتى مع وجود نسخة واحدة منه" },
           { fr: "jamais", en: "never", ar: "أبداً" },
           { fr: "uniquement chez les femelles", en: "only in females", ar: "فقط عند الإناث" },
