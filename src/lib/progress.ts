@@ -250,7 +250,7 @@ export function getWeeklyActivity(): number[] {
   for (const ts of Object.values(readCompleted())) {
     if (ts >= weekStart) {
       const idx = (new Date(ts).getDay() + 6) % 7;
-      counts[idx] += 1;
+      counts[idx] = Math.min(counts[idx] + 1, 9);
     }
   }
   return counts;

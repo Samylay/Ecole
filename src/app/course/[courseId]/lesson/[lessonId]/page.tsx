@@ -31,6 +31,7 @@ import {
   addNote,
   deleteNote,
   migrateLegacyProgress,
+  recordActiveDay,
   LessonNote,
 } from "@/lib/progress";
 
@@ -70,7 +71,8 @@ export default function LessonPage({
     setCountdown(null);
     setDrawerOpen(false);
     startedAt.current = Date.now();
-  }, [courseId, lessonId]);
+    if (user) recordActiveDay();
+  }, [courseId, lessonId, user]);
 
   // Active sidebar row auto-scrolls into view.
   useEffect(() => {
