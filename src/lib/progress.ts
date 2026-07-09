@@ -86,6 +86,7 @@ const STATE_KEYS = [
   "followed_teachers",
   "activity",
   "downloaded_docs",
+  "positions",
 ] as const;
 
 let syncTimer: ReturnType<typeof setTimeout> | null = null;
@@ -405,6 +406,18 @@ export function recordDocumentDownload(courseId: string, lessonId: string, docNa
   if (!downloaded.includes(k)) {
     write("downloaded_docs", [...downloaded, k]);
   }
+}
+
+// ——— Video resume position (real player position, in seconds) ———
+
+export function getResumePosition(courseId: string, lessonId: string): number {
+  return read<Record<string, number>>("positions", {})[`${courseId}:${lessonId}`] ?? 0;
+}
+
+export function setResumePosition(courseId: string, lessonId: string, seconds: number): void {
+  const positions = read<Record<string, number>>("positions", {});
+  positions[`${courseId}:${lessonId}`] = seconds;
+  write("positions", positions);
 }
 
 // ——— Activity feed (parent view) ———

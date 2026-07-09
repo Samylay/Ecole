@@ -34,10 +34,65 @@ import {
   recordActiveDay,
   isDocumentDownloaded,
   recordDocumentDownload,
+  getResumePosition,
+  setResumePosition,
   LessonNote,
 } from "@/lib/progress";
 
 type Tab = "about" | "notes" | "documents";
+
+// Real player position via the YouTube IFrame API (the iframe already
+// requests enablejsapi=1 — see withPlayerParams below).
+interface YTPlayerInstance {
+  getCurrentTime: () => number;
+  getDuration: () => number;
+  seekTo: (seconds: number, allowSeekAhead: boolean) => void;
+  destroy?: () => void;
+}
+
+declare global {
+  interface Window {
+    YT?: {
+      Player: new (
+        elementId: string,
+        options: { events?: { onReady?: (event: { target: YTPlayerInstance }) => void } }
+      ) => YTPlayerInstance;
+    };
+    onYouTubeIframeAPIReady?: () => void;
+  }
+}
+
+let ytApiPromise: Promise<void> | null = null;
+
+function loadYouTubeIframeAPI(): Promise<void> {
+  if (typeof window === "undefined") return Promise.resolve();
+  if (window.YT?.Player) return Promise.resolve();
+  if (ytApiPromise) return ytApiPromise;
+  ytApiPromise = new Promise((resolve) => {
+    const prevCallback = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = () => {
+      prevCallback?.();
+      resolve();
+    };
+    const script = document.createElement("script");
+    script.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(script);
+  });
+  return ytApiPromise;
+}
+
+function withPlayerParams(url: string): string {
+  try {
+    const u = new URL(url);
+    u.searchParams.set("enablejsapi", "1");
+    if (typeof window !== "undefined") u.searchParams.set("origin", window.location.origin);
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
+
+const VIEWED_THRESHOLD = 0.8;
 
 export default function LessonPage({
   params,
@@ -58,7 +113,7 @@ export default function LessonPage({
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [downloadTick, setDownloadTick] = useState(0);
   const [countdown, setCountdown] = useState<number | null>(null);
-  const startedAt = useRef(Date.now());
+  const playerRef = useRef<YTPlayerInstance | null>(null);
   const activeRowRef = useRef<HTMLAnchorElement | null>(null);
 
   useEffect(() => {
@@ -73,7 +128,6 @@ export default function LessonPage({
     setTab("about");
     setCountdown(null);
     setDrawerOpen(false);
-    startedAt.current = Date.now();
     if (user) recordActiveDay();
   }, [courseId, lessonId, user]);
 
@@ -81,6 +135,51 @@ export default function LessonPage({
   useEffect(() => {
     activeRowRef.current?.scrollIntoView({ block: "nearest" });
   }, [lessonId]);
+
+  // Wire the YouTube IFrame API to the player: resume at the last saved
+  // position, poll real playback position (not a wall-clock timer) to persist
+  // it and to auto-mark the lesson viewed once ≥80% watched.
+  useEffect(() => {
+    let cancelled = false;
+    let interval: ReturnType<typeof setInterval> | null = null;
+    let markedViewed = false;
+    const elementId = `yt-player-${courseId}-${lessonId}`;
+
+    loadYouTubeIframeAPI().then(() => {
+      if (cancelled || !window.YT) return;
+      playerRef.current = new window.YT.Player(elementId, {
+        events: {
+          onReady: (event) => {
+            if (cancelled) return;
+            const resumeAt = getResumePosition(courseId, lessonId);
+            if (resumeAt > 0) event.target.seekTo(resumeAt, true);
+            interval = setInterval(() => {
+              const player = playerRef.current;
+              if (!player) return;
+              const current = player.getCurrentTime();
+              const duration = player.getDuration();
+              setResumePosition(courseId, lessonId, Math.floor(current));
+              if (!markedViewed && duration > 0 && current / duration >= VIEWED_THRESHOLD) {
+                markedViewed = true;
+                if (!isLessonCompleted(courseId, lessonId)) {
+                  toggleLessonCompleted(courseId, lessonId, true);
+                  setCompleted(true);
+                  setCompletedIds(getCompletedLessonIds(courseId));
+                }
+              }
+            }, 2000);
+          },
+        },
+      });
+    });
+
+    return () => {
+      cancelled = true;
+      if (interval) clearInterval(interval);
+      playerRef.current?.destroy?.();
+      playerRef.current = null;
+    };
+  }, [courseId, lessonId]);
 
   const result = getLesson(courseId, lessonId);
   const allLessons = result ? getAllLessons(result.course) : [];
@@ -142,9 +241,8 @@ export default function LessonPage({
   const handleAddNote = (e: React.FormEvent) => {
     e.preventDefault();
     if (!noteText.trim()) return;
-    // Mock video position: elapsed time on this lesson page.
-    const elapsed = Math.floor((Date.now() - startedAt.current) / 1000);
-    const ts = `${String(Math.floor(elapsed / 60)).padStart(2, "0")}:${String(elapsed % 60).padStart(2, "0")}`;
+    const seconds = Math.floor(playerRef.current?.getCurrentTime() ?? 0);
+    const ts = `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
     addNote(courseId, lessonId, ts, noteText.trim());
     setNotes(getNotes(courseId, lessonId));
     setNoteText("");
@@ -250,7 +348,8 @@ export default function LessonPage({
           <div className="overflow-hidden rounded-card bg-ink shadow-card">
             <div className="relative aspect-video">
               <iframe
-                src={lesson.videoUrl}
+                id={`yt-player-${courseId}-${lessonId}`}
+                src={withPlayerParams(lesson.videoUrl)}
                 className="absolute inset-0 h-full w-full"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
