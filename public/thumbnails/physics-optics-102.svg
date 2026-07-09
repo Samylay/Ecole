@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225" width="400" height="225" role="img" aria-hidden="true">
+  <rect width="400" height="225" fill="#f0e7fb"/>
+  <ellipse cx="200" cy="112" rx="22" ry="60" fill="#9256d9" opacity="0.4" stroke="#6f3aa8" stroke-width="3"/>
+  <line x1="40" y1="80" x2="180" y2="95" stroke="#6f3aa8" stroke-width="2.5"/>
+  <line x1="40" y1="112" x2="180" y2="112" stroke="#6f3aa8" stroke-width="2.5"/>
+  <line x1="40" y1="144" x2="180" y2="129" stroke="#6f3aa8" stroke-width="2.5"/>
+  <line x1="220" y1="95" x2="360" y2="150" stroke="#6f3aa8" stroke-width="2.5"/>
+  <line x1="220" y1="112" x2="360" y2="150" stroke="#6f3aa8" stroke-width="2.5"/>
+  <line x1="220" y1="129" x2="360" y2="150" stroke="#6f3aa8" stroke-width="2.5"/>
+  <circle cx="360" cy="150" r="4" fill="#6f3aa8"/>
+</svg>

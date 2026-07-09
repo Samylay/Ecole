@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { BookOpen, Clock, Star } from "lucide-react";
 import { useLocale } from "@/lib/locale-context";
 import { formatNumber } from "@/lib/i18n";
-import { Course, subjectColors, subjectIcons } from "@/lib/data";
+import { Course, subjectColors } from "@/lib/data";
 import { Badge } from "./Badge";
 import { ProgressBar } from "./Progress";
 
@@ -12,16 +13,19 @@ export function CourseCard({ course, progress }: { course: Course; progress?: nu
   const { locale, t } = useLocale();
 
   const colors = subjectColors[course.subject];
-  const icon = subjectIcons[course.subject];
 
   return (
     <Link href={`/course/${course.id}`} className="group block h-full">
       <div className="flex h-full flex-col overflow-hidden rounded-card border border-border bg-surface transition-all duration-[180ms] ease-out group-hover:-translate-y-0.5 group-hover:shadow-lift">
-        {/* Subject-tinted placeholder thumbnail */}
-        <div className={`relative flex h-36 items-center justify-center ${colors.bg}`}>
-          <span className={`text-5xl ${colors.text} opacity-50`} aria-hidden="true">
-            {icon}
-          </span>
+        {/* Subject-tinted background stays visible while the SVG illustration loads/decodes */}
+        <div className={`relative flex h-36 items-center justify-center overflow-hidden ${colors.bg}`}>
+          <Image
+            src={`/thumbnails/${course.id}.svg`}
+            alt=""
+            fill
+            className="object-cover"
+            aria-hidden="true"
+          />
           <div className="absolute start-3 top-3 flex gap-2">
             <Badge className={`${colors.bg} ${colors.text} border border-surface/60 bg-surface/80 backdrop-blur-sm`}>
               {t.subjects[course.subject]}

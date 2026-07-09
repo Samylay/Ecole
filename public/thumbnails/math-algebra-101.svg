@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225" width="400" height="225" role="img" aria-hidden="true">
+  <rect width="400" height="225" fill="#e3edfb"/>
+  <g stroke="#2c5aa8" stroke-width="2" opacity="0.25">
+    <line x1="0" y1="45" x2="400" y2="45"/>
+    <line x1="0" y1="90" x2="400" y2="90"/>
+    <line x1="0" y1="135" x2="400" y2="135"/>
+    <line x1="0" y1="180" x2="400" y2="180"/>
+  </g>
+  <rect x="60" y="55" width="80" height="80" rx="12" fill="#3f7ad9" opacity="0.85"/>
+  <text x="100" y="107" font-family="ui-monospace, monospace" font-size="34" fill="#e3edfb" text-anchor="middle">x</text>
+  <circle cx="230" cy="70" r="34" fill="#2c5aa8" opacity="0.8"/>
+  <text x="230" y="80" font-family="ui-monospace, monospace" font-size="30" fill="#e3edfb" text-anchor="middle">y</text>
+  <path d="M290 150 L320 120 L350 150 L320 180 Z" fill="#3f7ad9" opacity="0.7"/>
+  <text x="180" y="200" font-family="ui-monospace, monospace" font-size="26" fill="#2c5aa8" opacity="0.7">x² + y = 42</text>
+</svg>
