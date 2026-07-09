@@ -292,7 +292,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                                 >
                                   <span
                                     className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-pill text-[13px] font-medium ${
-                                      done ? "bg-success-soft text-success" : "bg-primary-soft text-primary-hover dark:text-primary"
+                                      done ? "bg-success-soft text-success" : "bg-primary-soft text-primary-hover"
                                     }`}
                                   >
                                     {done ? <Check className="h-4 w-4" aria-hidden="true" /> : formatNumber(locale, lIdx + 1)}

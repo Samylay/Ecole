@@ -73,9 +73,21 @@
   --color-primary-hover: #9494f0;
   --color-primary-soft: #2a2a4e;
   /* subject tints: oklch(0.30 0.05 H) */
+  --color-math: #6fa3ea;
   --color-math-soft: #1d2a42;
+  --color-physics: #b087e8;
   --color-physics-soft: #2a2140;
+  --color-biology: #4fc98a;
   --color-biology-soft: #1a3229;
+  /* semantic colors + their soft tints, lightened/darkened the same way as
+     primary above — the un-remapped light values left text-on-soft-chip
+     pairs (warning-on-warning-soft, error-on-error-soft, ...) below AA */
+  --color-success: #4fc98a;
+  --color-success-soft: #1a3229;
+  --color-warning: #e0a952;
+  --color-warning-soft: #332108;
+  --color-error: #e0748a;
+  --color-error-soft: #2c1319;
 }
 
 html {
