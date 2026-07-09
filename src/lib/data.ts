@@ -3522,7 +3522,191 @@ const courseExtras: Record<string, Partial<CourseExtras>> = {
       },
     ],
   },
-  "biology-ecology-201": { prerequisiteId: "biology-cells-101" },
+  "biology-cells-101": {
+    outcomes: [
+      {
+        fr: "Nommer les organites de la cellule et leur rôle",
+        en: "Name the cell's organelles and their role",
+        ar: "تسمية عضيات الخلية ودورها",
+      },
+      {
+        fr: "Comparer cellule animale et cellule végétale",
+        en: "Compare an animal cell to a plant cell",
+        ar: "مقارنة الخلية الحيوانية والخلية النباتية",
+      },
+      {
+        fr: "Décrire les étapes de la division cellulaire",
+        en: "Describe the stages of cell division",
+        ar: "وصف مراحل الانقسام الخلوي",
+      },
+      {
+        fr: "Utiliser un microscope et interpréter une observation",
+        en: "Use a microscope and interpret an observation",
+        ar: "استعمال المجهر وتفسير الملاحظة",
+      },
+    ],
+    reviews: [
+      {
+        author: "Zineb K.",
+        rating: 5,
+        text: {
+          fr: "Les schémas de cellules sont magnifiques et bien légendés.",
+          en: "The cell diagrams are beautiful and clearly labeled.",
+          ar: "رسوم الخلايا جميلة ومُعنونة بوضوح.",
+        },
+        date: "2026-05-06",
+      },
+      {
+        author: "Hugo V.",
+        rating: 4,
+        text: {
+          fr: "Très pédagogue, mais j'aurais aimé une vidéo au microscope réel.",
+          en: "Very pedagogical, though I'd have liked footage from a real microscope.",
+          ar: "تربوي جداً، لكن كنت أتمنى فيديو حقيقياً بالمجهر.",
+        },
+        date: "2026-03-15",
+      },
+    ],
+  },
+  "biology-ecology-201": {
+    prerequisiteId: "biology-cells-101",
+    outcomes: [
+      {
+        fr: "Décrire les relations entre êtres vivants dans un écosystème",
+        en: "Describe how living things interact within an ecosystem",
+        ar: "وصف العلاقات بين الكائنات الحية داخل نظام بيئي",
+      },
+      {
+        fr: "Expliquer une chaîne et un réseau alimentaire",
+        en: "Explain a food chain and a food web",
+        ar: "شرح السلسلة والشبكة الغذائية",
+      },
+      {
+        fr: "Analyser l'impact humain sur un milieu naturel",
+        en: "Analyze human impact on a natural environment",
+        ar: "تحليل تأثير الإنسان على وسط طبيعي",
+      },
+      {
+        fr: "Proposer des gestes concrets pour préserver la biodiversité",
+        en: "Suggest concrete actions to preserve biodiversity",
+        ar: "اقتراح إجراءات ملموسة للحفاظ على التنوع البيولوجي",
+      },
+    ],
+    reviews: [
+      {
+        author: "Salma E.",
+        rating: 5,
+        text: {
+          fr: "Cours très concret, avec des exemples de forêts et rivières près de chez moi.",
+          en: "Very concrete course, with examples of forests and rivers near where I live.",
+          ar: "درس ملموس جداً بأمثلة عن غابات وأنهار قريبة من منزلي.",
+        },
+        date: "2026-04-29",
+      },
+      {
+        author: "Mathis G.",
+        rating: 4,
+        text: {
+          fr: "J'ai adoré le chapitre sur les réseaux alimentaires, bien illustré.",
+          en: "I loved the food-web chapter, really well illustrated.",
+          ar: "أحببت فصل الشبكات الغذائية، موضح بشكل جيد.",
+        },
+        date: "2026-02-14",
+      },
+    ],
+  },
+  "biology-human-body-102": {
+    outcomes: [
+      {
+        fr: "Situer les grands systèmes du corps humain et leur fonction",
+        en: "Locate the body's major systems and their function",
+        ar: "تحديد الأجهزة الكبرى لجسم الإنسان ووظيفتها",
+      },
+      {
+        fr: "Expliquer le trajet de l'air et du sang dans l'organisme",
+        en: "Explain the path of air and blood through the body",
+        ar: "شرح مسار الهواء والدم داخل الجسم",
+      },
+      {
+        fr: "Décrire le rôle du système digestif dans la nutrition",
+        en: "Describe the digestive system's role in nutrition",
+        ar: "وصف دور الجهاز الهضمي في التغذية",
+      },
+      {
+        fr: "Relier hygiène de vie et bon fonctionnement du corps",
+        en: "Connect lifestyle habits to how well the body functions",
+        ar: "ربط نمط الحياة الصحي بحسن سير الجسم",
+      },
+    ],
+    reviews: [
+      {
+        author: "Aya R.",
+        rating: 5,
+        text: {
+          fr: "La Pre Zahra explique le corps humain simplement, j'ai adoré le chapitre circulation.",
+          en: "Pr. Zahra explains the human body simply, I loved the circulation chapter.",
+          ar: "الأستاذة زهراء تشرح جسم الإنسان ببساطة، أحببت فصل الدورة الدموية.",
+        },
+        date: "2026-05-11",
+      },
+      {
+        author: "Noah C.",
+        rating: 5,
+        text: {
+          fr: "Les animations du système respiratoire sont bluffantes de clarté.",
+          en: "The respiratory system animations are impressively clear.",
+          ar: "رسوم الجهاز التنفسي المتحركة واضحة بشكل مذهل.",
+        },
+        date: "2026-03-22",
+      },
+    ],
+  },
+  "biology-genetics-301": {
+    outcomes: [
+      {
+        fr: "Expliquer ce qu'est un gène et un chromosome",
+        en: "Explain what a gene and a chromosome are",
+        ar: "شرح ماهية المورثة والصبغي",
+      },
+      {
+        fr: "Construire et lire un arbre généalogique",
+        en: "Build and read a family (pedigree) tree",
+        ar: "إنشاء وقراءة شجرة نسب",
+      },
+      {
+        fr: "Prévoir la transmission d'un caractère héréditaire simple",
+        en: "Predict the transmission of a simple hereditary trait",
+        ar: "توقع انتقال صفة وراثية بسيطة",
+      },
+      {
+        fr: "Distinguer information génétique et environnement",
+        en: "Distinguish genetic information from environmental factors",
+        ar: "التمييز بين المعلومة الوراثية والعامل البيئي",
+      },
+    ],
+    reviews: [
+      {
+        author: "Chaimae O.",
+        rating: 5,
+        text: {
+          fr: "La double hélice enfin comprise grâce aux schémas 3D.",
+          en: "I finally understood the double helix thanks to the 3D diagrams.",
+          ar: "فهمت اللولب المزدوج أخيراً بفضل الرسوم ثلاثية الأبعاد.",
+        },
+        date: "2026-05-03",
+      },
+      {
+        author: "Ethan F.",
+        rating: 4,
+        text: {
+          fr: "Chapitre exigeant mais les exemples d'arbres généalogiques aident beaucoup.",
+          en: "Demanding chapter, but the pedigree-tree examples help a lot.",
+          ar: "فصل صعب لكن أمثلة أشجار النسب تساعد كثيراً.",
+        },
+        date: "2026-02-27",
+      },
+    ],
+  },
 };
 
 export function getCourseExtras(courseId: string): CourseExtras {
