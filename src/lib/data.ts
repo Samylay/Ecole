@@ -3243,8 +3243,146 @@ const courseExtras: Record<string, Partial<CourseExtras>> = {
       },
     ],
   },
-  "math-geometry-201": { prerequisiteId: "math-algebra-101" },
-  "math-trigonometry-301": { prerequisiteId: "math-geometry-201" },
+  "math-geometry-201": {
+    prerequisiteId: "math-algebra-101",
+    outcomes: [
+      {
+        fr: "Identifier les propriétés des triangles, quadrilatères et cercles",
+        en: "Identify the properties of triangles, quadrilaterals and circles",
+        ar: "تحديد خصائص المثلثات والرباعيات والدوائر",
+      },
+      {
+        fr: "Démontrer avec les théorèmes de Pythagore et de Thalès",
+        en: "Prove statements using the Pythagorean and Thales theorems",
+        ar: "البرهنة باستعمال نظريتي فيثاغورس وطاليس",
+      },
+      {
+        fr: "Calculer aires et périmètres de figures composées",
+        en: "Calculate the area and perimeter of composite figures",
+        ar: "حساب مساحات ومحيطات الأشكال المركبة",
+      },
+      {
+        fr: "Construire une figure géométrique à partir d'un énoncé",
+        en: "Construct a geometric figure from a written statement",
+        ar: "إنشاء شكل هندسي انطلاقاً من نص المسألة",
+      },
+    ],
+    reviews: [
+      {
+        author: "Nadia F.",
+        rating: 5,
+        text: {
+          fr: "Le prof Benali rend les démonstrations logiques, pas juste à apprendre par cœur.",
+          en: "Pr. Benali makes the proofs feel logical, not just something to memorize.",
+          ar: "الأستاذ بنعلي يجعل البراهين منطقية وليست مجرد حفظ.",
+        },
+        date: "2026-05-02",
+      },
+      {
+        author: "Omar T.",
+        rating: 4,
+        text: {
+          fr: "Bon rythme, un peu rapide sur Thalès mais les fiches PDF rattrapent ça.",
+          en: "Good pace, a bit fast on Thales but the PDF sheets make up for it.",
+          ar: "إيقاع جيد، سريع قليلاً في نظرية طاليس لكن ملفات PDF تعوض ذلك.",
+        },
+        date: "2026-03-27",
+      },
+    ],
+  },
+  "math-statistics-102": {
+    outcomes: [
+      {
+        fr: "Organiser des données avec tableaux et graphiques",
+        en: "Organize data using tables and charts",
+        ar: "تنظيم المعطيات بجداول ورسوم بيانية",
+      },
+      {
+        fr: "Calculer moyenne, médiane et écart-type d'une série",
+        en: "Calculate the mean, median and standard deviation of a series",
+        ar: "حساب المتوسط والوسيط والانحراف المعياري لسلسلة",
+      },
+      {
+        fr: "Calculer une probabilité simple ou conditionnelle",
+        en: "Calculate a simple or conditional probability",
+        ar: "حساب احتمال بسيط أو شرطي",
+      },
+      {
+        fr: "Interpréter un résultat statistique dans un contexte réel",
+        en: "Interpret a statistical result in a real-world context",
+        ar: "تفسير نتيجة إحصائية في سياق واقعي",
+      },
+    ],
+    reviews: [
+      {
+        author: "Camille R.",
+        rating: 5,
+        text: {
+          fr: "Les probabilités enfin claires grâce aux exemples avec des dés et des cartes.",
+          en: "Probability finally made sense thanks to the dice and card examples.",
+          ar: "أصبحت الاحتمالات واضحة أخيراً بفضل أمثلة النرد والأوراق.",
+        },
+        date: "2026-04-18",
+      },
+      {
+        author: "Yassine H.",
+        rating: 4,
+        text: {
+          fr: "Très utile pour le brevet, j'aurais aimé un exercice de synthèse en plus.",
+          en: "Very useful for the exam, I'd have liked one more synthesis exercise.",
+          ar: "مفيد جداً للامتحان، كنت أتمنى تمريناً تركيبياً إضافياً.",
+        },
+        date: "2026-02-11",
+      },
+    ],
+  },
+  "math-trigonometry-301": {
+    prerequisiteId: "math-geometry-201",
+    outcomes: [
+      {
+        fr: "Utiliser sinus, cosinus et tangente dans un triangle rectangle",
+        en: "Use sine, cosine and tangent in a right triangle",
+        ar: "استعمال الجيب وجيب التمام والظل في مثلث قائم الزاوية",
+      },
+      {
+        fr: "Convertir entre degrés et radians",
+        en: "Convert between degrees and radians",
+        ar: "التحويل بين الدرجات والراديان",
+      },
+      {
+        fr: "Lire et tracer le cercle trigonométrique",
+        en: "Read and sketch the trigonometric (unit) circle",
+        ar: "قراءة ورسم الدائرة المثلثية",
+      },
+      {
+        fr: "Résoudre une équation trigonométrique simple",
+        en: "Solve a simple trigonometric equation",
+        ar: "حل معادلة مثلثية بسيطة",
+      },
+    ],
+    reviews: [
+      {
+        author: "Ines D.",
+        rating: 5,
+        text: {
+          fr: "Le cercle trigonométrique animé a tout changé, je visualise enfin les angles.",
+          en: "The animated unit circle changed everything — I finally visualize the angles.",
+          ar: "الدائرة المثلثية المتحركة غيّرت كل شيء، أصبحت أتخيل الزوايا أخيراً.",
+        },
+        date: "2026-05-09",
+      },
+      {
+        author: "Karim S.",
+        rating: 4,
+        text: {
+          fr: "Exigeant mais bien expliqué, indispensable avant la trigonométrie du lycée.",
+          en: "Demanding but well explained — essential before high-school trigonometry.",
+          ar: "صعب لكن مشروح جيداً، ضروري قبل حساب المثلثات في الثانوي.",
+        },
+        date: "2026-03-30",
+      },
+    ],
+  },
   "physics-optics-102": { prerequisiteId: "physics-mechanics-101" },
   "biology-ecology-201": { prerequisiteId: "biology-cells-101" },
 };
