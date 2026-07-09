@@ -39,6 +39,7 @@ export const metadata: Metadata = {
     siteName: "Layaida",
     title: "Layaida - Apprends mieux, réussis plus",
     description: "Plateforme d'apprentissage pour le collège et le lycée.",
+    images: [{ url: "/logo.png", width: 512, height: 512, alt: "Layaida" }],
   },
 };
 
