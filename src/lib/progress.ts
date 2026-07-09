@@ -85,6 +85,7 @@ const STATE_KEYS = [
   "notifications",
   "followed_teachers",
   "activity",
+  "downloaded_docs",
 ] as const;
 
 let syncTimer: ReturnType<typeof setTimeout> | null = null;
@@ -390,6 +391,20 @@ export function toggleFollowTeacher(slug: string): boolean {
   const next = followed.includes(slug) ? followed.filter((s) => s !== slug) : [...followed, slug];
   write("followed_teachers", next);
   return next.includes(slug);
+}
+
+// ——— Document downloads (offline availability tracking) ———
+
+export function isDocumentDownloaded(courseId: string, lessonId: string, docName: string): boolean {
+  return read<string[]>("downloaded_docs", []).includes(`${courseId}:${lessonId}:${docName}`);
+}
+
+export function recordDocumentDownload(courseId: string, lessonId: string, docName: string): void {
+  const downloaded = read<string[]>("downloaded_docs", []);
+  const k = `${courseId}:${lessonId}:${docName}`;
+  if (!downloaded.includes(k)) {
+    write("downloaded_docs", [...downloaded, k]);
+  }
 }
 
 // ——— Activity feed (parent view) ———

@@ -83,6 +83,7 @@ type TranslationKeys = {
     completed: string;
     documents: string;
     downloadPdf: string;
+    downloaded: string;
     whatYouWillLearn: string;
     prerequisite: string;
     preview: string;
@@ -387,6 +388,7 @@ const translations: Record<Locale, TranslationKeys> = {
       completed: "Terminé",
       documents: "Documents",
       downloadPdf: "Télécharger PDF",
+      downloaded: "Téléchargé, disponible hors ligne",
       whatYouWillLearn: "Ce que tu vas apprendre",
       prerequisite: "Prérequis",
       preview: "Aperçu",
@@ -690,6 +692,7 @@ const translations: Record<Locale, TranslationKeys> = {
       completed: "Completed",
       documents: "Documents",
       downloadPdf: "Download PDF",
+      downloaded: "Downloaded, available offline",
       whatYouWillLearn: "What you'll learn",
       prerequisite: "Prerequisite",
       preview: "Preview",
@@ -993,6 +996,7 @@ const translations: Record<Locale, TranslationKeys> = {
       completed: "مكتمل",
       documents: "الوثائق",
       downloadPdf: "تحميل PDF",
+      downloaded: "تم التحميل، متاح دون اتصال",
       whatYouWillLearn: "ماذا ستتعلم",
       prerequisite: "المتطلبات",
       preview: "معاينة",

@@ -32,6 +32,8 @@ import {
   deleteNote,
   migrateLegacyProgress,
   recordActiveDay,
+  isDocumentDownloaded,
+  recordDocumentDownload,
   LessonNote,
 } from "@/lib/progress";
 
@@ -54,6 +56,7 @@ export default function LessonPage({
   const [notes, setNotes] = useState<LessonNote[]>([]);
   const [noteText, setNoteText] = useState("");
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [downloadTick, setDownloadTick] = useState(0);
   const [countdown, setCountdown] = useState<number | null>(null);
   const startedAt = useRef(Date.now());
   const activeRowRef = useRef<HTMLAnchorElement | null>(null);
@@ -359,21 +362,38 @@ export default function LessonPage({
                   <p className="text-[15px] text-muted">{t.lesson.noDocuments}</p>
                 ) : (
                   <ul className="space-y-3">
-                    {lesson.documents.map((doc, i) => (
-                      <li key={i} className="flex items-center gap-3 rounded-card border border-border bg-surface p-4">
-                        <span className={`flex h-10 w-10 items-center justify-center rounded-input ${colors.bg} ${colors.text}`}>
-                          <FileText className="h-5 w-5" aria-hidden="true" />
-                        </span>
-                        <span className="min-w-0 flex-1 truncate text-[15px] font-medium text-ink">{doc.name}</span>
-                        <a
-                          href={doc.url}
-                          className="flex min-h-11 items-center gap-1.5 rounded-pill px-4 text-[13px] font-semibold text-primary transition-colors hover:bg-primary-soft"
-                        >
-                          <Download className="h-4 w-4" aria-hidden="true" />
-                          {t.course.downloadPdf}
-                        </a>
-                      </li>
-                    ))}
+                    {lesson.documents.map((doc, i) => {
+                      void downloadTick;
+                      const downloaded = isDocumentDownloaded(courseId, lessonId, doc.name);
+                      return (
+                        <li key={i} className="flex items-center gap-3 rounded-card border border-border bg-surface p-4">
+                          <span className={`flex h-10 w-10 items-center justify-center rounded-input ${colors.bg} ${colors.text}`}>
+                            <FileText className="h-5 w-5" aria-hidden="true" />
+                          </span>
+                          <span className="min-w-0 flex-1 truncate text-[15px] font-medium text-ink">{doc.name}</span>
+                          {downloaded && (
+                            <span
+                              className="flex items-center gap-1 text-[13px] text-success"
+                              title={t.course.downloaded}
+                            >
+                              <Check className="h-4 w-4" aria-hidden="true" />
+                            </span>
+                          )}
+                          <a
+                            href={doc.url}
+                            download={doc.name}
+                            onClick={() => {
+                              recordDocumentDownload(courseId, lessonId, doc.name);
+                              setDownloadTick((n) => n + 1);
+                            }}
+                            className="flex min-h-11 items-center gap-1.5 rounded-pill px-4 text-[13px] font-semibold text-primary transition-colors hover:bg-primary-soft"
+                          >
+                            <Download className="h-4 w-4" aria-hidden="true" />
+                            {t.course.downloadPdf}
+                          </a>
+                        </li>
+                      );
+                    })}
                   </ul>
                 )}
               </div>
