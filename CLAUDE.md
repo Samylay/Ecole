@@ -22,3 +22,9 @@
 ## Locked decisions
 - 2026-07-08: Nord Campus design system is THE design — don't re-theme.
 - Phase gates (backend, video strategy, curriculum, hosting) are Samy-only; queue questions as NEEDS-SAMY, never pick for him.
+
+## Interaction & motion (house doctrine, locked 2026-07-10)
+
+- All UI work follows the `interaction-craft` skill (`~/.agents/skills/interaction-craft/SKILL.md` — Emil Kowalski doctrine). The existing 180ms ease-out convention stands — formalize it with the skill's easing/duration vars.
+- Students use this occasionally → subtle+fast on navigation, but real celebration animations are ENCOURAGED on rare meaningful events (lesson complete, quiz passed). RTL: slide directions flip for Arabic.
+- Hard floor: animate only `transform`/`opacity`/`clip-path`/`filter` (progress bars via `scaleX`); ≤300ms (celebrations ≤400ms); `transition-all` banned; `active:scale-[0.98]` press feedback everywhere (already the pattern on one element — extend it); `prefers-reduced-motion` block in globals.
