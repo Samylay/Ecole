@@ -256,7 +256,7 @@ export default function LessonPage({
       <div className="border-b border-border p-4">
         <Link
           href={`/course/${courseId}`}
-          className="flex items-center gap-1.5 text-[13px] font-medium text-muted transition-colors hover:text-ink"
+          className="flex items-center gap-1.5 text-[13px] font-medium text-muted transition-[color,transform] duration-[var(--duration-fast)] ease-[var(--ease-out-custom)] hover:text-ink active:scale-[0.98]"
         >
           <ArrowLeft className={`h-4 w-4 ${dir === "rtl" ? "-scale-x-100" : ""}`} aria-hidden="true" />
           {t.lesson.backToCourse}
@@ -279,7 +279,7 @@ export default function LessonPage({
                   href={`/course/${courseId}/lesson/${l.id}`}
                   aria-current={isCurrent ? "page" : undefined}
                   onClick={() => setDrawerOpen(false)}
-                  className={`flex min-h-12 items-center gap-3 border-s-2 px-4 py-2 text-[13px] transition-colors duration-[180ms] ${
+                  className={`flex min-h-12 items-center gap-3 border-s-2 px-4 py-2 text-[13px] transition-[background-color,color,border-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] active:scale-[0.98] ${
                     isCurrent
                       ? "border-primary bg-primary-soft/50 font-semibold text-primary-hover dark:text-primary"
                       : "border-transparent text-slate hover:bg-bg"
@@ -299,7 +299,7 @@ export default function LessonPage({
               <Link
                 href={`/course/${courseId}/quiz/${chapter.id}`}
                 onClick={() => setDrawerOpen(false)}
-                className="flex min-h-12 items-center gap-3 border-s-2 border-transparent bg-warning-soft/40 px-4 py-2 text-[13px] font-medium text-ink transition-colors duration-[180ms] hover:bg-warning-soft"
+                className="flex min-h-12 items-center gap-3 border-s-2 border-transparent bg-warning-soft/40 px-4 py-2 text-[13px] font-medium text-ink transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:bg-warning-soft active:scale-[0.98]"
               >
                 <ClipboardCheck className="h-4 w-4 shrink-0 text-warning" aria-hidden="true" />
                 <span className="flex-1">{t.course.quiz}</span>
@@ -319,7 +319,7 @@ export default function LessonPage({
           <Link
             href={`/course/${courseId}`}
             aria-label={t.lesson.backToCourse}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-pill text-slate transition-colors hover:bg-mist"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-pill text-slate transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:bg-mist active:scale-[0.98]"
           >
             <ArrowLeft className={`h-5 w-5 ${dir === "rtl" ? "-scale-x-100" : ""}`} aria-hidden="true" />
           </Link>
@@ -332,7 +332,7 @@ export default function LessonPage({
           </div>
           <button
             onClick={() => setDrawerOpen(true)}
-            className="flex min-h-11 items-center gap-2 rounded-pill px-3 text-[13px] font-medium text-slate transition-colors hover:bg-mist lg:hidden"
+            className="flex min-h-11 items-center gap-2 rounded-pill px-3 text-[13px] font-medium text-slate transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:bg-mist active:scale-[0.98] lg:hidden"
             aria-expanded={drawerOpen}
           >
             <List className="h-5 w-5" aria-hidden="true" />
@@ -402,7 +402,7 @@ export default function LessonPage({
                 role="tab"
                 aria-selected={tab === value}
                 onClick={() => setTab(value)}
-                className={`-mb-px min-h-11 border-b-2 px-4 text-[15px] font-medium transition-colors duration-[180ms] ${
+                className={`-mb-px min-h-11 border-b-2 px-4 text-[15px] font-medium transition-[border-color,color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] active:scale-[0.98] ${
                   tab === value ? "border-primary text-primary" : "border-transparent text-muted hover:text-ink"
                 }`}
               >
@@ -444,7 +444,7 @@ export default function LessonPage({
                             setNotes(getNotes(courseId, lessonId));
                           }}
                           aria-label={`${t.common.close} — ${note.timestamp}`}
-                          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-pill text-faint transition-colors hover:bg-error-soft hover:text-error"
+                          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-pill text-faint transition-[background-color,color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:bg-error-soft hover:text-error active:scale-[0.98]"
                         >
                           <Trash2 className="h-4 w-4" aria-hidden="true" />
                         </button>
@@ -485,7 +485,7 @@ export default function LessonPage({
                               recordDocumentDownload(courseId, lessonId, doc.name);
                               setDownloadTick((n) => n + 1);
                             }}
-                            className="flex min-h-11 items-center gap-1.5 rounded-pill px-4 text-[13px] font-semibold text-primary transition-colors hover:bg-primary-soft"
+                            className="flex min-h-11 items-center gap-1.5 rounded-pill px-4 text-[13px] font-semibold text-primary transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:bg-primary-soft active:scale-[0.98]"
                           >
                             <Download className="h-4 w-4" aria-hidden="true" />
                             {t.course.downloadPdf}
@@ -504,7 +504,7 @@ export default function LessonPage({
             {prevLesson ? (
               <Link
                 href={`/course/${courseId}/lesson/${prevLesson.id}`}
-                className="flex min-h-11 items-center gap-1.5 rounded-pill px-4 text-[15px] font-medium text-slate transition-colors hover:bg-mist"
+                className="flex min-h-11 items-center gap-1.5 rounded-pill px-4 text-[15px] font-medium text-slate transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:bg-mist active:scale-[0.98]"
               >
                 <PrevChevron className="h-5 w-5" aria-hidden="true" />
                 {t.lesson.previous}
@@ -515,7 +515,7 @@ export default function LessonPage({
             {nextLesson ? (
               <Link
                 href={`/course/${courseId}/lesson/${nextLesson.id}`}
-                className="flex min-h-11 items-center gap-1.5 rounded-pill bg-primary px-5 text-[15px] font-semibold text-white shadow-primary transition-colors hover:bg-primary-hover"
+                className="flex min-h-11 items-center gap-1.5 rounded-pill bg-primary px-5 text-[15px] font-semibold text-white shadow-primary transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:bg-primary-hover active:scale-[0.98]"
               >
                 {t.lesson.next}
                 <NextChevron className="h-5 w-5" aria-hidden="true" />

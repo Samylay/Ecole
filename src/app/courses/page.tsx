@@ -114,7 +114,7 @@ function CatalogContent() {
             return (
               <label
                 key={s}
-                className="flex min-h-11 cursor-pointer items-center gap-3 rounded-input px-2 text-[15px] text-slate transition-colors duration-[180ms] hover:bg-mist/50"
+                className="flex min-h-11 cursor-pointer items-center gap-3 rounded-input px-2 text-[15px] text-slate transition-colors duration-[var(--duration-base)] hover:bg-mist/50"
               >
                 <input
                   type="checkbox"
@@ -164,7 +164,7 @@ function CatalogContent() {
           ).map(([value, label]) => (
             <label
               key={value}
-              className="flex min-h-11 cursor-pointer items-center gap-3 rounded-input px-2 text-[15px] text-slate transition-colors duration-[180ms] hover:bg-mist/50"
+              className="flex min-h-11 cursor-pointer items-center gap-3 rounded-input px-2 text-[15px] text-slate transition-colors duration-[var(--duration-base)] hover:bg-mist/50"
             >
               <input
                 type="radio"
@@ -188,7 +188,7 @@ function CatalogContent() {
           {[0, 4, 4.5].map((r) => (
             <label
               key={r}
-              className="flex min-h-11 cursor-pointer items-center gap-3 rounded-input px-2 text-[15px] text-slate transition-colors duration-[180ms] hover:bg-mist/50"
+              className="flex min-h-11 cursor-pointer items-center gap-3 rounded-input px-2 text-[15px] text-slate transition-colors duration-[var(--duration-base)] hover:bg-mist/50"
             >
               <input
                 type="radio"
@@ -267,14 +267,17 @@ function CatalogContent() {
                 <button
                   key={chip.key}
                   onClick={chip.clear}
-                  className="flex items-center gap-1.5 rounded-pill bg-primary-soft px-3 py-1.5 text-[13px] font-medium text-primary-hover transition-colors duration-[180ms] hover:bg-primary hover:text-white dark:text-primary dark:hover:text-white"
+                  className="flex items-center gap-1.5 rounded-pill bg-primary-soft px-3 py-1.5 text-[13px] font-medium text-primary-hover transition-[background-color,color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:bg-primary hover:text-white active:scale-[0.98] dark:text-primary dark:hover:text-white"
                 >
                   {chip.label}
                   <X className="h-3.5 w-3.5" aria-hidden="true" />
                 </button>
               ))}
               {activeChips.length > 0 && (
-                <button onClick={clearAll} className="text-[13px] font-medium text-muted underline underline-offset-2 hover:text-ink">
+                <button
+                  onClick={clearAll}
+                  className="text-[13px] font-medium text-muted underline underline-offset-2 transition-[color,transform] duration-[var(--duration-fast)] ease-[var(--ease-out-custom)] hover:text-ink active:scale-[0.98]"
+                >
                   {t.catalog.clearFilters}
                 </button>
               )}
@@ -317,7 +320,7 @@ function CatalogContent() {
               <button
                 onClick={() => setSheetOpen(false)}
                 aria-label={t.common.close}
-                className="flex h-11 w-11 items-center justify-center rounded-pill text-slate hover:bg-mist"
+                className="flex h-11 w-11 items-center justify-center rounded-pill text-slate transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:bg-mist active:scale-[0.98]"
               >
                 <X className="h-5 w-5" aria-hidden="true" />
               </button>

@@ -24,7 +24,7 @@ import {
 type Section = "account" | "preferences" | "security";
 
 export default function ProfilePage() {
-  const { t, locale, setLocale } = useLocale();
+  const { t, locale, setLocale, dir } = useLocale();
   const { theme, setTheme } = useTheme();
   const { user, isLoading, logout } = useAuth();
   const router = useRouter();
@@ -114,7 +114,7 @@ export default function ProfilePage() {
                   <button
                     onClick={() => setSection(s.value)}
                     aria-current={section === s.value ? "true" : undefined}
-                    className={`flex min-h-11 w-full items-center gap-3 rounded-input px-3 text-start text-[15px] font-medium transition-colors duration-[180ms] ${
+                    className={`flex min-h-11 w-full items-center gap-3 rounded-input px-3 text-start text-[15px] font-medium transition-colors duration-[var(--duration-base)] ${
                       section === s.value
                         ? "bg-primary-soft text-primary-hover dark:text-primary"
                         : "text-slate hover:bg-mist"
@@ -201,14 +201,17 @@ export default function ProfilePage() {
                       setNotificationsEnabled(next);
                       showToast(t.profile.savedToast);
                     }}
-                    className={`relative h-7 w-12 shrink-0 rounded-pill transition-colors duration-[180ms] ${
+                    className={`relative h-7 w-12 shrink-0 rounded-pill transition-colors duration-[var(--duration-base)] ${
                       notifications ? "bg-primary" : "bg-mist"
                     }`}
                   >
                     <span
-                      className={`absolute top-1 h-5 w-5 rounded-pill bg-white transition-all duration-[180ms] ${
-                        notifications ? "start-6" : "start-1"
-                      }`}
+                      className="absolute start-1 top-1 h-5 w-5 rounded-pill bg-white transition-transform duration-[var(--duration-base)] ease-[var(--ease-out-custom)]"
+                      style={{
+                        transform: notifications
+                          ? `translateX(${dir === "rtl" ? "-" : ""}1.25rem)`
+                          : "translateX(0)",
+                      }}
                     />
                   </button>
                 </div>
@@ -228,7 +231,7 @@ export default function ProfilePage() {
                           setWeeklyGoal(n);
                           showToast(t.profile.savedToast);
                         }}
-                        className={`min-h-11 rounded-pill border-[1.5px] px-5 font-mono text-[13px] font-medium transition-all duration-[180ms] ${
+                        className={`min-h-11 rounded-pill border-[1.5px] px-5 font-mono text-[13px] font-medium transition-[border-color,background-color,color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] active:scale-[0.98] ${
                           goal === n
                             ? "border-primary bg-primary-soft/50 text-primary-hover dark:text-primary"
                             : "border-mist text-slate hover:border-faint"

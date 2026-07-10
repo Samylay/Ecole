@@ -28,7 +28,7 @@ export function Segmented<T extends string>({
             role="tab"
             aria-selected={active}
             onClick={() => onChange(opt.value)}
-            className={`min-h-9 rounded-pill px-4 text-[13px] font-medium transition-colors duration-[180ms] ${
+            className={`min-h-9 rounded-pill px-4 text-[13px] font-medium transition-[background-color,color,box-shadow,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] active:scale-[0.98] ${
               active ? "bg-surface text-ink shadow-card" : "text-muted hover:text-ink"
             }`}
           >

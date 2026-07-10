@@ -112,7 +112,7 @@ export default function SignUpPage() {
                   role="radio"
                   aria-checked={active}
                   onClick={() => setRole(r.value)}
-                  className={`relative rounded-card border-[1.5px] p-4 text-start transition-all duration-[180ms] ${
+                  className={`relative rounded-card border-[1.5px] p-4 text-start transition-[border-color,background-color,box-shadow,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] active:scale-[0.98] ${
                     active ? "border-primary bg-primary-soft/50 shadow-card" : "border-mist hover:border-faint"
                   }`}
                 >
@@ -171,7 +171,7 @@ export default function SignUpPage() {
                   {[1, 2, 3].map((step) => (
                     <div
                       key={step}
-                      className={`h-1.5 flex-1 rounded-pill transition-colors duration-[180ms] ${
+                      className={`h-1.5 flex-1 rounded-pill transition-colors duration-[var(--duration-base)] ${
                         strength >= step ? strengthColors[strength] : "bg-mist"
                       }`}
                     />

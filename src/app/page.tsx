@@ -64,7 +64,7 @@ export default function HomePage() {
               <button
                 type="submit"
                 aria-label={t.common.search}
-                className="absolute inset-y-0 end-2 my-auto flex h-10 w-10 items-center justify-center rounded-pill bg-primary text-white shadow-primary transition-colors duration-[180ms] hover:bg-primary-hover"
+                className="absolute inset-y-0 end-2 my-auto flex h-10 w-10 items-center justify-center rounded-pill bg-primary text-white shadow-primary transition-colors duration-[var(--duration-base)] hover:bg-primary-hover"
               >
                 <ArrowRight className={`h-5 w-5 ${dir === "rtl" ? "-scale-x-100" : ""}`} aria-hidden="true" />
               </button>
@@ -84,7 +84,7 @@ export default function HomePage() {
                 <Link
                   key={subject}
                   href={`/courses?subject=${subject}`}
-                  className={`group rounded-card ${colors.bg} border border-transparent p-6 transition-all duration-[180ms] ease-out hover:-translate-y-0.5 hover:border-border hover:shadow-lift`}
+                  className={`group rounded-card ${colors.bg} border border-transparent p-6 transition-[transform,border-color,box-shadow] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:-translate-y-0.5 hover:border-border hover:shadow-lift active:scale-[0.98]`}
                 >
                   <span className={`text-4xl ${colors.text}`} aria-hidden="true">
                     {subjectIcons[subject]}
@@ -105,7 +105,7 @@ export default function HomePage() {
             <h2 className="text-[22px] font-semibold text-ink">{t.home.popularCourses}</h2>
             <Link
               href="/courses"
-              className="rounded-pill px-4 py-2 text-[13px] font-medium text-primary transition-colors duration-[180ms] hover:bg-primary-soft"
+              className="rounded-pill px-4 py-2 text-[13px] font-medium text-primary transition-colors duration-[var(--duration-base)] hover:bg-primary-soft"
             >
               {t.home.viewAll}
             </Link>

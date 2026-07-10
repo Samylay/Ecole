@@ -132,8 +132,8 @@ export default function QuizPage({ params }: { params: Promise<{ courseId: strin
         </div>
         <div className="h-1 bg-mist">
           <div
-            className="h-full bg-primary transition-[width] duration-[180ms] ease-out"
-            style={{ width: `${phase === "results" ? 100 : (index / questions.length) * 100}%` }}
+            className="h-full w-full origin-left bg-primary transition-transform duration-[var(--duration-base)] ease-[var(--ease-out-custom)]"
+            style={{ transform: `scaleX(${(phase === "results" ? 100 : (index / questions.length) * 100) / 100})` }}
           />
         </div>
       </header>
@@ -155,7 +155,7 @@ export default function QuizPage({ params }: { params: Promise<{ courseId: strin
                     aria-checked={picked}
                     disabled={phase === "feedback"}
                     onClick={() => setSelected(i)}
-                    className={`flex min-h-12 w-full items-center gap-3 rounded-card border-[1.5px] px-5 py-3.5 text-start text-[15px] font-medium transition-all duration-[180ms] ${
+                    className={`flex min-h-12 w-full items-center gap-3 rounded-card border-[1.5px] px-5 py-3.5 text-start text-[15px] font-medium transition-[border-color,background-color,color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] active:scale-[0.98] disabled:active:scale-100 ${
                       showCorrect
                         ? "border-success bg-success-soft text-ink"
                         : showWrong
@@ -255,7 +255,7 @@ export default function QuizPage({ params }: { params: Promise<{ courseId: strin
                     <li key={q.id}>
                       <Link
                         href={`/course/${courseId}/lesson/${q.lessonId}`}
-                        className="flex min-h-12 items-center gap-3 rounded-card border border-border bg-surface px-4 py-3 transition-colors duration-[180ms] hover:bg-bg"
+                        className="flex min-h-12 items-center gap-3 rounded-card border border-border bg-surface px-4 py-3 transition-colors duration-[var(--duration-base)] hover:bg-bg"
                       >
                         <span
                           className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-pill ${

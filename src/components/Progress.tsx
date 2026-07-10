@@ -25,8 +25,8 @@ export function ProgressBar({
       className={`h-1.5 w-full overflow-hidden rounded-pill bg-mist ${className}`}
     >
       <div
-        className={`h-full rounded-pill transition-[width] duration-[180ms] ease-out ${barClassName}`}
-        style={{ width: `${clamped}%` }}
+        className={`h-full w-full origin-left rounded-pill transition-transform duration-[var(--duration-base)] ease-[var(--ease-out-custom)] ${barClassName}`}
+        style={{ transform: `scaleX(${clamped / 100})` }}
       />
     </div>
   );
@@ -112,7 +112,7 @@ export function ProgressSegments({
       {Array.from({ length: total }).map((_, i) => (
         <div
           key={i}
-          className={`h-2 flex-1 rounded-pill transition-colors duration-[180ms] ${
+          className={`h-2 flex-1 rounded-pill transition-colors duration-[var(--duration-base)] ${
             i < done ? "bg-primary" : "bg-mist"
           }`}
         />

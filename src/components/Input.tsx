@@ -30,7 +30,7 @@ export function Input({ label, error, icon, className = "", id, ...rest }: Input
           id={inputId}
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? errorId : undefined}
-          className={`h-12 w-full rounded-input border-[1.5px] bg-surface px-4 text-[15px] text-ink placeholder:text-faint transition-colors duration-[180ms] focus:outline-none ${
+          className={`h-12 w-full rounded-input border-[1.5px] bg-surface px-4 text-[15px] text-ink placeholder:text-faint transition-colors duration-[var(--duration-base)] focus:outline-none ${
             icon ? "ps-11" : ""
           } ${
             error

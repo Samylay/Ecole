@@ -15,8 +15,11 @@ export function CourseCard({ course, progress }: { course: Course; progress?: nu
   const colors = subjectColors[course.subject];
 
   return (
-    <Link href={`/course/${course.id}`} className="group block h-full">
-      <div className="flex h-full flex-col overflow-hidden rounded-card border border-border bg-surface transition-all duration-[180ms] ease-out group-hover:-translate-y-0.5 group-hover:shadow-lift">
+    <Link
+      href={`/course/${course.id}`}
+      className="group block h-full transition-transform duration-[var(--duration-fast)] ease-[var(--ease-out-custom)] active:scale-[0.98]"
+    >
+      <div className="flex h-full flex-col overflow-hidden rounded-card border border-border bg-surface transition-[transform,box-shadow] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] group-hover:-translate-y-0.5 group-hover:shadow-lift">
         {/* Subject-tinted background stays visible while the SVG illustration loads/decodes */}
         <div className={`relative flex h-36 items-center justify-center overflow-hidden ${colors.bg}`}>
           <Image
@@ -35,7 +38,7 @@ export function CourseCard({ course, progress }: { course: Course; progress?: nu
         </div>
 
         <div className="flex flex-1 flex-col p-4">
-          <h3 className="line-clamp-2 text-[15px] font-semibold text-ink transition-colors duration-[180ms] group-hover:text-primary">
+          <h3 className="line-clamp-2 text-[15px] font-semibold text-ink transition-colors duration-[var(--duration-base)] group-hover:text-primary">
             {course.title[locale]}
           </h3>
           <p className="mt-1 text-[13px] text-muted">{course.instructor.name}</p>

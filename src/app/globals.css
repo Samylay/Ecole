@@ -56,6 +56,16 @@
   --shadow-lift: 0 4px 16px rgba(32, 38, 58, 0.1);
   --shadow-modal: 0 8px 28px rgba(32, 38, 58, 0.16);
   --shadow-primary: 0 2px 8px rgba(91, 91, 214, 0.3);
+
+  /* Motion (interaction-craft doctrine) — ease-out-custom/duration-base formalize
+     the existing 180ms ease-out convention; fast/slow + the other easings cover
+     press feedback, drawers, and celebration moments. */
+  --ease-out-custom: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-custom: cubic-bezier(0.45, 0, 0.15, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --duration-fast: 150ms;
+  --duration-base: 180ms;
+  --duration-slow: 300ms;
 }
 
 /* Dark mode — same variable names, remapped */
@@ -127,9 +137,9 @@ body {
 /* Skip to content link for keyboard accessibility */
 .skip-to-content {
   position: absolute;
-  top: -100%;
+  top: 0;
   inset-inline-start: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -100%);
   z-index: 100;
   padding: 0.75rem 1.5rem;
   background: var(--color-primary);
@@ -137,11 +147,11 @@ body {
   border-radius: 0 0 0.5rem 0.5rem;
   font-weight: 600;
   text-decoration: none;
-  transition: top 180ms ease-out;
+  transition: transform var(--duration-base) var(--ease-out-custom);
 }
 
 .skip-to-content:focus {
-  top: 0;
+  transform: translate(-50%, 0);
 }
 
 *:focus-visible {

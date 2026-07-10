@@ -138,11 +138,11 @@ export default function DashboardPage() {
             {resumeData ? (
               <Link
                 href={`/course/${state.resume!.courseId}/lesson/${state.resume!.lessonId}`}
-                className="group block rounded-card bg-ink p-6 text-bg shadow-card transition-all duration-[180ms] hover:shadow-lift dark:bg-surface dark:text-ink"
+                className="group block rounded-card bg-ink p-6 text-bg shadow-card transition-[box-shadow,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:shadow-lift active:scale-[0.98] dark:bg-surface dark:text-ink"
               >
                 <p className="text-[13px] font-medium text-faint">{t.dashboard.resumeSubtitle}</p>
                 <div className="mt-3 flex items-center gap-4">
-                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-pill bg-primary text-white shadow-primary transition-transform duration-[180ms] group-hover:scale-105">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-pill bg-primary text-white shadow-primary transition-transform duration-[var(--duration-base)] ease-[var(--ease-out-custom)] group-hover:scale-105">
                     <Play className={`h-5 w-5 ${dir === "rtl" ? "-scale-x-100" : ""}`} fill="currentColor" aria-hidden="true" />
                   </span>
                   <div className="min-w-0 flex-1">
@@ -190,7 +190,7 @@ export default function DashboardPage() {
                     <Link
                       key={subject}
                       href="/my-courses"
-                      className="group flex flex-col items-center gap-2 rounded-card p-3 transition-colors duration-[180ms] hover:bg-bg"
+                      className="group flex flex-col items-center gap-2 rounded-card p-3 transition-colors duration-[var(--duration-base)] hover:bg-bg"
                     >
                       <ProgressRing value={pct} colorClassName={subjectColors[subject].stroke} label={t.subjects[subject]}>
                         <span className="text-lg" aria-hidden="true">
@@ -234,10 +234,12 @@ export default function DashboardPage() {
               <div className="mt-5 flex h-28 items-end gap-2" aria-hidden="true">
                 {state.weekActivity.map((count, i) => (
                   <div key={i} className="flex flex-1 flex-col items-center gap-1.5">
-                    <div
-                      className={`w-full rounded-chip transition-all duration-[180ms] ${count > 0 ? "bg-primary" : "bg-mist"}`}
-                      style={{ height: `${Math.max(8, (count / maxDay) * 88)}px` }}
-                    />
+                    <div className="flex h-[88px] w-full items-end">
+                      <div
+                        className={`w-full origin-bottom rounded-chip transition-[transform,background-color] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] ${count > 0 ? "bg-primary" : "bg-mist"}`}
+                        style={{ height: "88px", transform: `scaleY(${Math.max(8, (count / maxDay) * 88) / 88})` }}
+                      />
+                    </div>
                     <span className="font-mono text-[11px] text-faint">{dayLabels[i]}</span>
                   </div>
                 ))}
@@ -275,7 +277,7 @@ export default function DashboardPage() {
                       <li key={course.id}>
                         <Link
                           href={`/course/${course.id}`}
-                          className="flex min-h-11 items-center gap-3 rounded-input px-2 py-2 transition-colors duration-[180ms] hover:bg-bg"
+                          className="flex min-h-11 items-center gap-3 rounded-input px-2 py-2 transition-colors duration-[var(--duration-base)] hover:bg-bg"
                         >
                           <span
                             className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-chip text-base ${subjectColors[course.subject].bg} ${subjectColors[course.subject].text}`}

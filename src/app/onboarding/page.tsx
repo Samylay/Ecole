@@ -19,7 +19,7 @@ const GOALS = [
 ] as const;
 
 export default function OnboardingPage() {
-  const { t } = useLocale();
+  const { t, dir } = useLocale();
   const { user, isLoading } = useAuth();
   const router = useRouter();
   const { showToast } = useToast();
@@ -68,7 +68,7 @@ export default function OnboardingPage() {
             {[0, 1, 2].map((i) => (
               <div
                 key={i}
-                className={`h-2 flex-1 rounded-pill transition-colors duration-[180ms] ${
+                className={`h-2 flex-1 rounded-pill transition-colors duration-[var(--duration-base)] ${
                   i <= step ? "bg-primary" : "bg-mist"
                 }`}
               />
@@ -100,7 +100,7 @@ export default function OnboardingPage() {
                     role="radio"
                     aria-checked={active}
                     onClick={() => setGrade(g)}
-                    className={`min-h-11 rounded-input border-[1.5px] px-4 py-3 text-start text-[15px] font-medium transition-all duration-[180ms] ${
+                    className={`min-h-11 rounded-input border-[1.5px] px-4 py-3 text-start text-[15px] font-medium transition-[border-color,background-color,color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] active:scale-[0.98] ${
                       active
                         ? "border-primary bg-primary-soft/50 text-ink"
                         : "border-mist text-slate hover:border-faint"
@@ -125,7 +125,7 @@ export default function OnboardingPage() {
                     role="checkbox"
                     aria-checked={active}
                     onClick={() => toggleSubject(s)}
-                    className={`flex w-full items-center gap-4 rounded-card border-[1.5px] p-4 text-start transition-all duration-[180ms] ${
+                    className={`flex w-full items-center gap-4 rounded-card border-[1.5px] p-4 text-start transition-[border-color,background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] active:scale-[0.98] ${
                       active ? "border-primary bg-primary-soft/40" : "border-mist hover:border-faint"
                     }`}
                   >
@@ -137,7 +137,7 @@ export default function OnboardingPage() {
                     </span>
                     <span className="flex-1 text-[15px] font-semibold text-ink">{t.subjects[s]}</span>
                     <span
-                      className={`flex h-6 w-6 items-center justify-center rounded-pill border-[1.5px] transition-colors duration-[180ms] ${
+                      className={`flex h-6 w-6 items-center justify-center rounded-pill border-[1.5px] transition-colors duration-[var(--duration-base)] ${
                         active ? "border-primary bg-primary text-white" : "border-mist"
                       }`}
                       aria-hidden="true"
@@ -167,7 +167,7 @@ export default function OnboardingPage() {
                       role="radio"
                       aria-checked={active}
                       onClick={() => setGoal(g.id)}
-                      className={`flex w-full items-center justify-between rounded-card border-[1.5px] p-4 text-start transition-all duration-[180ms] ${
+                      className={`flex w-full items-center justify-between rounded-card border-[1.5px] p-4 text-start transition-[border-color,background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] active:scale-[0.98] ${
                         active ? "border-primary bg-primary-soft/40" : "border-mist hover:border-faint"
                       }`}
                     >
@@ -176,7 +176,7 @@ export default function OnboardingPage() {
                         <span className="block text-[13px] text-muted">{labels[1]}</span>
                       </div>
                       <span
-                        className={`flex h-6 w-6 items-center justify-center rounded-pill border-[1.5px] transition-colors duration-[180ms] ${
+                        className={`flex h-6 w-6 items-center justify-center rounded-pill border-[1.5px] transition-colors duration-[var(--duration-base)] ${
                           active ? "border-primary bg-primary text-white" : "border-mist"
                         }`}
                         aria-hidden="true"
@@ -201,14 +201,17 @@ export default function OnboardingPage() {
                   aria-checked={reminders}
                   aria-label={t.onboarding.reminders}
                   onClick={() => setReminders(!reminders)}
-                  className={`relative h-7 w-12 shrink-0 rounded-pill transition-colors duration-[180ms] ${
+                  className={`relative h-7 w-12 shrink-0 rounded-pill transition-colors duration-[var(--duration-base)] ${
                     reminders ? "bg-primary" : "bg-mist"
                   }`}
                 >
                   <span
-                    className={`absolute top-1 h-5 w-5 rounded-pill bg-white transition-all duration-[180ms] ${
-                      reminders ? "start-6" : "start-1"
-                    }`}
+                    className="absolute start-1 top-1 h-5 w-5 rounded-pill bg-white transition-transform duration-[var(--duration-base)] ease-[var(--ease-out-custom)]"
+                    style={{
+                      transform: reminders
+                        ? `translateX(${dir === "rtl" ? "-" : ""}1.25rem)`
+                        : "translateX(0)",
+                    }}
                   />
                 </button>
               </div>

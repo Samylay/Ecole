@@ -138,7 +138,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                 {/* Instructor → public teacher page */}
                 <Link
                   href={`/teacher/${slug}`}
-                  className="group mt-5 inline-flex items-center gap-3 rounded-pill bg-surface/70 py-1.5 pe-4 ps-1.5 transition-colors duration-[180ms] hover:bg-surface"
+                  className="group mt-5 inline-flex items-center gap-3 rounded-pill bg-surface/70 py-1.5 pe-4 ps-1.5 transition-colors duration-[var(--duration-base)] hover:bg-surface"
                 >
                   <span className="flex h-9 w-9 items-center justify-center rounded-pill bg-primary-soft text-[15px] font-semibold text-primary-hover dark:text-primary">
                     {course.instructor.name.replace(/^Pr\.\s*/, "")[0]}
@@ -173,7 +173,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                 {prerequisite && (
                   <Link
                     href={`/course/${prerequisite.id}`}
-                    className="mt-5 inline-flex items-center gap-2 rounded-pill border border-border bg-surface px-4 py-2 text-[13px] font-medium text-slate transition-colors duration-[180ms] hover:border-primary hover:text-primary"
+                    className="mt-5 inline-flex items-center gap-2 rounded-pill border border-border bg-surface px-4 py-2 text-[13px] font-medium text-slate transition-colors duration-[var(--duration-base)] hover:border-primary hover:text-primary"
                   >
                     <span className="text-muted">{t.course.prerequisite} :</span>
                     {prerequisite.title[locale]}
@@ -259,7 +259,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                         <button
                           onClick={() => setOpenChapter(open ? null : chapter.id)}
                           aria-expanded={open}
-                          className="flex min-h-14 w-full items-center gap-4 px-5 py-4 text-start transition-colors duration-[180ms] hover:bg-bg"
+                          className="flex min-h-14 w-full items-center gap-4 px-5 py-4 text-start transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:bg-bg active:scale-[0.98]"
                         >
                           <span className="font-mono text-[13px] font-medium text-muted">
                             {formatNumber(locale, chIdx + 1).padStart(2, "0")}
@@ -269,7 +269,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                             {formatNumber(locale, chapter.lessons.length)} {t.course.lessons}
                           </span>
                           <ChevronDown
-                            className={`h-5 w-5 text-muted transition-transform duration-[180ms] ${open ? "rotate-180" : ""}`}
+                            className={`h-5 w-5 text-muted transition-transform duration-[var(--duration-base)] ${open ? "rotate-180" : ""}`}
                             aria-hidden="true"
                           />
                         </button>
@@ -286,8 +286,8 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                                   onClick={(e) => {
                                     if (!accessible) e.preventDefault();
                                   }}
-                                  className={`flex min-h-12 items-center gap-3 px-5 py-3 transition-colors duration-[180ms] ${
-                                    accessible ? "hover:bg-bg" : "cursor-default opacity-60"
+                                  className={`flex min-h-12 items-center gap-3 px-5 py-3 transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] ${
+                                    accessible ? "hover:bg-bg active:scale-[0.98]" : "cursor-default opacity-60"
                                   }`}
                                 >
                                   <span
@@ -320,8 +320,8 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                                 onClick={(e) => {
                                   if (!enrolled) e.preventDefault();
                                 }}
-                                className={`flex min-h-12 items-center gap-3 bg-warning-soft/50 px-5 py-3 transition-colors duration-[180ms] ${
-                                  enrolled ? "hover:bg-warning-soft" : "cursor-default opacity-60"
+                                className={`flex min-h-12 items-center gap-3 bg-warning-soft/50 px-5 py-3 transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] ${
+                                  enrolled ? "hover:bg-warning-soft active:scale-[0.98]" : "cursor-default opacity-60"
                                 }`}
                               >
                                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-pill bg-warning-soft text-warning">
