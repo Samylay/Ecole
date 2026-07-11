@@ -37,6 +37,13 @@ type TranslationKeys = {
     min: string;
     of: string;
     and: string;
+    skipToContent: string;
+    mainNav: string;
+    languageLabel: string;
+    selectLanguage: string;
+    openMenu: string;
+    closeMenu: string;
+    delete: string;
   };
   nav: {
     home: string;
@@ -341,6 +348,13 @@ const translations: Record<Locale, TranslationKeys> = {
       min: "min",
       of: "sur",
       and: "et",
+      skipToContent: "Aller au contenu",
+      mainNav: "Navigation principale",
+      languageLabel: "Langue",
+      selectLanguage: "Choisir la langue",
+      openMenu: "Ouvrir le menu",
+      closeMenu: "Fermer le menu",
+      delete: "Supprimer",
     },
     nav: {
       home: "Accueil",
@@ -645,6 +659,13 @@ const translations: Record<Locale, TranslationKeys> = {
       min: "min",
       of: "of",
       and: "and",
+      skipToContent: "Skip to content",
+      mainNav: "Main navigation",
+      languageLabel: "Language",
+      selectLanguage: "Select language",
+      openMenu: "Open menu",
+      closeMenu: "Close menu",
+      delete: "Delete",
     },
     nav: {
       home: "Home",
@@ -949,6 +970,13 @@ const translations: Record<Locale, TranslationKeys> = {
       min: "د",
       of: "من",
       and: "و",
+      skipToContent: "الانتقال إلى المحتوى",
+      mainNav: "التنقل الرئيسي",
+      languageLabel: "اللغة",
+      selectLanguage: "اختيار اللغة",
+      openMenu: "فتح القائمة",
+      closeMenu: "إغلاق القائمة",
+      delete: "حذف",
     },
     nav: {
       home: "الرئيسية",

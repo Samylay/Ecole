@@ -29,7 +29,7 @@ export default function HomePage() {
   return (
     <div className="flex min-h-screen flex-col bg-bg">
       <a href="#main" className="skip-to-content">
-        Skip to content
+        {t.common.skipToContent}
       </a>
       <Navbar />
 

@@ -469,7 +469,7 @@ export default function LessonPage({
                             deleteNote(courseId, lessonId, note.id);
                             setNotes(getNotes(courseId, lessonId));
                           }}
-                          aria-label={`${t.common.close} — ${note.timestamp}`}
+                          aria-label={`${t.common.delete} — ${note.timestamp}`}
                           className="flex h-8 w-8 shrink-0 items-center justify-center rounded-pill text-faint transition-[background-color,color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:bg-error-soft hover:text-error active:scale-[0.98]"
                         >
                           <Trash2 className="h-4 w-4" aria-hidden="true" />
@@ -502,6 +502,7 @@ export default function LessonPage({
                               title={t.course.downloaded}
                             >
                               <Check className="h-4 w-4" aria-hidden="true" />
+                              <span className="sr-only">{t.course.downloaded}</span>
                             </span>
                           )}
                           <a

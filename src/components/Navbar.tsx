@@ -50,7 +50,7 @@ export function Navbar() {
       ];
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-border bg-surface" aria-label="Main navigation">
+    <nav className="sticky top-0 z-50 border-b border-border bg-surface" aria-label={t.common.mainNav}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
@@ -75,7 +75,7 @@ export function Navbar() {
                 className="flex min-h-11 items-center gap-1.5 rounded-pill px-3 text-[13px] font-medium text-slate transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:bg-mist active:scale-[0.98]"
                 aria-expanded={langOpen}
                 aria-haspopup="listbox"
-                aria-label={`Language: ${localeNames[locale]}`}
+                aria-label={`${t.common.languageLabel}: ${localeNames[locale]}`}
               >
                 <Globe className="h-4 w-4" aria-hidden="true" />
                 {localeNames[locale]}
@@ -84,7 +84,7 @@ export function Navbar() {
                 <div
                   className="absolute end-0 mt-1 min-w-[130px] rounded-input border border-border bg-surface py-1 shadow-lift"
                   role="listbox"
-                  aria-label="Select language"
+                  aria-label={t.common.selectLanguage}
                 >
                   {locales.map((l: Locale) => (
                     <button
@@ -144,7 +144,7 @@ export function Navbar() {
             className="flex h-11 w-11 items-center justify-center rounded-pill text-slate transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:bg-mist active:scale-[0.98] md:hidden"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-expanded={mobileOpen}
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-label={mobileOpen ? t.common.closeMenu : t.common.openMenu}
           >
             {mobileOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
           </button>
