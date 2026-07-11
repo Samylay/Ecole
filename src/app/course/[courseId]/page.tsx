@@ -119,7 +119,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
       </a>
       <Navbar />
 
-      <main id="main" className="flex-1">
+      <main id="main" className="page-enter flex-1">
         {/* Subject-tinted hero */}
         <section className={colors.bg}>
           <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">

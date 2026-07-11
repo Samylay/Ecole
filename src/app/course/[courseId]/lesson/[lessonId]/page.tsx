@@ -360,7 +360,7 @@ export default function LessonPage({
 
       <div className="mx-auto flex w-full max-w-[1400px] flex-1">
         {/* Main */}
-        <main className="min-w-0 flex-1 px-4 py-6 sm:px-6">
+        <main className="page-enter min-w-0 flex-1 px-4 py-6 sm:px-6">
           {/* Video */}
           <div className="overflow-hidden rounded-card bg-ink shadow-card">
             <div className="relative aspect-video">

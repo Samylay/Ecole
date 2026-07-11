@@ -82,7 +82,7 @@ export function Navbar() {
               </button>
               {langOpen && (
                 <div
-                  className="absolute end-0 mt-1 min-w-[130px] rounded-input border border-border bg-surface py-1 shadow-lift"
+                  className="menu-enter absolute end-0 mt-1 min-w-[130px] origin-top-right rounded-input border border-border bg-surface py-1 shadow-lift rtl:origin-top-left"
                   role="listbox"
                   aria-label={t.common.selectLanguage}
                 >

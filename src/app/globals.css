@@ -217,3 +217,38 @@ body {
   stroke-dashoffset: 34;
   animation: celebration-mark 220ms var(--ease-out-custom) 80ms both;
 }
+
+/* Page enter (P1-T12) — course-card → course → lesson navigation fades/slides
+   the destination's main content in. translateY is direction-neutral so no
+   RTL flip is needed; killed by the reduced-motion block above. */
+@keyframes page-enter {
+  from {
+    transform: translateY(4px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.page-enter {
+  animation: page-enter 200ms var(--ease-out-custom) both;
+}
+
+/* Dropdown/menu enter (P1-T12) — origin-aware scale, e.g. the Navbar language
+   switcher. transform-origin is set inline per-menu for logical-corner cases. */
+@keyframes menu-enter {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.menu-enter {
+  animation: menu-enter var(--duration-fast) var(--ease-out-custom) both;
+}
