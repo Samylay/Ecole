@@ -179,3 +179,39 @@ body {
   background-size: 200% 100%;
   animation: shimmer 1.4s ease-in-out infinite;
 }
+
+/* Celebration checkmark (lesson complete, quiz passed) — circle scales/fades
+   in, then the check stroke draws in. Combined ≤300ms, well under the
+   400ms celebration ceiling; killed by the reduced-motion block above. */
+@keyframes celebration-circle {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes celebration-mark {
+  from {
+    stroke-dashoffset: 34;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.celebration-check-circle {
+  stroke: var(--color-success);
+  transform-origin: center;
+  animation: celebration-circle var(--duration-base) var(--ease-out-custom) both;
+}
+
+.celebration-check-mark {
+  stroke: var(--color-success);
+  stroke-dasharray: 34;
+  stroke-dashoffset: 34;
+  animation: celebration-mark 220ms var(--ease-out-custom) 80ms both;
+}

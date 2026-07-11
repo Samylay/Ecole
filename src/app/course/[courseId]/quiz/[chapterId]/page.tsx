@@ -9,6 +9,7 @@ import { useAuth } from "@/lib/auth-context";
 import { Button, ButtonLink } from "@/components/Button";
 import { Modal } from "@/components/Modal";
 import { ProgressRing } from "@/components/Progress";
+import { CelebrationCheck } from "@/components/Celebration";
 import { formatNumber } from "@/lib/i18n";
 import { getCourse, getQuiz, QuizQuestion } from "@/lib/data";
 import { recordQuizAttempt, getLastQuizAttempt, migrateLegacyProgress } from "@/lib/progress";
@@ -38,6 +39,7 @@ export default function QuizPage({ params }: { params: Promise<{ courseId: strin
   const [phase, setPhase] = useState<Phase>("question");
   const [answers, setAnswers] = useState<{ id: string; correct: boolean; picked: number }[]>([]);
   const [exitOpen, setExitOpen] = useState(false);
+  const [celebrate, setCelebrate] = useState<"idle" | "in" | "out">("idle");
 
   useEffect(() => {
     if (!isLoading && !user) router.push("/signin");
@@ -46,6 +48,18 @@ export default function QuizPage({ params }: { params: Promise<{ courseId: strin
   useEffect(() => {
     migrateLegacyProgress();
   }, []);
+
+  // Celebration checkmark: brief entrance, hold, then fade out.
+  useEffect(() => {
+    if (celebrate === "in") {
+      const hold = setTimeout(() => setCelebrate("out"), 1100);
+      return () => clearTimeout(hold);
+    }
+    if (celebrate === "out") {
+      const done = setTimeout(() => setCelebrate("idle"), 220);
+      return () => clearTimeout(done);
+    }
+  }, [celebrate]);
 
   if (isLoading || !user) {
     return (
@@ -79,14 +93,16 @@ export default function QuizPage({ params }: { params: Promise<{ courseId: strin
   const handleNext = () => {
     if (index + 1 >= questions.length) {
       // answers already includes the current question (added on validate)
+      const finalScore = answers.filter((a) => a.correct).length;
       recordQuizAttempt({
         courseId,
         chapterId,
-        score: answers.filter((a) => a.correct).length,
+        score: finalScore,
         total: questions.length,
         wrongQuestionIds: answers.filter((a) => !a.correct).map((a) => a.id),
         date: Date.now(),
       });
+      if (finalScore / questions.length >= 0.6) setCelebrate("in");
       setPhase("results");
     } else {
       setIndex(index + 1);
@@ -226,7 +242,16 @@ export default function QuizPage({ params }: { params: Promise<{ courseId: strin
         {phase === "results" && (
           <div className="text-center">
             <h1 className="text-[22px] font-semibold text-ink">{t.quiz.results}</h1>
-            <div className="mt-8 flex justify-center">
+            <div className="relative mt-8 flex justify-center">
+              {celebrate !== "idle" && (
+                <div
+                  className={`pointer-events-none absolute inset-0 z-10 flex items-center justify-center transition-opacity duration-[var(--duration-base)] ease-[var(--ease-out-custom)] ${
+                    celebrate === "out" ? "opacity-0" : "opacity-100"
+                  }`}
+                >
+                  <CelebrationCheck size={72} />
+                </div>
+              )}
               <ProgressRing
                 value={scorePct}
                 size={140}

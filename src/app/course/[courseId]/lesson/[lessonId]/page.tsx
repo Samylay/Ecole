@@ -21,6 +21,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useToast } from "@/components/Toast";
 import { Button } from "@/components/Button";
 import { ProgressBar } from "@/components/Progress";
+import { CelebrationCheck } from "@/components/Celebration";
 import { formatNumber } from "@/lib/i18n";
 import { getLesson, getAllLessons, chapterHasQuiz, subjectColors } from "@/lib/data";
 import {
@@ -113,6 +114,7 @@ export default function LessonPage({
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [downloadTick, setDownloadTick] = useState(0);
   const [countdown, setCountdown] = useState<number | null>(null);
+  const [celebrate, setCelebrate] = useState<"idle" | "in" | "out">("idle");
   const playerRef = useRef<YTPlayerInstance | null>(null);
   const activeRowRef = useRef<HTMLAnchorElement | null>(null);
 
@@ -128,8 +130,21 @@ export default function LessonPage({
     setTab("about");
     setCountdown(null);
     setDrawerOpen(false);
+    setCelebrate("idle");
     if (user) recordActiveDay();
   }, [courseId, lessonId, user]);
+
+  // Celebration checkmark: brief entrance, hold, then fade out.
+  useEffect(() => {
+    if (celebrate === "in") {
+      const hold = setTimeout(() => setCelebrate("out"), 1100);
+      return () => clearTimeout(hold);
+    }
+    if (celebrate === "out") {
+      const done = setTimeout(() => setCelebrate("idle"), 220);
+      return () => clearTimeout(done);
+    }
+  }, [celebrate]);
 
   // Active sidebar row auto-scrolls into view.
   useEffect(() => {
@@ -165,6 +180,7 @@ export default function LessonPage({
                   toggleLessonCompleted(courseId, lessonId, true);
                   setCompleted(true);
                   setCompletedIds(getCompletedLessonIds(courseId));
+                  setCelebrate("in");
                 }
               }
             }, 2000);
@@ -232,6 +248,7 @@ export default function LessonPage({
     setCompletedIds(getCompletedLessonIds(courseId));
     if (next) {
       showToast(t.lesson.completedToast);
+      setCelebrate("in");
       if (nextLesson) setCountdown(5);
     } else {
       setCountdown(null);
@@ -355,6 +372,15 @@ export default function LessonPage({
                 allowFullScreen
                 title={lesson.title[locale]}
               />
+              {celebrate !== "idle" && (
+                <div
+                  className={`pointer-events-none absolute inset-0 flex items-center justify-center bg-ink/60 transition-opacity duration-[var(--duration-base)] ease-[var(--ease-out-custom)] ${
+                    celebrate === "out" ? "opacity-0" : "opacity-100"
+                  }`}
+                >
+                  <CelebrationCheck />
+                </div>
+              )}
             </div>
           </div>
 
