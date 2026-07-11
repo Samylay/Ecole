@@ -25,7 +25,7 @@ function shuffleWrongFirst(questions: QuizQuestion[], wrongIds: string[]): QuizQ
 
 export default function QuizPage({ params }: { params: Promise<{ courseId: string; chapterId: string }> }) {
   const { courseId, chapterId } = use(params);
-  const { locale, t } = useLocale();
+  const { locale, t, dir } = useLocale();
   const { user, isLoading } = useAuth();
   const router = useRouter();
 
@@ -148,7 +148,7 @@ export default function QuizPage({ params }: { params: Promise<{ courseId: strin
         </div>
         <div className="h-1 bg-mist">
           <div
-            className="h-full w-full origin-left bg-primary transition-transform duration-[var(--duration-base)] ease-[var(--ease-out-custom)]"
+            className="h-full w-full origin-left bg-primary transition-transform duration-[var(--duration-base)] ease-[var(--ease-out-custom)] rtl:origin-right"
             style={{ transform: `scaleX(${(phase === "results" ? 100 : (index / questions.length) * 100) / 100})` }}
           />
         </div>
@@ -219,7 +219,7 @@ export default function QuizPage({ params }: { params: Promise<{ courseId: strin
                   className="mt-3 inline-flex items-center gap-1 text-[13px] font-semibold text-primary hover:underline"
                 >
                   {t.quiz.backToLesson}
-                  <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+                  <ArrowUpRight className={`h-3.5 w-3.5 ${dir === "rtl" ? "-scale-x-100" : ""}`} aria-hidden="true" />
                 </Link>
               </div>
             )}

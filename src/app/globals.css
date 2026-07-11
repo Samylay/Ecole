@@ -138,7 +138,9 @@ body {
 .skip-to-content {
   position: absolute;
   top: 0;
-  inset-inline-start: 50%;
+  /* Physical left/translateX pair: centering is direction-neutral, and the
+     logical-start + -50% combo mis-centered the link under RTL. */
+  left: 50%;
   transform: translate(-50%, -100%);
   z-index: 100;
   padding: 0.75rem 1.5rem;

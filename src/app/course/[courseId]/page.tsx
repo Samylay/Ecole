@@ -115,7 +115,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
   return (
     <div className="flex min-h-screen flex-col bg-bg pb-24 lg:pb-0">
       <a href="#main" className="skip-to-content">
-        Skip to content
+        {t.common.skipToContent}
       </a>
       <Navbar />
 
@@ -262,7 +262,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                           className="flex min-h-14 w-full items-center gap-4 px-5 py-4 text-start transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:bg-bg active:scale-[0.98]"
                         >
                           <span className="font-mono text-[13px] font-medium text-muted">
-                            {formatNumber(locale, chIdx + 1).padStart(2, "0")}
+                            {formatNumber(locale, chIdx + 1).padStart(2, formatNumber(locale, 0))}
                           </span>
                           <span className="flex-1 text-[15px] font-semibold text-ink">{chapter.title[locale]}</span>
                           <span className="font-mono text-[11px] text-faint">

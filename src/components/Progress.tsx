@@ -25,7 +25,7 @@ export function ProgressBar({
       className={`h-1.5 w-full overflow-hidden rounded-pill bg-mist ${className}`}
     >
       <div
-        className={`h-full w-full origin-left rounded-pill transition-transform duration-[var(--duration-base)] ease-[var(--ease-out-custom)] ${barClassName}`}
+        className={`h-full w-full origin-left rounded-pill transition-transform duration-[var(--duration-base)] ease-[var(--ease-out-custom)] rtl:origin-right ${barClassName}`}
         style={{ transform: `scaleX(${clamped / 100})` }}
       />
     </div>
