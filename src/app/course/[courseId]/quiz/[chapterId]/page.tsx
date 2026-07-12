@@ -32,6 +32,12 @@ export default function QuizPage({ params }: { params: Promise<{ courseId: strin
   const course = getCourse(courseId);
   const baseQuestions = useMemo(() => getQuiz(courseId, chapterId), [courseId, chapterId]);
   const chapter = course?.chapters.find((c) => c.id === chapterId);
+  const chapterIndex = course?.chapters.findIndex((c) => c.id === chapterId) ?? -1;
+  const isLastChapter = course ? chapterIndex === course.chapters.length - 1 : false;
+  const nextChapterFirstLessonId = !isLastChapter ? course?.chapters[chapterIndex + 1]?.lessons[0]?.id : undefined;
+  const quizNextHref = nextChapterFirstLessonId
+    ? `/course/${courseId}/lesson/${nextChapterFirstLessonId}`
+    : `/course/${courseId}`;
 
   const [questions, setQuestions] = useState<QuizQuestion[]>(baseQuestions ?? []);
   const [index, setIndex] = useState(0);
@@ -269,6 +275,20 @@ export default function QuizPage({ params }: { params: Promise<{ courseId: strin
             </div>
             <p className="mt-5 text-[15px] text-slate">{scoreMessage}</p>
 
+            {/* Course complete: this was the last chapter's quiz and it's passed */}
+            {isLastChapter && scorePct >= 60 && (
+              <div className="mt-6 flex flex-col items-center gap-3 rounded-card bg-success-soft px-5 py-8">
+                <p className="text-[17px] font-semibold text-ink">{t.lesson.courseCompleteTitle}</p>
+                <p className="text-[15px] text-slate">{t.lesson.courseCompleteBody}</p>
+                <div className="mt-1 flex flex-wrap justify-center gap-3">
+                  <ButtonLink href="/dashboard">{t.nav.dashboard}</ButtonLink>
+                  <ButtonLink href="/my-courses" variant="secondary">
+                    {t.nav.myCourses}
+                  </ButtonLink>
+                </div>
+              </div>
+            )}
+
             {/* Per-question review */}
             <div className="mt-8 text-start">
               <h2 className="text-[15px] font-semibold text-ink">{t.quiz.reviewAnswers}</h2>
@@ -301,10 +321,13 @@ export default function QuizPage({ params }: { params: Promise<{ courseId: strin
             </div>
 
             <div className="mt-8 flex flex-wrap justify-center gap-3">
+              {!(isLastChapter && scorePct >= 60) && <ButtonLink href={quizNextHref}>{t.common.continue}</ButtonLink>}
               <Button variant="secondary" onClick={handleReplay}>
                 {t.quiz.replay}
               </Button>
-              <ButtonLink href={`/course/${courseId}`}>{t.lesson.backToCourse}</ButtonLink>
+              <ButtonLink href={`/course/${courseId}`} variant="ghost">
+                {t.lesson.backToCourse}
+              </ButtonLink>
             </div>
           </div>
         )}

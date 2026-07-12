@@ -19,11 +19,11 @@ import {
 import { useLocale } from "@/lib/locale-context";
 import { useAuth } from "@/lib/auth-context";
 import { useToast } from "@/components/Toast";
-import { Button } from "@/components/Button";
+import { Button, ButtonLink } from "@/components/Button";
 import { ProgressBar } from "@/components/Progress";
 import { CelebrationCheck } from "@/components/Celebration";
 import { formatNumber } from "@/lib/i18n";
-import { getLesson, getAllLessons, chapterHasQuiz, subjectColors } from "@/lib/data";
+import { getLesson, getAllLessons, chapterHasQuiz, subjectColors, Course } from "@/lib/data";
 import {
   isLessonCompleted,
   toggleLessonCompleted,
@@ -37,10 +37,27 @@ import {
   recordDocumentDownload,
   getResumePosition,
   setResumePosition,
+  getLastQuizAttempt,
   LessonNote,
 } from "@/lib/progress";
 
 type Tab = "about" | "notes" | "documents";
+
+const QUIZ_PASS_RATIO = 0.6;
+
+// A chapter's last lesson routes to its quiz first (if not yet passed);
+// otherwise falls through to the next lesson (first lesson of the next
+// chapter, or null once the whole course is done).
+function computeNextHref(courseId: string, course: Course, lessonId: string, nextLessonId: string | null): string | null {
+  const chapter = course.chapters.find((c) => c.lessons.some((l) => l.id === lessonId));
+  const isLastInChapter = chapter ? chapter.lessons[chapter.lessons.length - 1].id === lessonId : false;
+  if (chapter && isLastInChapter && chapterHasQuiz(courseId, chapter.id)) {
+    const attempt = getLastQuizAttempt(courseId, chapter.id);
+    const passed = attempt ? attempt.score / attempt.total >= QUIZ_PASS_RATIO : false;
+    if (!passed) return `/course/${courseId}/quiz/${chapter.id}`;
+  }
+  return nextLessonId ? `/course/${courseId}/lesson/${nextLessonId}` : null;
+}
 
 // Real player position via the YouTube IFrame API (the iframe already
 // requests enablejsapi=1 — see withPlayerParams below).
@@ -201,10 +218,11 @@ export default function LessonPage({
   const allLessons = result ? getAllLessons(result.course) : [];
   const currentIndex = allLessons.findIndex((l) => l.id === lessonId);
   const nextLesson = currentIndex >= 0 && currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null;
+  const nextHref = result ? computeNextHref(courseId, result.course, lessonId, nextLesson?.id ?? null) : null;
 
   const goNext = useCallback(() => {
-    if (nextLesson) router.push(`/course/${courseId}/lesson/${nextLesson.id}`);
-  }, [nextLesson, courseId, router]);
+    if (nextHref) router.push(nextHref);
+  }, [nextHref, router]);
 
   // Auto-advance countdown after marking complete (cancellable).
   useEffect(() => {
@@ -249,7 +267,7 @@ export default function LessonPage({
     if (next) {
       showToast(t.lesson.completedToast);
       setCelebrate("in");
-      if (nextLesson) setCountdown(5);
+      if (nextHref) setCountdown(5);
     } else {
       setCountdown(null);
     }
@@ -397,7 +415,7 @@ export default function LessonPage({
           </div>
 
           {/* Auto-advance banner */}
-          {countdown !== null && nextLesson && (
+          {countdown !== null && nextHref && (
             <div
               role="status"
               className="mt-4 flex items-center justify-between rounded-card bg-primary-soft px-5 py-3"
@@ -539,9 +557,9 @@ export default function LessonPage({
             ) : (
               <span />
             )}
-            {nextLesson ? (
+            {nextHref ? (
               <Link
-                href={`/course/${courseId}/lesson/${nextLesson.id}`}
+                href={nextHref}
                 className="flex min-h-11 items-center gap-1.5 rounded-pill bg-primary px-5 text-[15px] font-semibold text-white shadow-primary transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:bg-primary-hover active:scale-[0.98]"
               >
                 {t.lesson.next}
@@ -551,6 +569,23 @@ export default function LessonPage({
               <span />
             )}
           </div>
+
+          {/* Course complete: reached once the last lesson/quiz of the course is done */}
+          {completed && !nextHref && (
+            <div className="mt-5 flex flex-col items-center gap-3 rounded-card bg-success-soft px-5 py-8 text-center">
+              <CelebrationCheck size={56} />
+              <div>
+                <p className="text-[17px] font-semibold text-ink">{t.lesson.courseCompleteTitle}</p>
+                <p className="mt-1 text-[15px] text-slate">{t.lesson.courseCompleteBody}</p>
+              </div>
+              <div className="mt-2 flex flex-wrap justify-center gap-3">
+                <ButtonLink href="/dashboard">{t.nav.dashboard}</ButtonLink>
+                <ButtonLink href="/my-courses" variant="secondary">
+                  {t.nav.myCourses}
+                </ButtonLink>
+              </div>
+            </div>
+          )}
         </main>
 
         {/* Desktop sidebar — 320px, at inline-end (flips in RTL automatically) */}

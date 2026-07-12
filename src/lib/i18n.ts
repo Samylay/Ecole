@@ -120,6 +120,8 @@ type TranslationKeys = {
     stayHere: string;
     chaptersDrawer: string;
     courseProgress: string;
+    courseCompleteTitle: string;
+    courseCompleteBody: string;
   };
   quiz: {
     title: string;
@@ -432,6 +434,8 @@ const translations: Record<Locale, TranslationKeys> = {
       stayHere: "Rester ici",
       chaptersDrawer: "Chapitres",
       courseProgress: "Progression du cours",
+      courseCompleteTitle: "Cours terminé !",
+      courseCompleteBody: "Tu as terminé toutes les leçons de ce cours. Bravo pour ton travail !",
     },
     quiz: {
       title: "Quiz",
@@ -743,6 +747,8 @@ const translations: Record<Locale, TranslationKeys> = {
       stayHere: "Stay here",
       chaptersDrawer: "Chapters",
       courseProgress: "Course progress",
+      courseCompleteTitle: "Course completed!",
+      courseCompleteBody: "You've finished every lesson in this course. Great work!",
     },
     quiz: {
       title: "Quiz",
@@ -1054,6 +1060,8 @@ const translations: Record<Locale, TranslationKeys> = {
       stayHere: "ابقَ هنا",
       chaptersDrawer: "الفصول",
       courseProgress: "تقدم الدرس",
+      courseCompleteTitle: "أتممت الدرس!",
+      courseCompleteBody: "أنهيت كل حصص هذا الدرس. أحسنت صنعاً!",
     },
     quiz: {
       title: "اختبار",
