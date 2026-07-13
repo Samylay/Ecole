@@ -44,6 +44,7 @@ type TranslationKeys = {
     openMenu: string;
     closeMenu: string;
     delete: string;
+    lockedContent: string;
   };
   nav: {
     home: string;
@@ -357,6 +358,7 @@ const translations: Record<Locale, TranslationKeys> = {
       openMenu: "Ouvrir le menu",
       closeMenu: "Fermer le menu",
       delete: "Supprimer",
+      lockedContent: "Contenu verrouillé",
     },
     nav: {
       home: "Accueil",
@@ -670,6 +672,7 @@ const translations: Record<Locale, TranslationKeys> = {
       openMenu: "Open menu",
       closeMenu: "Close menu",
       delete: "Delete",
+      lockedContent: "Locked content",
     },
     nav: {
       home: "Home",
@@ -983,6 +986,7 @@ const translations: Record<Locale, TranslationKeys> = {
       openMenu: "فتح القائمة",
       closeMenu: "إغلاق القائمة",
       delete: "حذف",
+      lockedContent: "محتوى مُقفل",
     },
     nav: {
       home: "الرئيسية",

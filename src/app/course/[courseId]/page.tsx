@@ -279,17 +279,8 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                               const done = completedIds.has(lesson.id);
                               const isPreview = chIdx === 0 && lIdx === 0;
                               const accessible = enrolled || isPreview;
-                              return (
-                                <Link
-                                  key={lesson.id}
-                                  href={accessible ? `/course/${course.id}/lesson/${lesson.id}` : "#"}
-                                  onClick={(e) => {
-                                    if (!accessible) e.preventDefault();
-                                  }}
-                                  className={`flex min-h-12 items-center gap-3 px-5 py-3 transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] ${
-                                    accessible ? "hover:bg-bg active:scale-[0.98]" : "cursor-default opacity-60"
-                                  }`}
-                                >
+                              const rowContent = (
+                                <>
                                   <span
                                     className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-pill text-[13px] font-medium ${
                                       done ? "bg-success-soft text-success" : "bg-primary-soft text-primary-hover"
@@ -309,20 +300,40 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                                     <FileText className="h-4 w-4 shrink-0 text-faint" aria-hidden="true" />
                                   )}
                                   <span className="shrink-0 font-mono text-[11px] text-faint">{lesson.duration}</span>
-                                  {!accessible && <Lock className="h-4 w-4 shrink-0 text-faint" aria-hidden="true" />}
+                                  {!accessible && (
+                                    <>
+                                      <Lock className="h-4 w-4 shrink-0 text-faint" aria-hidden="true" />
+                                      <span className="sr-only">{t.common.lockedContent}</span>
+                                    </>
+                                  )}
+                                </>
+                              );
+                              if (!accessible) {
+                                return (
+                                  <div
+                                    key={lesson.id}
+                                    aria-disabled="true"
+                                    className="flex min-h-12 cursor-default items-center gap-3 px-5 py-3 opacity-60"
+                                  >
+                                    {rowContent}
+                                  </div>
+                                );
+                              }
+                              return (
+                                <Link
+                                  key={lesson.id}
+                                  href={`/course/${course.id}/lesson/${lesson.id}`}
+                                  className="flex min-h-12 items-center gap-3 px-5 py-3 transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:bg-bg active:scale-[0.98]"
+                                >
+                                  {rowContent}
                                 </Link>
                               );
                             })}
                             {/* Quiz row in warning tint */}
-                            {hasQuiz && (
-                              <Link
-                                href={enrolled ? `/course/${course.id}/quiz/${chapter.id}` : "#"}
-                                onClick={(e) => {
-                                  if (!enrolled) e.preventDefault();
-                                }}
-                                className={`flex min-h-12 items-center gap-3 bg-warning-soft/50 px-5 py-3 transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] ${
-                                  enrolled ? "hover:bg-warning-soft active:scale-[0.98]" : "cursor-default opacity-60"
-                                }`}
+                            {hasQuiz && !enrolled && (
+                              <div
+                                aria-disabled="true"
+                                className="flex min-h-12 cursor-default items-center gap-3 bg-warning-soft/50 px-5 py-3 opacity-60"
                               >
                                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-pill bg-warning-soft text-warning">
                                   <ClipboardCheck className="h-4 w-4" aria-hidden="true" />
@@ -330,7 +341,21 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                                 <span className="flex-1 text-[15px] font-medium text-ink">
                                   {t.course.quiz} — {chapter.title[locale]}
                                 </span>
-                                {!enrolled && <Lock className="h-4 w-4 shrink-0 text-faint" aria-hidden="true" />}
+                                <Lock className="h-4 w-4 shrink-0 text-faint" aria-hidden="true" />
+                                <span className="sr-only">{t.common.lockedContent}</span>
+                              </div>
+                            )}
+                            {hasQuiz && enrolled && (
+                              <Link
+                                href={`/course/${course.id}/quiz/${chapter.id}`}
+                                className="flex min-h-12 items-center gap-3 bg-warning-soft/50 px-5 py-3 transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:bg-warning-soft active:scale-[0.98]"
+                              >
+                                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-pill bg-warning-soft text-warning">
+                                  <ClipboardCheck className="h-4 w-4" aria-hidden="true" />
+                                </span>
+                                <span className="flex-1 text-[15px] font-medium text-ink">
+                                  {t.course.quiz} — {chapter.title[locale]}
+                                </span>
                               </Link>
                             )}
                           </div>

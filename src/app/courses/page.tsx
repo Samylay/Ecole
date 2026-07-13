@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useMemo, useState } from "react";
+import { Suspense, useCallback, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Search, SlidersHorizontal, X, SearchX, Star } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
@@ -10,6 +10,7 @@ import { EmptyState } from "@/components/EmptyState";
 import { Button } from "@/components/Button";
 import { Segmented } from "@/components/Tabs";
 import { useLocale } from "@/lib/locale-context";
+import { useOverlay } from "@/lib/useOverlay";
 import { formatNumber } from "@/lib/i18n";
 import { courses, Subject, Level, subjectIcons } from "@/lib/data";
 
@@ -37,6 +38,9 @@ function CatalogContent() {
   const [duration, setDuration] = useState<Duration>("all");
   const [minRating, setMinRating] = useState<number>(0);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const sheetPanelRef = useRef<HTMLDivElement>(null);
+  const closeSheet = useCallback(() => setSheetOpen(false), []);
+  useOverlay(sheetOpen, closeSheet, sheetPanelRef);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -310,6 +314,7 @@ function CatalogContent() {
         <div className="fixed inset-0 z-[60] lg:hidden">
           <button aria-hidden="true" tabIndex={-1} className="absolute inset-0 bg-ink/40" onClick={() => setSheetOpen(false)} />
           <div
+            ref={sheetPanelRef}
             role="dialog"
             aria-modal="true"
             aria-label={t.catalog.filters}

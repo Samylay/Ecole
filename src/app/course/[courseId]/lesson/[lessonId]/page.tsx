@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { useLocale } from "@/lib/locale-context";
 import { useAuth } from "@/lib/auth-context";
+import { useOverlay } from "@/lib/useOverlay";
 import { useToast } from "@/components/Toast";
 import { Button, ButtonLink } from "@/components/Button";
 import { ProgressBar } from "@/components/Progress";
@@ -134,6 +135,10 @@ export default function LessonPage({
   const [celebrate, setCelebrate] = useState<"idle" | "in" | "out">("idle");
   const playerRef = useRef<YTPlayerInstance | null>(null);
   const activeRowRef = useRef<HTMLAnchorElement | null>(null);
+  const drawerPanelRef = useRef<HTMLDivElement>(null);
+
+  const closeDrawer = useCallback(() => setDrawerOpen(false), []);
+  useOverlay(drawerOpen, closeDrawer, drawerPanelRef);
 
   useEffect(() => {
     if (!isLoading && !user) router.push("/signin");
@@ -599,6 +604,7 @@ export default function LessonPage({
         <div className="fixed inset-0 z-[60] lg:hidden">
           <button aria-hidden="true" tabIndex={-1} className="absolute inset-0 bg-ink/40" onClick={() => setDrawerOpen(false)} />
           <div
+            ref={drawerPanelRef}
             role="dialog"
             aria-modal="true"
             aria-label={t.lesson.chaptersDrawer}

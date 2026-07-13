@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { Globe, Menu, X, LogOut } from "lucide-react";
 import { useLocale } from "@/lib/locale-context";
 import { useAuth } from "@/lib/auth-context";
+import { useDismiss } from "@/lib/useOverlay";
 import { Locale, localeNames, locales } from "@/lib/i18n";
 import { ButtonLink } from "./Button";
 
@@ -31,6 +32,9 @@ export function Navbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
+  const langMenuRef = useRef<HTMLDivElement>(null);
+  const closeLangMenu = useCallback(() => setLangOpen(false), []);
+  useDismiss(langOpen, closeLangMenu, langMenuRef);
 
   const handleLogout = () => {
     logout();
@@ -69,7 +73,7 @@ export function Navbar() {
           {/* Right side */}
           <div className="hidden items-center gap-2 md:flex">
             {/* Language switcher */}
-            <div className="relative">
+            <div className="relative" ref={langMenuRef}>
               <button
                 onClick={() => setLangOpen(!langOpen)}
                 className="flex min-h-11 items-center gap-1.5 rounded-pill px-3 text-[13px] font-medium text-slate transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:bg-mist active:scale-[0.98]"

@@ -1,6 +1,7 @@
 "use client";
 
-import { ReactNode, useEffect, useRef } from "react";
+import { ReactNode, useRef } from "react";
+import { useOverlay } from "@/lib/useOverlay";
 
 export function Modal({
   open,
@@ -15,15 +16,7 @@ export function Modal({
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", onKey);
-    panelRef.current?.focus();
-    return () => document.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
+  useOverlay(open, onClose, panelRef);
 
   if (!open) return null;
 
