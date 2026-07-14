@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Bell, Check } from "lucide-react";
 import { useLocale } from "@/lib/locale-context";
@@ -9,6 +9,7 @@ import { useToast } from "@/components/Toast";
 import { Button } from "@/components/Button";
 import { setPrefs } from "@/lib/progress";
 import { subjectColors, subjectIcons, Subject } from "@/lib/data";
+import { rovingTabIndexHandler } from "@/lib/rovingTabIndex";
 
 const GRADES = ["sixieme", "cinquieme", "quatrieme", "troisieme", "seconde", "premiere", "terminale"] as const;
 const SUBJECTS: Subject[] = ["math", "physics", "biology"];
@@ -29,6 +30,8 @@ export default function OnboardingPage() {
   const [subjects, setSubjects] = useState<Subject[]>([...SUBJECTS]);
   const [goal, setGoal] = useState<(typeof GOALS)[number]["id"]>("regular");
   const [reminders, setReminders] = useState(true);
+  const gradeGroupRef = useRef<HTMLDivElement>(null);
+  const goalGroupRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!isLoading && !user) router.replace("/signin");
@@ -91,7 +94,13 @@ export default function OnboardingPage() {
 
           {/* Step 1 — classe */}
           {step === 0 && (
-            <div className="mt-6 grid grid-cols-2 gap-3" role="radiogroup" aria-label={t.onboarding.classTitle}>
+            <div
+              ref={gradeGroupRef}
+              className="mt-6 grid grid-cols-2 gap-3"
+              role="radiogroup"
+              aria-label={t.onboarding.classTitle}
+              onKeyDown={rovingTabIndexHandler(gradeGroupRef, '[role="radio"]', (i) => setGrade(GRADES[i]), dir)}
+            >
               {GRADES.map((g) => {
                 const active = grade === g;
                 return (
@@ -99,6 +108,7 @@ export default function OnboardingPage() {
                     key={g}
                     role="radio"
                     aria-checked={active}
+                    tabIndex={active ? 0 : -1}
                     onClick={() => setGrade(g)}
                     className={`min-h-11 rounded-input border-[1.5px] px-4 py-3 text-start text-[15px] font-medium transition-[border-color,background-color,color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] active:scale-[0.98] ${
                       active
@@ -153,7 +163,13 @@ export default function OnboardingPage() {
           {/* Step 3 — objectif hebdo + rappels */}
           {step === 2 && (
             <div className="mt-6 space-y-3">
-              <div role="radiogroup" aria-label={t.onboarding.goalTitle} className="space-y-3">
+              <div
+                ref={goalGroupRef}
+                role="radiogroup"
+                aria-label={t.onboarding.goalTitle}
+                className="space-y-3"
+                onKeyDown={rovingTabIndexHandler(goalGroupRef, '[role="radio"]', (i) => setGoal(GOALS[i].id), dir)}
+              >
                 {GOALS.map((g) => {
                   const active = goal === g.id;
                   const labels = {
@@ -166,6 +182,7 @@ export default function OnboardingPage() {
                       key={g.id}
                       role="radio"
                       aria-checked={active}
+                      tabIndex={active ? 0 : -1}
                       onClick={() => setGoal(g.id)}
                       className={`flex w-full items-center justify-between rounded-card border-[1.5px] p-4 text-start transition-[border-color,background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] active:scale-[0.98] ${
                         active ? "border-primary bg-primary-soft/40" : "border-mist hover:border-faint"

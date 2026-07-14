@@ -161,6 +161,8 @@ export default function ProfilePage() {
                       value={locale}
                       onChange={setLocale}
                       label={t.profile.language}
+                      variant="radiogroup"
+                      dir={dir}
                     />
                   </div>
                 </div>
@@ -178,6 +180,8 @@ export default function ProfilePage() {
                       value={theme}
                       onChange={(v) => setTheme(v as Theme)}
                       label={t.profile.theme}
+                      variant="radiogroup"
+                      dir={dir}
                     />
                   </div>
                 </div>

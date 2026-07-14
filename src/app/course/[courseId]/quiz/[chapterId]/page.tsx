@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect, useMemo, useState } from "react";
+import { use, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { X, Check, ArrowUpRight } from "lucide-react";
@@ -13,6 +13,7 @@ import { CelebrationCheck } from "@/components/Celebration";
 import { formatNumber } from "@/lib/i18n";
 import { getCourse, getQuiz, QuizQuestion } from "@/lib/data";
 import { recordQuizAttempt, getLastQuizAttempt, migrateLegacyProgress } from "@/lib/progress";
+import { rovingTabIndexHandler } from "@/lib/rovingTabIndex";
 
 type Phase = "question" | "feedback" | "results";
 
@@ -42,6 +43,7 @@ export default function QuizPage({ params }: { params: Promise<{ courseId: strin
   const [questions, setQuestions] = useState<QuizQuestion[]>(baseQuestions ?? []);
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
+  const optionsRef = useRef<HTMLDivElement>(null);
   const [phase, setPhase] = useState<Phase>("question");
   const [answers, setAnswers] = useState<{ id: string; correct: boolean; picked: number }[]>([]);
   const [exitOpen, setExitOpen] = useState(false);
@@ -165,7 +167,18 @@ export default function QuizPage({ params }: { params: Promise<{ courseId: strin
           <>
             <h1 className="text-[22px] font-semibold leading-snug text-ink">{question.question[locale]}</h1>
 
-            <div className="mt-6 space-y-3" role="radiogroup" aria-label={question.question[locale]}>
+            <div
+              ref={optionsRef}
+              className="mt-6 space-y-3"
+              role="radiogroup"
+              aria-label={question.question[locale]}
+              onKeyDown={rovingTabIndexHandler(
+                optionsRef,
+                '[role="radio"]',
+                (i) => phase !== "feedback" && setSelected(i),
+                dir,
+              )}
+            >
               {question.options.map((option, i) => {
                 const picked = selected === i;
                 const showCorrect = phase === "feedback" && i === question.correctIndex;
@@ -175,6 +188,7 @@ export default function QuizPage({ params }: { params: Promise<{ courseId: strin
                     key={i}
                     role="radio"
                     aria-checked={picked}
+                    tabIndex={picked || (selected === null && i === 0) ? 0 : -1}
                     disabled={phase === "feedback"}
                     onClick={() => setSelected(i)}
                     className={`flex min-h-12 w-full items-center gap-3 rounded-card border-[1.5px] px-5 py-3.5 text-start text-[15px] font-medium transition-[border-color,background-color,color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] active:scale-[0.98] disabled:active:scale-100 ${

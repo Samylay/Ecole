@@ -19,6 +19,7 @@ import {
 import { useLocale } from "@/lib/locale-context";
 import { useAuth } from "@/lib/auth-context";
 import { useOverlay } from "@/lib/useOverlay";
+import { rovingTabIndexHandler } from "@/lib/rovingTabIndex";
 import { useToast } from "@/components/Toast";
 import { Button, ButtonLink } from "@/components/Button";
 import { ProgressBar } from "@/components/Progress";
@@ -127,6 +128,7 @@ export default function LessonPage({
   const [completed, setCompleted] = useState(false);
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
   const [tab, setTab] = useState<Tab>("about");
+  const tabListRef = useRef<HTMLDivElement>(null);
   const [notes, setNotes] = useState<LessonNote[]>([]);
   const [noteText, setNoteText] = useState("");
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -351,6 +353,18 @@ export default function LessonPage({
     </nav>
   );
 
+  const TABS: [Tab, string][] = [
+    ["about", t.lesson.about],
+    ["notes", t.lesson.myNotes],
+    ["documents", t.lesson.resources],
+  ];
+  const onTabsKeyDown = rovingTabIndexHandler(
+    tabListRef,
+    '[role="tab"]',
+    (i) => setTab(TABS[i][0]),
+    dir,
+  );
+
   return (
     <div className="flex min-h-screen flex-col bg-bg">
       {/* Top bar with course progress */}
@@ -438,18 +452,21 @@ export default function LessonPage({
           )}
 
           {/* Tabs */}
-          <div role="tablist" aria-label={t.lesson.about} className="mt-6 flex gap-1 border-b border-border">
-            {(
-              [
-                ["about", t.lesson.about],
-                ["notes", t.lesson.myNotes],
-                ["documents", t.lesson.resources],
-              ] as [Tab, string][]
-            ).map(([value, label]) => (
+          <div
+            ref={tabListRef}
+            role="tablist"
+            aria-label={t.lesson.about}
+            onKeyDown={onTabsKeyDown}
+            className="mt-6 flex gap-1 border-b border-border"
+          >
+            {TABS.map(([value, label]) => (
               <button
                 key={value}
+                id={`tab-${value}`}
                 role="tab"
                 aria-selected={tab === value}
+                aria-controls={`panel-${value}`}
+                tabIndex={tab === value ? 0 : -1}
                 onClick={() => setTab(value)}
                 className={`-mb-px min-h-11 border-b-2 px-4 text-[15px] font-medium transition-[border-color,color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] active:scale-[0.98] ${
                   tab === value ? "border-primary text-primary" : "border-transparent text-muted hover:text-ink"
@@ -461,10 +478,19 @@ export default function LessonPage({
           </div>
 
           <div className="py-5">
-            {tab === "about" && <p className="max-w-2xl text-[15px] leading-relaxed text-slate">{lesson.description[locale]}</p>}
+            {tab === "about" && (
+              <p
+                role="tabpanel"
+                id="panel-about"
+                aria-labelledby="tab-about"
+                className="max-w-2xl text-[15px] leading-relaxed text-slate"
+              >
+                {lesson.description[locale]}
+              </p>
+            )}
 
             {tab === "notes" && (
-              <div className="max-w-2xl">
+              <div role="tabpanel" id="panel-notes" aria-labelledby="tab-notes" className="max-w-2xl">
                 <form onSubmit={handleAddNote} className="flex gap-3">
                   <input
                     value={noteText}
@@ -505,7 +531,7 @@ export default function LessonPage({
             )}
 
             {tab === "documents" && (
-              <div className="max-w-2xl">
+              <div role="tabpanel" id="panel-documents" aria-labelledby="tab-documents" className="max-w-2xl">
                 {!lesson.documents || lesson.documents.length === 0 ? (
                   <p className="text-[15px] text-muted">{t.lesson.noDocuments}</p>
                 ) : (

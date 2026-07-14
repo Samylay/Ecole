@@ -25,7 +25,7 @@ function matchesDuration(hours: number, d: Duration): boolean {
 }
 
 function CatalogContent() {
-  const { t, locale } = useLocale();
+  const { t, locale, dir } = useLocale();
   const router = useRouter();
   const params = useSearchParams();
 
@@ -149,6 +149,8 @@ function CatalogContent() {
           value={level}
           onChange={(v) => setLevel(v as Level | "all")}
           label={t.catalog.levelLabel}
+          variant="radiogroup"
+          dir={dir}
         />
       </fieldset>
 
