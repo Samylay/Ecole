@@ -44,3 +44,6 @@ next-env.d.ts
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Scratch dist dir for `npm run build:verify` — never the live deploy (P4-T5)
+.next-verify
