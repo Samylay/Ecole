@@ -314,13 +314,13 @@ function CatalogContent() {
       {/* Mobile filter bottom sheet */}
       {sheetOpen && (
         <div className="fixed inset-0 z-[60] lg:hidden">
-          <button aria-hidden="true" tabIndex={-1} className="absolute inset-0 bg-ink/40" onClick={() => setSheetOpen(false)} />
+          <button aria-hidden="true" tabIndex={-1} className="backdrop-enter absolute inset-0 bg-ink/40" onClick={() => setSheetOpen(false)} />
           <div
             ref={sheetPanelRef}
             role="dialog"
             aria-modal="true"
             aria-label={t.catalog.filters}
-            className="absolute inset-x-0 bottom-0 max-h-[85vh] overflow-y-auto rounded-t-card bg-surface p-6 shadow-modal"
+            className="sheet-enter absolute inset-x-0 bottom-0 max-h-[85vh] overflow-y-auto rounded-t-card bg-surface p-6 shadow-modal"
           >
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-[17px] font-semibold text-ink">{t.catalog.filters}</h2>

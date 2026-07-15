@@ -34,7 +34,7 @@ export function Modal({
         aria-modal="true"
         aria-label={title}
         tabIndex={-1}
-        className="relative w-full max-w-sm rounded-card bg-surface p-6 shadow-modal outline-none"
+        className="modal-enter relative w-full max-w-sm rounded-card bg-surface p-6 shadow-modal outline-none"
       >
         <h2 className="text-[17px] font-semibold text-ink">{title}</h2>
         <div className="mt-3">{children}</div>

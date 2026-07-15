@@ -81,7 +81,7 @@ export function ProgressRing({
           strokeLinecap="round"
           strokeDasharray={circumference}
           strokeDashoffset={offset}
-          className={`stroke-current transition-[stroke-dashoffset] duration-500 ease-out motion-reduce:transition-none ${colorClassName}`}
+          className={`stroke-current transition-[stroke-dashoffset] duration-[var(--duration-slow)] ease-out motion-reduce:transition-none ${colorClassName}`}
         />
       </svg>
       {children && <div className="absolute inset-0 flex items-center justify-center">{children}</div>}

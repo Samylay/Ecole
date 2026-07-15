@@ -252,3 +252,46 @@ body {
 .menu-enter {
   animation: menu-enter var(--duration-fast) var(--ease-out-custom) both;
 }
+
+/* Modal enter (P1-T16) */
+@keyframes modal-enter {
+  from {
+    transform: scale(0.97);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-enter {
+  animation: modal-enter var(--duration-base) var(--ease-out-custom) both;
+}
+
+/* Bottom sheet enter (P1-T16) — lesson chapters drawer, catalog filter sheet */
+@keyframes sheet-enter {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.sheet-enter {
+  animation: sheet-enter var(--duration-slow) var(--ease-drawer) both;
+}
+
+@keyframes backdrop-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.backdrop-enter {
+  animation: backdrop-enter var(--duration-base) var(--ease-out-custom) both;
+}

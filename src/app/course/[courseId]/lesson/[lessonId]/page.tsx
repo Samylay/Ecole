@@ -628,13 +628,13 @@ export default function LessonPage({
       {/* Mobile chapters bottom drawer */}
       {drawerOpen && (
         <div className="fixed inset-0 z-[60] lg:hidden">
-          <button aria-hidden="true" tabIndex={-1} className="absolute inset-0 bg-ink/40" onClick={() => setDrawerOpen(false)} />
+          <button aria-hidden="true" tabIndex={-1} className="backdrop-enter absolute inset-0 bg-ink/40" onClick={() => setDrawerOpen(false)} />
           <div
             ref={drawerPanelRef}
             role="dialog"
             aria-modal="true"
             aria-label={t.lesson.chaptersDrawer}
-            className="absolute inset-x-0 bottom-0 flex max-h-[80vh] flex-col rounded-t-card bg-surface shadow-modal"
+            className="sheet-enter absolute inset-x-0 bottom-0 flex max-h-[80vh] flex-col rounded-t-card bg-surface shadow-modal"
           >
             <div className="flex items-center justify-between border-b border-border px-4 py-3">
               <h2 className="text-[15px] font-semibold text-ink">{t.lesson.chaptersDrawer}</h2>
