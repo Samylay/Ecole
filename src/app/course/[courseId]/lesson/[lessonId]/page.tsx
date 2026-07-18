@@ -610,7 +610,10 @@ export default function LessonPage({
                 <p className="mt-1 text-[15px] text-slate">{t.lesson.courseCompleteBody}</p>
               </div>
               <div className="mt-2 flex flex-wrap justify-center gap-3">
-                <ButtonLink href="/dashboard">{t.nav.dashboard}</ButtonLink>
+                <ButtonLink href={`/course/${courseId}/certificate`}>{t.certificate.viewCertificate}</ButtonLink>
+                <ButtonLink href="/dashboard" variant="secondary">
+                  {t.nav.dashboard}
+                </ButtonLink>
                 <ButtonLink href="/my-courses" variant="secondary">
                   {t.nav.myCourses}
                 </ButtonLink>

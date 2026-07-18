@@ -95,7 +95,14 @@ export default function MyCoursesPage() {
           ) : (
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {visible.map(({ course, progress }) => (
-                <CourseCard key={course.id} course={course} progress={progress} />
+                <div key={course.id} className="flex flex-col gap-3">
+                  <CourseCard course={course} progress={progress} />
+                  {tab === "completed" && (
+                    <ButtonLink href={`/course/${course.id}/certificate`} variant="secondary" size="sm">
+                      {t.certificate.viewCertificate}
+                    </ButtonLink>
+                  )}
+                </div>
               ))}
             </div>
           )}

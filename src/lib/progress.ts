@@ -220,6 +220,18 @@ export function getCourseProgress(courseId: string, totalLessons: number): numbe
   return Math.round((getCompletedLessonIds(courseId).size / totalLessons) * 100);
 }
 
+// Latest lesson-completion timestamp for a course — used as the certificate issue date.
+export function getCourseCompletionDate(courseId: string): number | null {
+  const completions = readCompleted();
+  let latest: number | null = null;
+  for (const k of Object.keys(completions)) {
+    if (k.startsWith(`${courseId}:`) && (latest === null || completions[k] > latest)) {
+      latest = completions[k];
+    }
+  }
+  return latest;
+}
+
 export function getLastActivity(): { courseId: string; lessonId: string; date: number } | null {
   const completions = readCompleted();
   let best: { courseId: string; lessonId: string; date: number } | null = null;

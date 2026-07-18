@@ -331,6 +331,19 @@ type TranslationKeys = {
     privacy: string;
     tagline: string;
   };
+  certificate: {
+    title: string;
+    presentedTo: string;
+    completionStatement: string;
+    instructor: string;
+    issuedOn: string;
+    print: string;
+    back: string;
+    viewCertificate: string;
+    notCompletedTitle: string;
+    notCompletedBody: string;
+    goToCourse: string;
+  };
 };
 
 const translations: Record<Locale, TranslationKeys> = {
@@ -647,6 +660,19 @@ const translations: Record<Locale, TranslationKeys> = {
       privacy: "Confidentialité",
       tagline: "La plateforme d'apprentissage pour réussir",
     },
+    certificate: {
+      title: "Certificat de réussite",
+      presentedTo: "Décerné à",
+      completionStatement: "a terminé avec succès le cours",
+      instructor: "Formateur",
+      issuedOn: "Délivré le",
+      print: "Imprimer / Télécharger en PDF",
+      back: "Retour au cours",
+      viewCertificate: "Voir le certificat",
+      notCompletedTitle: "Certificat non disponible",
+      notCompletedBody: "Termine toutes les leçons de ce cours pour débloquer ton certificat.",
+      goToCourse: "Aller au cours",
+    },
   },
   en: {
     common: {
@@ -961,6 +987,19 @@ const translations: Record<Locale, TranslationKeys> = {
       privacy: "Privacy",
       tagline: "The learning platform for success",
     },
+    certificate: {
+      title: "Certificate of Completion",
+      presentedTo: "Presented to",
+      completionStatement: "has successfully completed the course",
+      instructor: "Instructor",
+      issuedOn: "Issued on",
+      print: "Print / Download as PDF",
+      back: "Back to course",
+      viewCertificate: "View certificate",
+      notCompletedTitle: "Certificate not available",
+      notCompletedBody: "Finish every lesson in this course to unlock your certificate.",
+      goToCourse: "Go to course",
+    },
   },
   ar: {
     common: {
@@ -1273,6 +1312,19 @@ const translations: Record<Locale, TranslationKeys> = {
       terms: "الشروط",
       privacy: "الخصوصية",
       tagline: "منصة التعلم للنجاح",
+    },
+    certificate: {
+      title: "شهادة إتمام",
+      presentedTo: "مُمنوحة إلى",
+      completionStatement: "أتمّ بنجاح دورة",
+      instructor: "الأستاذ",
+      issuedOn: "تاريخ الإصدار",
+      print: "طباعة / تحميل كملف PDF",
+      back: "العودة إلى الدورة",
+      viewCertificate: "عرض الشهادة",
+      notCompletedTitle: "الشهادة غير متوفرة",
+      notCompletedBody: "أنهِ جميع حصص هذه الدورة لفتح شهادتك.",
+      goToCourse: "الذهاب إلى الدورة",
     },
   },
 };
