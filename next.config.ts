@@ -22,6 +22,23 @@ const nextConfig: NextConfig = {
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   async headers() {
+    // Lesson pages embed a YouTube iframe (P3-T1/P3-T4) and Next.js App
+    // Router hydration relies on inline scripts with no nonce plumbing yet,
+    // so script-src/style-src need 'unsafe-inline' rather than a stricter
+    // nonce-based policy — still meaningfully narrows default-src/frame-src/
+    // connect-src down from "anything goes".
+    const csp = [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' https://www.youtube.com https://s.ytimg.com",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data:",
+      "font-src 'self'",
+      "connect-src 'self'",
+      "frame-src https://www.youtube.com",
+      "frame-ancestors 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+    ].join("; ");
     return [
       {
         source: "/(.*)",
@@ -41,6 +58,10 @@ const nextConfig: NextConfig = {
           {
             key: "X-DNS-Prefetch-Control",
             value: "on",
+          },
+          {
+            key: "Content-Security-Policy",
+            value: csp,
           },
         ],
       },

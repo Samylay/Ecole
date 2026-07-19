@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server";
 import { createUser, findUserByEmail } from "@/lib/server/db";
 import { hashPassword, startSession, publicUser } from "@/lib/server/auth";
+import { isRateLimited, clientIp } from "@/lib/server/rateLimit";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(request: Request) {
+  if (isRateLimited(`signup:${clientIp(request)}`, 10, 5 * 60 * 1000)) {
+    return NextResponse.json({ success: false, error: "rate_limited" }, { status: 429 });
+  }
   try {
     const body = await request.json();
     const { name, email, password, role } = body;
