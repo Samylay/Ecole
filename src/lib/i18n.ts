@@ -202,6 +202,8 @@ type TranslationKeys = {
     noResultsTitle: string;
     noResultsBody: string;
     searchPlaceholder: string;
+    lessonResultsTitle: string;
+    inCourse: string;
   };
   myCourses: {
     title: string;
@@ -530,6 +532,8 @@ const translations: Record<Locale, TranslationKeys> = {
       noResultsTitle: "Aucun cours ne correspond",
       noResultsBody: "Essaie d'élargir tes filtres ou de chercher autre chose.",
       searchPlaceholder: "Rechercher un cours…",
+      lessonResultsTitle: "Leçons",
+      inCourse: "Dans",
     },
     myCourses: {
       title: "Mes cours",
@@ -857,6 +861,8 @@ const translations: Record<Locale, TranslationKeys> = {
       noResultsTitle: "No course matches",
       noResultsBody: "Try widening your filters or searching for something else.",
       searchPlaceholder: "Search a course…",
+      lessonResultsTitle: "Lessons",
+      inCourse: "In",
     },
     myCourses: {
       title: "My courses",
@@ -1184,6 +1190,8 @@ const translations: Record<Locale, TranslationKeys> = {
       noResultsTitle: "لا درس يطابق بحثك",
       noResultsBody: "جرّب توسيع التصفية أو البحث عن شيء آخر.",
       searchPlaceholder: "ابحث عن درس…",
+      lessonResultsTitle: "الدروس",
+      inCourse: "في",
     },
     myCourses: {
       title: "دروسي",

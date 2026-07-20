@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useCallback, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Search, SlidersHorizontal, X, SearchX, Star } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
@@ -9,6 +10,7 @@ import { CourseCard } from "@/components/CourseCard";
 import { EmptyState } from "@/components/EmptyState";
 import { Button } from "@/components/Button";
 import { Segmented } from "@/components/Tabs";
+import { HighlightMatch } from "@/components/HighlightMatch";
 import { useLocale } from "@/lib/locale-context";
 import { useOverlay } from "@/lib/useOverlay";
 import { formatNumber } from "@/lib/i18n";
@@ -56,6 +58,23 @@ function CatalogContent() {
       return true;
     });
   }, [query, selectedSubjects, level, duration, minRating, locale, t]);
+
+  const lessonMatches = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return [];
+    const hits: { courseId: string; courseTitle: string; lessonId: string; lessonTitle: string }[] = [];
+    for (const c of courses) {
+      for (const chapter of c.chapters) {
+        for (const lesson of chapter.lessons) {
+          const hay = `${lesson.title[locale]} ${lesson.description[locale]}`.toLowerCase();
+          if (hay.includes(q)) {
+            hits.push({ courseId: c.id, courseTitle: c.title[locale], lessonId: lesson.id, lessonTitle: lesson.title[locale] });
+          }
+        }
+      }
+    }
+    return hits;
+  }, [query, locale]);
 
   const activeChips: { key: string; label: string; clear: () => void }[] = [
     ...selectedSubjects.map((s) => ({
@@ -288,6 +307,31 @@ function CatalogContent() {
                 </button>
               )}
             </div>
+
+            {lessonMatches.length > 0 && (
+              <div className="mb-8">
+                <h2 className="mb-3 text-[13px] font-semibold uppercase tracking-wide text-muted">
+                  {t.catalog.lessonResultsTitle}
+                </h2>
+                <ul className="space-y-2">
+                  {lessonMatches.map((hit) => (
+                    <li key={`${hit.courseId}-${hit.lessonId}`}>
+                      <Link
+                        href={`/course/${hit.courseId}/lesson/${hit.lessonId}`}
+                        className="block rounded-card border border-border bg-surface px-4 py-3 transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:bg-mist/50 active:scale-[0.98]"
+                      >
+                        <p className="text-[15px] font-medium text-ink">
+                          <HighlightMatch text={hit.lessonTitle} query={query} />
+                        </p>
+                        <p className="mt-0.5 text-[13px] text-muted">
+                          {t.catalog.inCourse} {hit.courseTitle}
+                        </p>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
             {filtered.length === 0 ? (
               <EmptyState
