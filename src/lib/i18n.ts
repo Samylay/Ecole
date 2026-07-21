@@ -346,6 +346,18 @@ type TranslationKeys = {
     notCompletedBody: string;
     goToCourse: string;
   };
+  review: {
+    title: string;
+    subtitle: string;
+    emptyTitle: string;
+    emptyBody: string;
+    doneTitle: string;
+    doneBody: string;
+    reviewAgain: string;
+    backToDashboard: string;
+    dashboardCardTitle: string;
+    dashboardCardBody: string;
+  };
 };
 
 const translations: Record<Locale, TranslationKeys> = {
@@ -677,6 +689,18 @@ const translations: Record<Locale, TranslationKeys> = {
       notCompletedBody: "Termine toutes les leçons de ce cours pour débloquer ton certificat.",
       goToCourse: "Aller au cours",
     },
+    review: {
+      title: "Réviser",
+      subtitle: "Reprends les questions ratées, tous chapitres confondus.",
+      emptyTitle: "Rien à réviser",
+      emptyBody: "Toutes tes réponses de quiz sont correctes pour l'instant — bien joué !",
+      doneTitle: "Session terminée",
+      doneBody: "Tu as revu toutes les questions en attente.",
+      reviewAgain: "Revoir les questions restantes",
+      backToDashboard: "Retour au tableau de bord",
+      dashboardCardTitle: "À réviser",
+      dashboardCardBody: "question(s) de quiz à revoir",
+    },
   },
   en: {
     common: {
@@ -1006,6 +1030,18 @@ const translations: Record<Locale, TranslationKeys> = {
       notCompletedBody: "Finish every lesson in this course to unlock your certificate.",
       goToCourse: "Go to course",
     },
+    review: {
+      title: "Review",
+      subtitle: "Retry the questions you got wrong, across every chapter.",
+      emptyTitle: "Nothing to review",
+      emptyBody: "All your quiz answers are correct for now — nice work!",
+      doneTitle: "Session complete",
+      doneBody: "You've reviewed every pending question.",
+      reviewAgain: "Review remaining questions",
+      backToDashboard: "Back to dashboard",
+      dashboardCardTitle: "To review",
+      dashboardCardBody: "quiz question(s) to revisit",
+    },
   },
   ar: {
     common: {
@@ -1333,6 +1369,18 @@ const translations: Record<Locale, TranslationKeys> = {
       notCompletedTitle: "الشهادة غير متوفرة",
       notCompletedBody: "أنهِ جميع حصص هذه الدورة لفتح شهادتك.",
       goToCourse: "الذهاب إلى الدورة",
+    },
+    review: {
+      title: "مراجعة",
+      subtitle: "أعد الإجابة على الأسئلة التي أخطأت فيها، من كل الفصول.",
+      emptyTitle: "لا شيء للمراجعة",
+      emptyBody: "كل إجاباتك في الاختبارات صحيحة حالياً — أحسنت!",
+      doneTitle: "انتهت الجلسة",
+      doneBody: "راجعت كل الأسئلة المعلّقة.",
+      reviewAgain: "مراجعة الأسئلة المتبقية",
+      backToDashboard: "العودة إلى لوحة التحكم",
+      dashboardCardTitle: "للمراجعة",
+      dashboardCardBody: "سؤال (أسئلة) اختبار للمراجعة",
     },
   },
 };

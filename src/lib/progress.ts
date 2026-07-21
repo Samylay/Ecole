@@ -339,6 +339,39 @@ export function getLastQuizAttempt(courseId: string, chapterId: string): QuizAtt
   return attempts.length ? attempts[attempts.length - 1] : null;
 }
 
+// ——— Spaced-repetition review queue ———
+// A question stays "wrong" until it's answered correctly again, judged from
+// each chapter's most recent attempt only (older attempts are superseded).
+
+export type WrongQuestionRef = { courseId: string; chapterId: string; questionId: string };
+
+export function getWrongQuestions(): WrongQuestionRef[] {
+  const attempts = read<QuizAttempt[]>("quiz_attempts", []);
+  const latestByChapter = new Map<string, QuizAttempt>();
+  for (const a of attempts) {
+    latestByChapter.set(`${a.courseId}:${a.chapterId}`, a);
+  }
+  const result: WrongQuestionRef[] = [];
+  for (const a of latestByChapter.values()) {
+    for (const questionId of a.wrongQuestionIds) {
+      result.push({ courseId: a.courseId, chapterId: a.chapterId, questionId });
+    }
+  }
+  return result;
+}
+
+export function clearWrongQuestion(courseId: string, chapterId: string, questionId: string): void {
+  const attempts = read<QuizAttempt[]>("quiz_attempts", []);
+  for (let i = attempts.length - 1; i >= 0; i--) {
+    const a = attempts[i];
+    if (a.courseId === courseId && a.chapterId === chapterId) {
+      a.wrongQuestionIds = a.wrongQuestionIds.filter((id) => id !== questionId);
+      break;
+    }
+  }
+  write("quiz_attempts", attempts);
+}
+
 // ——— Notes (timestamped to video position) ———
 
 export function getNotes(courseId: string, lessonId: string): LessonNote[] {
