@@ -1339,6 +1339,10 @@ export function getCoursesBySubject(subject: Subject): Course[] {
   return courses.filter((c) => c.subject === subject);
 }
 
+export function getCoursesByLevel(level: Level): Course[] {
+  return courses.filter((c) => c.level === level);
+}
+
 export function getLesson(courseId: string, lessonId: string) {
   const course = getCourse(courseId);
   if (!course) return null;
@@ -3142,6 +3146,28 @@ export const quizzes: Record<string, Record<string, QuizQuestion[]>> = {
 
 export function getQuiz(courseId: string, chapterId: string): QuizQuestion[] | null {
   return quizzes[courseId]?.[chapterId] ?? null;
+}
+
+export type ExamQuestionRef = {
+  courseId: string;
+  chapterId: string;
+  question: QuizQuestion;
+};
+
+// Pool every quiz question across all courses of a given level (collège/lycée),
+// for the exam-prep mock-exam mode — not scoped to a single course/chapter.
+export function getExamQuestionPool(level: Level): ExamQuestionRef[] {
+  const pool: ExamQuestionRef[] = [];
+  for (const course of getCoursesByLevel(level)) {
+    for (const chapter of course.chapters) {
+      const questions = quizzes[course.id]?.[chapter.id];
+      if (!questions) continue;
+      for (const question of questions) {
+        pool.push({ courseId: course.id, chapterId: chapter.id, question });
+      }
+    }
+  }
+  return pool;
 }
 
 export function chapterHasQuiz(courseId: string, chapterId: string): boolean {
