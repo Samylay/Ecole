@@ -358,6 +358,24 @@ type TranslationKeys = {
     dashboardCardTitle: string;
     dashboardCardBody: string;
   };
+  examPrep: {
+    title: string;
+    subtitle: string;
+    chooseLevelTitle: string;
+    middleExam: string;
+    highExam: string;
+    startExam: string;
+    timeLeft: string;
+    submitExam: string;
+    noQuestionsTitle: string;
+    noQuestionsBody: string;
+    resultsTitle: string;
+    timeUp: string;
+    backToDashboard: string;
+    retry: string;
+    dashboardCardTitle: string;
+    dashboardCardBody: string;
+  };
 };
 
 const translations: Record<Locale, TranslationKeys> = {
@@ -701,6 +719,24 @@ const translations: Record<Locale, TranslationKeys> = {
       dashboardCardTitle: "À réviser",
       dashboardCardBody: "question(s) de quiz à revoir",
     },
+    examPrep: {
+      title: "Examen blanc",
+      subtitle: "Un examen chronométré à partir des quiz de tes chapitres, par niveau.",
+      chooseLevelTitle: "Choisis un niveau",
+      middleExam: "Brevet blanc (Collège)",
+      highExam: "Bac blanc (Lycée)",
+      startExam: "Commencer l'examen",
+      timeLeft: "Temps restant",
+      submitExam: "Terminer l'examen",
+      noQuestionsTitle: "Aucune question disponible",
+      noQuestionsBody: "Il n'y a pas encore de quiz pour ce niveau.",
+      resultsTitle: "Résultats de l'examen",
+      timeUp: "Temps écoulé ! Ton examen a été soumis automatiquement.",
+      backToDashboard: "Retour au tableau de bord",
+      retry: "Refaire un examen",
+      dashboardCardTitle: "Examen blanc",
+      dashboardCardBody: "Entraîne-toi en conditions chronométrées",
+    },
   },
   en: {
     common: {
@@ -1042,6 +1078,24 @@ const translations: Record<Locale, TranslationKeys> = {
       dashboardCardTitle: "To review",
       dashboardCardBody: "quiz question(s) to revisit",
     },
+    examPrep: {
+      title: "Mock exam",
+      subtitle: "A timed exam assembled from your chapter quizzes, by grade level.",
+      chooseLevelTitle: "Choose a level",
+      middleExam: "Mock brevet (Middle school)",
+      highExam: "Mock bac (High school)",
+      startExam: "Start exam",
+      timeLeft: "Time left",
+      submitExam: "Submit exam",
+      noQuestionsTitle: "No questions available",
+      noQuestionsBody: "There are no quizzes for this level yet.",
+      resultsTitle: "Exam results",
+      timeUp: "Time's up! Your exam was submitted automatically.",
+      backToDashboard: "Back to dashboard",
+      retry: "Take another exam",
+      dashboardCardTitle: "Mock exam",
+      dashboardCardBody: "Practice under timed conditions",
+    },
   },
   ar: {
     common: {
@@ -1381,6 +1435,24 @@ const translations: Record<Locale, TranslationKeys> = {
       backToDashboard: "العودة إلى لوحة التحكم",
       dashboardCardTitle: "للمراجعة",
       dashboardCardBody: "سؤال (أسئلة) اختبار للمراجعة",
+    },
+    examPrep: {
+      title: "امتحان تجريبي",
+      subtitle: "امتحان محدد بوقت يُجمع من اختبارات فصولك، حسب المستوى.",
+      chooseLevelTitle: "اختر مستوى",
+      middleExam: "امتحان تجريبي للبروفيه (المتوسط)",
+      highExam: "امتحان تجريبي للبكالوريا (الثانوي)",
+      startExam: "ابدأ الامتحان",
+      timeLeft: "الوقت المتبقي",
+      submitExam: "إنهاء الامتحان",
+      noQuestionsTitle: "لا توجد أسئلة متاحة",
+      noQuestionsBody: "لا توجد اختبارات لهذا المستوى بعد.",
+      resultsTitle: "نتائج الامتحان",
+      timeUp: "انتهى الوقت! تم إرسال امتحانك تلقائياً.",
+      backToDashboard: "العودة إلى لوحة التحكم",
+      retry: "إجراء امتحان آخر",
+      dashboardCardTitle: "امتحان تجريبي",
+      dashboardCardBody: "تدرّب في ظروف محددة بوقت",
     },
   },
 };

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Flame, Play, ArrowRight, RefreshCw } from "lucide-react";
+import { Flame, Play, ArrowRight, RefreshCw, GraduationCap } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { CourseCard } from "@/components/CourseCard";
@@ -288,6 +288,23 @@ export default function DashboardPage() {
                 </div>
               </Link>
             )}
+
+            {/* Exam prep */}
+            <Link
+              href="/exam-prep"
+              className="group block rounded-card border border-border bg-surface p-6 transition-[box-shadow,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:shadow-lift active:scale-[0.98]"
+            >
+              <div className="flex items-center gap-4">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-pill bg-primary-soft text-primary-hover dark:text-primary">
+                  <GraduationCap className="h-5 w-5" aria-hidden="true" />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[17px] font-semibold text-ink">{t.examPrep.dashboardCardTitle}</p>
+                  <p className="mt-1 text-[13px] text-muted">{t.examPrep.dashboardCardBody}</p>
+                </div>
+                <ArrowRight className={`h-4 w-4 shrink-0 text-muted ${dir === "rtl" ? "-scale-x-100" : ""}`} aria-hidden="true" />
+              </div>
+            </Link>
 
             {/* Enrolled shortcuts */}
             {enrolledCourses.length > 0 && (
