@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/server/auth";
-import { hashPassword, verifyPassword } from "@/lib/server/auth";
+import { hashPassword, verifyPassword, revokeOtherSessions } from "@/lib/server/auth";
 import { getDb } from "@/lib/server/db";
 import { isRateLimited, clientIp } from "@/lib/server/rateLimit";
 
@@ -22,7 +22,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: "invalid_credentials" }, { status: 401 });
     }
     getDb().prepare("UPDATE users SET password_hash = ? WHERE id = ?").run(hashPassword(newPassword), user.id);
-    return NextResponse.json({ success: true });
+    // A password change is the one action a compromised user takes to get an
+    // attacker out. Until now it did not: every other 30-day session cookie
+    // stayed valid. Revoke them all, keeping the caller signed in.
+    const revoked = await revokeOtherSessions(user.id);
+    return NextResponse.json({ success: true, revokedSessions: revoked });
   } catch {
     return NextResponse.json({ success: false, error: "invalid_request" }, { status: 400 });
   }

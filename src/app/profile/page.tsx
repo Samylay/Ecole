@@ -81,7 +81,9 @@ export default function ProfilePage() {
       setPwError("");
       setCurrentPw("");
       setNewPw("");
-      showToast(t.profile.savedToast);
+      showToast(
+        data.revokedSessions > 0 ? t.profile.passwordChangedOthersToast : t.profile.passwordChangedToast
+      );
     } catch {
       setPwError(t.states.errorBody);
     }

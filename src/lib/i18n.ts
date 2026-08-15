@@ -233,6 +233,8 @@ type TranslationKeys = {
     changePassword: string;
     currentPassword: string;
     newPassword: string;
+    passwordChangedToast: string;
+    passwordChangedOthersToast: string;
     savedToast: string;
     memberSince: string;
     preferences: string;
@@ -593,6 +595,8 @@ const translations: Record<Locale, TranslationKeys> = {
       changePassword: "Changer le mot de passe",
       currentPassword: "Mot de passe actuel",
       newPassword: "Nouveau mot de passe",
+      passwordChangedToast: "Mot de passe modifié",
+      passwordChangedOthersToast: "Mot de passe modifié. Tes autres appareils ont été déconnectés.",
       savedToast: "Réglages enregistrés",
       memberSince: "Membre depuis",
       preferences: "Préférences",
@@ -952,6 +956,8 @@ const translations: Record<Locale, TranslationKeys> = {
       changePassword: "Change password",
       currentPassword: "Current password",
       newPassword: "New password",
+      passwordChangedToast: "Password changed",
+      passwordChangedOthersToast: "Password changed. Your other devices have been signed out.",
       savedToast: "Settings saved",
       memberSince: "Member since",
       preferences: "Preferences",
@@ -1311,6 +1317,8 @@ const translations: Record<Locale, TranslationKeys> = {
       changePassword: "تغيير كلمة المرور",
       currentPassword: "كلمة المرور الحالية",
       newPassword: "كلمة المرور الجديدة",
+      passwordChangedToast: "تم تغيير كلمة المرور",
+      passwordChangedOthersToast: "تم تغيير كلمة المرور. تم تسجيل الخروج من أجهزتك الأخرى.",
       savedToast: "تم حفظ الإعدادات",
       memberSince: "عضو منذ",
       preferences: "التفضيلات",

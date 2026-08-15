@@ -96,6 +96,19 @@ export function deleteSession(token: string): void {
   getDb().prepare("DELETE FROM sessions WHERE token = ?").run(token);
 }
 
+/**
+ * Revoke every session for a user except the one making the request; returns how
+ * many were revoked. Called on password change — without it, changing your
+ * password does not evict anyone else who is signed in, and their 30-day cookie
+ * keeps working for its full remaining life.
+ */
+export function deleteOtherSessions(userId: number, keepToken: string): number {
+  const info = getDb()
+    .prepare("DELETE FROM sessions WHERE user_id = ? AND token != ?")
+    .run(userId, keepToken);
+  return info.changes;
+}
+
 export function getLearnerState(userId: number): Record<string, unknown> {
   const rows = getDb().prepare("SELECT key, value FROM learner_state WHERE user_id = ?").all(userId) as {
     key: string;

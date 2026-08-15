@@ -1,6 +1,6 @@
 import { randomBytes, scryptSync, timingSafeEqual } from "crypto";
 import { cookies } from "next/headers";
-import { DbUser, createSession, deleteSession, getSessionUser } from "./db";
+import { DbUser, createSession, deleteOtherSessions, deleteSession, getSessionUser } from "./db";
 
 // scrypt via node:crypto — no external hashing dependency needed for the MVP.
 export function hashPassword(password: string): string {
@@ -37,6 +37,18 @@ export async function getCurrentUser(): Promise<DbUser | null> {
   const token = store.get(COOKIE_NAME)?.value;
   if (!token) return null;
   return getSessionUser(token) ?? null;
+}
+
+/**
+ * Sign every OTHER device out, keeping the caller's own session alive. Returns
+ * the number revoked (0 if the caller has no cookie, which cannot happen on an
+ * authenticated route but is cheaper to handle than to assert).
+ */
+export async function revokeOtherSessions(userId: number): Promise<number> {
+  const store = await cookies();
+  const token = store.get(COOKIE_NAME)?.value;
+  if (!token) return 0;
+  return deleteOtherSessions(userId, token);
 }
 
 export async function endSession(): Promise<void> {
