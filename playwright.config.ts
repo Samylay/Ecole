@@ -23,10 +23,16 @@ export default defineConfig({
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
-    command: `npm run build && npm run start -- -p ${PORT}`,
+    // NEVER a bare `npm run build` here: `ecole.service` serves the live `.next`
+    // from this same directory and holds that build's chunk manifest in memory,
+    // so rebuilding into it makes the public site 400 on every chunk
+    // (ROADMAP P4-T5 — that is exactly how the site broke for four days).
+    // Build and serve out of the scratch dist dir instead; NEXT_DIST_DIR is read
+    // by next.config.ts and covers `next start` as well as the build.
+    command: `npm run build:verify && npm run start -- -p ${PORT}`,
     url: `http://127.0.0.1:${PORT}`,
     timeout: 240_000,
     reuseExistingServer: !process.env.CI,
-    env: { LAYAIDA_DB: E2E_DB },
+    env: { LAYAIDA_DB: E2E_DB, NEXT_DIST_DIR: ".next-verify" },
   },
 });
