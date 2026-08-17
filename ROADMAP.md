@@ -87,6 +87,126 @@ Goal: it teaches, not just demos. The YouTube placeholder embed must die.
 - [ ] **P5-T6 — Teacher dashboard** — upload/manage lessons (explicitly deferred in the handoff).
   - BLOCKED 2026-07-24 (autoloop): hits the same two hard limits as P5-T4. (1) "Upload/manage lessons" needs somewhere writable to save to — confirmed via `grep -rn role src/lib/auth-context.tsx` and reading `src/lib/data.ts` that course/chapter/lesson content is still static mock data with no admin-CRUD path; that's P2-T4's exact scope ("Course content in the DB + admin CRUD"), still open, and Phase 2's header says infra changes "queue, never unattended." Building a teacher dashboard now would mean either inventing a parallel, ad-hoc content-storage mechanism (redefining P2-T4's scope unattended) or a schema migration, both forbidden. (2) "Teacher dashboard" implies a teacher who can log in and see only their own lessons, but `User.role` is only `"student" | "parent"` — no teacher auth/session exists anywhere (`teacher/[slug]` is a public unauthenticated profile page). Adding a new auth role is a Samy-level decision, same as P5-T4's moderation-role blocker. Recommend waiting for P2-T4 (and a teacher-auth decision) before revisiting, same as P5-T4. No code touched; tree left clean.
 
+## Phase 6 — Payments, risk-based auth, teacher back office (2026-08-15 workstream)
+
+Goal: paid enrolment for Algerian students, step-up auth on suspicious sign-ins,
+and a real teacher role that self-serves its own content. Decision records live
+in `.scratch/{payments,risk-auth}/MAP.md` and `.scratch/live-replay/MAP.md`
+(gitignored, local-only — the remote is public). This phase absorbs P5-T4/T6 and
+depends on P2-T4.
+
+**Sequencing.** P6-T1 and P6-T2 are un-gated and go first — they are
+prerequisites the other maps independently converged on, not new scope. P2-T4
+(course content in DB) and P6-T3 (users.role rebuild) are two *separate*
+migrations; do not conflate them into one — rehearsing and shipping one does not
+substitute for the other. Everything under "Payments" and "Risk-based auth"
+needs Samy's decision before any provider-specific code — the un-gated pieces
+under each are called out explicitly and can proceed without waiting.
+
+### Prerequisites (un-gated, autoloop-safe)
+
+- [ ] **P6-T1 — Server-authoritative enrolment** — `enrollments` table
+  (`user_id, course_id, status, source, granted_at, granted_by`); every access
+  check (course page, lesson page, certificate, progress) reads it instead of
+  `learner_state.enrolled`; `learner_state.enrolled` degrades to a UI cache only.
+  Verify: proven live 2026-08-15 that a signed-in student can `PUT /api/state`
+  to enrol themselves in any course for free (see `.scratch/payments/MAP.md`
+  "the finding that reorders everything") — after this task, the same probe
+  must show `enrolled` writes to `learner_state` no longer affect what the
+  server considers the user enrolled in. NEEDS-SAMY: this is a schema migration
+  (new table, additive — no `ALTER` on `users`), queue per the hard migrations
+  rule even though it adds a table rather than touching an existing one.
+- [ ] **P6-T2 — Enrolment normalises "who is enrolled in what"** — depends on
+  P6-T1's table existing. Feeds two independent needs that already converged on
+  it: ticket 04's delete policy ("is a student mid-course on this video?") and
+  payments' access-gating. No new work beyond P6-T1 — this task is the point
+  where other tasks (P6-T8 delete policy, catalogue "enrolled" badge) start
+  reading `enrollments` instead of `learner_state`.
+
+### Payments (`.scratch/payments/MAP.md`)
+
+- [ ] **P6-T3 — NEEDS-SAMY: pick a collection method** — read
+  `.scratch/payments/MAP.md`'s research + decision table (research pending as
+  of 2026-08-15) and answer the 7 open questions in that file (residency,
+  RC/NIF, Algerian bank/CCP account, merchant-of-record, offline collection
+  acceptable for pilot, DZD-only vs EUR too, refund policy). Nothing below can
+  be scoped until this lands.
+- [ ] **P6-T4 — Manual/offline payment path** — an admin marks a `payments` row
+  paid and grants the matching `enrollments` row; needs P6-T1. This is the one
+  path usable regardless of what P6-T3 decides, and ships first because it
+  cannot be blocked by a provider's onboarding form. NEEDS-SAMY only for the
+  `payments` table shape sign-off (additive migration) — no provider, no
+  dependency, no credential.
+- [ ] **P6-T5 — NEEDS-SAMY: online provider integration** — once P6-T3 picks a
+  provider, one task per provider: `createCheckout`/`handleCallback` behind the
+  payment port `.scratch/payments/MAP.md` describes, idempotent on
+  `provider_ref`. New dependency/credential — queue per the hard rules.
+
+### Risk-based auth (`.scratch/risk-auth/MAP.md`)
+
+- [x] **P6-T6 — Revoke other sessions on password change** (2026-08-15, done
+  this session — commit `6fc4abc`). Prerequisite for any step-up: there was no
+  way to evict a session, so step-up would have been theatre.
+- [x] **P6-T7 — Rate-limit login on failures/per-account, not IP-attempts**
+  (2026-08-15, done this session — commit `14c650d`). Algerian carrier CGNAT
+  makes IP-attempt-count both too loose (attacker rotates IP) and too tight
+  (shared IP locks out a classroom); fixed to failures scored per-IP *and*
+  per-account.
+- [ ] **P6-T8 — `sessions` gains device metadata** — add nullable
+  `user_agent`, `ip_first_seen`, `last_seen_at` columns (SQLite `ALTER TABLE
+  ... ADD COLUMN`, in place, far cheaper than the `users.role` rebuild).
+  Prerequisite for scoring anything — today there is nothing to score. NEEDS-
+  SAMY: still a migration, even though additive.
+- [ ] **P6-T9 — NEEDS-SAMY: what the step-up factor is** — read
+  `.scratch/risk-auth/MAP.md` and its research, answer the open questions
+  (actual threat model, paid email provider acceptable?, do students realistically
+  have email, fail-open-or-closed, minors' fingerprint storage, who does
+  recovery). `.scratch/risk-auth/proof/totp.mjs` proves TOTP is viable with zero
+  npm dependency (all RFC 4226/6238/4648 test vectors pass) if that is the pick
+  — still needs product sign-off, not a dependency approval.
+- [ ] **P6-T10 — Password reset flow** — there is none today; a locked-out user
+  has no recovery path. Must ship in the same breath as P6-T9's step-up pick,
+  not after — a challenge that can fail closed with no recovery permanently
+  locks out children. NEEDS-SAMY: depends on P6-T9's answer (email? parent-
+  mediated? admin-mediated?).
+
+### Teacher back office (absorbs P5-T4/P5-T6, continues `.scratch/live-replay/`)
+
+- [ ] **P6-T11 — NEEDS-SAMY: `users.role` rebuild to add `teacher`+`admin`**
+  — SQLite CHECK constraints can't `ALTER`; needs the 12-step table-rebuild
+  (create `users_new`, copy rows, drop, rename), on the **live** `users` table
+  with `sessions`/`learner_state` FK cascades. First gate for all of Phase 6's
+  teacher work — see `.scratch/live-replay/tickets/04-grilling-teacher-
+  permissions.md` for the full analysis, mitigations (backup first, rehearse
+  against a copy, add `schema_version` in the same change), and R1–R6
+  recommendations (roles needed, admin-created only, ownership not RBAC,
+  server-side checks, split the trilingual law for content vs UI chrome, soft-
+  delete + publication states). Confirm `role IN (...)` is signup's *allowlist*
+  target, not a passthrough — `src/app/api/auth/signup/route.ts:26` already
+  defaults anything unrecognised to `"student"`, verified by probe 2026-08-15
+  (`role:"teacher"` came back `"student"`); keep that shape.
+- [ ] **P6-T12 — NEEDS-SAMY: resolve ticket 02 (content hierarchy)** — confirm
+  or refute the proposed mapping (matière→Subject/Level, série→Course,
+  cours→Chapter, vidéo→Lesson, no new entity) in
+  `.scratch/live-replay/tickets/02-grilling-content-hierarchy.md`; answer its 3
+  open questions (co-teaching ownership, `instructor` becoming a real user,
+  série-as-real-fifth-level falsifier).
+- [ ] **P6-T13 — Course content into DB with owner + hierarchy** — this is
+  P2-T4, done under Phase 6's naming from P6-T12: `courses/chapters/lessons`
+  tables, `courses.owner_user_id`, `data.ts` becomes the seed. Depends on
+  P6-T11 (owner FK needs the role to exist) and P6-T12 (table names/shape).
+- [ ] **P6-T14 — Server-side ownership checks on every content write** — every
+  teacher-facing write route re-fetches the row and compares `owner_user_id` to
+  the session user; admin bypasses. Depends on P6-T13.
+- [ ] **P6-T15 — Delete policy: unpublish/archive/hard-delete** — implements
+  ticket 04's R6 (soft delete + publication states, `deleted_at`, retention
+  window before hard delete, object sweep separate from row delete). Depends on
+  P6-T2 (needs `enrollments` to answer "is anyone enrolled") and P6-T13.
+- [ ] **P6-T16 — NEEDS-SAMY: resolve remaining live-replay tickets** — 03 (chat
+  moderation), 06 (video storage — see the video-storage research pending in
+  `.scratch/payments/` sibling research), 08 (live scheduling/access), 09
+  (assemble final spec). Continue the existing map; do not re-chart it.
+
 ## Log
 
 - 2026-08-12 (autoloop) — P2-T5 BLOCKED (first formal attempt; previously only implicitly skipped under the Phase 2 header's blanket "queue, never unattended", same gap P2-T4 had before its 2026-08-09 note). P2-T4 re-checked first: still BLOCKED with an unchanged cause (schema migration + no admin role, confirmed still true), so per the "unchanged cause is silence" rule wrote nothing new for it and moved to the next unchecked task, P2-T5. Read `src/lib/server/db.ts`'s `migrate()` (only `users`/`sessions`/`learner_state` tables, no parent-child link) and `src/app/parent/page.tsx` (currently reads the signed-in user's *own* progress via `progress.ts`, not a linked child's) before concluding: real parent-child linking needs a new table/column plus an invite-code signup flow and a server endpoint reading another user's data — a schema migration, forbidden unattended, the same class of block as P2-T4. Added the task's first inline BLOCKED note. No code changed; only ROADMAP.md touched.
