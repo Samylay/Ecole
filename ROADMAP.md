@@ -126,21 +126,39 @@ under each are called out explicitly and can proceed without waiting.
 ### Payments (`.scratch/payments/MAP.md`)
 
 - [ ] **P6-T3 — NEEDS-SAMY: pick a collection method** — read
-  `.scratch/payments/MAP.md`'s research + decision table (research pending as
-  of 2026-08-15) and answer the 7 open questions in that file (residency,
-  RC/NIF, Algerian bank/CCP account, merchant-of-record, offline collection
-  acceptable for pilot, DZD-only vs EUR too, refund policy). Nothing below can
-  be scoped until this lands.
+  `.scratch/payments/MAP.md` and `RESEARCH.md` (done 2026-08-15/17: every
+  automated Algerian gateway gates on an RC except Chargily's Test Mode,
+  which needs zero documents; CIB/Edahabia cards are domestic-only so the
+  foreign-MoR angle is closed by the buyer side, not the merchant side; the
+  manual CCP/BaridiMob path is proven production practice at a comparable
+  Algerian e-learning site) and answer the 7 open questions in MAP.md
+  (residency, RC/NIF, Algerian bank/CCP account, merchant-of-record, offline
+  collection acceptable for pilot, DZD-only vs EUR too, refund policy).
 - [ ] **P6-T4 — Manual/offline payment path** — an admin marks a `payments` row
-  paid and grants the matching `enrollments` row; needs P6-T1. This is the one
-  path usable regardless of what P6-T3 decides, and ships first because it
-  cannot be blocked by a provider's onboarding form. NEEDS-SAMY only for the
-  `payments` table shape sign-off (additive migration) — no provider, no
-  dependency, no credential.
-- [ ] **P6-T5 — NEEDS-SAMY: online provider integration** — once P6-T3 picks a
-  provider, one task per provider: `createCheckout`/`handleCallback` behind the
-  payment port `.scratch/payments/MAP.md` describes, idempotent on
-  `provider_ref`. New dependency/credential — queue per the hard rules.
+  paid and grants the matching `enrollments` row; needs P6-T1 (rehearsed and
+  proven against a DB copy 2026-08-17, see
+  `.scratch/payments/p6-t1-migration-rehearsal.md` — idempotent, row counts
+  unchanged, cascade-delete verified, ready to run the moment it's approved).
+  This is the one path usable regardless of what P6-T3 decides, and ships
+  first because it cannot be blocked by a provider's onboarding form.
+  NEEDS-SAMY only for the `payments` table shape sign-off (additive
+  migration) — no provider, no dependency, no credential.
+- [ ] **P6-T5 — NEEDS-SAMY: online provider integration** — `src/lib/server/
+  payments/chargily.ts` built and proven offline 2026-08-17 (same pattern as
+  LifeOS's `enable-banking.ts`): `buildCheckoutPayload`,
+  `verifyChargilyWebhookSignature` (HMAC-SHA256 over the raw body, confirmed
+  from Chargily's own docs + SDK source), `parseChargilyWebhook` — all pass
+  against Chargily's own published example webhook payload plus
+  tampered/wrong-secret/missing-header rejection cases. See
+  `.scratch/payments/chargily-api-contract.md` for the exact contract and one
+  unreconciled discrepancy in Chargily's own docs (`webhook_endpoint` vs
+  `webhook_url` field name) still needing a live sandbox check. Not wired to
+  any route — needs P6-T1 (enrollments table) and P6-T3 (formal provider
+  pick) first, and a real Chargily account (Samy: sign up, free, no
+  documents for Test Mode per the payments research) to test end-to-end.
+  New dependency (none needed — zero-dep so far) — if a second provider is
+  ever added, extracting a shared port interface is a small task then, not
+  now (one implementation doesn't need an abstraction over itself).
 
 ### Risk-based auth (`.scratch/risk-auth/MAP.md`)
 
@@ -158,12 +176,20 @@ under each are called out explicitly and can proceed without waiting.
   Prerequisite for scoring anything — today there is nothing to score. NEEDS-
   SAMY: still a migration, even though additive.
 - [ ] **P6-T9 — NEEDS-SAMY: what the step-up factor is** — read
-  `.scratch/risk-auth/MAP.md` and its research, answer the open questions
-  (actual threat model, paid email provider acceptable?, do students realistically
-  have email, fail-open-or-closed, minors' fingerprint storage, who does
-  recovery). `.scratch/risk-auth/proof/totp.mjs` proves TOTP is viable with zero
-  npm dependency (all RFC 4226/6238/4648 test vectors pass) if that is the pick
-  — still needs product sign-off, not a dependency approval.
+  `.scratch/risk-auth/MAP.md` and `RESEARCH.md` (done 2026-08-15: BAC-week
+  shutdowns are real and recurring, ~June 7-11 2026; direct SMTP from the
+  homelab cannot reach inboxes at all — structural, not a deliverability risk
+  to manage; SMS to Algeria costs $0.273/message and NIST now restricts SMS
+  OTP; parent-as-2FA is the best zero-dep fit for minors, independently
+  validated by NIST 800-63A's "trusted referee" model and Google Family
+  Link/Khan Academy prior art, but needs real parent-account linking, itself
+  blocked on P2-T5's own migration) and answer the open questions (actual
+  threat model, is a small dependency ever acceptable, do students
+  realistically have email, fail-open-or-closed, minors' fingerprint storage,
+  who does recovery). `.scratch/risk-auth/proof/totp.mjs` proves TOTP is
+  viable with zero npm dependency (all RFC 4226/6238/4648 test vectors pass)
+  if that is the pick — still needs product sign-off, not a dependency
+  approval.
 - [ ] **P6-T10 — Password reset flow** — there is none today; a locked-out user
   has no recovery path. Must ship in the same breath as P6-T9's step-up pick,
   not after — a challenge that can fail closed with no recovery permanently
@@ -203,9 +229,28 @@ under each are called out explicitly and can proceed without waiting.
   window before hard delete, object sweep separate from row delete). Depends on
   P6-T2 (needs `enrollments` to answer "is anyone enrolled") and P6-T13.
 - [ ] **P6-T16 — NEEDS-SAMY: resolve remaining live-replay tickets** — 03 (chat
-  moderation), 06 (video storage — see the video-storage research pending in
-  `.scratch/payments/` sibling research), 08 (live scheduling/access), 09
-  (assemble final spec). Continue the existing map; do not re-chart it.
+  moderation — proposed resolution appended 2026-08-15/17: owning teacher
+  only moderates for the pilot, mic-mute and chat-mute are two distinct
+  LiveKit calls not one button, three severity tiers map to three distinct
+  primitives, no chat persistence recommended), 06 (video storage — research
+  done 2026-08-15: LiveKit's Build tier caps recording at 60 shared min/mo,
+  effectively demo-only — Ship at $50/mo is the real floor; recommend
+  Cloudflare R2 for replay egress and Bunny Stream for prof uploads, see
+  `.scratch/live-replay/assets/video-storage-research.md`; confirmed
+  self-hosting video through the CF tunnel is a written ToS violation, not a
+  gray area), 08 (live scheduling/access — proposed resolution appended
+  2026-08-17: course-page block + home "live now" banner over a dedicated
+  `/live` page for the pilot's scale, in-app-only reminders since no
+  email/SMS provider exists, access tier explicitly deferred to P6-T3's paid-
+  or-not decision, a LiveKit room-started webhook drives discovery rather
+  than a second manual "go live" step), 09 (assemble final spec — still
+  blocked on 02/03/04/08's Samy confirmations landing first). A low-effort
+  design review (`.scratch/live-replay/assets/design-readiness-review.md`,
+  fable model, 2026-08-17) flags the teacher back office as the design
+  system's biggest gap — no data table, no destructive-action/danger-zone
+  pattern (needed for P6-T15's archive/delete), no upload or scheduling
+  input — recommend a small design ticket once P6-T11/T12 close, before
+  P6-T13/T15 code starts. Continue the existing map; do not re-chart it.
 
 ## Log
 
