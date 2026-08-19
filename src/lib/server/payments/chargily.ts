@@ -7,8 +7,8 @@
 // and proven correct with node:crypto now. No new dependency.
 //
 // NOT wired into any route yet — there is nowhere to write an enrolment to
-// (ROADMAP P6-T1, enrollments table, still NEEDS-SAMY) and no provider has
-// actually been picked (P6-T3, still NEEDS-SAMY). This is the provider-
+// (ROADMAP P6-T1, enrollments table, still NEEDS-USER) and no provider has
+// actually been picked (P6-T3, still NEEDS-USER). This is the provider-
 // specific half of the "payment port" MAP.md describes; the port interface
 // itself stays unbuilt until a second provider is ever in scope — one
 // implementation doesn't need an abstraction over itself.
