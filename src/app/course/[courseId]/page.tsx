@@ -21,6 +21,7 @@ import { Footer } from "@/components/Footer";
 import { Badge } from "@/components/Badge";
 import { Button, ButtonLink } from "@/components/Button";
 import { ProgressBar } from "@/components/Progress";
+import { LiveSessionLink } from "@/components/LiveSessionLink";
 import { useToast } from "@/components/Toast";
 import { useLocale } from "@/lib/locale-context";
 import { useAuth } from "@/lib/auth-context";
@@ -88,6 +89,14 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
   const firstLesson = allLessons[0];
   const progress = allLessons.length ? Math.round((completedIds.size / allLessons.length) * 100) : 0;
   const slug = teacherSlug(course.instructor.name);
+  const liveSessions = course.chapters.flatMap((chapter) => [
+    { key: chapter.id, livestreamUrl: chapter.livestreamUrl, scheduledAt: chapter.scheduledAt },
+    ...chapter.lessons.map((lesson) => ({
+      key: `${chapter.id}-${lesson.id}`,
+      livestreamUrl: lesson.livestreamUrl,
+      scheduledAt: lesson.scheduledAt,
+    })),
+  ]);
 
   const handleEnroll = async () => {
     // T7-1: enrolment is granted server-side; the UI only reflects the answer.
@@ -173,6 +182,15 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                     {formatNumber(locale, course.rating)}
                   </span>
                 </div>
+
+                {enrolled && liveSessions.map((session) => (
+                  <LiveSessionLink
+                    key={session.key}
+                    livestreamUrl={session.livestreamUrl}
+                    scheduledAt={session.scheduledAt}
+                    className="mt-5"
+                  />
+                ))}
 
                 {/* Prerequisite chip */}
                 {prerequisite && (
