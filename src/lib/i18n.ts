@@ -259,6 +259,7 @@ type TranslationKeys = {
     emptyTitle: string;
     emptyBody: string;
     refresh: string;
+  };
   admin: {
     title: string;
     subtitle: string;
