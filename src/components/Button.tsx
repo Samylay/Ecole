@@ -1,6 +1,6 @@
 "use client";
 
-import { ButtonHTMLAttributes, ReactNode } from "react";
+import { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from "react";
 import Link from "next/link";
 
 type Variant = "primary" | "secondary" | "ghost" | "danger";
@@ -48,13 +48,12 @@ export function Button({ variant = "primary", size = "md", loading, className = 
   );
 }
 
-type ButtonLinkProps = {
+type ButtonLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & {
   href: string;
   variant?: Variant;
   size?: Size;
   className?: string;
   children: ReactNode;
-  "aria-label"?: string;
 };
 
 export function ButtonLink({ href, variant = "primary", size = "md", className = "", children, ...rest }: ButtonLinkProps) {

@@ -24,6 +24,7 @@ import { useToast } from "@/components/Toast";
 import { Button, ButtonLink } from "@/components/Button";
 import { ProgressBar } from "@/components/Progress";
 import { CelebrationCheck } from "@/components/Celebration";
+import { LiveSessionLink } from "@/components/LiveSessionLink";
 import { formatNumber } from "@/lib/i18n";
 import { getLesson, getAllLessons, chapterHasQuiz, subjectColors, Course } from "@/lib/data";
 import {
@@ -40,6 +41,7 @@ import {
   getResumePosition,
   setResumePosition,
   getLastQuizAttempt,
+  isEnrolled,
   LessonNote,
 } from "@/lib/progress";
 
@@ -126,6 +128,7 @@ export default function LessonPage({
   const { showToast } = useToast();
 
   const [completed, setCompleted] = useState(false);
+  const [enrolled, setEnrolled] = useState(false);
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
   const [tab, setTab] = useState<Tab>("about");
   const tabListRef = useRef<HTMLDivElement>(null);
@@ -148,6 +151,7 @@ export default function LessonPage({
 
   useEffect(() => {
     migrateLegacyProgress();
+    setEnrolled(isEnrolled(courseId));
     setCompleted(isLessonCompleted(courseId, lessonId));
     setCompletedIds(getCompletedLessonIds(courseId));
     setNotes(getNotes(courseId, lessonId));
@@ -432,6 +436,14 @@ export default function LessonPage({
               {completed ? t.lesson.markedComplete : t.lesson.markComplete}
             </Button>
           </div>
+
+          {enrolled && (
+            <LiveSessionLink
+              livestreamUrl={lesson.livestreamUrl}
+              scheduledAt={lesson.scheduledAt}
+              className="mt-4"
+            />
+          )}
 
           {/* Auto-advance banner */}
           {countdown !== null && nextHref && (

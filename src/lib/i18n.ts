@@ -103,6 +103,10 @@ type TranslationKeys = {
     free: string;
     enrolledToast: string;
   };
+  live: {
+    joinLive: string;
+    scheduledFor: string;
+  };
   lesson: {
     next: string;
     previous: string;
@@ -468,6 +472,10 @@ const translations: Record<Locale, TranslationKeys> = {
       free: "Gratuit",
       enrolledToast: "Tu es inscrit·e ! Bon apprentissage 🎉",
     },
+    live: {
+      joinLive: "Rejoindre le live",
+      scheduledFor: "Prévu le {date}",
+    },
     lesson: {
       next: "Suivant",
       previous: "Précédent",
@@ -832,6 +840,10 @@ const translations: Record<Locale, TranslationKeys> = {
       free: "Free",
       enrolledToast: "You're enrolled! Happy learning 🎉",
     },
+    live: {
+      joinLive: "Join live session",
+      scheduledFor: "Scheduled for {date}",
+    },
     lesson: {
       next: "Next",
       previous: "Previous",
@@ -1195,6 +1207,10 @@ const translations: Record<Locale, TranslationKeys> = {
       quiz: "اختبار",
       free: "مجاني",
       enrolledToast: "تم تسجيلك! تعلّماً ممتعاً 🎉",
+    },
+    live: {
+      joinLive: "انضم إلى البث المباشر",
+      scheduledFor: "موعد البث: {date}",
     },
     lesson: {
       next: "التالي",
