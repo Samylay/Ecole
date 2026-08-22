@@ -367,7 +367,7 @@ onboarding, passwordless, and step-up.
 
 ### Tickets (order = execution order)
 
-- [ ] **T7-1 — Server-authoritative enrolment (P6-T1, unblocked)** —
+- [x] **T7-1 — Server-authoritative enrolment (P6-T1, unblocked)** (2026-08-22: done attended by Samy+ox-alpha — enrollments table with idempotent backfill from learner_state.enrolled; GET/POST /api/enrollments; PUT /api/state silently strips enrolled; course-page handleEnroll awaits the API result; typecheck + build:verify green; 3/3 e2e smoke pass on scratch dist+DB; live probe: forged enrolled via /api/state no longer appears in /api/enrollments) —
   `enrollments(user_id, course_id, status, source, granted_at, granted_by)`
   table; `/api/state` PUT silently strips the `enrolled` key (server-owned);
   new `/api/enrollments` GET (own) + POST (self-enrol while courses are free);
