@@ -376,14 +376,14 @@ onboarding, passwordless, and step-up.
   self-enrol probe (PUT /api/state with enrolled) no longer grants access.
   ATTENDED-OK: additive migration, no ALTER on users.
 
-- [ ] **T7-2 — Email infrastructure** — SMTP sender
+- [x] **T7-2 — Email infrastructure** (2026-08-22: done attended — src/lib/server/mailer.ts, zero new dependencies (hand-rolled STARTTLS/AUTH-PLAIN SMTP client), env LAYAIDA_SMTP_HOST/PORT/USER/PASS/FROM; LAYAIDA_DEV_MAIL_LOG=1 or missing host logs instead of sends so dev/e2e need no creds; email_tokens table (sha256 token hash, single-use, TTL). NEEDS-USER still open: real SMTP credentials before prod send.) — SMTP sender
   (`src/lib/server/mailer.ts`, env: LAYAIDA_SMTP_HOST/PORT/USER/PASS/FROM;
   nodemailer is proposed as the single approved dependency),
   `email_tokens` table (email, purpose, token_hash, expires_at,
   consumed_at), dev-mode LAYAIDA_DEV_MAIL_LOG=1 logs instead of sends.
   NEEDS-USER before prod send: SMTP credentials.
 
-- [ ] **T7-3 — Passwordless login (magic link)** — login becomes email-first:
+- [x] **T7-3 — Passwordless login (magic link)** (2026-08-22: done attended — POST /api/auth/magic issues a 15-min single-use link (no account enumeration: unknown addresses get success:true), /api/auth/magic/verify consumes sha256(token) and starts a session; /auth/magic landing page pulls server state then redirects to /dashboard; the signin forgot-password button now sends magic links (trilingual i18n keys added). Password login kept as fallback. Verified live: verify succeeds once, reuse rejected invalid_or_expired; 3/3 e2e smoke green.) — login becomes email-first:
   POST /api/auth/magic issues a 15-min single-use emailed code+link,
   POST /api/auth/magic/verify consumes it and starts a session. Password
   login stays as fallback during transition; new signups can be passwordless.
