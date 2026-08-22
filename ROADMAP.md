@@ -420,3 +420,71 @@ onboarding, passwordless, and step-up.
 - [ ] **T7-9 — Séries d'exercices + OCR (later)** — exercise sheets per
   chapter; v1: upload scan, teacher grades manually against it; v2: OCR pass
   (NEEDS-USER: Mathpix vs self-hosted). Depends on T7-6.
+
+## ⏸️ PAUSE POINT 2026-08-22 — resume here
+
+State: Phases 1-7 shipped and deployed (see git log; T7-1..T7-8 done incl.
+swarm wave). Live at ecole.samylayaida.com via ecole.service on 127.0.0.1:3002.
+Samy is admin (layaida.samy@gmail.com). Password login still works; magic
+links live but emails log to journalctl until SMTP creds are set.
+
+### New product decision (Samy, 2026-08-22) — pricing model
+Students subscribe per TOPIC/SUBJECT, each subject costs its own monthly
+amount (e.g. math 2000 DZD/mo, physics 1500 DZD/mo). Enrolment is therefore
+SUBSCRIPTION-based, not one-time-per-course:
+- enrolment grants should expire/renew monthly per subject, not per course
+- a student can hold several active subscriptions at once
+- payments table needs period fields (period_start, period_end or
+  months_paid) and a subscription state machine (active/expired/grace)
+- Chargily online flow should create recurring-or-manual-renewal payments;
+  cash path = staff marks N months paid
+- access checks must become expiry-aware (enrollments.expires_at)
+
+### Backlog before full release (unprioritized)
+- [ ] P8-A: subscription model migration (enrollments gains expires_at +
+  subject scoping OR subscriptions table; payments gain period fields)
+- [ ] P8-B: pricing config per subject + admin UI to set/change prices
+- [ ] P8-C: expiry-aware access checks + renewal reminders by email
+- [ ] P8-D: teacher UI on top of T7-6 backend (courses/chapters/lessons CRUD)
+- [ ] P8-E: real SMTP creds in ecole.service env (NEEDS-USER)
+- [ ] P8-F: Chargily integration go-live (contract researched in
+  .scratch/payments/chargily-api-contract.md) (NEEDS-USER: account)
+- [ ] P8-G: sharing-detection enforcement (warn → step-up → lock) on top of T7-8 v1
+- [ ] P8-H: replace illustrative Meet links + move livestreamUrl behind an
+  authenticated endpoint before real paid courses carry real links (reviewer P1-1)
+- [ ] P8-I: real content production (videos/PDFs) — NEEDS-SAMY
+- [ ] P8-J: legal pages (P4-T4 still open), monitoring probe (P4-T3 still open)
+
+## ⏸️ PAUSE POINT 2026-08-22 — resume here
+
+State: Phases 1-7 shipped and deployed (see git log; T7-1..T7-8 done incl.
+swarm wave). Live at ecole.samylayaida.com via ecole.service on 127.0.0.1:3002.
+Samy is admin (layaida.samy@gmail.com). Password login still works; magic
+links live but emails log to journalctl until SMTP creds are set.
+
+### New product decision (Samy, 2026-08-22) — pricing model
+Students subscribe per TOPIC/SUBJECT, each subject costs its own monthly
+amount (e.g. math 2000 DZD/mo, physics 1500 DZD/mo). Enrolment is therefore
+SUBSCRIPTION-based, not one-time-per-course:
+- enrolment grants should expire/renew monthly per subject, not per course
+- a student can hold several active subscriptions at once
+- payments table needs period fields (period_start, period_end or
+  months_paid) and a subscription state machine (active/expired/grace)
+- Chargily online flow should create recurring-or-manual-renewal payments;
+  cash path = staff marks N months paid
+- access checks must become expiry-aware (enrollments.expires_at)
+
+### Backlog before full release (unprioritized)
+- [ ] P8-A: subscription model migration (enrollments gains expires_at +
+  subject scoping OR subscriptions table; payments gain period fields)
+- [ ] P8-B: pricing config per subject + admin UI to set/change prices
+- [ ] P8-C: expiry-aware access checks + renewal reminders by email
+- [ ] P8-D: teacher UI on top of T7-6 backend (courses/chapters/lessons CRUD)
+- [ ] P8-E: real SMTP creds in ecole.service env (NEEDS-USER)
+- [ ] P8-F: Chargily integration go-live (contract researched in
+  .scratch/payments/chargily-api-contract.md) (NEEDS-USER: account)
+- [ ] P8-G: sharing-detection enforcement (warn then step-up then lock) on top of T7-8 v1
+- [ ] P8-H: replace illustrative Meet links + move livestreamUrl behind an
+  authenticated endpoint before real paid courses carry real links (reviewer P1-1)
+- [ ] P8-I: real content production (videos/PDFs) — NEEDS-SAMY
+- [ ] P8-J: legal pages (P4-T4 still open), monitoring probe (P4-T3 still open)
