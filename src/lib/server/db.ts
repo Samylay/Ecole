@@ -239,3 +239,67 @@ export function grantEnrollment(
     )
     .run(userId, courseId, source, grantedBy);
 }
+
+// ——— Email tokens (Phase 7 T7-2/T7-3): magic links + account activation ———
+
+export type EmailTokenPurpose = "magic_login" | "account_activation";
+
+let emailTokensReady = false;
+
+function ensureEmailTokensTable(database: Database.Database): void {
+  if (emailTokensReady) return;
+  database.exec(`
+    CREATE TABLE IF NOT EXISTS email_tokens (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      email TEXT NOT NULL,
+      purpose TEXT NOT NULL CHECK (purpose IN ('magic_login', 'account_activation')),
+      token_hash TEXT NOT NULL UNIQUE,
+      expires_at INTEGER NOT NULL,
+      consumed_at INTEGER,
+      created_at INTEGER NOT NULL DEFAULT (unixepoch() * 1000)
+    );
+    CREATE INDEX IF NOT EXISTS idx_email_tokens_email ON email_tokens(email);
+  `);
+  emailTokensReady = true;
+}
+
+function tokensDb(): Database.Database {
+  const database = getDb();
+  ensureEmailTokensTable(database);
+  return database;
+}
+
+export function createEmailToken(
+  email: string,
+  purpose: EmailTokenPurpose,
+  tokenHash: string,
+  ttlMs: number
+): void {
+  // single active token per (email, purpose): issuing a new one supersedes the old
+  tokensDb()
+    .prepare(`DELETE FROM email_tokens WHERE email = ? AND purpose = ?`)
+    .run(email, purpose);
+  tokensDb()
+    .prepare(
+      `INSERT INTO email_tokens (email, purpose, token_hash, expires_at) VALUES (?, ?, ?, ?)`
+    )
+    .run(email, purpose, tokenHash, Date.now() + ttlMs);
+}
+
+/** Consume a token: returns the email it was issued for, or null. Single-use. */
+export function consumeEmailToken(
+  purpose: EmailTokenPurpose,
+  tokenHash: string
+): { email: string } | null {
+  const row = tokensDb()
+    .prepare(
+      `SELECT id, email FROM email_tokens
+       WHERE purpose = ? AND token_hash = ? AND consumed_at IS NULL AND expires_at > ?`
+    )
+    .get(purpose, tokenHash, Date.now()) as { id: number; email: string } | undefined;
+  if (!row) return null;
+  tokensDb()
+    .prepare(`UPDATE email_tokens SET consumed_at = ? WHERE id = ?`)
+    .run(Date.now(), row.id);
+  return { email: row.email };
+}

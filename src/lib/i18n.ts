@@ -302,6 +302,9 @@ type TranslationKeys = {
     confirmPassword: string;
     fullName: string;
     forgotPassword: string;
+    magicLink: string;
+    magicLinkSent: string;
+    magicLinkError: string;
     noAccount: string;
     hasAccount: string;
     orContinueWith: string;
@@ -664,6 +667,9 @@ const translations: Record<Locale, TranslationKeys> = {
       confirmPassword: "Confirmer le mot de passe",
       fullName: "Nom complet",
       forgotPassword: "Mot de passe oublié ?",
+      magicLink: "Recevoir un lien de connexion",
+      magicLinkSent: "Lien envoyé ! Vérifie ta boîte mail.",
+      magicLinkError: "Impossible d'envoyer le lien pour le moment.",
       noAccount: "Pas encore de compte ?",
       hasAccount: "Déjà un compte ?",
       orContinueWith: "Ou continuer avec",
@@ -1025,6 +1031,9 @@ const translations: Record<Locale, TranslationKeys> = {
       confirmPassword: "Confirm password",
       fullName: "Full name",
       forgotPassword: "Forgot password?",
+      magicLink: "Email me a login link",
+      magicLinkSent: "Link sent! Check your inbox.",
+      magicLinkError: "Could not send the link right now.",
       noAccount: "Don't have an account?",
       hasAccount: "Already have an account?",
       orContinueWith: "Or continue with",
@@ -1386,6 +1395,9 @@ const translations: Record<Locale, TranslationKeys> = {
       confirmPassword: "تأكيد كلمة المرور",
       fullName: "الاسم الكامل",
       forgotPassword: "نسيت كلمة المرور؟",
+      magicLink: "أرسل لي رابط تسجيل الدخول",
+      magicLinkSent: "تم الإرسال! تحقّق من بريدك.",
+      magicLinkError: "تعذّر إرسال الرابط الآن.",
       noAccount: "ليس لديك حساب؟",
       hasAccount: "لديك حساب بالفعل؟",
       orContinueWith: "أو تابع بـ",

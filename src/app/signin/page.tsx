@@ -19,6 +19,38 @@ export default function SignInPage() {
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({});
   const [formError, setFormError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [magicLoading, setMagicLoading] = useState(false);
+  const [magicSent, setMagicSent] = useState(false);
+  const [magicError, setMagicError] = useState("");
+
+  // T7-3: passwordless entry point — email a single-use magic link.
+  const handleMagicLink = async () => {
+    if (!email.trim()) {
+      setFieldErrors((prev) => ({ ...prev, email: t.auth.missingFields }));
+      return;
+    }
+    setMagicSent(false);
+    setMagicError("");
+    setMagicLoading(true);
+    try {
+      const res = await fetch("/api/auth/magic", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      // success:true even for unknown addresses — never reveal existence
+      if (res.ok && data.success) {
+        setMagicSent(true);
+      } else {
+        setMagicError(t.auth.magicLinkError);
+      }
+    } catch {
+      setMagicError(t.auth.magicLinkError);
+    } finally {
+      setMagicLoading(false);
+    }
+  };
 
   const validateEmail = () => {
     setFieldErrors((prev) => ({ ...prev, email: email.trim() ? undefined : t.auth.missingFields }));
@@ -100,10 +132,26 @@ export default function SignInPage() {
             )}
 
             <div className="text-end">
-              <Link href="#" className="text-[13px] font-medium text-primary hover:underline">
-                {t.auth.forgotPassword}
-              </Link>
+              <button
+                type="button"
+                onClick={handleMagicLink}
+                disabled={magicLoading}
+                className="text-[13px] font-medium text-primary hover:underline disabled:opacity-60"
+              >
+                {magicLoading ? "…" : t.auth.forgotPassword}
+              </button>
             </div>
+
+            {magicSent && (
+              <p role="status" className="rounded-input bg-success-soft px-4 py-3 text-[13px] font-medium text-success">
+                {t.auth.magicLinkSent}
+              </p>
+            )}
+            {magicError && (
+              <p role="alert" className="rounded-input bg-error-soft px-4 py-3 text-[13px] font-medium text-error">
+                {magicError}
+              </p>
+            )}
 
             <Button type="submit" loading={loading} className="w-full">
               {t.auth.signIn}
