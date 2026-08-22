@@ -19,8 +19,11 @@ export async function PUT(request: Request) {
     if (!body || typeof body !== "object" || Array.isArray(body)) {
       return NextResponse.json({ success: false, error: "invalid_request" }, { status: 400 });
     }
+    // T7-1: enrolment is server-authoritative (enrollments table) — the client
+    // can no longer grant itself courses by writing this key. Silently stripped.
+    const SERVER_OWNED_KEYS = new Set(["enrolled"]);
     const entries = Object.entries(body as Record<string, unknown>).filter(
-      ([key]) => key.length <= 64 && /^[a-z_]+$/.test(key)
+      ([key]) => key.length <= 64 && /^[a-z_]+$/.test(key) && !SERVER_OWNED_KEYS.has(key)
     );
     if (entries.length > 50 || JSON.stringify(body).length > 500_000) {
       return NextResponse.json({ success: false, error: "too_large" }, { status: 413 });

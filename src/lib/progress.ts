@@ -124,6 +124,7 @@ async function pushLocalState(): Promise<void> {
 }
 
 export async function pullServerState(email: string): Promise<void> {
+  await pullEnrollments();
   try {
     const res = await fetch("/api/state");
     if (!res.ok) return;
@@ -165,15 +166,58 @@ export function migrateLegacyProgress(): void {
 
 // ——— Enrollment ———
 
+// T7-1: enrolment is server-authoritative (enrollments table via
+// /api/enrollments). localStorage stays as a synchronous read-only UI cache;
+// writes go through the API and login pulls the server list. The local
+// "enrolled" key is never written by this module anymore and /api/state PUT
+// strips it server-side.
+
+function setLocalEnrollmentCache(courseId: string, value: boolean): void {
+  const enrolled = read<Record<string, boolean>>("enrolled", {});
+  enrolled[courseId] = value;
+  if (typeof window !== "undefined") {
+    localStorage.setItem(key("enrolled"), JSON.stringify(enrolled));
+    scheduleSync();
+  }
+}
+
 export function isEnrolled(courseId: string): boolean {
   return read<Record<string, boolean>>("enrolled", {})[courseId] === true;
 }
 
-export function enroll(courseId: string): void {
-  const enrolled = read<Record<string, boolean>>("enrolled", {});
-  enrolled[courseId] = true;
-  write("enrolled", enrolled);
-  logActivity({ type: "enroll", courseId, refId: courseId, date: Date.now() });
+/** Server round-trip; resolves to whether the server now considers the user enrolled. */
+export async function enroll(courseId: string): Promise<boolean> {
+  try {
+    const res = await fetch("/api/enrollments", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ courseId }),
+    });
+    if (!res.ok) return false;
+    setLocalEnrollmentCache(courseId, true);
+    logActivity({ type: "enroll", courseId, refId: courseId, date: Date.now() });
+    return true;
+  } catch {
+    return false; // offline or denied: not granted — access is server-owned now
+  }
+}
+
+/** Pull the authoritative list at login and refresh the local UI cache. */
+export async function pullEnrollments(): Promise<void> {
+  try {
+    const res = await fetch("/api/enrollments");
+    if (!res.ok) return;
+    const data = (await res.json()) as { success?: boolean; courseIds?: unknown };
+    if (!data.success || !Array.isArray(data.courseIds)) return;
+    const ids = data.courseIds.filter((v): v is string => typeof v === "string");
+    const enrolled: Record<string, boolean> = {};
+    for (const id of ids) enrolled[id] = true;
+    if (typeof window !== "undefined") {
+      localStorage.setItem(key("enrolled"), JSON.stringify(enrolled));
+    }
+  } catch {
+    // offline: keep local copy
+  }
 }
 
 export function getEnrolledCourseIds(): string[] {

@@ -89,10 +89,15 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
   const progress = allLessons.length ? Math.round((completedIds.size / allLessons.length) * 100) : 0;
   const slug = teacherSlug(course.instructor.name);
 
-  const handleEnroll = () => {
-    enroll(courseId);
-    setEnrolled(true);
-    showToast(t.course.enrolledToast);
+  const handleEnroll = async () => {
+    // T7-1: enrolment is granted server-side; the UI only reflects the answer.
+    const granted = await enroll(courseId);
+    if (granted) {
+      setEnrolled(true);
+      showToast(t.course.enrolledToast);
+    } else {
+      showToast(t.states.errorTitle);
+    }
   };
 
   // Ratings histogram derived from the average (mock data has no per-star counts).

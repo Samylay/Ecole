@@ -138,3 +138,104 @@ export function putLearnerState(userId: number, state: Record<string, unknown>):
   });
   tx(Object.entries(state));
 }
+
+// ——— Enrolment (Phase 7 T7-1): server-authoritative access ———
+// The client's learner_state "enrolled" key was proven forgeable on 2026-08-15
+// (any signed-in student could PUT themselves into any course for free).
+// Access now reads THIS table only; learner_state.enrolled degrades to a
+// read-only UI cache and is stripped at the /api/state boundary.
+
+export type Enrollment = {
+  user_id: number;
+  course_id: string;
+  status: "active" | "revoked";
+  source: "self_free" | "cash" | "chargily" | "admin" | "import";
+  granted_at: number;
+  granted_by: number | null;
+};
+
+function ensureEnrollmentsTable(db: Database.Database): void {
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS enrollments (
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      course_id TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'revoked')),
+      source TEXT NOT NULL DEFAULT 'self_free' CHECK (source IN ('self_free', 'cash', 'chargily', 'admin', 'import')),
+      granted_at INTEGER NOT NULL DEFAULT (unixepoch() * 1000),
+      granted_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+      PRIMARY KEY (user_id, course_id)
+    );
+    CREATE INDEX IF NOT EXISTS idx_enrollments_user ON enrollments(user_id);
+  `);
+}
+
+/** One-time import of pre-T7-1 self-enrolments from learner_state (idempotent). */
+function backfillEnrollmentsFromLearnerState(db: Database.Database): void {
+  const rows = db
+    .prepare(`SELECT user_id, value FROM learner_state WHERE key = 'enrolled'`)
+    .all() as { user_id: number; value: string }[];
+  const insert = db.prepare(
+    `INSERT OR IGNORE INTO enrollments (user_id, course_id, status, source)
+     VALUES (?, ?, 'active', 'import')`
+  );
+  const tx = db.transaction(() => {
+    for (const row of rows) {
+      try {
+        const parsed = JSON.parse(row.value) as Record<string, unknown>;
+        for (const [courseId, flag] of Object.entries(parsed)) {
+          if (flag === true && typeof courseId === "string" && courseId.length <= 128) {
+            insert.run(row.user_id, courseId);
+          }
+        }
+      } catch {
+        // skip corrupt rows
+      }
+    }
+  });
+  tx();
+}
+
+let enrollmentsReady = false;
+
+function getEnrollmentsDb(): Database.Database {
+  const database = getDb();
+  if (!enrollmentsReady) {
+    ensureEnrollmentsTable(database);
+    backfillEnrollmentsFromLearnerState(database);
+    enrollmentsReady = true;
+  }
+  return database;
+}
+
+export function listEnrollments(userId: number): Enrollment[] {
+  return getEnrollmentsDb()
+    .prepare(`SELECT * FROM enrollments WHERE user_id = ? AND status = 'active'`)
+    .all(userId) as Enrollment[];
+}
+
+export function isEnrolledIn(userId: number, courseId: string): boolean {
+  return (
+    getEnrollmentsDb()
+      .prepare(
+        `SELECT 1 FROM enrollments WHERE user_id = ? AND course_id = ? AND status = 'active'`
+      )
+      .get(userId, courseId) !== undefined
+  );
+}
+
+export function grantEnrollment(
+  userId: number,
+  courseId: string,
+  source: Enrollment["source"],
+  grantedBy: number | null = null
+): void {
+  getEnrollmentsDb()
+    .prepare(
+      `INSERT INTO enrollments (user_id, course_id, status, source, granted_by)
+       VALUES (?, ?, 'active', ?, ?)
+       ON CONFLICT(user_id, course_id) DO UPDATE SET
+         status = 'active', source = excluded.source,
+         granted_at = unixepoch() * 1000, granted_by = excluded.granted_by`
+    )
+    .run(userId, courseId, source, grantedBy);
+}
