@@ -45,8 +45,27 @@ const insertQuestion = db.prepare(`INSERT INTO quiz_questions (
   options_json, correct_index, explanation_fr, explanation_en, explanation_ar, position
 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
 
+const seededIds = new Set(courses.map((c) => c.id));
+// Reviewer P1-2: never wipe teacher-created content. Refuse when non-seed courses exist.
+const placeholders = courses.map(() => "?").join(",");
+const foreign = db
+  .prepare(
+    "SELECT COUNT(*) AS n FROM courses WHERE id NOT IN (" + placeholders + ")"
+  )
+  .get(...seededIds) as { n: number };
+if (foreign.n > 0) {
+  console.error(
+    "Refusing to seed: " + foreign.n + " non-seed course(s) exist. Delete or re-id them first."
+  );
+  process.exit(1);
+}
+
 db.transaction(() => {
-  db.prepare("DELETE FROM courses").run();
+  for (const id of seededIds) db.prepare("DELETE FROM documents WHERE course_id = ?").run(id);
+  for (const id of seededIds) db.prepare("DELETE FROM quiz_questions WHERE course_id = ?").run(id);
+  for (const id of seededIds) db.prepare("DELETE FROM lessons WHERE course_id = ?").run(id);
+  for (const id of seededIds) db.prepare("DELETE FROM chapters WHERE course_id = ?").run(id);
+  for (const id of seededIds) db.prepare("DELETE FROM courses WHERE id = ? AND owner_id = ?").run(id, owner.id);
   for (const course of courses) {
     insertCourse.run(
       course.id, owner.id, course.subject, course.level, course.title.fr, course.title.en, course.title.ar,

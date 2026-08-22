@@ -185,8 +185,10 @@ export function updateQuestion(courseId: string, chapterId: string, questionId: 
 
 export function deleteQuestion(courseId: string, chapterId: string, questionId: string, userId: number): void {
   assertOwnership(courseId, userId);
-  getContentDb().prepare("DELETE FROM quiz_questions WHERE course_id = ? AND chapter_id = ? AND id = ?")
+  const info = getContentDb()
+    .prepare("DELETE FROM quiz_questions WHERE course_id = ? AND chapter_id = ? AND id = ?")
     .run(courseId, chapterId, questionId);
+  if (info.changes === 0) throw new Error("not_found"); // reviewer P2-4: fail loudly on wrong ids
 }
 
 export function createDocument(courseId: string, chapterId: string, lessonId: string, userId: number, input: DocumentInput): number {
