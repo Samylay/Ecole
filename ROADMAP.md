@@ -340,3 +340,83 @@ under each are called out explicitly and can proceed without waiting.
 - 2026-07-10 (autoloop) — P1-T10 done. Skipped P1-T6 (still BLOCKED, unchanged NEEDS-USER dependency gate) and P2-T4/P2-T5 (Phase 2 infra, forbidden unattended) same as every prior run, landing on the first unblocked unchecked task, P1-T10. Surveyed all 13 `transition-all` sites plus a codebase-wide sweep for actionable elements missing `active:scale` before touching anything (via an Explore subagent, since this spans ~18 files). Added `--ease-out-custom/--ease-in-out-custom/--ease-drawer` + `--duration-fast/base/slow` CSS vars to `globals.css` per the interaction-craft skill (180ms formalized as `--duration-base`, matching the existing convention exactly; the `prefers-reduced-motion` block already existed from the original redesign, untouched). Replaced every `transition-all` with an explicit property list (`transition-[background-color,color,box-shadow,transform]` etc., scoped to what each site actually animates, checked per-site rather than blanket-applied). While auditing what each `transition-all` site animated, the survey surfaced 3 pre-existing layout-property violations of the hard floor (animate only transform/opacity/clip-path/filter) that weren't themselves `transition-all` but were adjacent: two toggle-switch knobs (profile notifications, onboarding reminders) animating `inset-inline-start`, converted to `transform: translateX` with an RTL-aware sign computed from `dir` (`useLocale()`); the dashboard weekly-activity bar chart animating inline `height`, converted to a fixed-height container + `transform: scaleY` from `origin-bottom`; and the `.skip-to-content` link animating `top`, converted to `transform: translateY`. Also converted 3 progress-bar `width` animations (shared `ProgressBar` component, quiz header progress) to `transform: scaleX`, per CLAUDE.md's explicit "progress bars via scaleX" rule that was previously unimplemented. Extended `active:scale-[0.98]` press feedback to every actionable element the survey found missing it: `Navbar` (nav pills, language switcher + dropdown, profile link, logout, hamburger, mobile menu), `Tabs`/`Segmented`, `CourseCard`, quiz answer options, onboarding/signup selection cards, `courses` catalog filter chips, and the course-detail chapter/lesson/quiz accordion rows plus the lesson-player's sidebar links, tabs, note-delete, document-download, and prev/next buttons (the shared `Button.tsx` base already had it, so every `<Button>`/`<ButtonLink>` usage was already covered — confirmed via the survey rather than assumed). Deliberately left a few sites alone as out of scope: native `<label>`-wrapped filter checkboxes/radios (not the button/card pattern the doctrine targets), the modal/drawer backdrop overlay (visually wrong to scale a full-screen tap target), and the pre-existing `ProgressRing` SVG stroke-dashoffset animation (500ms, not part of the enumerated `transition-all`/press-feedback scope — flagging for a future pass if the 300ms hard-floor ceiling needs enforcing there too). `npm run typecheck && npm run build` pass (18/18 routes); `grep -rn 'transition-all' src` empty; inspected the compiled `.next/static/css` output directly to confirm `--duration-base`/`--ease-out-custom` resolve to real values in generated utility classes, not just declared-and-unused. Diff: 108 insertions / 84 deletions across 18 files, one commit (well under the 400-line cap).
 - 2026-07-11 (autoloop) — P1-T11 done. Skipped P1-T6 (still BLOCKED, unchanged NEEDS-USER dependency gate) and P2-T4/P2-T5 (Phase 2 infra, forbidden unattended) same as every prior run, landing on P1-T11. Added `src/components/Celebration.tsx` (`CelebrationCheck`, a small SVG: a circle that scales/fades in, then a checkmark path whose stroke draws in via `stroke-dashoffset`) plus matching `celebration-circle`/`celebration-mark` `@keyframes` in `globals.css` — circle 180ms + mark starting at 80ms/220ms long, ending at 300ms total, under the 400ms celebration ceiling, using only transform/opacity/stroke-dashoffset (the same property the pre-existing `ProgressRing` already animates, so not a new exception); the global `prefers-reduced-motion` block already zeroes all animation/transition durations, so reduced-motion is satisfied for free. Wired it as a brief pointer-events-none overlay, held ~1.1s then faded out over `--duration-base`: in `course/[courseId]/lesson/[lessonId]/page.tsx` over the video on both completion paths (the manual "mark complete" button and the 80%-watched YouTube-API auto-complete); in `course/[courseId]/quiz/[chapterId]/page.tsx` over the results `ProgressRing` when `handleNext` computes a final score ≥60% (the same threshold the page already uses for the "good job" copy/ring color, so "passed" wasn't invented). No new i18n strings — the overlay is `aria-hidden`, the already-announced toast/results text carries the semantic event. `npm run typecheck && npm run build` pass (18/18 routes). Manual dev-server smoke test: signed up a throwaway account and curled the lesson route — confirmed 200 and (same client-auth-gated, spinner-only-SSR constraint as P3-T4) the server HTML doesn't include the client-only celebration markup pre-hydration, so instead grepped the compiled `.next/static` output and confirmed both the lesson and quiz page JS chunks reference `celebration-check` and the compiled CSS contains the new keyframes — the code ships. Caught and corrected a mistake from that smoke test: `npm run start` with no `LAYAIDA_DB` override defaults to `./data/layaida.db`, the exact file `ecole.service` (the live prod instance) also uses per its systemd unit — the throwaway signup landed in the live DB. Deleted that one row (id 3, `autoloop-test-p1t11@example.com`) plus its session immediately after noticing, verified via a query that only the two pre-existing real users remain. Diff: 109 insertions / 2 deletions across 4 files, one commit.
 - 2026-07-12 (autoloop) — P1-T13 done. Skipped P1-T6 (still BLOCKED, unchanged NEEDS-USER dependency gate) and P2-T4/P2-T5 (Phase 2 infra, forbidden unattended) same as every prior run, landing on the first unblocked unchecked task, P1-T13. Read `getLesson`/`getAllLessons`/`chapterHasQuiz` in `data.ts` and `getLastQuizAttempt` in `progress.ts` before touching anything to confirm the shapes the task assumed still held. Added a `computeNextHref(courseId, course, lessonId, nextLessonId)` helper to the lesson page: on a chapter's last lesson it checks `chapterHasQuiz` and, if the last attempt via `getLastQuizAttempt` scored below 60% (matching the existing pass threshold already used on the quiz results page), routes to that chapter's quiz instead of the next lesson; once passed it falls through to the next chapter's first lesson exactly as before. Wired this into both the "Suivant" button and the 5s auto-advance countdown/banner (previously keyed off `nextLesson` directly). The final lesson of a course (no quiz pending, quiz already passed, or no quiz at all) now renders a course-complete panel — `CelebrationCheck` + two new trilingual `lesson.courseCompleteTitle`/`lesson.courseCompleteBody` keys + `ButtonLink`s to `/dashboard` and `/my-courses` — replacing the dead `<span/>` that used to sit where "next" would go. On the quiz page, added `isLastChapter`/`quizNextHref` (next chapter's first lesson, or the course page as fallback on the last chapter) and a primary "Continuer" CTA reusing the existing `t.common.continue` string; passing the last chapter's quiz shows the same course-complete panel instead of the fallback link. `npm run typecheck && npm run build` pass (18/18 routes). Couldn't drive this through an actual browser (no browser-automation tooling available in this environment, same constraint noted in every prior lesson/quiz-page log entry since these routes are client-auth-gated with spinner-only SSR), so instead extracted the exact `computeNextHref`/`isLastChapter`/`quizNextHref` logic into a standalone `tsx` script that mocked `window.localStorage` and exercised it against the real `math-algebra-101` course data end-to-end: confirmed a chapter's last lesson with an unpassed quiz routes to that quiz, recording a passing `recordQuizAttempt` then flips the same lesson's `computeNextHref` to the next chapter's first lesson, the course's final lesson/quiz correctly resolves to `null` (course-complete) once its quiz is passed, the quiz page's `isLastChapter`/`quizNextHref` on the last chapter falls back to the course page, and a non-last lesson within a chapter is unaffected. Also grepped the compiled `.next/static/chunks` output and confirmed both the lesson and quiz page JS chunks reference the new `courseCompleteTitle` strings. Ran the smoke server against a scratch `LAYAIDA_DB=/tmp/ecole-smoke-p1t13.db` (never the live `data/layaida.db`), signed up a throwaway account there, then killed the server and deleted the scratch DB/cookies/script afterward — confirmed `data/layaida.db`'s mtime predates this session, so the live DB used by `ecole.service` was untouched. Diff: 75 insertions / 9 deletions across 3 files, one commit.
+
+## Phase 7 — Replan 2026-08-22 (Samy, attended): the real product
+
+Samys directive: build the real school. Teachers input courses, séries
+## Phase 7 — Replan 2026-08-22 (Samy, attended): the real product
+
+Samy's directive: build the real school. Teachers input courses, séries
+d'exercices (later: OCR of handwritten answers), and videos. Livestreams are
+OUT-OF-SCOPE as product features — use Google Meet links per lesson/chapter,
+moderated with Meet's own host controls. Payments must work in Algeria
+(Chargily CIB/EDAHABIA online; school staff can take CASH and create the
+student account, which receives an activation email). Login moves to
+PASSWORDLESS (magic-link email codes) — this supersedes P6-T9/T10. Risk-based
+auth targets ACCOUNT-SHARING detection (concurrent sessions/devices first,
+geo second). Email infrastructure is the hard prerequisite for cash
+onboarding, passwordless, and step-up.
+
+### Superseded / dropped (do not execute)
+- P2-T5 parent-child linking as designed — superseded by staff-created
+  accounts (T7-4); parental consent folds into that flow. CLOSED.
+- P6-T9 step-up factor — DECIDED 2026-08-22: email code (needs T7-2).
+- P6-T10 password reset — superseded by passwordless (T7-3). CLOSED.
+- P5-T4 teacher Q&A, P5-T6 teacher dashboard — absorbed by T7-5/T7-6.
+- Building livestream/moderation tooling — never a task; Meet links only (T7-7).
+
+### Tickets (order = execution order)
+
+- [ ] **T7-1 — Server-authoritative enrolment (P6-T1, unblocked)** —
+  `enrollments(user_id, course_id, status, source, granted_at, granted_by)`
+  table; `/api/state` PUT silently strips the `enrolled` key (server-owned);
+  new `/api/enrollments` GET (own) + POST (self-enrol while courses are free);
+  progress.ts reads enrolment from the API instead of local state; course/
+  lesson/quiz/certificate access checks consume it. Verify: the 2026-08-15
+  self-enrol probe (PUT /api/state with enrolled) no longer grants access.
+  ATTENDED-OK: additive migration, no ALTER on users.
+
+- [ ] **T7-2 — Email infrastructure** — SMTP sender
+  (`src/lib/server/mailer.ts`, env: LAYAIDA_SMTP_HOST/PORT/USER/PASS/FROM;
+  nodemailer is proposed as the single approved dependency),
+  `email_tokens` table (email, purpose, token_hash, expires_at,
+  consumed_at), dev-mode LAYAIDA_DEV_MAIL_LOG=1 logs instead of sends.
+  NEEDS-USER before prod send: SMTP credentials.
+
+- [ ] **T7-3 — Passwordless login (magic link)** — login becomes email-first:
+  POST /api/auth/magic issues a 15-min single-use emailed code+link,
+  POST /api/auth/magic/verify consumes it and starts a session. Password
+  login stays as fallback during transition; new signups can be passwordless.
+  Depends on T7-2.
+
+- [ ] **T7-4 — Staff-created accounts + cash payment path (P6-T4)** —
+  `payments(user_id, course_id, amount, method cash|chargily, status,
+  recorded_by, created_at)`; admin UI to create a student account (name+email),
+  mark cash payment, grant enrolment (source=cash); student receives an
+  activation magic-link email. Depends on T7-2/T7-3/T7-5.
+  NEEDS-USER: seed Samy's account as admin.
+
+- [ ] **T7-5 — Roles: teacher + admin (P6-T11)** — users.role CHECK rebuild
+  (student|parent|teacher|admin) with migration; role helpers in auth.ts.
+  ATTENDED-OK migration (rebuilds users table).
+
+- [ ] **T7-6 — Teacher back office (absorbs P2-T4, P6-T13/T14, P5-T6)** —
+  courses/chapters/lessons/quizzes/documents as tables with owner_id;
+  teacher CRUD scoped to own courses; data.ts becomes the seed script;
+  server-side ownership checks on every write. The big one — split into
+  sub-tickets when started.
+
+- [ ] **T7-7 — Livestream = Meet links** — optional livestreamUrl +
+  scheduled_at on chapter/lesson (T7-6 schema), "Join live" button visible to
+  enrolled students only, trilingual i18n. No streaming infrastructure built.
+
+- [ ] **T7-8 — Risk-based auth: account-sharing detection (P6-T8 + heuristics)** —
+  sessions gain nullable device metadata (user_agent, ip, last_seen_at) —
+  ATTENDED-OK additive migration; per-session revoke UI; sharing heuristics v1:
+  >N distinct active devices in 24h or simultaneous activity from distinct IPs
+  → email notice + step-up via emailed code (T7-2/T7-3). Geo/impossible-travel
+  deferred (noisy on Algerian mobile carriers).
+
+- [ ] **T7-9 — Séries d'exercices + OCR (later)** — exercise sheets per
+  chapter; v1: upload scan, teacher grades manually against it; v2: OCR pass
+  (NEEDS-USER: Mathpix vs self-hosted). Depends on T7-6.
