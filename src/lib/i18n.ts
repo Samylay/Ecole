@@ -240,6 +240,21 @@ type TranslationKeys = {
     preferences: string;
     security: string;
   };
+  devices: {
+    title: string;
+    description: string;
+    current: string;
+    unknownDevice: string;
+    unknownIp: string;
+    lastSeen: string;
+    connectedAt: string;
+    disconnect: string;
+    disconnectedToast: string;
+    loadError: string;
+    emptyTitle: string;
+    emptyBody: string;
+    refresh: string;
+  };
   teacher: {
     coursesBy: string;
     students: string;
@@ -605,6 +620,21 @@ const translations: Record<Locale, TranslationKeys> = {
       preferences: "Préférences",
       security: "Sécurité",
     },
+    devices: {
+      title: "Appareils connectés",
+      description: "Les sessions actuellement ouvertes sur ton compte.",
+      current: "Cet appareil",
+      unknownDevice: "Appareil inconnu",
+      unknownIp: "Adresse IP inconnue",
+      lastSeen: "Dernière activité",
+      connectedAt: "Connecté le",
+      disconnect: "Déconnecter",
+      disconnectedToast: "Appareil déconnecté",
+      loadError: "Impossible de charger les appareils.",
+      emptyTitle: "Aucun appareil à afficher",
+      emptyBody: "Actualise la liste pour vérifier tes sessions actives.",
+      refresh: "Actualiser",
+    },
     teacher: {
       coursesBy: "Cours de",
       students: "étudiants",
@@ -969,6 +999,21 @@ const translations: Record<Locale, TranslationKeys> = {
       preferences: "Preferences",
       security: "Security",
     },
+    devices: {
+      title: "Connected devices",
+      description: "Sessions currently open on your account.",
+      current: "This device",
+      unknownDevice: "Unknown device",
+      unknownIp: "Unknown IP address",
+      lastSeen: "Last active",
+      connectedAt: "Connected on",
+      disconnect: "Sign out",
+      disconnectedToast: "Device signed out",
+      loadError: "Unable to load devices.",
+      emptyTitle: "No devices to show",
+      emptyBody: "Refresh the list to check your active sessions.",
+      refresh: "Refresh",
+    },
     teacher: {
       coursesBy: "Courses by",
       students: "students",
@@ -1332,6 +1377,21 @@ const translations: Record<Locale, TranslationKeys> = {
       memberSince: "عضو منذ",
       preferences: "التفضيلات",
       security: "الأمان",
+    },
+    devices: {
+      title: "الأجهزة المتصلة",
+      description: "الجلسات المفتوحة حاليًا على حسابك.",
+      current: "هذا الجهاز",
+      unknownDevice: "جهاز غير معروف",
+      unknownIp: "عنوان IP غير معروف",
+      lastSeen: "آخر نشاط",
+      connectedAt: "تم الاتصال في",
+      disconnect: "تسجيل الخروج",
+      disconnectedToast: "تم تسجيل خروج الجهاز",
+      loadError: "تعذّر تحميل الأجهزة.",
+      emptyTitle: "لا توجد أجهزة لعرضها",
+      emptyBody: "حدّث القائمة للتحقق من جلساتك النشطة.",
+      refresh: "تحديث",
     },
     teacher: {
       coursesBy: "دروس",

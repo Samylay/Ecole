@@ -104,24 +104,101 @@ export function createUser(name: string, email: string, passwordHash: string, ro
 
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 30; // 30 days
 
-export function createSession(userId: number, token: string): void {
-  getDb()
-    .prepare("INSERT INTO sessions (token, user_id, expires_at) VALUES (?, ?, ?)")
-    .run(token, userId, Date.now() + SESSION_TTL_MS);
+let sessionMetadataReady = false;
+
+function ensureSessionMetadata(database: Database.Database): void {
+  if (sessionMetadataReady) return;
+  const columns = database.prepare("SELECT name FROM pragma_table_info('sessions')").all() as {
+    name: string;
+  }[];
+  const names = new Set(columns.map((column) => column.name));
+  if (!names.has("user_agent")) database.exec("ALTER TABLE sessions ADD COLUMN user_agent TEXT");
+  if (!names.has("ip")) database.exec("ALTER TABLE sessions ADD COLUMN ip TEXT");
+  if (!names.has("last_seen_at")) database.exec("ALTER TABLE sessions ADD COLUMN last_seen_at INTEGER");
+  sessionMetadataReady = true;
+}
+
+export function getSessionsDb(): Database.Database {
+  const database = getDb();
+  ensureSessionMetadata(database);
+  return database;
+}
+
+export type ActiveSession = {
+  id: string;
+  user_agent: string | null;
+  ip: string | null;
+  created_at: number;
+  last_seen_at: number | null;
+  current: boolean;
+};
+
+export function createSession(
+  userId: number,
+  token: string,
+  userAgent: string | null,
+  ip: string | null
+): void {
+  const now = Date.now();
+  getSessionsDb()
+    .prepare(
+      `INSERT INTO sessions (token, user_id, expires_at, user_agent, ip, last_seen_at)
+       VALUES (?, ?, ?, ?, ?, ?)`
+    )
+    .run(token, userId, now + SESSION_TTL_MS, userAgent, ip, now);
 }
 
 export function getSessionUser(token: string): DbUser | undefined {
-  const row = getDb()
+  const database = getSessionsDb();
+  const now = Date.now();
+  const row = database
     .prepare(
       `SELECT u.* FROM sessions s JOIN users u ON u.id = s.user_id
        WHERE s.token = ? AND s.expires_at > ?`
     )
-    .get(token, Date.now()) as DbUser | undefined;
+    .get(token, now) as DbUser | undefined;
+  if (row) {
+    database
+      .prepare(
+        `UPDATE sessions SET last_seen_at = ?
+         WHERE token = ? AND (last_seen_at IS NULL OR last_seen_at < ?)`
+      )
+      .run(now, token, now - 60_000);
+  }
   return row;
 }
 
+export function listActiveSessions(userId: number, currentToken: string): ActiveSession[] {
+  return getSessionsDb()
+    .prepare(
+      `SELECT substr(token, 1, 8) AS id, user_agent, ip, created_at, last_seen_at,
+              token = ? AS current
+       FROM sessions
+       WHERE user_id = ? AND expires_at > ?
+       ORDER BY COALESCE(last_seen_at, created_at) DESC`
+    )
+    .all(currentToken, userId, Date.now()) as ActiveSession[];
+}
+
+export function deleteSessionByPrefix(
+  userId: number,
+  prefix: string,
+  currentToken: string
+): boolean {
+  const database = getSessionsDb();
+  const row = database
+    .prepare(
+      `SELECT token FROM sessions
+       WHERE user_id = ? AND substr(token, 1, 8) = ? AND token != ? AND expires_at > ?
+       LIMIT 1`
+    )
+    .get(userId, prefix, currentToken, Date.now()) as { token: string } | undefined;
+  if (!row) return false;
+  return database.prepare("DELETE FROM sessions WHERE token = ?").run(row.token).changes === 1;
+}
+
 export function deleteSession(token: string): void {
-  getDb().prepare("DELETE FROM sessions WHERE token = ?").run(token);
+  getSessionsDb().prepare("DELETE FROM sessions WHERE token = ?").run(token);
 }
 
 /**
@@ -131,7 +208,7 @@ export function deleteSession(token: string): void {
  * keeps working for its full remaining life.
  */
 export function deleteOtherSessions(userId: number, keepToken: string): number {
-  const info = getDb()
+  const info = getSessionsDb()
     .prepare("DELETE FROM sessions WHERE user_id = ? AND token != ?")
     .run(userId, keepToken);
   return info.changes;
