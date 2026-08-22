@@ -102,6 +102,18 @@ export function createUser(name: string, email: string, passwordHash: string, ro
   return findUserById(Number(info.lastInsertRowid))!;
 }
 
+export function adminUserExists(): boolean {
+  return getDb().prepare("SELECT 1 FROM users WHERE role = 'admin' LIMIT 1").get() !== undefined;
+}
+
+export function setUserRole(
+  email: string,
+  role: DbUser["role"]
+): DbUser | undefined {
+  getDb().prepare("UPDATE users SET role = ? WHERE email = ?").run(role, email.trim().toLowerCase());
+  return findUserByEmail(email.trim().toLowerCase());
+}
+
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 30; // 30 days
 
 export function createSession(userId: number, token: string): void {
@@ -266,6 +278,91 @@ export function grantEnrollment(
          granted_at = unixepoch() * 1000, granted_by = excluded.granted_by`
     )
     .run(userId, courseId, source, grantedBy);
+}
+
+// ——— Payments (Phase 7 T7-4): staff-recorded cash/Chargily payments ———
+
+export type Payment = {
+  id: number;
+  user_id: number;
+  course_id: string;
+  amount: number;
+  method: "cash" | "chargily";
+  status: "pending" | "paid" | "refunded";
+  recorded_by: number | null;
+  created_at: number;
+};
+
+let paymentsReady = false;
+
+function ensurePaymentsTable(database: Database.Database): void {
+  if (paymentsReady) return;
+  database.exec(`
+    CREATE TABLE IF NOT EXISTS payments (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      course_id TEXT NOT NULL,
+      amount INTEGER NOT NULL CHECK (amount >= 0),
+      method TEXT NOT NULL CHECK (method IN ('cash', 'chargily')),
+      status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'paid', 'refunded')),
+      recorded_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+      created_at INTEGER NOT NULL DEFAULT (unixepoch() * 1000)
+    );
+    CREATE INDEX IF NOT EXISTS idx_payments_user ON payments(user_id);
+    CREATE INDEX IF NOT EXISTS idx_payments_status ON payments(status);
+  `);
+  paymentsReady = true;
+}
+
+function paymentsDb(): Database.Database {
+  const database = getDb();
+  ensurePaymentsTable(database);
+  return database;
+}
+
+export function createPayment(
+  userId: number,
+  courseId: string,
+  amount: number,
+  method: Payment["method"],
+  recordedBy: number
+): Payment {
+  const info = paymentsDb()
+    .prepare(
+      `INSERT INTO payments (user_id, course_id, amount, method, recorded_by)
+       VALUES (?, ?, ?, ?, ?)`
+    )
+    .run(userId, courseId, amount, method, recordedBy);
+  return paymentsDb().prepare("SELECT * FROM payments WHERE id = ?").get(info.lastInsertRowid) as Payment;
+}
+
+export function listPaymentsForUser(userId: number): Payment[] {
+  return paymentsDb()
+    .prepare("SELECT * FROM payments WHERE user_id = ? ORDER BY created_at DESC")
+    .all(userId) as Payment[];
+}
+
+export type PaymentWithUser = Payment & { user_name: string; user_email: string };
+
+export function listPendingPayments(): PaymentWithUser[] {
+  return paymentsDb()
+    .prepare(
+      `SELECT p.*, u.name AS user_name, u.email AS user_email
+       FROM payments p JOIN users u ON u.id = p.user_id
+       WHERE p.status = 'pending' ORDER BY p.created_at ASC`
+    )
+    .all() as PaymentWithUser[];
+}
+
+export function markPaymentPaid(paymentId: number): Payment | undefined {
+  const database = paymentsDb();
+  const info = database
+    .prepare("UPDATE payments SET status = 'paid' WHERE id = ? AND status = 'pending'")
+    .run(paymentId);
+  if (info.changes === 0) return undefined;
+  return database.prepare("SELECT * FROM payments WHERE id = ? AND status = 'paid'").get(paymentId) as
+    | Payment
+    | undefined;
 }
 
 // ——— Email tokens (Phase 7 T7-2/T7-3): magic links + account activation ———
