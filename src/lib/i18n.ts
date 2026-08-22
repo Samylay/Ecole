@@ -52,6 +52,7 @@ type TranslationKeys = {
     myCourses: string;
     dashboard: string;
     profile: string;
+    admin: string;
     signIn: string;
     signUp: string;
   };
@@ -258,6 +259,31 @@ type TranslationKeys = {
     emptyTitle: string;
     emptyBody: string;
     refresh: string;
+  admin: {
+    title: string;
+    subtitle: string;
+    createStudent: string;
+    studentName: string;
+    studentEmail: string;
+    course: string;
+    amount: string;
+    amountHint: string;
+    createAndRecord: string;
+    pendingPayments: string;
+    noPendingTitle: string;
+    noPendingBody: string;
+    markPaid: string;
+    studentCreatedToast: string;
+    paymentCreatedToast: string;
+    paymentPaidToast: string;
+    activationMailWarning: string;
+    emailTaken: string;
+    invalidForm: string;
+    requestFailed: string;
+    cash: string;
+    pending: string;
+    activationSubject: string;
+    activationText: string;
   };
   teacher: {
     coursesBy: string;
@@ -435,8 +461,35 @@ const translations: Record<Locale, TranslationKeys> = {
       myCourses: "Mes cours",
       dashboard: "Tableau de bord",
       profile: "Profil",
+      admin: "Administration",
       signIn: "Connexion",
       signUp: "Inscription",
+    },
+    admin: {
+      title: "Administration",
+      subtitle: "Crée les comptes élèves et confirme les paiements en espèces.",
+      createStudent: "Nouveau compte élève",
+      studentName: "Nom complet",
+      studentEmail: "Adresse e-mail",
+      course: "Cours",
+      amount: "Montant (DA)",
+      amountHint: "Le montant est enregistré en centimes.",
+      createAndRecord: "Créer le compte et le paiement",
+      pendingPayments: "Paiements en attente",
+      noPendingTitle: "Aucun paiement en attente",
+      noPendingBody: "Crée un compte élève avec un paiement pour le voir ici.",
+      markPaid: "Marquer payé",
+      studentCreatedToast: "Compte élève créé.",
+      paymentCreatedToast: "Paiement en espèces enregistré.",
+      paymentPaidToast: "Paiement confirmé et accès au cours accordé.",
+      activationMailWarning: "L'accès est accordé, mais l'e-mail d'activation n'a pas pu être envoyé.",
+      emailTaken: "Cette adresse e-mail est déjà utilisée.",
+      invalidForm: "Vérifie le nom, l'adresse e-mail et le montant.",
+      requestFailed: "L'opération a échoué. Réessaie.",
+      cash: "Espèces",
+      pending: "En attente",
+      activationSubject: "Active ton compte Layaida",
+      activationText: "Salam {name} !\n\nTon inscription est confirmée. Active ton compte avec ce lien valable 24 heures :\n{link}\n\nCe lien est personnel et à usage unique.\n\n— Layaida",
     },
     home: {
       hero: {
@@ -818,8 +871,35 @@ const translations: Record<Locale, TranslationKeys> = {
       myCourses: "My courses",
       dashboard: "Dashboard",
       profile: "Profile",
+      admin: "Admin",
       signIn: "Sign in",
       signUp: "Sign up",
+    },
+    admin: {
+      title: "Administration",
+      subtitle: "Create student accounts and confirm cash payments.",
+      createStudent: "New student account",
+      studentName: "Full name",
+      studentEmail: "Email address",
+      course: "Course",
+      amount: "Amount (DZD)",
+      amountHint: "The amount is stored in centimes.",
+      createAndRecord: "Create account and payment",
+      pendingPayments: "Pending payments",
+      noPendingTitle: "No pending payments",
+      noPendingBody: "Create a student account with a payment to see it here.",
+      markPaid: "Mark paid",
+      studentCreatedToast: "Student account created.",
+      paymentCreatedToast: "Cash payment recorded.",
+      paymentPaidToast: "Payment confirmed and course access granted.",
+      activationMailWarning: "Access was granted, but the activation email could not be sent.",
+      emailTaken: "This email address is already in use.",
+      invalidForm: "Check the name, email address, and amount.",
+      requestFailed: "The operation failed. Try again.",
+      cash: "Cash",
+      pending: "Pending",
+      activationSubject: "Activate your Layaida account",
+      activationText: "Salam {name}!\n\nYour registration is confirmed. Activate your account with this link, valid for 24 hours:\n{link}\n\nThis link is personal and can only be used once.\n\n— Layaida",
     },
     home: {
       hero: {
@@ -1201,8 +1281,35 @@ const translations: Record<Locale, TranslationKeys> = {
       myCourses: "دروسي",
       dashboard: "لوحة التحكم",
       profile: "الملف الشخصي",
+      admin: "الإدارة",
       signIn: "تسجيل الدخول",
       signUp: "إنشاء حساب",
+    },
+    admin: {
+      title: "الإدارة",
+      subtitle: "أنشئ حسابات الطلاب وأكّد الدفعات النقدية.",
+      createStudent: "حساب طالب جديد",
+      studentName: "الاسم الكامل",
+      studentEmail: "البريد الإلكتروني",
+      course: "الدرس",
+      amount: "المبلغ (دج)",
+      amountHint: "يُسجّل المبلغ بالسنتيم.",
+      createAndRecord: "إنشاء الحساب والدفعة",
+      pendingPayments: "الدفعات المعلّقة",
+      noPendingTitle: "لا توجد دفعات معلّقة",
+      noPendingBody: "أنشئ حساب طالب مع دفعة ليظهر هنا.",
+      markPaid: "تأكيد الدفع",
+      studentCreatedToast: "تم إنشاء حساب الطالب.",
+      paymentCreatedToast: "تم تسجيل الدفعة النقدية.",
+      paymentPaidToast: "تم تأكيد الدفع ومنح الوصول إلى الدرس.",
+      activationMailWarning: "تم منح الوصول، لكن تعذّر إرسال بريد التفعيل.",
+      emailTaken: "هذا البريد الإلكتروني مستخدم بالفعل.",
+      invalidForm: "تحقق من الاسم والبريد الإلكتروني والمبلغ.",
+      requestFailed: "فشلت العملية. حاول مرة أخرى.",
+      cash: "نقداً",
+      pending: "معلّقة",
+      activationSubject: "فعّل حسابك في العيايدة",
+      activationText: "السلام عليكم {name}!\n\nتم تأكيد تسجيلك. فعّل حسابك عبر هذا الرابط الصالح لمدة 24 ساعة:\n{link}\n\nهذا الرابط شخصي ويُستخدم مرة واحدة فقط.\n\n— العيايدة",
     },
     home: {
       hero: {

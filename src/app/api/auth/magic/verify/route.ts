@@ -21,7 +21,10 @@ export async function POST(request: Request) {
     if (typeof body.token !== "string" || body.token.length < 32 || body.token.length > 256) {
       return NextResponse.json({ success: false, error: "invalid_request" }, { status: 400 });
     }
-    const result = consumeEmailToken("magic_login", hashToken(body.token));
+    const tokenHash = hashToken(body.token);
+    const result =
+      consumeEmailToken("magic_login", tokenHash) ??
+      consumeEmailToken("account_activation", tokenHash);
     if (!result) {
       return NextResponse.json({ success: false, error: "invalid_or_expired" }, { status: 401 });
     }
