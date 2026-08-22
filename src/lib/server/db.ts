@@ -78,6 +78,100 @@ function migrate(db: Database.Database) {
   ensureUsersRoleV2(db);
 }
 
+// ——— Teacher-owned content (Phase 7 T7-6) ———
+
+let contentTablesReady = false;
+
+export function ensureContentTables(database: Database.Database = getDb()): void {
+  if (contentTablesReady) return;
+  database.exec(`
+    CREATE TABLE IF NOT EXISTS courses (
+      id TEXT PRIMARY KEY,
+      owner_id INTEGER NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
+      subject TEXT NOT NULL CHECK (subject IN ('math', 'physics', 'biology')),
+      level TEXT NOT NULL CHECK (level IN ('middle', 'high')),
+      title_fr TEXT NOT NULL, title_en TEXT NOT NULL, title_ar TEXT NOT NULL,
+      description_fr TEXT NOT NULL, description_en TEXT NOT NULL, description_ar TEXT NOT NULL,
+      thumbnail TEXT NOT NULL,
+      instructor_name TEXT NOT NULL, instructor_avatar TEXT NOT NULL,
+      instructor_bio_fr TEXT NOT NULL, instructor_bio_en TEXT NOT NULL, instructor_bio_ar TEXT NOT NULL,
+      total_lessons INTEGER NOT NULL DEFAULT 0,
+      total_hours REAL NOT NULL DEFAULT 0,
+      student_count INTEGER NOT NULL DEFAULT 0,
+      rating REAL NOT NULL DEFAULT 0,
+      archived INTEGER NOT NULL DEFAULT 0 CHECK (archived IN (0, 1)),
+      created_at INTEGER NOT NULL DEFAULT (unixepoch() * 1000),
+      updated_at INTEGER NOT NULL DEFAULT (unixepoch() * 1000)
+    );
+    CREATE INDEX IF NOT EXISTS idx_courses_owner ON courses(owner_id, archived);
+
+    CREATE TABLE IF NOT EXISTS chapters (
+      course_id TEXT NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+      id TEXT NOT NULL,
+      title_fr TEXT NOT NULL, title_en TEXT NOT NULL, title_ar TEXT NOT NULL,
+      position INTEGER NOT NULL DEFAULT 0,
+      PRIMARY KEY (course_id, id)
+    );
+
+    CREATE TABLE IF NOT EXISTS lessons (
+      course_id TEXT NOT NULL,
+      chapter_id TEXT NOT NULL,
+      id TEXT NOT NULL,
+      title_fr TEXT NOT NULL, title_en TEXT NOT NULL, title_ar TEXT NOT NULL,
+      duration TEXT NOT NULL,
+      video_url TEXT NOT NULL,
+      description_fr TEXT NOT NULL, description_en TEXT NOT NULL, description_ar TEXT NOT NULL,
+      position INTEGER NOT NULL DEFAULT 0,
+      PRIMARY KEY (course_id, chapter_id, id),
+      FOREIGN KEY (course_id, chapter_id) REFERENCES chapters(course_id, id) ON DELETE CASCADE
+    );
+
+    CREATE TABLE IF NOT EXISTS quiz_questions (
+      course_id TEXT NOT NULL,
+      chapter_id TEXT NOT NULL,
+      id TEXT NOT NULL,
+      lesson_id TEXT NOT NULL,
+      question_fr TEXT NOT NULL, question_en TEXT NOT NULL, question_ar TEXT NOT NULL,
+      options_json TEXT NOT NULL,
+      correct_index INTEGER NOT NULL,
+      explanation_fr TEXT NOT NULL, explanation_en TEXT NOT NULL, explanation_ar TEXT NOT NULL,
+      position INTEGER NOT NULL DEFAULT 0,
+      PRIMARY KEY (course_id, chapter_id, id),
+      FOREIGN KEY (course_id, chapter_id) REFERENCES chapters(course_id, id) ON DELETE CASCADE,
+      FOREIGN KEY (course_id, chapter_id, lesson_id) REFERENCES lessons(course_id, chapter_id, id) ON DELETE CASCADE
+    );
+
+    CREATE TABLE IF NOT EXISTS documents (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      course_id TEXT NOT NULL,
+      chapter_id TEXT NOT NULL,
+      lesson_id TEXT NOT NULL,
+      name TEXT NOT NULL,
+      url TEXT NOT NULL,
+      position INTEGER NOT NULL DEFAULT 0,
+      FOREIGN KEY (course_id, chapter_id, lesson_id) REFERENCES lessons(course_id, chapter_id, id) ON DELETE CASCADE
+    );
+    CREATE INDEX IF NOT EXISTS idx_documents_lesson ON documents(course_id, chapter_id, lesson_id);
+
+    CREATE TABLE IF NOT EXISTS content_meta (
+      key TEXT PRIMARY KEY,
+      value TEXT NOT NULL,
+      updated_at INTEGER NOT NULL DEFAULT (unixepoch() * 1000)
+    );
+  `);
+  contentTablesReady = true;
+}
+
+function contentDb(): Database.Database {
+  const database = getDb();
+  ensureContentTables(database);
+  return database;
+}
+
+export function getContentDb(): Database.Database {
+  return contentDb();
+}
+
 export type DbUser = {
   id: number;
   name: string;
