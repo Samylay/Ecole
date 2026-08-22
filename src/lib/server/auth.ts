@@ -1,5 +1,5 @@
 import { randomBytes, scryptSync, timingSafeEqual } from "crypto";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { DbUser, createSession, deleteOtherSessions, deleteSession, getSessionUser } from "./db";
 
 // scrypt via node:crypto — no external hashing dependency needed for the MVP.
@@ -21,7 +21,10 @@ const COOKIE_NAME = "layaida_session";
 
 export async function startSession(userId: number): Promise<void> {
   const token = randomBytes(32).toString("hex");
-  createSession(userId, token);
+  const requestHeaders = await headers();
+  const forwarded = requestHeaders.get("x-forwarded-for");
+  const ip = forwarded?.split(",")[0]?.trim() || null;
+  createSession(userId, token, requestHeaders.get("user-agent"), ip);
   const store = await cookies();
   store.set(COOKIE_NAME, token, {
     httpOnly: true,
@@ -30,6 +33,11 @@ export async function startSession(userId: number): Promise<void> {
     path: "/",
     maxAge: 60 * 60 * 24 * 30,
   });
+}
+
+export async function getCurrentSessionToken(): Promise<string | null> {
+  const store = await cookies();
+  return store.get(COOKIE_NAME)?.value ?? null;
 }
 
 export async function getCurrentUser(): Promise<DbUser | null> {

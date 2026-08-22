@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { User, Settings2, Lock, Bell } from "lucide-react";
+import { User, Settings2, Lock, Bell, MonitorSmartphone } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Segmented } from "@/components/Tabs";
@@ -23,6 +23,15 @@ import {
 
 type Section = "account" | "preferences" | "security";
 
+type DeviceSession = {
+  id: string;
+  ua: string | null;
+  ip: string | null;
+  created_at: number;
+  last_seen_at: number | null;
+  current: boolean;
+};
+
 export default function ProfilePage() {
   const { t, locale, setLocale, dir } = useLocale();
   const { theme, setTheme } = useTheme();
@@ -36,6 +45,10 @@ export default function ProfilePage() {
   const [currentPw, setCurrentPw] = useState("");
   const [newPw, setNewPw] = useState("");
   const [pwError, setPwError] = useState("");
+  const [sessions, setSessions] = useState<DeviceSession[]>([]);
+  const [sessionsLoading, setSessionsLoading] = useState(false);
+  const [sessionsError, setSessionsError] = useState(false);
+  const [revokingSession, setRevokingSession] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isLoading && !user) router.replace("/signin");
@@ -46,6 +59,25 @@ export default function ProfilePage() {
     setGoal(getWeeklyGoal());
     setNotifications(getNotificationsEnabled());
   }, [user]);
+
+  const loadSessions = async () => {
+    setSessionsLoading(true);
+    setSessionsError(false);
+    try {
+      const response = await fetch("/api/auth/sessions");
+      const data = (await response.json()) as { success?: boolean; sessions?: DeviceSession[] };
+      if (!response.ok || !data.success || !data.sessions) throw new Error("sessions_request_failed");
+      setSessions(data.sessions);
+    } catch {
+      setSessionsError(true);
+    } finally {
+      setSessionsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (user && section === "security") void loadSessions();
+  }, [user, section]);
 
   if (isLoading || !user) {
     return (
@@ -88,6 +120,23 @@ export default function ProfilePage() {
       setPwError(t.states.errorBody);
     }
   };
+
+  const handleRevokeSession = async (id: string) => {
+    setRevokingSession(id);
+    try {
+      const response = await fetch(`/api/auth/sessions/${id}`, { method: "DELETE" });
+      if (!response.ok) throw new Error("session_revoke_failed");
+      showToast(t.devices.disconnectedToast);
+      await loadSessions();
+    } catch {
+      showToast(t.states.errorBody);
+    } finally {
+      setRevokingSession(null);
+    }
+  };
+
+  const formatSessionDate = (timestamp: number) =>
+    new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" }).format(timestamp);
 
   return (
     <div className="flex min-h-screen flex-col bg-bg">
@@ -253,29 +302,100 @@ export default function ProfilePage() {
 
             {/* Security */}
             {section === "security" && (
-              <form onSubmit={handleChangePassword} className="rounded-card border border-border bg-surface p-6">
-                <h2 className="text-[15px] font-semibold text-ink">{t.profile.changePassword}</h2>
-                <div className="mt-4 max-w-sm space-y-4">
-                  <Input
-                    type="password"
-                    label={t.profile.currentPassword}
-                    value={currentPw}
-                    onChange={(e) => setCurrentPw(e.target.value)}
-                    autoComplete="current-password"
-                  />
-                  <Input
-                    type="password"
-                    label={t.profile.newPassword}
-                    value={newPw}
-                    onChange={(e) => setNewPw(e.target.value)}
-                    error={pwError || undefined}
-                    autoComplete="new-password"
-                  />
-                  <Button type="submit" disabled={!currentPw || !newPw}>
-                    {t.common.save}
-                  </Button>
-                </div>
-              </form>
+              <>
+                <form onSubmit={handleChangePassword} className="rounded-card border border-border bg-surface p-6">
+                  <h2 className="text-[15px] font-semibold text-ink">{t.profile.changePassword}</h2>
+                  <div className="mt-4 max-w-sm space-y-4">
+                    <Input
+                      type="password"
+                      label={t.profile.currentPassword}
+                      value={currentPw}
+                      onChange={(e) => setCurrentPw(e.target.value)}
+                      autoComplete="current-password"
+                    />
+                    <Input
+                      type="password"
+                      label={t.profile.newPassword}
+                      value={newPw}
+                      onChange={(e) => setNewPw(e.target.value)}
+                      error={pwError || undefined}
+                      autoComplete="new-password"
+                    />
+                    <Button type="submit" disabled={!currentPw || !newPw}>
+                      {t.common.save}
+                    </Button>
+                  </div>
+                </form>
+
+                <section className="rounded-card border border-border bg-surface p-6" aria-labelledby="devices-title">
+                  <div className="flex items-start gap-3">
+                    <MonitorSmartphone className="mt-0.5 h-5 w-5 shrink-0 text-muted" aria-hidden="true" />
+                    <div>
+                      <h2 id="devices-title" className="text-[15px] font-semibold text-ink">{t.devices.title}</h2>
+                      <p className="mt-0.5 text-[13px] text-muted">{t.devices.description}</p>
+                    </div>
+                  </div>
+
+                  {sessionsLoading && sessions.length === 0 ? (
+                    <div className="mt-5 space-y-3" aria-label={t.common.loading}>
+                      {[0, 1].map((item) => (
+                        <div key={item} className="h-20 animate-pulse rounded-input bg-mist" />
+                      ))}
+                    </div>
+                  ) : sessionsError ? (
+                    <div className="mt-5 rounded-input bg-error-soft p-4">
+                      <p className="text-[13px] text-error">{t.devices.loadError}</p>
+                      <Button className="mt-3" variant="ghost" onClick={() => void loadSessions()}>
+                        {t.common.retry}
+                      </Button>
+                    </div>
+                  ) : sessions.length === 0 ? (
+                    <div className="mt-5 rounded-input bg-bg p-4 text-center">
+                      <p className="text-[15px] font-semibold text-ink">{t.devices.emptyTitle}</p>
+                      <p className="mt-1 text-[13px] text-muted">{t.devices.emptyBody}</p>
+                      <Button className="mt-3" variant="secondary" onClick={() => void loadSessions()}>
+                        {t.devices.refresh}
+                      </Button>
+                    </div>
+                  ) : (
+                    <ul className="mt-5 divide-y divide-border-soft">
+                      {sessions.map((session) => (
+                        <li key={session.id} className="flex flex-col gap-3 py-4 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:justify-between">
+                          <div className="min-w-0">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <p className="truncate text-[15px] font-medium text-ink" title={session.ua ?? undefined}>
+                                {session.ua || t.devices.unknownDevice}
+                              </p>
+                              {session.current && (
+                                <span className="rounded-pill bg-primary-soft px-2 py-0.5 font-mono text-[11px] text-primary-hover dark:text-primary">
+                                  {t.devices.current}
+                                </span>
+                              )}
+                            </div>
+                            <p className="mt-1 font-mono text-[11px] text-muted">{session.ip || t.devices.unknownIp}</p>
+                            <p className="mt-1 text-[13px] text-muted">
+                              {session.last_seen_at
+                                ? `${t.devices.lastSeen}: ${formatSessionDate(session.last_seen_at)}`
+                                : `${t.devices.connectedAt}: ${formatSessionDate(session.created_at)}`}
+                            </p>
+                          </div>
+                          {!session.current && (
+                            <Button
+                              variant="ghost"
+                              loading={revokingSession === session.id}
+                              disabled={revokingSession !== null}
+                              onClick={() => void handleRevokeSession(session.id)}
+                              className="self-start text-error hover:bg-error-soft sm:self-auto"
+                            >
+                              {t.devices.disconnect}
+                            </Button>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </section>
+              </>
             )}
           </div>
         </div>
