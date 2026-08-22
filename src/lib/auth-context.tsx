@@ -6,7 +6,7 @@ import { pullServerState } from "./progress";
 export type User = {
   name: string;
   email: string;
-  role: "student" | "parent";
+  role: "student" | "parent" | "teacher" | "admin";
 };
 
 type AuthContextType = {
@@ -17,7 +17,7 @@ type AuthContextType = {
     name: string,
     email: string,
     password: string,
-    role?: "student" | "parent"
+    role?: "student" | "parent" | "teacher" | "admin"
   ) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
 };
@@ -86,7 +86,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const signup = async (name: string, email: string, password: string, role: "student" | "parent" = "student") => {
+  const signup = async (name: string, email: string, password: string, role: "student" | "parent" | "teacher" | "admin" = "student") => {
     try {
       const res = await fetch("/api/auth/signup", {
         method: "POST",

@@ -18,6 +18,33 @@ export function getDb(): Database.Database {
   return db;
 }
 
+// T7-5 (Phase 7): roles widened student|parent -> +teacher|admin. SQLite
+// cannot ALTER a CHECK constraint, so migrate() rebuilds users in place when
+// the old 2-role CHECK is still present (idempotent: data-preserving, runs
+// once).
+function ensureUsersRoleV2(db: Database.Database): void {
+  const sql = db
+    .prepare("SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'users'")
+    .get() as { sql: string } | undefined;
+  if (!sql?.sql || sql.sql.includes("'teacher'")) return; // already v2
+  const rebuild = db.transaction(() => {
+    db.exec(`
+      CREATE TABLE users_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL UNIQUE,
+        password_hash TEXT NOT NULL,
+        role TEXT NOT NULL DEFAULT 'student' CHECK (role IN ('student', 'parent', 'teacher', 'admin')),
+        created_at INTEGER NOT NULL DEFAULT (unixepoch() * 1000)
+      );
+      INSERT INTO users_new SELECT id, name, email, password_hash, role, created_at FROM users;
+      DROP TABLE users;
+      ALTER TABLE users_new RENAME TO users;
+    `);
+  });
+  rebuild();
+}
+
 function migrate(db: Database.Database) {
   db.exec(`
     CREATE TABLE IF NOT EXISTS users (
@@ -25,7 +52,7 @@ function migrate(db: Database.Database) {
       name TEXT NOT NULL,
       email TEXT NOT NULL UNIQUE,
       password_hash TEXT NOT NULL,
-      role TEXT NOT NULL DEFAULT 'student' CHECK (role IN ('student', 'parent')),
+      role TEXT NOT NULL DEFAULT 'student' CHECK (role IN ('student', 'parent', 'teacher', 'admin')),
       created_at INTEGER NOT NULL DEFAULT (unixepoch() * 1000)
     );
 
@@ -48,6 +75,7 @@ function migrate(db: Database.Database) {
       PRIMARY KEY (user_id, key)
     );
   `);
+  ensureUsersRoleV2(db);
 }
 
 export type DbUser = {
@@ -55,7 +83,7 @@ export type DbUser = {
   name: string;
   email: string;
   password_hash: string;
-  role: "student" | "parent";
+  role: "student" | "parent" | "teacher" | "admin";
   created_at: number;
 };
 
@@ -67,7 +95,7 @@ export function findUserById(id: number): DbUser | undefined {
   return getDb().prepare("SELECT * FROM users WHERE id = ?").get(id) as DbUser | undefined;
 }
 
-export function createUser(name: string, email: string, passwordHash: string, role: "student" | "parent"): DbUser {
+export function createUser(name: string, email: string, passwordHash: string, role: "student" | "parent" | "teacher" | "admin"): DbUser {
   const info = getDb()
     .prepare("INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?)")
     .run(name, email, passwordHash, role);
