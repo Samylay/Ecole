@@ -389,7 +389,7 @@ onboarding, passwordless, and step-up.
   login stays as fallback during transition; new signups can be passwordless.
   Depends on T7-2.
 
-- [ ] **T7-4 — Staff-created accounts + cash payment path (P6-T4)** —
+- [x]**T7-4 — Staff-created accounts + cash payment path (P6-T4)** (2026-08-22: done via swarm — payments table, admin API routes with role checks + rate limits, admin page, activation magic-link flow; merged+gated) —
   `payments(user_id, course_id, amount, method cash|chargily, status,
   recorded_by, created_at)`; admin UI to create a student account (name+email),
   mark cash payment, grant enrolment (source=cash); student receives an
@@ -400,17 +400,17 @@ onboarding, passwordless, and step-up.
   (student|parent|teacher|admin) with migration; role helpers in auth.ts.
   ATTENDED-OK migration (rebuilds users table).
 
-- [ ] **T7-6 — Teacher back office (absorbs P2-T4, P6-T13/T14, P5-T6)** —
+- [x]**T7-6 — Teacher back office (absorbs P2-T4, P6-T13/T14, P5-T6)** (2026-08-22: backend done via swarm — content tables w/ owner_id, ownership-checked CRUD lib, teacher API routes, idempotent seed from data.ts; UI wave pending) —
   courses/chapters/lessons/quizzes/documents as tables with owner_id;
   teacher CRUD scoped to own courses; data.ts becomes the seed script;
   server-side ownership checks on every write. The big one — split into
   sub-tickets when started.
 
-- [ ] **T7-7 — Livestream = Meet links** — optional livestreamUrl +
+- [x]**T7-7 — Livestream = Meet links** (2026-08-22: done via swarm — livestreamUrl/scheduledAt on lesson+chapter, LiveSessionLink for enrolled users in window, trilingual keys) — optional livestreamUrl +
   scheduled_at on chapter/lesson (T7-6 schema), "Join live" button visible to
   enrolled students only, trilingual i18n. No streaming infrastructure built.
 
-- [ ] **T7-8 — Risk-based auth: account-sharing detection (P6-T8 + heuristics)** —
+- [x]**T7-8 — Risk-based auth: account-sharing detection (P6-T8 + heuristics)** (2026-08-22: v1 done via swarm — sessions ua/ip/last_seen_at, per-session revoke API + profile devices section, distinct-devices risk endpoint; enforcement pending) —
   sessions gain nullable device metadata (user_agent, ip, last_seen_at) —
   ATTENDED-OK additive migration; per-session revoke UI; sharing heuristics v1:
   >N distinct active devices in 24h or simultaneous activity from distinct IPs
