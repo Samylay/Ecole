@@ -20,7 +20,7 @@ export async function authorizeLessonQa(
 ) {
   const user = await getCurrentUser();
   if (!user) return { error: NextResponse.json({ success: false }, { status: 401 }) } as const;
-  if (isRateLimited(`lesson-qa:${user.id}:${clientIp(request)}`, 120, 5 * 60 * 1000)) {
+  if (isRateLimited(`lesson-qa-read:${user.id}`, 240, 5 * 60 * 1000)) {
     return { error: NextResponse.json({ success: false, error: "rate_limited" }, { status: 429 }) } as const;
   }
   const url = new URL(request.url);

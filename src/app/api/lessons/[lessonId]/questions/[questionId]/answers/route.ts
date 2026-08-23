@@ -1,12 +1,16 @@
 import { NextResponse } from "next/server";
 import { createLessonAnswer } from "@/lib/server/db";
 import { authorizeLessonQa, numericId, plainText, scopedQuestion } from "../../_shared";
+import { isRateLimited, clientIp } from "@/lib/server/rateLimit";
 
 export async function POST(
   request: Request,
   context: { params: Promise<{ lessonId: string; questionId: string }> }
 ) {
   const { lessonId, questionId: rawQuestionId } = await context.params;
+  if (isRateLimited(`lesson-qa-write:${clientIp(request)}`, 20, 5 * 60 * 1000)) {
+    return NextResponse.json({ success: false, error: "rate_limited" }, { status: 429 });
+  }
   const auth = await authorizeLessonQa(request, lessonId);
   if ("error" in auth) return auth.error;
   if (!auth.enrolled && !auth.isStaff) return NextResponse.json({ success: false }, { status: 403 });

@@ -70,9 +70,7 @@ function computeNextHref(courseId: string, course: Course, lessonId: string, nex
 
 // Real player position via the YouTube IFrame API (the iframe already
 // requests enablejsapi=1 — see withPlayerParams below).
-type YTPlayerInstance = YouTubePlayer & {
-  setPlaybackQuality?: (quality: string) => void;
-};
+type YTPlayerInstance = YouTubePlayer;
 
 declare global {
   interface Window {
@@ -110,8 +108,10 @@ function withPlayerParams(url: string, dataSaver: boolean): string {
     const u = new URL(url);
     u.searchParams.set("enablejsapi", "1");
     if (dataSaver) {
+      // Autoplay off is the reliable data saving lever we control (YouTube
+      // deprecated client-set playback quality, so we do not pretend to cap it;
+      // the user picks quality in the player and the saver chip reminds them).
       u.searchParams.set("autoplay", "0");
-      u.searchParams.set("vq", "medium");
     }
     if (typeof window !== "undefined") u.searchParams.set("origin", window.location.origin);
     return u.toString();
@@ -206,7 +206,6 @@ export default function LessonPage({
           onReady: (event) => {
             if (cancelled) return;
             setPlayer(event.target);
-            if (dataSaver) event.target.setPlaybackQuality?.("medium");
             const resumeAt = getResumePosition(courseId, lessonId);
             const linkedAt = Number(new URLSearchParams(window.location.search).get("t"));
             const startAt = Number.isFinite(linkedAt) && linkedAt >= 0 ? linkedAt : resumeAt;

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createLessonQuestion, listLessonQuestions } from "@/lib/server/db";
 import { authorizeLessonQa, plainText, QA_PAGE_SIZE } from "./_shared";
+import { clientIp, isRateLimited } from "@/lib/server/rateLimit";
 
 export async function GET(request: Request, context: { params: Promise<{ lessonId: string }> }) {
   const { lessonId } = await context.params;
@@ -44,6 +45,9 @@ export async function GET(request: Request, context: { params: Promise<{ lessonI
 
 export async function POST(request: Request, context: { params: Promise<{ lessonId: string }> }) {
   const { lessonId } = await context.params;
+  if (isRateLimited(`lesson-qa-write:${clientIp(request)}`, 20, 5 * 60 * 1000)) {
+    return NextResponse.json({ success: false, error: "rate_limited" }, { status: 429 });
+  }
   const auth = await authorizeLessonQa(request, lessonId, { enrolledOnly: true });
   if ("error" in auth) return auth.error;
   if (!auth.enrolled) return NextResponse.json({ success: false }, { status: 403 });

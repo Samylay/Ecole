@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { User, Settings2, Lock, Bell, MonitorSmartphone, Gauge } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -311,6 +312,19 @@ export default function ProfilePage() {
                       }}
                     />
                   </button>
+                </div>
+
+                {/* Mes notes */}
+                <div className="rounded-card border border-border bg-surface p-6">
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <h2 className="text-[15px] font-semibold text-ink">{t.notes.title}</h2>
+                      <p className="mt-0.5 text-[13px] text-muted">{t.notes.subtitle}</p>
+                    </div>
+                    <Link href="/mes-notes" className="flex min-h-11 shrink-0 items-center rounded-pill bg-primary-soft px-4 text-[13px] font-medium text-primary-hover transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:bg-primary-soft/70 active:scale-[0.98]">
+                      {t.notes.viewAll}
+                    </Link>
+                  </div>
                 </div>
 
                 {/* Weekly goal */}
