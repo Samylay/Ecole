@@ -28,6 +28,7 @@ import { CelebrationCheck } from "@/components/Celebration";
 import { LiveSessionLink } from "@/components/LiveSessionLink";
 import { VideoControls, YouTubePlayer } from "@/components/VideoControls";
 import { TranscriptLine, TranscriptPanel } from "@/components/TranscriptPanel";
+import { QuestionThread } from "@/components/QuestionThread";
 import { formatNumber } from "@/lib/i18n";
 import { getLesson, getAllLessons, chapterHasQuiz, subjectColors, Course } from "@/lib/data";
 import {
@@ -49,7 +50,7 @@ import {
   getDataSaverEnabled,
 } from "@/lib/progress";
 
-type Tab = "about" | "transcript" | "notes" | "documents";
+type Tab = "about" | "transcript" | "notes" | "questions" | "documents";
 
 const QUIZ_PASS_RATIO = 0.6;
 
@@ -69,10 +70,9 @@ function computeNextHref(courseId: string, course: Course, lessonId: string, nex
 
 // Real player position via the YouTube IFrame API (the iframe already
 // requests enablejsapi=1 — see withPlayerParams below).
-interface YTPlayerInstance extends YouTubePlayer {
+type YTPlayerInstance = YouTubePlayer & {
   setPlaybackQuality?: (quality: string) => void;
-  destroy?: () => void;
-}
+};
 
 declare global {
   interface Window {
@@ -236,7 +236,7 @@ export default function LessonPage({
     return () => {
       cancelled = true;
       if (interval) clearInterval(interval);
-      playerRef.current?.destroy?.();
+      (playerRef.current as { destroy?: () => void } | null)?.destroy?.();
       playerRef.current = null;
       setPlayer(null);
     };
@@ -393,6 +393,7 @@ export default function LessonPage({
     ["about", t.lesson.about],
     ["transcript", t.video.transcript],
     ["notes", t.lesson.myNotes],
+    ["questions", t.qa.questions],
     ["documents", t.lesson.resources],
   ];
   const onTabsKeyDown = rovingTabIndexHandler(
@@ -628,6 +629,17 @@ export default function LessonPage({
                     highlight: t.video.highlightAsNote,
                   }}
                   compact
+                />
+              </div>
+            )}
+
+            {tab === "questions" && (
+              <div role="tabpanel" id="panel-questions" aria-labelledby="tab-questions">
+                <QuestionThread
+                  courseId={courseId}
+                  lessonId={lessonId}
+                  isStaff={user.role === "teacher" || user.role === "admin"}
+                  canAsk={enrolled}
                 />
               </div>
             )}
