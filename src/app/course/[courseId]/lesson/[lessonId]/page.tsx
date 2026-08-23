@@ -43,6 +43,7 @@ import {
   getLastQuizAttempt,
   isEnrolled,
   LessonNote,
+  getDataSaverEnabled,
 } from "@/lib/progress";
 
 type Tab = "about" | "notes" | "documents";
@@ -69,6 +70,7 @@ interface YTPlayerInstance {
   getCurrentTime: () => number;
   getDuration: () => number;
   seekTo: (seconds: number, allowSeekAhead: boolean) => void;
+  setPlaybackQuality?: (quality: string) => void;
   destroy?: () => void;
 }
 
@@ -103,10 +105,14 @@ function loadYouTubeIframeAPI(): Promise<void> {
   return ytApiPromise;
 }
 
-function withPlayerParams(url: string): string {
+function withPlayerParams(url: string, dataSaver: boolean): string {
   try {
     const u = new URL(url);
     u.searchParams.set("enablejsapi", "1");
+    if (dataSaver) {
+      u.searchParams.set("autoplay", "0");
+      u.searchParams.set("vq", "medium");
+    }
     if (typeof window !== "undefined") u.searchParams.set("origin", window.location.origin);
     return u.toString();
   } catch {
@@ -138,6 +144,7 @@ export default function LessonPage({
   const [downloadTick, setDownloadTick] = useState(0);
   const [countdown, setCountdown] = useState<number | null>(null);
   const [celebrate, setCelebrate] = useState<"idle" | "in" | "out">("idle");
+  const [dataSaver, setDataSaver] = useState(false);
   const playerRef = useRef<YTPlayerInstance | null>(null);
   const activeRowRef = useRef<HTMLAnchorElement | null>(null);
   const drawerPanelRef = useRef<HTMLDivElement>(null);
@@ -159,6 +166,7 @@ export default function LessonPage({
     setCountdown(null);
     setDrawerOpen(false);
     setCelebrate("idle");
+    setDataSaver(getDataSaverEnabled());
     if (user) recordActiveDay();
   }, [courseId, lessonId, user]);
 
@@ -194,6 +202,7 @@ export default function LessonPage({
         events: {
           onReady: (event) => {
             if (cancelled) return;
+            if (dataSaver) event.target.setPlaybackQuality?.("medium");
             const resumeAt = getResumePosition(courseId, lessonId);
             if (resumeAt > 0) event.target.seekTo(resumeAt, true);
             interval = setInterval(() => {
@@ -223,7 +232,7 @@ export default function LessonPage({
       playerRef.current?.destroy?.();
       playerRef.current = null;
     };
-  }, [courseId, lessonId]);
+  }, [courseId, lessonId, dataSaver]);
 
   const result = getLesson(courseId, lessonId);
   const allLessons = result ? getAllLessons(result.course) : [];
@@ -407,12 +416,17 @@ export default function LessonPage({
             <div className="relative aspect-video">
               <iframe
                 id={`yt-player-${courseId}-${lessonId}`}
-                src={withPlayerParams(lesson.videoUrl)}
+                src={withPlayerParams(lesson.videoUrl, dataSaver)}
                 className="absolute inset-0 h-full w-full"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 title={lesson.title[locale]}
               />
+              {dataSaver && (
+                <span className="pointer-events-none absolute start-3 top-3 rounded-chip bg-ink/80 px-2.5 py-1 text-[11px] font-medium text-white shadow-card">
+                  {t.dataSaver.active}
+                </span>
+              )}
               {celebrate !== "idle" && (
                 <div
                   className={`pointer-events-none absolute inset-0 flex items-center justify-center bg-ink/60 transition-opacity duration-[var(--duration-base)] ease-[var(--ease-out-custom)] ${

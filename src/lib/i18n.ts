@@ -245,6 +245,15 @@ type TranslationKeys = {
     preferences: string;
     security: string;
   };
+  dataSaver: {
+    title: string;
+    description: string;
+    active: string;
+    installTitle: string;
+    installDescription: string;
+    install: string;
+    dismiss: string;
+  };
   devices: {
     title: string;
     description: string;
@@ -682,6 +691,15 @@ const translations: Record<Locale, TranslationKeys> = {
       preferences: "Préférences",
       security: "Sécurité",
     },
+    dataSaver: {
+      title: "Économie de données",
+      description: "Limite les vidéos à 360p, allège les miniatures et désactive la lecture automatique.",
+      active: "Mode économie de données",
+      installTitle: "Installer Layaida",
+      installDescription: "Ajoute Layaida à ton écran d’accueil pour y accéder plus vite.",
+      install: "Installer",
+      dismiss: "Plus tard",
+    },
     devices: {
       title: "Appareils connectés",
       description: "Les sessions actuellement ouvertes sur ton compte.",
@@ -1092,6 +1110,15 @@ const translations: Record<Locale, TranslationKeys> = {
       preferences: "Preferences",
       security: "Security",
     },
+    dataSaver: {
+      title: "Data saver",
+      description: "Limits videos to 360p, uses lighter thumbnails, and turns off autoplay.",
+      active: "Data saver mode",
+      installTitle: "Install Layaida",
+      installDescription: "Add Layaida to your home screen for quicker access.",
+      install: "Install",
+      dismiss: "Not now",
+    },
     devices: {
       title: "Connected devices",
       description: "Sessions currently open on your account.",
@@ -1501,6 +1528,15 @@ const translations: Record<Locale, TranslationKeys> = {
       memberSince: "عضو منذ",
       preferences: "التفضيلات",
       security: "الأمان",
+    },
+    dataSaver: {
+      title: "توفير البيانات",
+      description: "يحدّ الفيديوهات بدقة 360p ويستخدم صورًا مصغرة أخف ويوقف التشغيل التلقائي.",
+      active: "وضع توفير البيانات",
+      installTitle: "ثبّت العيايدة",
+      installDescription: "أضف العيايدة إلى شاشتك الرئيسية للوصول إليها بسرعة.",
+      install: "تثبيت",
+      dismiss: "لاحقًا",
     },
     devices: {
       title: "الأجهزة المتصلة",

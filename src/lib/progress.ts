@@ -23,6 +23,7 @@ export type OnboardingPrefs = {
   weeklyGoal: number;
   reminders: boolean;
   onboarded: boolean;
+  dataSaver?: boolean;
 };
 
 export type ActivityEvent = {
@@ -446,18 +447,28 @@ export function deleteNote(courseId: string, lessonId: string, noteId: string): 
 // ——— Onboarding prefs ———
 
 export function getPrefs(): OnboardingPrefs {
-  return read<OnboardingPrefs>("prefs", {
+  const prefs = read<OnboardingPrefs>("prefs", {
     grade: "troisieme",
     subjects: ["math", "physics", "biology"],
     weeklyGoal: 4,
     reminders: true,
     onboarded: false,
+    dataSaver: false,
   });
+  return { ...prefs, dataSaver: prefs.dataSaver ?? false };
 }
 
 export function setPrefs(prefs: OnboardingPrefs): void {
-  write("prefs", prefs);
+  write("prefs", { ...getPrefs(), ...prefs });
   setWeeklyGoal(prefs.weeklyGoal);
+}
+
+export function getDataSaverEnabled(): boolean {
+  return getPrefs().dataSaver ?? false;
+}
+
+export function setDataSaverEnabled(enabled: boolean): void {
+  setPrefs({ ...getPrefs(), dataSaver: enabled });
 }
 
 // ——— Notification toggle (profile) ———

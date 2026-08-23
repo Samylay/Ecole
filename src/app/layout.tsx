@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Sans, IBM_Plex_Sans_Arabic, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
+import { InstallPrompt } from "./InstallPrompt";
 
 const plexSans = IBM_Plex_Sans({
   subsets: ["latin"],
@@ -33,6 +34,7 @@ export const metadata: Metadata = {
   keywords: ["éducation", "cours en ligne", "mathématiques", "physique", "biologie", "collège", "lycée"],
   authors: [{ name: "Layaida" }],
   icons: { icon: "/logo.png" },
+  manifest: "/manifest.webmanifest",
   openGraph: {
     type: "website",
     locale: "fr_FR",
@@ -68,7 +70,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="fr" dir="ltr" suppressHydrationWarning>
       <body className={`${plexSans.variable} ${plexArabic.variable} ${plexMono.variable} antialiased`}>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <InstallPrompt />
+        </Providers>
       </body>
     </html>
   );
