@@ -14,7 +14,13 @@ export type LessonNote = {
   id: string;
   timestamp: string; // video position, mm:ss
   text: string;
+  quote?: string;
   createdAt: number;
+};
+
+export type CourseLessonNote = LessonNote & {
+  courseId: string;
+  lessonId: string;
 };
 
 export type OnboardingPrefs = {
@@ -422,18 +428,38 @@ export function getNotes(courseId: string, lessonId: string): LessonNote[] {
   return read<Record<string, LessonNote[]>>("notes", {})[`${courseId}:${lessonId}`] ?? [];
 }
 
-export function addNote(courseId: string, lessonId: string, timestamp: string, text: string): LessonNote {
+export function addNote(
+  courseId: string,
+  lessonId: string,
+  timestamp: string,
+  text: string,
+  quote?: string,
+): LessonNote {
   const all = read<Record<string, LessonNote[]>>("notes", {});
   const k = `${courseId}:${lessonId}`;
   const note: LessonNote = {
     id: Math.random().toString(36).slice(2, 10),
     timestamp,
     text,
+    ...(quote ? { quote } : {}),
     createdAt: Date.now(),
   };
   all[k] = [...(all[k] ?? []), note];
   write("notes", all);
   return note;
+}
+
+export function getAllNotes(): CourseLessonNote[] {
+  const all = read<Record<string, LessonNote[]>>("notes", {});
+  return Object.entries(all)
+    .flatMap(([key, notes]) => {
+      const separator = key.indexOf(":");
+      if (separator < 1) return [];
+      const courseId = key.slice(0, separator);
+      const lessonId = key.slice(separator + 1);
+      return notes.map((note) => ({ ...note, courseId, lessonId }));
+    })
+    .sort((a, b) => b.createdAt - a.createdAt);
 }
 
 export function deleteNote(courseId: string, lessonId: string, noteId: string): void {

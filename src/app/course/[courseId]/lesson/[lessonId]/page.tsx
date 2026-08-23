@@ -15,6 +15,7 @@ import {
   List,
   X,
   Trash2,
+  NotebookPen,
 } from "lucide-react";
 import { useLocale } from "@/lib/locale-context";
 import { useAuth } from "@/lib/auth-context";
@@ -25,6 +26,8 @@ import { Button, ButtonLink } from "@/components/Button";
 import { ProgressBar } from "@/components/Progress";
 import { CelebrationCheck } from "@/components/Celebration";
 import { LiveSessionLink } from "@/components/LiveSessionLink";
+import { VideoControls, YouTubePlayer } from "@/components/VideoControls";
+import { TranscriptLine, TranscriptPanel } from "@/components/TranscriptPanel";
 import { formatNumber } from "@/lib/i18n";
 import { getLesson, getAllLessons, chapterHasQuiz, subjectColors, Course } from "@/lib/data";
 import {
@@ -45,7 +48,7 @@ import {
   LessonNote,
 } from "@/lib/progress";
 
-type Tab = "about" | "notes" | "documents";
+type Tab = "about" | "transcript" | "notes" | "documents";
 
 const QUIZ_PASS_RATIO = 0.6;
 
@@ -65,10 +68,7 @@ function computeNextHref(courseId: string, course: Course, lessonId: string, nex
 
 // Real player position via the YouTube IFrame API (the iframe already
 // requests enablejsapi=1 — see withPlayerParams below).
-interface YTPlayerInstance {
-  getCurrentTime: () => number;
-  getDuration: () => number;
-  seekTo: (seconds: number, allowSeekAhead: boolean) => void;
+interface YTPlayerInstance extends YouTubePlayer {
   destroy?: () => void;
 }
 
@@ -138,7 +138,10 @@ export default function LessonPage({
   const [downloadTick, setDownloadTick] = useState(0);
   const [countdown, setCountdown] = useState<number | null>(null);
   const [celebrate, setCelebrate] = useState<"idle" | "in" | "out">("idle");
+  const [currentTime, setCurrentTime] = useState(0);
+  const [player, setPlayer] = useState<YTPlayerInstance | null>(null);
   const playerRef = useRef<YTPlayerInstance | null>(null);
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const activeRowRef = useRef<HTMLAnchorElement | null>(null);
   const drawerPanelRef = useRef<HTMLDivElement>(null);
 
@@ -194,13 +197,17 @@ export default function LessonPage({
         events: {
           onReady: (event) => {
             if (cancelled) return;
-            const resumeAt = getResumePosition(courseId, lessonId);
-            if (resumeAt > 0) event.target.seekTo(resumeAt, true);
+            setPlayer(event.target);
+          const resumeAt = getResumePosition(courseId, lessonId);
+            const linkedAt = Number(new URLSearchParams(window.location.search).get("t"));
+            const startAt = Number.isFinite(linkedAt) && linkedAt >= 0 ? linkedAt : resumeAt;
+            if (startAt > 0) event.target.seekTo(startAt, true);
             interval = setInterval(() => {
               const player = playerRef.current;
               if (!player) return;
               const current = player.getCurrentTime();
               const duration = player.getDuration();
+              setCurrentTime(current);
               setResumePosition(courseId, lessonId, Math.floor(current));
               if (!markedViewed && duration > 0 && current / duration >= VIEWED_THRESHOLD) {
                 markedViewed = true;
@@ -222,6 +229,7 @@ export default function LessonPage({
       if (interval) clearInterval(interval);
       playerRef.current?.destroy?.();
       playerRef.current = null;
+      setPlayer(null);
     };
   }, [courseId, lessonId]);
 
@@ -294,6 +302,14 @@ export default function LessonPage({
     setNoteText("");
   };
 
+  const handleTranscriptHighlight = (line: TranscriptLine) => {
+    const seconds = Math.floor(line.start);
+    const ts = `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
+    addNote(courseId, lessonId, ts, t.notes.fromTranscript, line.text);
+    setNotes(getNotes(courseId, lessonId));
+    setTab("notes");
+  };
+
   const PrevChevron = dir === "rtl" ? ChevronRight : ChevronLeft;
   const NextChevron = dir === "rtl" ? ChevronLeft : ChevronRight;
 
@@ -308,6 +324,13 @@ export default function LessonPage({
           {t.lesson.backToCourse}
         </Link>
         <h2 className="mt-2 truncate text-[15px] font-semibold text-ink">{course.title[locale]}</h2>
+        <Link
+          href="/mes-notes"
+          className="mt-3 flex min-h-11 items-center gap-2 rounded-input px-3 text-[13px] font-medium text-primary transition-[background-color,transform] duration-[var(--duration-fast)] ease-[var(--ease-out-custom)] hover:bg-primary-soft active:scale-[0.98]"
+        >
+          <NotebookPen className="h-4 w-4" aria-hidden="true" />
+          {t.notes.viewAll}
+        </Link>
       </div>
       <div className="flex-1 overflow-y-auto">
         {course.chapters.map((chapter) => (
@@ -359,6 +382,7 @@ export default function LessonPage({
 
   const TABS: [Tab, string][] = [
     ["about", t.lesson.about],
+    ["transcript", t.video.transcript],
     ["notes", t.lesson.myNotes],
     ["documents", t.lesson.resources],
   ];
@@ -402,10 +426,12 @@ export default function LessonPage({
       <div className="mx-auto flex w-full max-w-[1400px] flex-1">
         {/* Main */}
         <main className="page-enter min-w-0 flex-1 px-4 py-6 sm:px-6">
-          {/* Video */}
-          <div className="overflow-hidden rounded-card bg-ink shadow-card">
-            <div className="relative aspect-video">
+          {/* Video + desktop transcript */}
+          <div className="grid overflow-hidden rounded-card bg-ink shadow-card lg:grid-cols-[minmax(0,1fr)_320px]">
+            <div className="min-w-0">
+              <div className="relative aspect-video">
               <iframe
+                ref={iframeRef}
                 id={`yt-player-${courseId}-${lessonId}`}
                 src={withPlayerParams(lesson.videoUrl)}
                 className="absolute inset-0 h-full w-full"
@@ -422,6 +448,28 @@ export default function LessonPage({
                   <CelebrationCheck />
                 </div>
               )}
+              </div>
+              <VideoControls
+                player={player}
+                iframe={iframeRef.current}
+                labels={t.video}
+              />
+            </div>
+            <div className="hidden max-h-[calc((100vw-368px)*9/16+56px)] min-h-0 border-s border-border lg:block">
+              <TranscriptPanel
+                videoUrl={lesson.videoUrl}
+                locale={locale}
+                currentTime={currentTime}
+                onSeek={(seconds) => playerRef.current?.seekTo(seconds, true)}
+                onHighlight={handleTranscriptHighlight}
+                labels={{
+                  title: t.video.transcript,
+                  loading: t.video.transcriptLoading,
+                  unavailableTitle: t.video.transcriptUnavailableTitle,
+                  unavailableBody: t.video.transcriptUnavailableBody,
+                  highlight: t.video.highlightAsNote,
+                }}
+              />
             </div>
           </div>
 
@@ -469,7 +517,7 @@ export default function LessonPage({
             role="tablist"
             aria-label={t.lesson.about}
             onKeyDown={onTabsKeyDown}
-            className="mt-6 flex gap-1 border-b border-border"
+            className="mt-6 flex gap-1 overflow-x-auto border-b border-border"
           >
             {TABS.map(([value, label]) => (
               <button
@@ -480,7 +528,7 @@ export default function LessonPage({
                 aria-controls={`panel-${value}`}
                 tabIndex={tab === value ? 0 : -1}
                 onClick={() => setTab(value)}
-                className={`-mb-px min-h-11 border-b-2 px-4 text-[15px] font-medium transition-[border-color,color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] active:scale-[0.98] ${
+                className={`-mb-px min-h-11 shrink-0 border-b-2 px-3 text-[13px] font-medium transition-[border-color,color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] active:scale-[0.98] sm:px-4 sm:text-[15px] ${value === "transcript" ? "lg:hidden" : ""} ${
                   tab === value ? "border-primary text-primary" : "border-transparent text-muted hover:text-ink"
                 }`}
               >
@@ -524,7 +572,15 @@ export default function LessonPage({
                         <span className="rounded-chip bg-primary-soft px-2 py-0.5 font-mono text-[11px] font-medium text-primary-hover dark:text-primary">
                           {note.timestamp}
                         </span>
-                        <p className="min-w-0 flex-1 text-[15px] text-slate">{note.text}</p>
+                        <div className="min-w-0 flex-1">
+                          {note.quote && (
+                            <blockquote className="mb-2 border-s-2 border-primary ps-3 text-[13px] italic text-muted">
+                              <span className="sr-only">{t.notes.quoteLabel}: </span>
+                              “{note.quote}”
+                            </blockquote>
+                          )}
+                          <p className="text-[15px] text-slate">{note.text}</p>
+                        </div>
                         <button
                           onClick={() => {
                             deleteNote(courseId, lessonId, note.id);
@@ -539,6 +595,26 @@ export default function LessonPage({
                     ))}
                   </ul>
                 )}
+              </div>
+            )}
+
+            {tab === "transcript" && (
+              <div role="tabpanel" id="panel-transcript" aria-labelledby="tab-transcript" className="lg:hidden">
+                <TranscriptPanel
+                  videoUrl={lesson.videoUrl}
+                  locale={locale}
+                  currentTime={currentTime}
+                  onSeek={(seconds) => playerRef.current?.seekTo(seconds, true)}
+                  onHighlight={handleTranscriptHighlight}
+                  labels={{
+                    title: t.video.transcript,
+                    loading: t.video.transcriptLoading,
+                    unavailableTitle: t.video.transcriptUnavailableTitle,
+                    unavailableBody: t.video.transcriptUnavailableBody,
+                    highlight: t.video.highlightAsNote,
+                  }}
+                  compact
+                />
               </div>
             )}
 
