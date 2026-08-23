@@ -25,6 +25,7 @@ import { Button, ButtonLink } from "@/components/Button";
 import { ProgressBar } from "@/components/Progress";
 import { CelebrationCheck } from "@/components/Celebration";
 import { LiveSessionLink } from "@/components/LiveSessionLink";
+import { QuestionThread } from "@/components/QuestionThread";
 import { formatNumber } from "@/lib/i18n";
 import { getLesson, getAllLessons, chapterHasQuiz, subjectColors, Course } from "@/lib/data";
 import {
@@ -45,7 +46,7 @@ import {
   LessonNote,
 } from "@/lib/progress";
 
-type Tab = "about" | "notes" | "documents";
+type Tab = "about" | "notes" | "questions" | "documents";
 
 const QUIZ_PASS_RATIO = 0.6;
 
@@ -360,6 +361,7 @@ export default function LessonPage({
   const TABS: [Tab, string][] = [
     ["about", t.lesson.about],
     ["notes", t.lesson.myNotes],
+    ["questions", t.qa.questions],
     ["documents", t.lesson.resources],
   ];
   const onTabsKeyDown = rovingTabIndexHandler(
@@ -539,6 +541,17 @@ export default function LessonPage({
                     ))}
                   </ul>
                 )}
+              </div>
+            )}
+
+            {tab === "questions" && (
+              <div role="tabpanel" id="panel-questions" aria-labelledby="tab-questions">
+                <QuestionThread
+                  courseId={courseId}
+                  lessonId={lessonId}
+                  isStaff={user.role === "teacher" || user.role === "admin"}
+                  canAsk={enrolled}
+                />
               </div>
             )}
 

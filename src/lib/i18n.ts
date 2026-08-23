@@ -129,6 +129,26 @@ type TranslationKeys = {
     courseCompleteTitle: string;
     courseCompleteBody: string;
   };
+  qa: {
+    questions: string;
+    askQuestion: string;
+    questionPlaceholder: string;
+    publishQuestion: string;
+    firstQuestion: string;
+    reply: string;
+    replyPlaceholder: string;
+    publishReply: string;
+    acceptedAnswer: string;
+    acceptAnswer: string;
+    teacher: string;
+    unansweredOnly: string;
+    loadMore: string;
+    loading: string;
+    loadError: string;
+    retry: string;
+    noUnanswered: string;
+    charactersRemaining: string;
+  };
   quiz: {
     title: string;
     questionOf: string;
@@ -566,6 +586,26 @@ const translations: Record<Locale, TranslationKeys> = {
       courseCompleteTitle: "Cours terminé !",
       courseCompleteBody: "Tu as terminé toutes les leçons de ce cours. Bravo pour ton travail !",
     },
+    qa: {
+      questions: "Questions",
+      askQuestion: "Poser une question",
+      questionPlaceholder: "Que veux-tu clarifier dans cette leçon ?",
+      publishQuestion: "Publier",
+      firstQuestion: "Pose la première question sur cette leçon.",
+      reply: "Répondre",
+      replyPlaceholder: "Écris une réponse claire…",
+      publishReply: "Publier la réponse",
+      acceptedAnswer: "Réponse acceptée",
+      acceptAnswer: "Accepter cette réponse",
+      teacher: "Prof",
+      unansweredOnly: "Sans réponse",
+      loadMore: "Charger plus",
+      loading: "Chargement des questions…",
+      loadError: "Impossible de charger les questions.",
+      retry: "Réessayer",
+      noUnanswered: "Toutes les questions affichées ont une réponse.",
+      charactersRemaining: "{count} caractères restants",
+    },
     quiz: {
       title: "Quiz",
       questionOf: "Question",
@@ -976,6 +1016,26 @@ const translations: Record<Locale, TranslationKeys> = {
       courseCompleteTitle: "Course completed!",
       courseCompleteBody: "You've finished every lesson in this course. Great work!",
     },
+    qa: {
+      questions: "Questions",
+      askQuestion: "Ask a question",
+      questionPlaceholder: "What would you like clarified in this lesson?",
+      publishQuestion: "Post",
+      firstQuestion: "Ask the first question about this lesson.",
+      reply: "Reply",
+      replyPlaceholder: "Write a clear answer…",
+      publishReply: "Post answer",
+      acceptedAnswer: "Accepted answer",
+      acceptAnswer: "Accept this answer",
+      teacher: "Teacher",
+      unansweredOnly: "Unanswered",
+      loadMore: "Load more",
+      loading: "Loading questions…",
+      loadError: "Questions could not be loaded.",
+      retry: "Try again",
+      noUnanswered: "Every question shown has an answer.",
+      charactersRemaining: "{count} characters remaining",
+    },
     quiz: {
       title: "Quiz",
       questionOf: "Question",
@@ -1385,6 +1445,26 @@ const translations: Record<Locale, TranslationKeys> = {
       courseProgress: "تقدم الدرس",
       courseCompleteTitle: "أتممت الدرس!",
       courseCompleteBody: "أنهيت كل حصص هذا الدرس. أحسنت صنعاً!",
+    },
+    qa: {
+      questions: "الأسئلة",
+      askQuestion: "اطرح سؤالاً",
+      questionPlaceholder: "ما الذي تريد توضيحه في هذه الحصة؟",
+      publishQuestion: "نشر",
+      firstQuestion: "اطرح أول سؤال حول هذه الحصة.",
+      reply: "أجب",
+      replyPlaceholder: "اكتب إجابة واضحة…",
+      publishReply: "نشر الإجابة",
+      acceptedAnswer: "إجابة مقبولة",
+      acceptAnswer: "اعتمد هذه الإجابة",
+      teacher: "أستاذ",
+      unansweredOnly: "بدون إجابة",
+      loadMore: "تحميل المزيد",
+      loading: "جارٍ تحميل الأسئلة…",
+      loadError: "تعذّر تحميل الأسئلة.",
+      retry: "حاول مجدداً",
+      noUnanswered: "كل الأسئلة المعروضة لها إجابة.",
+      charactersRemaining: "متبقٍ {count} حرفاً",
     },
     quiz: {
       title: "اختبار",

@@ -599,3 +599,163 @@ export function consumeEmailToken(
     .run(Date.now(), row.id);
   return { email: row.email };
 }
+
+// ——— Per-lesson Q&A (UX Wave 1 U3) ———
+
+export type LessonAnswer = {
+  id: number;
+  question_id: number;
+  user_id: number;
+  author_name: string;
+  author_role: DbUser["role"];
+  body: string;
+  created_at: number;
+  accepted: 0 | 1;
+};
+
+export type LessonQuestion = {
+  id: number;
+  user_id: number;
+  author_name: string;
+  author_role: DbUser["role"];
+  course_id: string;
+  chapter_id: string;
+  lesson_id: string;
+  body: string;
+  created_at: number;
+  answers: LessonAnswer[];
+};
+
+let lessonQaReady = false;
+
+export function ensureLessonQaTables(database: Database.Database = getDb()): void {
+  if (lessonQaReady) return;
+  database.exec(`
+    CREATE TABLE IF NOT EXISTS lesson_questions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      course_id TEXT NOT NULL,
+      chapter_id TEXT NOT NULL,
+      lesson_id TEXT NOT NULL,
+      body TEXT NOT NULL,
+      created_at INTEGER NOT NULL DEFAULT (unixepoch() * 1000)
+    );
+    CREATE INDEX IF NOT EXISTS idx_lesson_questions_lesson
+      ON lesson_questions(course_id, chapter_id, lesson_id, created_at DESC, id DESC);
+
+    CREATE TABLE IF NOT EXISTS lesson_answers (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      question_id INTEGER NOT NULL REFERENCES lesson_questions(id) ON DELETE CASCADE,
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      body TEXT NOT NULL,
+      created_at INTEGER NOT NULL DEFAULT (unixepoch() * 1000),
+      accepted INTEGER NOT NULL DEFAULT 0 CHECK (accepted IN (0, 1))
+    );
+    CREATE INDEX IF NOT EXISTS idx_lesson_answers_question
+      ON lesson_answers(question_id, accepted DESC, created_at ASC, id ASC);
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_lesson_answers_one_accepted
+      ON lesson_answers(question_id) WHERE accepted = 1;
+  `);
+  lessonQaReady = true;
+}
+
+function lessonQaDb(): Database.Database {
+  const database = getDb();
+  ensureLessonQaTables(database);
+  return database;
+}
+
+type QuestionRow = Omit<LessonQuestion, "answers">;
+
+export function listLessonQuestions(
+  courseId: string,
+  chapterId: string,
+  lessonId: string,
+  limit: number,
+  offset: number,
+  unansweredOnly: boolean
+): { questions: LessonQuestion[]; hasMore: boolean } {
+  const database = lessonQaDb();
+  const unansweredClause = unansweredOnly
+    ? "AND NOT EXISTS (SELECT 1 FROM lesson_answers a WHERE a.question_id = q.id)"
+    : "";
+  const rows = database
+    .prepare(
+      `SELECT q.*, u.name AS author_name, u.role AS author_role
+       FROM lesson_questions q JOIN users u ON u.id = q.user_id
+       WHERE q.course_id = ? AND q.chapter_id = ? AND q.lesson_id = ?
+       ${unansweredClause}
+       ORDER BY q.created_at DESC, q.id DESC LIMIT ? OFFSET ?`
+    )
+    .all(courseId, chapterId, lessonId, limit + 1, offset) as QuestionRow[];
+  const hasMore = rows.length > limit;
+  const page = rows.slice(0, limit);
+  if (page.length === 0) return { questions: [], hasMore };
+  const placeholders = page.map(() => "?").join(",");
+  const answerRows = database
+    .prepare(
+      `SELECT a.*, u.name AS author_name, u.role AS author_role
+       FROM lesson_answers a JOIN users u ON u.id = a.user_id
+       WHERE a.question_id IN (${placeholders})
+       ORDER BY a.accepted DESC, a.created_at ASC, a.id ASC`
+    )
+    .all(...page.map((question) => question.id)) as LessonAnswer[];
+  const answersByQuestion = new Map<number, LessonAnswer[]>();
+  for (const answer of answerRows) {
+    const answers = answersByQuestion.get(answer.question_id) ?? [];
+    answers.push(answer);
+    answersByQuestion.set(answer.question_id, answers);
+  }
+  return {
+    questions: page.map((question) => ({
+      ...question,
+      answers: answersByQuestion.get(question.id) ?? [],
+    })),
+    hasMore,
+  };
+}
+
+export function createLessonQuestion(
+  userId: number,
+  courseId: string,
+  chapterId: string,
+  lessonId: string,
+  body: string
+): number {
+  const info = lessonQaDb()
+    .prepare(
+      `INSERT INTO lesson_questions (user_id, course_id, chapter_id, lesson_id, body)
+       VALUES (?, ?, ?, ?, ?)`
+    )
+    .run(userId, courseId, chapterId, lessonId, body);
+  return Number(info.lastInsertRowid);
+}
+
+export function getLessonQuestion(questionId: number): QuestionRow | undefined {
+  return lessonQaDb()
+    .prepare(
+      `SELECT q.*, u.name AS author_name, u.role AS author_role
+       FROM lesson_questions q JOIN users u ON u.id = q.user_id WHERE q.id = ?`
+    )
+    .get(questionId) as QuestionRow | undefined;
+}
+
+export function createLessonAnswer(questionId: number, userId: number, body: string): number {
+  const info = lessonQaDb()
+    .prepare("INSERT INTO lesson_answers (question_id, user_id, body) VALUES (?, ?, ?)")
+    .run(questionId, userId, body);
+  return Number(info.lastInsertRowid);
+}
+
+export function acceptLessonAnswer(questionId: number, answerId: number): boolean {
+  const database = lessonQaDb();
+  return database.transaction(() => {
+    const answer = database
+      .prepare("SELECT 1 FROM lesson_answers WHERE id = ? AND question_id = ?")
+      .get(answerId, questionId);
+    if (!answer) return false;
+    database.prepare("UPDATE lesson_answers SET accepted = 0 WHERE question_id = ?").run(questionId);
+    database.prepare("UPDATE lesson_answers SET accepted = 1 WHERE id = ?").run(answerId);
+    return true;
+  })();
+}
