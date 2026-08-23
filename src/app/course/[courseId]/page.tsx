@@ -35,7 +35,18 @@ import {
   subjectIcons,
   teacherSlug,
 } from "@/lib/data";
-import { isEnrolled, enroll, getCompletedLessonIds, migrateLegacyProgress } from "@/lib/progress";
+import {
+  computeChapterMastery,
+  computeCourseMasteryPercent,
+  enroll,
+  getBestQuizScore,
+  getCompletedLessonIds,
+  getResumePosition,
+  getWrongQuestions,
+  isEnrolled,
+  MasteryLevel,
+  migrateLegacyProgress,
+} from "@/lib/progress";
 
 export default function CoursePage({ params }: { params: Promise<{ courseId: string }> }) {
   const { courseId } = use(params);
@@ -88,6 +99,27 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
   const allLessons = getAllLessons(course);
   const firstLesson = allLessons[0];
   const progress = allLessons.length ? Math.round((completedIds.size / allLessons.length) * 100) : 0;
+  const wrongQuestions = getWrongQuestions();
+  const chapterMastery = new Map(
+    course.chapters.map((chapter) => {
+      const best = getBestQuizScore(course.id, chapter.id);
+      const completedLessonCount = chapter.lessons.filter((lesson) => completedIds.has(lesson.id)).length;
+      const visitedLessonCount = chapter.lessons.filter(
+        (lesson) => completedIds.has(lesson.id) || getResumePosition(course.id, lesson.id) > 0
+      ).length;
+      const level = computeChapterMastery({
+        bestQuizPercent: best && best.total > 0 ? (best.score / best.total) * 100 : null,
+        wrongQuestionCount: wrongQuestions.filter(
+          (question) => question.courseId === course.id && question.chapterId === chapter.id
+        ).length,
+        completedLessonCount,
+        visitedLessonCount,
+        totalLessonCount: chapter.lessons.length,
+      });
+      return [chapter.id, level] as const;
+    })
+  );
+  const masteryPercent = computeCourseMasteryPercent([...chapterMastery.values()]);
   const slug = teacherSlug(course.instructor.name);
   const liveSessions = course.chapters.flatMap((chapter) => [
     { key: chapter.id, livestreamUrl: chapter.livestreamUrl, scheduledAt: chapter.scheduledAt },
@@ -192,6 +224,14 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                   />
                 ))}
 
+                {enrolled && (
+                  <div className="mt-5 inline-flex items-center gap-2 rounded-pill bg-surface/70 px-4 py-2 text-[13px]">
+                    <span className="h-2.5 w-2.5 rounded-pill bg-success" aria-hidden="true" />
+                    <span className="font-medium text-slate">{t.mastery.overall}</span>
+                    <span className="font-mono font-semibold text-ink">{formatNumber(locale, masteryPercent)}%</span>
+                  </div>
+                )}
+
                 {/* Prerequisite chip */}
                 {prerequisite && (
                   <Link
@@ -277,6 +317,13 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                   {course.chapters.map((chapter, chIdx) => {
                     const open = openChapter === chapter.id;
                     const hasQuiz = chapterHasQuiz(course.id, chapter.id);
+                    const mastery = chapterMastery.get(chapter.id) ?? null;
+                    const masteryLabel = mastery ? t.mastery[mastery] : t.mastery.notStarted;
+                    const masteryColor: Record<MasteryLevel, string> = {
+                      decouvert: "bg-faint",
+                      entraine: "bg-primary",
+                      maitrise: "bg-success",
+                    };
                     return (
                       <div key={chapter.id} className="overflow-hidden rounded-card border border-border bg-surface">
                         <button
@@ -288,6 +335,14 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                             {formatNumber(locale, chIdx + 1).padStart(2, formatNumber(locale, 0))}
                           </span>
                           <span className="flex-1 text-[15px] font-semibold text-ink">{chapter.title[locale]}</span>
+                          <span className="flex shrink-0 items-center gap-2 text-[13px] text-muted">
+                            <span
+                              className={`h-2.5 w-2.5 rounded-pill ${mastery ? masteryColor[mastery] : "bg-border"}`}
+                              aria-hidden="true"
+                            />
+                            <span className="hidden sm:inline">{masteryLabel}</span>
+                            <span className="sr-only sm:hidden">{masteryLabel}</span>
+                          </span>
                           <span className="font-mono text-[11px] text-faint">
                             {formatNumber(locale, chapter.lessons.length)} {t.course.lessons}
                           </span>
