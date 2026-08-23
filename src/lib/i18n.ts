@@ -104,6 +104,14 @@ type TranslationKeys = {
     free: string;
     enrolledToast: string;
   };
+  mastery: {
+    title: string;
+    overall: string;
+    decouvert: string;
+    entraine: string;
+    maitrise: string;
+    notStarted: string;
+  };
   live: {
     joinLive: string;
     scheduledFor: string;
@@ -541,6 +549,14 @@ const translations: Record<Locale, TranslationKeys> = {
       free: "Gratuit",
       enrolledToast: "Tu es inscrit·e ! Bon apprentissage 🎉",
     },
+    mastery: {
+      title: "Maîtrise",
+      overall: "Maîtrise globale",
+      decouvert: "Découvert",
+      entraine: "Entraîné",
+      maitrise: "Maîtrisé",
+      notStarted: "Pas encore commencé",
+    },
     live: {
       joinLive: "Rejoindre le live",
       scheduledFor: "Prévu le {date}",
@@ -951,6 +967,14 @@ const translations: Record<Locale, TranslationKeys> = {
       free: "Free",
       enrolledToast: "You're enrolled! Happy learning 🎉",
     },
+    mastery: {
+      title: "Mastery",
+      overall: "Overall mastery",
+      decouvert: "Discovered",
+      entraine: "Trained",
+      maitrise: "Mastered",
+      notStarted: "Not started yet",
+    },
     live: {
       joinLive: "Join live session",
       scheduledFor: "Scheduled for {date}",
@@ -1360,6 +1384,14 @@ const translations: Record<Locale, TranslationKeys> = {
       quiz: "اختبار",
       free: "مجاني",
       enrolledToast: "تم تسجيلك! تعلّماً ممتعاً 🎉",
+    },
+    mastery: {
+      title: "الإتقان",
+      overall: "الإتقان العام",
+      decouvert: "مُكتشَف",
+      entraine: "مُتدرَّب عليه",
+      maitrise: "مُتقَن",
+      notStarted: "لم يبدأ بعد",
     },
     live: {
       joinLive: "انضم إلى البث المباشر",

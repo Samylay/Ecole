@@ -10,6 +10,39 @@ export type QuizAttempt = {
   date: number;
 };
 
+export type MasteryLevel = "decouvert" | "entraine" | "maitrise";
+
+export type ChapterMasteryInput = {
+  bestQuizPercent: number | null;
+  wrongQuestionCount: number;
+  completedLessonCount: number;
+  visitedLessonCount: number;
+  totalLessonCount: number;
+};
+
+/** Pure mastery derivation. A null result means the chapter has not been visited yet. */
+export function computeChapterMastery({
+  bestQuizPercent,
+  wrongQuestionCount,
+  completedLessonCount,
+  visitedLessonCount,
+  totalLessonCount,
+}: ChapterMasteryInput): MasteryLevel | null {
+  const quizPercent = bestQuizPercent ?? 0;
+  if (bestQuizPercent !== null && quizPercent >= 80 && wrongQuestionCount === 0) return "maitrise";
+
+  const lessonPercent = totalLessonCount > 0 ? (completedLessonCount / totalLessonCount) * 100 : 0;
+  if ((bestQuizPercent !== null && quizPercent >= 50) || lessonPercent >= 50) return "entraine";
+  if (visitedLessonCount > 0) return "decouvert";
+  return null;
+}
+
+/** Pure course aggregate: the share of chapters that are fully mastered. */
+export function computeCourseMasteryPercent(levels: ReadonlyArray<MasteryLevel | null>): number {
+  if (levels.length === 0) return 0;
+  return Math.round((levels.filter((level) => level === "maitrise").length / levels.length) * 100);
+}
+
 export type LessonNote = {
   id: string;
   timestamp: string; // video position, mm:ss

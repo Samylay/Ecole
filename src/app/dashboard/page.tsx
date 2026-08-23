@@ -25,6 +25,10 @@ import {
   getStreak,
   getPrefs,
   getWrongQuestions,
+  getBestQuizScore,
+  getResumePosition,
+  computeChapterMastery,
+  computeCourseMasteryPercent,
 } from "@/lib/progress";
 
 const DAY_KEYS = ["L", "M", "M", "J", "V", "S", "D"];
@@ -39,6 +43,7 @@ type DashState = {
   weekActivity: number[];
   streak: number;
   subjectPct: Partial<Record<Subject, number>>;
+  courseMastery: Record<string, number>;
   wrongCount: number;
 };
 
@@ -78,13 +83,38 @@ export default function DashboardPage() {
       if (nextLesson) resume = { courseId: course.id, lessonId: nextLesson.id };
     }
 
+    const wrongQuestions = getWrongQuestions();
+    const courseMastery: Record<string, number> = {};
+    for (const courseId of enrolledIds) {
+      const course = getCourse(courseId)!;
+      const completed = getCompletedLessonIds(course.id);
+      const levels = course.chapters.map((chapter) => {
+        const best = getBestQuizScore(course.id, chapter.id);
+        return computeChapterMastery({
+          bestQuizPercent: best && best.total > 0 ? (best.score / best.total) * 100 : null,
+          wrongQuestionCount: wrongQuestions.filter(
+            (question) => question.courseId === course.id && question.chapterId === chapter.id
+          ).length,
+          completedLessonCount: chapter.lessons.filter((lesson) => completed.has(lesson.id)).length,
+          visitedLessonCount: chapter.lessons.filter(
+            (lesson) => completed.has(lesson.id) || getResumePosition(course.id, lesson.id) > 0
+          ).length,
+          totalLessonCount: chapter.lessons.length,
+        });
+      });
+      courseMastery[course.id] = computeCourseMasteryPercent(levels);
+    }
+
     const subjectPct: DashState["subjectPct"] = {};
     for (const subject of ["math", "physics", "biology"] as Subject[]) {
       const enrolled = enrolledIds.map((id) => getCourse(id)!).filter((c) => c.subject === subject);
       if (enrolled.length === 0) continue;
-      const total = enrolled.reduce((sum, c) => sum + getAllLessons(c).length, 0);
-      const done = enrolled.reduce((sum, c) => sum + getCompletedLessonIds(c.id).size, 0);
-      subjectPct[subject] = total ? Math.round((done / total) * 100) : 0;
+      const totalChapters = enrolled.reduce((sum, course) => sum + course.chapters.length, 0);
+      const masteredChapters = enrolled.reduce(
+        (sum, course) => sum + Math.round((courseMastery[course.id] / 100) * course.chapters.length),
+        0
+      );
+      subjectPct[subject] = totalChapters ? Math.round((masteredChapters / totalChapters) * 100) : 0;
     }
 
     setState({
@@ -95,7 +125,8 @@ export default function DashboardPage() {
       weekActivity: getWeeklyActivity(),
       streak: getStreak(),
       subjectPct,
-      wrongCount: getWrongQuestions().length,
+      courseMastery,
+      wrongCount: wrongQuestions.length,
     });
   }, [user, router]);
 
@@ -184,10 +215,10 @@ export default function DashboardPage() {
               />
             </div>
 
-            {/* Per-subject rings */}
+            {/* Per-subject mastery rings */}
             {Object.keys(state.subjectPct).length > 0 && (
               <div className="rounded-card border border-border bg-surface p-6">
-                <h2 className="text-[17px] font-semibold text-ink">{t.dashboard.subjectProgress}</h2>
+                <h2 className="text-[17px] font-semibold text-ink">{t.mastery.title}</h2>
                 <div className="mt-5 grid grid-cols-3 gap-4">
                   {(Object.entries(state.subjectPct) as [Subject, number][]).map(([subject, pct]) => (
                     <Link
@@ -201,7 +232,9 @@ export default function DashboardPage() {
                         </span>
                       </ProgressRing>
                       <span className="text-[13px] font-medium text-slate">{t.subjects[subject]}</span>
-                      <span className="font-mono text-[11px] font-medium text-muted">{formatNumber(locale, pct)}%</span>
+                      <span className="font-mono text-[11px] font-medium text-muted">
+                        {formatNumber(locale, pct)}% {t.mastery.maitrise}
+                      </span>
                     </Link>
                   ))}
                 </div>
@@ -312,8 +345,6 @@ export default function DashboardPage() {
                 <h2 className="text-[17px] font-semibold text-ink">{t.nav.myCourses}</h2>
                 <ul className="mt-4 space-y-1">
                   {enrolledCourses.slice(0, 4).map((course) => {
-                    const total = getAllLessons(course).length;
-                    const done = getCompletedLessonIds(course.id).size;
                     return (
                       <li key={course.id}>
                         <Link
@@ -330,7 +361,7 @@ export default function DashboardPage() {
                             {course.title[locale]}
                           </span>
                           <span className="font-mono text-[11px] text-muted">
-                            {formatNumber(locale, done)}/{formatNumber(locale, total)}
+                            {formatNumber(locale, state.courseMastery[course.id] ?? 0)}% {t.mastery.title}
                           </span>
                         </Link>
                       </li>
