@@ -129,6 +129,38 @@ type TranslationKeys = {
     courseCompleteTitle: string;
     courseCompleteBody: string;
   };
+  video: {
+    play: string;
+    pause: string;
+    speed: string;
+    quality: string;
+    automatic: string;
+    captions: string;
+    captionsOn: string;
+    captionsOff: string;
+    fullscreen: string;
+    shortcuts: string;
+    transcript: string;
+    transcriptLoading: string;
+    transcriptUnavailableTitle: string;
+    transcriptUnavailableBody: string;
+    highlightAsNote: string;
+  };
+  notes: {
+    title: string;
+    subtitle: string;
+    allCourses: string;
+    allChapters: string;
+    courseFilter: string;
+    chapterFilter: string;
+    emptyTitle: string;
+    emptyBody: string;
+    emptyAction: string;
+    openNote: string;
+    quoteLabel: string;
+    fromTranscript: string;
+    viewAll: string;
+  };
   quiz: {
     title: string;
     questionOf: string;
@@ -566,6 +598,38 @@ const translations: Record<Locale, TranslationKeys> = {
       courseCompleteTitle: "Cours terminé !",
       courseCompleteBody: "Tu as terminé toutes les leçons de ce cours. Bravo pour ton travail !",
     },
+    video: {
+      play: "Lire",
+      pause: "Pause",
+      speed: "Vitesse de lecture",
+      quality: "Qualité vidéo",
+      automatic: "Auto",
+      captions: "Sous-titres",
+      captionsOn: "Activer les sous-titres",
+      captionsOff: "Désactiver les sous-titres",
+      fullscreen: "Plein écran",
+      shortcuts: "Commandes vidéo. Espace : lecture, J : reculer, L : avancer, F : plein écran",
+      transcript: "Transcription",
+      transcriptLoading: "Chargement de la transcription…",
+      transcriptUnavailableTitle: "Transcription indisponible",
+      transcriptUnavailableBody: "Cette vidéo ne fournit pas encore de transcription dans cette langue.",
+      highlightAsNote: "Enregistrer ce passage dans mes notes",
+    },
+    notes: {
+      title: "Mes notes",
+      subtitle: "Retrouve tes notes de cours et reprends la vidéo au bon moment.",
+      allCourses: "Tous les cours",
+      allChapters: "Tous les chapitres",
+      courseFilter: "Filtrer par cours",
+      chapterFilter: "Filtrer par chapitre",
+      emptyTitle: "Aucune note ici",
+      emptyBody: "Ajoute une note pendant une leçon pour la retrouver sur cette page.",
+      emptyAction: "Voir mes cours",
+      openNote: "Ouvrir la note dans la leçon",
+      quoteLabel: "Extrait de la transcription",
+      fromTranscript: "Passage enregistré. Complète ta note si nécessaire.",
+      viewAll: "Voir toutes mes notes",
+    },
     quiz: {
       title: "Quiz",
       questionOf: "Question",
@@ -976,6 +1040,38 @@ const translations: Record<Locale, TranslationKeys> = {
       courseCompleteTitle: "Course completed!",
       courseCompleteBody: "You've finished every lesson in this course. Great work!",
     },
+    video: {
+      play: "Play",
+      pause: "Pause",
+      speed: "Playback speed",
+      quality: "Video quality",
+      automatic: "Auto",
+      captions: "Captions",
+      captionsOn: "Turn captions on",
+      captionsOff: "Turn captions off",
+      fullscreen: "Full screen",
+      shortcuts: "Video controls. Space: play, J: rewind, L: forward, F: full screen",
+      transcript: "Transcript",
+      transcriptLoading: "Loading transcript…",
+      transcriptUnavailableTitle: "Transcript unavailable",
+      transcriptUnavailableBody: "This video does not yet provide a transcript in this language.",
+      highlightAsNote: "Save this passage to my notes",
+    },
+    notes: {
+      title: "My notes",
+      subtitle: "Find your course notes and resume the video at the right moment.",
+      allCourses: "All courses",
+      allChapters: "All chapters",
+      courseFilter: "Filter by course",
+      chapterFilter: "Filter by chapter",
+      emptyTitle: "No notes here",
+      emptyBody: "Add a note during a lesson to find it on this page.",
+      emptyAction: "View my courses",
+      openNote: "Open note in lesson",
+      quoteLabel: "Transcript excerpt",
+      fromTranscript: "Passage saved. Add your own note when ready.",
+      viewAll: "View all my notes",
+    },
     quiz: {
       title: "Quiz",
       questionOf: "Question",
@@ -1385,6 +1481,38 @@ const translations: Record<Locale, TranslationKeys> = {
       courseProgress: "تقدم الدرس",
       courseCompleteTitle: "أتممت الدرس!",
       courseCompleteBody: "أنهيت كل حصص هذا الدرس. أحسنت صنعاً!",
+    },
+    video: {
+      play: "تشغيل",
+      pause: "إيقاف مؤقت",
+      speed: "سرعة التشغيل",
+      quality: "جودة الفيديو",
+      automatic: "تلقائي",
+      captions: "الترجمة",
+      captionsOn: "تشغيل الترجمة",
+      captionsOff: "إيقاف الترجمة",
+      fullscreen: "ملء الشاشة",
+      shortcuts: "أوامر الفيديو. المسافة: تشغيل، J: رجوع، L: تقديم، F: ملء الشاشة",
+      transcript: "النص المكتوب",
+      transcriptLoading: "جارٍ تحميل النص…",
+      transcriptUnavailableTitle: "النص غير متاح",
+      transcriptUnavailableBody: "لا يوفر هذا الفيديو نصاً مكتوباً بهذه اللغة حالياً.",
+      highlightAsNote: "احفظ هذا المقطع في ملاحظاتي",
+    },
+    notes: {
+      title: "ملاحظاتي",
+      subtitle: "راجع ملاحظات دروسك واستأنف الفيديو من اللحظة المناسبة.",
+      allCourses: "كل الدروس",
+      allChapters: "كل الفصول",
+      courseFilter: "تصفية حسب الدرس",
+      chapterFilter: "تصفية حسب الفصل",
+      emptyTitle: "لا توجد ملاحظات هنا",
+      emptyBody: "أضف ملاحظة أثناء الحصة لتجدها في هذه الصفحة.",
+      emptyAction: "عرض دروسي",
+      openNote: "افتح الملاحظة في الحصة",
+      quoteLabel: "مقطع من النص",
+      fromTranscript: "تم حفظ المقطع. أضف ملاحظتك عند الحاجة.",
+      viewAll: "عرض كل ملاحظاتي",
     },
     quiz: {
       title: "اختبار",
