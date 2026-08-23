@@ -44,16 +44,17 @@ A6. **Spaced repetition upgrade**
       instead of simple clear-once-correct, and surface a daily "Révision du
       jour" card.
 
-## B. Motivation & habit (Duolingo lessons, applied within our laws)
-B1. **Streaks stay** — we have them; add streak-freeze (1/day, earned by
-    completing a review session) to prevent rage-quit after a missed day.
-B2. **Weekly goal already exists** — add a Monday "semaine type" plan and a
-    Sunday recap email/notification (needs SMTP).
-B3. **Badges tied to mastery milestones only** (no XP spam): first unit
-    mastered, first course completed, 30-day streak, BAC-blanc ≥ 15/20, etc.
-    Trilingual names, tokens-only art.
-B4. **Leaderboard: opt-in classroom-level only** (teacher-created groups),
-    never global — avoids demotivating the long tail and fits school use.
+## B. Motivation & habit (non-gamified, per Samy 2026-08-22)
+B1. **Progress narrative, not game mechanics**: replace abstract completion %
+with concrete "what you can now do" statements ("Tu sais factoriser une
+équation du second degré") derived from mastered chapters.
+B2. **Weekly rhythm**: Monday suggested plan + Sunday recap email/notification
+(needs SMTP) — pure planning aid, no rewards.
+B3. **Streak kept as a private signal only**: shown to the student on their own
+dashboard, no badges, no leaderboards, no freeze mechanics, no notifications
+guilting about missed days.
+B4. **Exam-outcome framing**: BAC/BEM score projections from exam-prep results
+("objectif BAC: en bonne voie") — motivation through the real goal.
 
 ## C. Community & teacher presence (biggest feature gap vs market)
 C1. **Per-lesson Q&A thread** (absorbs old P5-T4, now unblocked by T7-6):
@@ -111,7 +112,7 @@ F4. **Search upgrade**: fuzzy Arabic search (normalize alef/hamza/taa
    needs T7-6 UI wave)
 4. D1+D2 landing + subscription pages (revenue path, needs P8-A/B)
 5. A1+A2 mastery system (deep, high effort, biggest long-term moat)
-6. B1–B4 motivation layer (small increments after mastery exists)
+6. B1–B4 motivation layer (planning aids + outcome framing, after mastery exists)
 7. F1 parent view, F2 analytics, F3 certificates (ops maturity)
 
 ## Explicitly NOT doing (and why)
