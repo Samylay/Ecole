@@ -124,3 +124,14 @@ F4. **Search upgrade**: fuzzy Arabic search (normalize alef/hamza/taa
   questions to existing Q&A + review queue.
 - Native apps: PWA covers install/offline/push at zero store overhead until
   >500 paying students (industry threshold).
+
+## UX Wave 1 — shipped 2026-08-24
+All four wave-1 agents merged, reviewer-audited (verdict FIX-FIRST → fixes
+applied → all gates green), deployed. Done: video controls + transcript panel +
+notes 2.0 (/mes-notes), data-saver mode + PWA + offline shell, per-lesson Q&A
+with accepted answers, mastery levels on curriculum/dashboard.
+Reviewer P0/P1/P2 all fixed: honest data-saver (YouTube deprecated quality
+caps — autoplay-off + chip only), profile notes link, separate QA read/write
+rate buckets, accept-answer transaction already existed.
+Remaining known limit: transcript panel usually shows empty state (YouTube
+timedtext is CORS-blocked) until transcripts are stored server-side (P8).
