@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { User, Settings2, Lock, Bell, MonitorSmartphone } from "lucide-react";
+import { User, Settings2, Lock, Bell, MonitorSmartphone, Gauge } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Segmented } from "@/components/Tabs";
@@ -19,6 +19,8 @@ import {
   getNotificationsEnabled,
   setNotificationsEnabled,
   migrateLegacyProgress,
+  getDataSaverEnabled,
+  setDataSaverEnabled,
 } from "@/lib/progress";
 
 type Section = "account" | "preferences" | "security";
@@ -42,6 +44,7 @@ export default function ProfilePage() {
   const [section, setSection] = useState<Section>("account");
   const [goal, setGoal] = useState(4);
   const [notifications, setNotifications] = useState(true);
+  const [dataSaver, setDataSaver] = useState(false);
   const [currentPw, setCurrentPw] = useState("");
   const [newPw, setNewPw] = useState("");
   const [pwError, setPwError] = useState("");
@@ -58,6 +61,7 @@ export default function ProfilePage() {
     migrateLegacyProgress();
     setGoal(getWeeklyGoal());
     setNotifications(getNotificationsEnabled());
+    setDataSaver(getDataSaverEnabled());
   }, [user]);
 
   const loadSessions = async () => {
@@ -264,6 +268,44 @@ export default function ProfilePage() {
                       className="absolute start-1 top-1 h-5 w-5 rounded-pill bg-white transition-transform duration-[var(--duration-base)] ease-[var(--ease-out-custom)]"
                       style={{
                         transform: notifications
+                          ? `translateX(${dir === "rtl" ? "-" : ""}1.25rem)`
+                          : "translateX(0)",
+                      }}
+                    />
+                  </button>
+                </div>
+
+                {/* Data saver */}
+                <div className="flex items-center justify-between gap-4 rounded-card border border-border bg-surface p-6">
+                  <div className="flex items-start gap-3">
+                    <Gauge className="mt-0.5 h-5 w-5 shrink-0 text-muted" aria-hidden="true" />
+                    <div>
+                      <h2 id="data-saver-title" className="text-[15px] font-semibold text-ink">{t.dataSaver.title}</h2>
+                      <p id="data-saver-description" className="mt-0.5 text-[13px] text-muted">
+                        {t.dataSaver.description}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={dataSaver}
+                    aria-labelledby="data-saver-title"
+                    aria-describedby="data-saver-description"
+                    onClick={() => {
+                      const next = !dataSaver;
+                      setDataSaver(next);
+                      setDataSaverEnabled(next);
+                      showToast(t.profile.savedToast);
+                    }}
+                    className={`relative h-7 w-12 shrink-0 rounded-pill transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] active:scale-[0.98] ${
+                      dataSaver ? "bg-primary" : "bg-mist"
+                    }`}
+                  >
+                    <span
+                      className="absolute start-1 top-1 h-5 w-5 rounded-pill bg-white transition-transform duration-[var(--duration-base)] ease-[var(--ease-out-custom)]"
+                      style={{
+                        transform: dataSaver
                           ? `translateX(${dir === "rtl" ? "-" : ""}1.25rem)`
                           : "translateX(0)",
                       }}
