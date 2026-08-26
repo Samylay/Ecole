@@ -136,6 +136,10 @@ type TranslationKeys = {
     courseProgress: string;
     courseCompleteTitle: string;
     courseCompleteBody: string;
+    previewPdf: string;
+    hidePreview: string;
+    exercisesTitle: string;
+    exercisesDone: string;
   };
   video: {
     play: string;
@@ -642,6 +646,10 @@ const translations: Record<Locale, TranslationKeys> = {
       courseProgress: "Progression du cours",
       courseCompleteTitle: "Cours terminé !",
       courseCompleteBody: "Tu as terminé toutes les leçons de ce cours. Bravo pour ton travail !",
+      previewPdf: "Aperçu",
+      hidePreview: "Masquer l'aperçu",
+      exercisesTitle: "Exercices de la fiche",
+      exercisesDone: "terminés",
     },
     video: {
       play: "Lire",
@@ -1121,6 +1129,10 @@ const translations: Record<Locale, TranslationKeys> = {
       courseProgress: "Course progress",
       courseCompleteTitle: "Course completed!",
       courseCompleteBody: "You've finished every lesson in this course. Great work!",
+      previewPdf: "Preview",
+      hidePreview: "Hide preview",
+      exercisesTitle: "Worksheet exercises",
+      exercisesDone: "done",
     },
     video: {
       play: "Play",
@@ -1600,6 +1612,10 @@ const translations: Record<Locale, TranslationKeys> = {
       courseProgress: "تقدم الدرس",
       courseCompleteTitle: "أتممت الدرس!",
       courseCompleteBody: "أنهيت كل حصص هذا الدرس. أحسنت صنعاً!",
+      previewPdf: "معاينة",
+      hidePreview: "إخفاء المعاينة",
+      exercisesTitle: "تمارين الفيشة",
+      exercisesDone: "منجزة",
     },
     video: {
       play: "تشغيل",

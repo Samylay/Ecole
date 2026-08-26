@@ -9,6 +9,9 @@ export type Lesson = {
   videoUrl: string;
   description: { fr: string; en: string; ar: string };
   documents?: { name: string; url: string }[];
+  // Per-exercise checklist for a worksheet document (e.g. an "exo série" PDF);
+  // tracked independently from lesson completion via progress.ts.
+  exercises?: { id: string; label: { fr: string; en: string; ar: string } }[];
   livestreamUrl?: string;
   scheduledAt?: string;
 };
@@ -84,8 +87,8 @@ export const courses: Course[] = [
         ar: "أستاذ رياضيات بخبرة 15 سنة",
       },
     },
-    totalLessons: 10,
-    totalHours: 7,
+    totalLessons: 11,
+    totalHours: 8,
     studentCount: 2340,
     rating: 4.8,
     chapters: [
@@ -228,6 +231,48 @@ export const courses: Course[] = [
               ar: "تقنيات لحل المتراجحات وتمثيلها.",
             },
             documents: [{ name: "inegalites-exercices.pdf", url: "/documents/placeholder.pdf" }],
+          },
+        ],
+      },
+      {
+        id: "ch5",
+        title: { fr: "Fonctions exponentielles", en: "Exponential Functions", ar: "الدوال الأسية" },
+        lessons: [
+          {
+            id: "l11",
+            title: {
+              fr: "Fiche d'exercices — Fonctions exponentielles",
+              en: "Worksheet — Exponential Functions",
+              ar: "فيشة تمارين — الدوال الأسية",
+            },
+            duration: "25:00",
+            videoUrl: "https://www.youtube.com/embed/aqz-KE-bpKQ", // ILLUSTRATIVE placeholder (Big Buck Bunny, CC-BY) pending real Algèbre video production — see ROADMAP P3-T2
+            description: {
+              fr: "Niveau lycée (Terminale) : simplification d'expressions, parité, équations et inéquations, limites, dérivées et équations différentielles avec la fonction exponentielle. 13 exercices d'application, fiche fournie par Pr. Boutekka et Lotfi B Maths.",
+              en: "High-school (final year) level: simplifying expressions, parity, equations and inequalities, limits, derivatives, and differential equations with the exponential function. 13 practice exercises, worksheet provided by Pr. Boutekka and Lotfi B Maths.",
+              ar: "مستوى ثانوي (السنة الثالثة): تبسيط التعابير، الزوجية والفردية، المعادلات والمتراجحات، النهايات، المشتقات والمعادلات التفاضلية للدالة الأسية. 13 تمرين تطبيقي، فيشة من إعداد الأستاذ بوتكة والأستاذ لطفي.",
+            },
+            documents: [
+              {
+                name: "Exercices — Fonctions exponentielles (Boutekka & Lotfi)",
+                url: "/documents/fonctions-exponentielles-exercices.pdf",
+              },
+            ],
+            exercises: [
+              { id: "ex1", label: { fr: "Simplifier des expressions avec exponentielles", en: "Simplify expressions with exponentials", ar: "تبسيط عبارات أسية" } },
+              { id: "ex2", label: { fr: "Démontrer des identités avec eˣ", en: "Prove identities with eˣ", ar: "برهنة متطابقات بدالة eˣ" } },
+              { id: "ex3", label: { fr: "Étudier la parité de f(x) = (eˣ-1)/(eˣ+1)", en: "Study the parity of f(x) = (eˣ-1)/(eˣ+1)", ar: "دراسة زوجية الدالة f(x) = (eˣ-1)/(eˣ+1)" } },
+              { id: "ex4", label: { fr: "Étudier f(x) = (3eˣ-1)/(eˣ+1)", en: "Study f(x) = (3eˣ-1)/(eˣ+1)", ar: "دراسة الدالة f(x) = (3eˣ-1)/(eˣ+1)" } },
+              { id: "ex5", label: { fr: "Résoudre des équations exponentielles", en: "Solve exponential equations", ar: "حل معادلات أسية" } },
+              { id: "ex6", label: { fr: "Résoudre des inéquations exponentielles", en: "Solve exponential inequalities", ar: "حل متراجحات أسية" } },
+              { id: "ex7", label: { fr: "Résoudre des systèmes d'équations exponentielles", en: "Solve systems of exponential equations", ar: "حل جمل معادلات أسية" } },
+              { id: "ex8", label: { fr: "Calculer des limites en +∞ et -∞", en: "Compute limits at +∞ and -∞", ar: "حساب نهايات عند +∞ و-∞" } },
+              { id: "ex9", label: { fr: "Calculer des limites remarquables", en: "Compute standard/remarkable limits", ar: "حساب نهايات مميزة" } },
+              { id: "ex10", label: { fr: "Calculer des dérivées de fonctions exponentielles", en: "Compute derivatives of exponential functions", ar: "حساب مشتقات دوال أسية" } },
+              { id: "ex11", label: { fr: "Résoudre des équations différentielles y' = ay + b", en: "Solve differential equations y' = ay + b", ar: "حل معادلات تفاضلية y' = ay + b" } },
+              { id: "ex12", label: { fr: "Étudier une fonction et tracer sa courbe", en: "Study a function and sketch its curve", ar: "دراسة دالة ورسم منحناها" } },
+              { id: "ex13", label: { fr: "Lecture graphique : f(x) = (ax+b)eˣ et sa tangente", en: "Graphical reading: f(x) = (ax+b)eˣ and its tangent", ar: "قراءة بيانية: f(x) = (ax+b)eˣ ومماسها" } },
+            ],
           },
         ],
       },
@@ -1628,6 +1673,113 @@ export const quizzes: Record<string, Record<string, QuizQuestion[]>> = {
           ar: "نقسم على −2 ونعكس الجهة: x < 6 / (−2) = −3.",
         },
         lessonId: "l10",
+      },
+    ],
+    ch5: [
+      {
+        id: "q1",
+        question: {
+          fr: "Simplifie : (eˣ)³ × e⁻²ˣ",
+          en: "Simplify: (eˣ)³ × e⁻²ˣ",
+          ar: "بسّط: (eˣ)³ × e⁻²ˣ",
+        },
+        options: [
+          { fr: "eˣ", en: "eˣ", ar: "eˣ" },
+          { fr: "e⁵ˣ", en: "e⁵ˣ", ar: "e⁵ˣ" },
+          { fr: "e⁻ˣ", en: "e⁻ˣ", ar: "e⁻ˣ" },
+          { fr: "e⁶ˣ", en: "e⁶ˣ", ar: "e⁶ˣ" },
+        ],
+        correctIndex: 0,
+        explanation: {
+          fr: "(eˣ)³ = e³ˣ, puis e³ˣ × e⁻²ˣ = e³ˣ⁻²ˣ = eˣ.",
+          en: "(eˣ)³ = e³ˣ, then e³ˣ × e⁻²ˣ = e³ˣ⁻²ˣ = eˣ.",
+          ar: "(eˣ)³ = e³ˣ، ثم e³ˣ × e⁻²ˣ = e³ˣ⁻²ˣ = eˣ.",
+        },
+        lessonId: "l11",
+      },
+      {
+        id: "q2",
+        question: {
+          fr: "Résous dans ℝ : e²ˣ⁻¹ = 1",
+          en: "Solve in ℝ: e²ˣ⁻¹ = 1",
+          ar: "حل في ℝ: e²ˣ⁻¹ = 1",
+        },
+        options: [
+          { fr: "x = 1/2", en: "x = 1/2", ar: "x = 1/2" },
+          { fr: "x = 0", en: "x = 0", ar: "x = 0" },
+          { fr: "x = 1", en: "x = 1", ar: "x = 1" },
+          { fr: "x = −1/2", en: "x = −1/2", ar: "x = −1/2" },
+        ],
+        correctIndex: 0,
+        explanation: {
+          fr: "e²ˣ⁻¹ = 1 = e⁰, donc par injectivité de l'exponentielle : 2x − 1 = 0, soit x = 1/2.",
+          en: "e²ˣ⁻¹ = 1 = e⁰, so by injectivity of the exponential: 2x − 1 = 0, giving x = 1/2.",
+          ar: "e²ˣ⁻¹ = 1 = e⁰، وبما أن الدالة الأسية متباينة: 2x − 1 = 0، إذن x = 1/2.",
+        },
+        lessonId: "l11",
+      },
+      {
+        id: "q3",
+        question: {
+          fr: "La fonction f(x) = (eˣ−1)/(eˣ+1), définie sur ℝ, est :",
+          en: "The function f(x) = (eˣ−1)/(eˣ+1), defined on ℝ, is:",
+          ar: "الدالة f(x) = (eˣ−1)/(eˣ+1)، المعرفة على ℝ، هي:",
+        },
+        options: [
+          { fr: "Paire", en: "Even", ar: "زوجية" },
+          { fr: "Impaire", en: "Odd", ar: "فردية" },
+          { fr: "Ni paire ni impaire", en: "Neither even nor odd", ar: "لا زوجية ولا فردية" },
+          { fr: "Périodique", en: "Periodic", ar: "دورية" },
+        ],
+        correctIndex: 1,
+        explanation: {
+          fr: "f(−x) = (e⁻ˣ−1)/(e⁻ˣ+1) = (1−eˣ)/(1+eˣ) = −f(x) : f est impaire.",
+          en: "f(−x) = (e⁻ˣ−1)/(e⁻ˣ+1) = (1−eˣ)/(1+eˣ) = −f(x): f is odd.",
+          ar: "f(−x) = (e⁻ˣ−1)/(e⁻ˣ+1) = (1−eˣ)/(1+eˣ) = −f(x): f فردية.",
+        },
+        lessonId: "l11",
+      },
+      {
+        id: "q4",
+        question: {
+          fr: "Calcule : lim(x→0) (e²ˣ−1)/(x²−x)",
+          en: "Compute: lim(x→0) (e²ˣ−1)/(x²−x)",
+          ar: "احسب: lim(x→0) (e²ˣ−1)/(x²−x)",
+        },
+        options: [
+          { fr: "−2", en: "−2", ar: "−2" },
+          { fr: "2", en: "2", ar: "2" },
+          { fr: "0", en: "0", ar: "0" },
+          { fr: "+∞", en: "+∞", ar: "+∞" },
+        ],
+        correctIndex: 0,
+        explanation: {
+          fr: "Au voisinage de 0, e²ˣ−1 ~ 2x et x²−x ~ −x, donc le quotient tend vers 2x/(−x) = −2.",
+          en: "Near 0, e²ˣ−1 ~ 2x and x²−x ~ −x, so the quotient tends to 2x/(−x) = −2.",
+          ar: "بجوار 0، e²ˣ−1 ~ 2x وx²−x ~ −x، إذن النسبة تؤول إلى 2x/(−x) = −2.",
+        },
+        lessonId: "l11",
+      },
+      {
+        id: "q5",
+        question: {
+          fr: "Si f(x) = x + 3 − eˣ, alors f'(x) = ?",
+          en: "If f(x) = x + 3 − eˣ, then f'(x) = ?",
+          ar: "إذا كانت f(x) = x + 3 − eˣ، فإن f'(x) = ؟",
+        },
+        options: [
+          { fr: "1 − eˣ", en: "1 − eˣ", ar: "1 − eˣ" },
+          { fr: "1 + eˣ", en: "1 + eˣ", ar: "1 + eˣ" },
+          { fr: "−eˣ", en: "−eˣ", ar: "−eˣ" },
+          { fr: "x − eˣ", en: "x − eˣ", ar: "x − eˣ" },
+        ],
+        correctIndex: 0,
+        explanation: {
+          fr: "La dérivée de x est 1, celle de 3 est 0, celle de eˣ est eˣ : f'(x) = 1 − eˣ.",
+          en: "The derivative of x is 1, of 3 is 0, of eˣ is eˣ: f'(x) = 1 − eˣ.",
+          ar: "مشتقة x هي 1، ومشتقة 3 هي 0، ومشتقة eˣ هي eˣ: f'(x) = 1 − eˣ.",
+        },
+        lessonId: "l11",
       },
     ],
   },
