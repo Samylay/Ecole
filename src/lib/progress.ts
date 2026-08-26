@@ -127,6 +127,7 @@ const STATE_KEYS = [
   "activity",
   "downloaded_docs",
   "positions",
+  "completed_exercises",
 ] as const;
 
 let syncTimer: ReturnType<typeof setTimeout> | null = null;
@@ -565,6 +566,23 @@ export function recordDocumentDownload(courseId: string, lessonId: string, docNa
   if (!downloaded.includes(k)) {
     write("downloaded_docs", [...downloaded, k]);
   }
+}
+
+// ——— Per-exercise checklist (worksheet self-tracking) ———
+
+export function getCompletedExercises(courseId: string, lessonId: string): string[] {
+  const prefix = `${courseId}:${lessonId}:`;
+  return read<string[]>("completed_exercises", [])
+    .filter((k) => k.startsWith(prefix))
+    .map((k) => k.slice(prefix.length));
+}
+
+export function toggleExerciseCompleted(courseId: string, lessonId: string, exerciseId: string): boolean {
+  const completed = read<string[]>("completed_exercises", []);
+  const k = `${courseId}:${lessonId}:${exerciseId}`;
+  const next = completed.includes(k) ? completed.filter((c) => c !== k) : [...completed, k];
+  write("completed_exercises", next);
+  return next.includes(k);
 }
 
 // ——— Video resume position (real player position, in seconds) ———
