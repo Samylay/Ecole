@@ -50,3 +50,6 @@ next-env.d.ts
 
 # wayfinder / scratch trackers
 /.scratch/
+
+# raw content drops pending processing — real files land in public/documents/
+/content-inbox/
