@@ -154,7 +154,7 @@ under each are called out explicitly and can proceed without waiting.
   Algerian e-learning site) and answer the 7 open questions in MAP.md
   (residency, RC/NIF, Algerian bank/CCP account, merchant-of-record, offline
   collection acceptable for pilot, DZD-only vs EUR too, refund policy).
-- [ ] **P6-T4 — Manual/offline payment path** — an admin marks a `payments` row
+- [x] **P6-T4 — Manual/offline payment path (2026-08-30: CLOSED, absorbed by T7-4)** — an admin marks a `payments` row
   paid and grants the matching `enrollments` row; needs P6-T1 (rehearsed and
   proven against a DB copy 2026-08-17, see
   `.scratch/payments/p6-t1-migration-rehearsal.md` — idempotent, row counts
@@ -163,16 +163,29 @@ under each are called out explicitly and can proceed without waiting.
   first because it cannot be blocked by a provider's onboarding form.
   NEEDS-USER only for the `payments` table shape sign-off (additive
   migration) — no provider, no dependency, no credential.
-  - BLOCKED 2026-08-20 (autoloop): first formal attempt. This task's own text
-    makes it a schema migration twice over: it depends on P6-T1's
-    `enrollments` table, which is still BLOCKED (confirmed unchanged —
-    `grep -n "CREATE TABLE" src/lib/server/db.ts` still shows only
-    `users`/`sessions`/`learner_state`, no `enrollments`), and it adds its own
-    new `payments` table, which the task's own inline note says needs
-    NEEDS-USER sign-off on the table shape before it can even start. CLAUDE.md's
-    hard migrations rule has no carve-out for additive tables — the same
-    reasoning P6-T1/P6-T2 already hit. No code touched; tree left clean, only
-    ROADMAP.md changed.
+  (2026-08-30, autoloop, bookkeeping close, no code change: this task's own
+  two original blockers — no `enrollments` table, and no signed-off `payments`
+  table shape — no longer hold, both closed by T7-4 (2026-08-22, attended),
+  whose own title literally reads "Staff-created accounts + cash payment path
+  (P6-T4)". Verified rather than assumed: `grep -n "CREATE TABLE IF NOT EXISTS
+  payments" -A15 src/lib/server/db.ts` shows exactly the shape this task
+  specifies — `user_id`, `course_id`, `amount`, `method IN ('cash',
+  'chargily')`, `status IN ('pending','paid','refunded')`, `recorded_by`;
+  `src/app/api/admin/payments/[id]/mark-paid/route.ts` is admin-role-gated
+  and rate-limited, calls `markPaymentPaid` then `grantEnrollment(student.id,
+  payment.course_id, "cash", admin.id)` — exactly "marks a payments row paid
+  and grants the matching enrollments row" — then issues a single-use
+  `account_activation` email token and sends the activation link, matching
+  T7-4's own description. `src/app/api/admin/students/route.ts` is the
+  staff-creates-account half. `npm run typecheck` passes; no source touched,
+  so `build:verify` wasn't re-run — nothing to verify beyond the roadmap
+  edit.)
+  - BLOCKED 2026-08-20 (autoloop, superseded 2026-08-30): was a genuine
+    missing-`enrollments`-table/no-signed-off-`payments`-shape block at the
+    time; T7-1 (enrollments, 2026-08-22) and T7-4 (payments table + admin
+    cash-payment/activation flow, 2026-08-22, both attended) closed both gaps
+    before this task was ever revisited, so the block is now moot rather than
+    resolved as originally scoped.
 - [ ] **P6-T5 — NEEDS-USER: online provider integration** — `src/lib/server/
   payments/chargily.ts` built and proven offline 2026-08-17 (same pattern as
   LifeOS's `enable-banking.ts`): `buildCheckoutPayload`,
@@ -301,6 +314,7 @@ under each are called out explicitly and can proceed without waiting.
 
 ## Log
 
+- 2026-08-30 (autoloop) — P6-T4 done (bookkeeping close as CLOSED/absorbed by T7-4, no code change). Re-checked every already-blocked task ahead of it in file order before touching anything, per the "unchanged cause is silence" rule: P4-T3 (`grep -n ecole ~/infra/monitoring/prometheus/prometheus.yml`/`grep -rn ecole ~/infra/monitoring/grafana` both still empty — shared homelab infra outside this repo's boundary, unchanged), P4-T4 (`grep -n 'href: "#"' src/components/Footer.tsx` — all four footer links still literal `href: "#"`, unchanged). Wrote nothing new for either. P6-T3/P6-T5 skipped (NEEDS-USER in title). Landed on P6-T4, the next unchecked non-NEEDS-USER task. Its 2026-08-20 BLOCKED note cited two causes — the `enrollments` table not existing, and its own new `payments` table needing NEEDS-USER sign-off on shape — and both are gone: `grep -n "CREATE TABLE IF NOT EXISTS payments" -A15 src/lib/server/db.ts` shows exactly the columns this task specifies (`user_id`, `course_id`, `amount`, `method IN ('cash','chargily')`, `status IN ('pending','paid','refunded')`, `recorded_by`); `src/app/api/admin/payments/[id]/mark-paid/route.ts` (admin-role-gated, rate-limited) calls `markPaymentPaid` then `grantEnrollment(student.id, payment.course_id, "cash", admin.id)` — exactly "an admin marks a payments row paid and grants the matching enrollments row" — then issues a single-use `account_activation` email token and sends the activation link; `src/app/api/admin/students/route.ts` covers the staff-creates-account half. T7-4's own title literally reads "Staff-created accounts + cash payment path (P6-T4)" (2026-08-22, attended) — a decision/build Samy already made, just never reflected on this checkbox, the same gap P2-T4/P2-T5/P5-T4/P5-T6/P6-T2 had before their own bookkeeping closes. `npm run typecheck` passes; no source touched, so `build:verify` wasn't re-run. No code changed, no migration attempted; tree left clean, only ROADMAP.md changed.
 - 2026-08-29 (autoloop) — P5-T6 done (bookkeeping close as CLOSED/absorbed by T7-5/T7-6, no code change). Re-checked every already-blocked task ahead of it in file order before touching anything, per the "unchanged cause is silence" rule: P4-T3 (`grep -n ecole ~/infra/monitoring/prometheus/prometheus.yml`/`grep -rn ecole ~/infra/monitoring/grafana` both still empty — shared homelab infra outside this repo's boundary, unchanged), P4-T4 (`grep -n 'href.*"#"' src/components/Footer.tsx` — all four footer links still literal `href: "#"`, unchanged). Wrote nothing new for either. Landed on P5-T6, the next unchecked non-NEEDS-USER task. Its 2026-07-24 BLOCKED note cited two causes — no admin-CRUD content path, and no teacher auth role — and both are gone: `grep -n role src/lib/auth-context.tsx` now shows `"student" | "parent" | "teacher" | "admin"`; `grep -n "CREATE TABLE IF NOT EXISTS" src/lib/server/db.ts` shows `courses`/`chapters`/`lessons`/`quiz_questions`/`documents` tables with owner FKs, and `src/app/api/teacher/courses/**` exposes ownership-checked CRUD routes — both landed via T7-5/T7-6 (2026-08-22, attended). The Phase 7 header's own "Superseded / dropped" list names this task explicitly ("P5-T4 teacher Q&A, P5-T6 teacher dashboard — absorbed by T7-5/T7-6") — a decision Samy already made attended, just never reflected on this checkbox, the same gap P2-T4/P2-T5/P5-T4 had before their own 2026-08-25/26/27 bookkeeping closes. Confirmed the one thing genuinely still missing — an actual admin/teacher CRUD screen (`grep -n "course\|chapter\|lesson\|quiz" src/app/admin/page.tsx` still shows only payments/student-creation) — is already tracked as backlog item P8-D, so closing here doesn't drop that work. `npm run typecheck` passes; no source touched, so `build:verify` wasn't re-run. No code changed, no migration attempted; tree left clean, only ROADMAP.md changed.
 - 2026-08-28 (autoloop) — P6-T2 done (bookkeeping close as CLOSED, no code change). Re-checked every already-blocked task ahead of it in file order before touching anything, per the "unchanged cause is silence" rule: P4-T3 (`grep -rn ecole ~/infra/monitoring/prometheus/prometheus.yml`/`grafana` both still empty — shared homelab infra outside this repo's boundary, unchanged), P4-T4 (`grep -n 'href.*#' src/components/Footer.tsx` — all four footer links still literal `href: "#"`, unchanged). Wrote nothing new for either. Landed on P6-T2, the next unchecked non-NEEDS-USER task. Its 2026-08-19 BLOCKED note cited one cause — the `enrollments` table not existing, with P6-T1 itself still blocked — and that's gone: `grep -n "CREATE TABLE IF NOT EXISTS enrollments" src/lib/server/db.ts` finds it, and P6-T1 is `[x]` done (T7-1, 2026-08-22, attended). The task's own text says it needs no work beyond P6-T1 existing — only that other code start reading `enrollments` instead of `learner_state` — and that's already true: `grep -rln "isEnrolled\|getEnrolledCourseIds" src` shows my-courses, dashboard, `course/[courseId]`, the lesson page, and parent all read enrolment through `src/lib/progress.ts`'s `isEnrolled`/`getEnrolledCourseIds`, a read-only local cache populated by `pullEnrollments()` from `GET /api/enrollments` (server-authoritative); `src/app/api/state/route.ts`'s `SERVER_OWNED_KEYS` strips any client-forged `enrolled` key from `PUT /api/state` before it reaches storage — confirmed live already by the P6-T1 log entry's own forged-write probe. `npm run typecheck` passes; no source touched, so `build:verify` wasn't re-run. No code changed, no migration attempted; tree left clean, only ROADMAP.md changed.
 - 2026-08-27 (autoloop) — P5-T4 done (bookkeeping close as CLOSED/absorbed by T7-6, no code change). Re-checked every already-blocked task ahead of it in file order before touching anything, per the "unchanged cause is silence" rule: P4-T3 (`grep -rn ecole ~/infra/monitoring/prometheus/prometheus.yml`/`grafana` both still empty — shared homelab infra outside this repo's boundary, unchanged), P4-T4 (`grep -n 'href.*#' src/components/Footer.tsx` — all four footer links still literal `href: "#"`, unchanged). Wrote nothing new for either. Landed on P5-T4, the next unchecked non-NEEDS-USER task. Its 2026-07-22 BLOCKED note cited two causes — no shared cross-user storage, and no teacher/moderator auth role — and both are gone: `sed -n '625,660p' src/lib/server/db.ts` shows `lesson_questions`/`lesson_answers` tables (genuinely shared, not per-user-namespaced like every other piece of learner state, with a partial unique index enforcing one accepted answer per question); `src/app/api/lessons/[lessonId]/questions/route.ts` and its `[questionId]/` subroutes expose the shared read/write API; `src/components/QuestionThread.tsx` renders a teacher badge and accept-answer control and is wired into the lesson page's "questions" tab (confirmed via `grep -n "QuestionThread\|t.qa.questions" "src/app/course/[courseId]/lesson/[lessonId]/page.tsx"`). This is exactly Phase 7's T7-6 scope, and the Phase 7 header's own "Superseded / dropped" list names P5-T4 as "absorbed by T7-5/T7-6" — a decision Samy already made attended (2026-08-22), just never reflected on this checkbox, the same gap P2-T4/P2-T5 had before their own 2026-08-25/26 bookkeeping closes. `npm run typecheck` passes; no source touched, so `build:verify` wasn't re-run. No code changed, no migration attempted; tree left clean, only ROADMAP.md changed.
