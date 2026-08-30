@@ -500,6 +500,56 @@ type TranslationKeys = {
     dashboardCardTitle: string;
     dashboardCardBody: string;
   };
+  legal: {
+    lastUpdated: string;
+    backToHome: string;
+    terms: {
+      pageTitle: string;
+      intro: string;
+      s1Title: string;
+      s1Body: string;
+      s2Title: string;
+      s2Body: string;
+      s3Title: string;
+      s3Body: string;
+      s4Title: string;
+      s4Body: string;
+      s5Title: string;
+      s5Body: string;
+      s6Title: string;
+      s6Body: string;
+      s7Title: string;
+      s7Body: string;
+      s8Title: string;
+      s8Body: string;
+      s9Title: string;
+      s9Body: string;
+    };
+    privacy: {
+      pageTitle: string;
+      intro: string;
+      s1Title: string;
+      s1Body: string;
+      s2Title: string;
+      s2Body: string;
+      s3Title: string;
+      s3Body: string;
+      s4Title: string;
+      s4Body: string;
+      s5Title: string;
+      s5Body: string;
+      s6Title: string;
+      s6Body: string;
+      s7Title: string;
+      s7Body: string;
+      s8Title: string;
+      s8Body: string;
+      s9Title: string;
+      s9Body: string;
+      s10Title: string;
+      s10Body: string;
+    };
+  };
 };
 
 const translations: Record<Locale, TranslationKeys> = {
@@ -985,6 +1035,77 @@ const translations: Record<Locale, TranslationKeys> = {
       dashboardCardTitle: "Examen blanc",
       dashboardCardBody: "Entraîne-toi en conditions chronométrées",
     },
+    legal: {
+      lastUpdated: "Dernière mise à jour : 30 août 2026",
+      backToHome: "Retour à l'accueil",
+      terms: {
+        pageTitle: "Conditions générales d'utilisation",
+        intro:
+          "Les présentes conditions générales d'utilisation (CGU) régissent l'accès et l'utilisation de la plateforme Layaida, un service d'apprentissage en ligne destiné aux élèves de collège et de lycée ainsi qu'à leurs parents. En créant un compte ou en utilisant le site, vous acceptez ces conditions.",
+        s1Title: "1. Objet du service",
+        s1Body:
+          "Layaida propose des cours en ligne (vidéos, documents, quiz) organisés par matière, chapitre et leçon, ainsi qu'un suivi de progression, des certificats de fin de cours et un espace de questions-réponses avec les enseignants. Le service est accessible en français, en anglais et en arabe.",
+        s2Title: "2. Comptes utilisateurs",
+        s2Body:
+          "L'accès à la majorité des fonctionnalités nécessite la création d'un compte (élève, parent, enseignant ou administrateur). Un compte peut être créé directement par l'utilisateur via le formulaire d'inscription, ou créé par un membre du personnel de Layaida pour le compte d'un élève, notamment dans le cadre d'une inscription payante gérée manuellement. Vous êtes responsable de la confidentialité de votre mot de passe et de toute activité effectuée depuis votre compte.",
+        s3Title: "3. Élèves mineurs",
+        s3Body:
+          "Layaida s'adresse en priorité à des élèves mineurs. Le formulaire d'inscription en ligne ne demande actuellement ni date de naissance ni pièce justificative et ne vérifie donc pas l'âge de l'utilisateur. Il appartient au parent ou au représentant légal d'un mineur de s'assurer que celui-ci n'utilise le service qu'avec son autorisation, et de superviser son utilisation. Lorsqu'un compte est créé par le personnel de Layaida à la suite d'une inscription encadrée (paiement, établissement partenaire), l'accord du parent ou représentant légal est recueilli en amont, en dehors du site, au moment de cette inscription.",
+        s4Title: "4. Contenu et propriété intellectuelle",
+        s4Body:
+          "Les cours, textes, vidéos, documents et éléments graphiques du site sont la propriété de Layaida ou de ses partenaires enseignants, sauf mention contraire. Vous pouvez consulter et télécharger les contenus mis à votre disposition dans le cadre de votre usage personnel et non commercial. Toute reproduction, diffusion ou revente sans autorisation est interdite.",
+        s5Title: "5. Paiement",
+        s5Body:
+          "Certains cours peuvent faire l'objet d'un accès payant. Les modalités de paiement en vigueur au moment de l'inscription vous sont communiquées directement ; à ce jour, le règlement s'effectue de façon manuelle (hors ligne) et l'accès au cours est activé par un membre du personnel une fois le paiement constaté. Aucune donnée de carte bancaire n'est saisie ou stockée sur le site.",
+        s6Title: "6. Disponibilité du service",
+        s6Body:
+          "Layaida est un service en développement continu ; certaines fonctionnalités ou certains contenus peuvent évoluer, être ajoutés ou retirés sans préavis. Le service est fourni « en l'état », sans garantie de disponibilité permanente ; des interruptions ponctuelles pour maintenance sont possibles.",
+        s7Title: "7. Résiliation",
+        s7Body:
+          "Vous pouvez cesser d'utiliser le service à tout moment. Layaida peut suspendre ou supprimer un compte en cas d'usage abusif, frauduleux ou contraire aux présentes conditions. Vous pouvez demander la clôture de votre compte et la suppression de vos données en nous contactant (voir la politique de confidentialité).",
+        s8Title: "8. Responsabilité",
+        s8Body:
+          "Layaida s'efforce de fournir un contenu pédagogique fiable mais ne garantit pas l'absence d'erreur dans les cours ou exercices. L'utilisation du service se fait sous votre responsabilité ; Layaida ne saurait être tenu responsable des dommages indirects résultant de son utilisation.",
+        s9Title: "9. Droit applicable et contact",
+        s9Body:
+          "Les présentes CGU sont principalement destinées à un usage en Algérie et rédigées en conséquence ; les utilisateurs résidant dans l'Union européenne bénéficient par ailleurs des droits décrits dans notre politique de confidentialité. Pour toute question relative à ces conditions, contactez-nous via la page Contact du site.",
+      },
+      privacy: {
+        pageTitle: "Politique de confidentialité",
+        intro:
+          "Cette politique explique quelles données Layaida collecte, pourquoi, et comment elles sont protégées. Layaida est un projet indépendant, auto-hébergé, sans lien avec un groupe publicitaire ou un tiers commercial.",
+        s1Title: "1. Responsable du traitement",
+        s1Body:
+          "Layaida est édité et exploité à titre indépendant. Pour toute question relative à vos données personnelles, vous pouvez nous contacter via la page Contact du site.",
+        s2Title: "2. Données que nous collectons",
+        s2Body:
+          "À l'inscription : votre nom, votre adresse e-mail et un mot de passe (haché, jamais stocké en clair). En cours d'utilisation : votre progression pédagogique (cours suivis, leçons terminées, position de lecture des vidéos, réponses aux quiz, documents téléchargés, notes personnelles). Si vous posez une question à un enseignant : le contenu de cette question et de sa réponse. En cas d'inscription payante : les informations de paiement manuel enregistrées par le personnel (montant, moyen, statut) — aucune donnée bancaire n'est saisie sur le site. Nous ne collectons ni date de naissance ni donnée de santé.",
+        s3Title: "3. Pourquoi nous les utilisons",
+        s3Body:
+          "Ces données sont utilisées uniquement pour faire fonctionner le service : créer et sécuriser votre compte, afficher et sauvegarder votre progression, générer vos certificats, gérer les questions-réponses et, le cas échéant, suivre une inscription payante. Elles ne sont jamais utilisées à des fins publicitaires.",
+        s4Title: "4. Élèves mineurs et consentement parental",
+        s4Body:
+          "Layaida est conçu pour des élèves mineurs. Nous ne mettons pas en œuvre aujourd'hui de mécanisme technique de recueil ou de vérification du consentement parental au moment de l'inscription en ligne ; c'est au parent ou représentant légal qu'il revient d'autoriser et de superviser l'utilisation du service par l'enfant. Lorsqu'un compte est créé par notre personnel dans le cadre d'une inscription encadrée (paiement, établissement), l'accord du parent est recueilli en amont, hors du site. Un parent souhaitant faire vérifier, modifier ou supprimer les données de son enfant peut nous contacter à tout moment.",
+        s5Title: "5. Cookies et traceurs",
+        s5Body:
+          "Layaida n'utilise aucun outil d'analyse d'audience (pas de Google Analytics ni équivalent), aucun cookie publicitaire et aucun cookie tiers. Le seul cookie déposé est un cookie de session strictement nécessaire (layaida_session), qui vous garde connecté pendant 30 jours ; il ne sert pas à vous suivre sur d'autres sites et ne nécessite pas de bandeau de consentement, car il est strictement nécessaire au fonctionnement du service.",
+        s6Title: "6. Sécurité",
+        s6Body:
+          "Votre mot de passe est haché (scrypt) et n'est jamais stocké en clair. Les sessions utilisent un cookie sécurisé, accessible uniquement au serveur (httpOnly). Les tentatives de connexion sont limitées en nombre pour limiter les attaques automatisées, et les échanges avec le site sont chiffrés (HTTPS).",
+        s7Title: "7. Durée de conservation",
+        s7Body:
+          "Vos données sont conservées tant que votre compte est actif. Il n'existe pas aujourd'hui de suppression automatique après une durée d'inactivité ; vous pouvez demander la suppression de votre compte et de vos données à tout moment en nous contactant, la demande étant alors traitée manuellement.",
+        s8Title: "8. Partage avec des tiers",
+        s8Body:
+          "Vos données sont hébergées sur une infrastructure serveur exploitée par l'éditeur de Layaida (auto-hébergement), et ne sont ni vendues ni transmises à des tiers à des fins commerciales. Les vidéos de cours sont actuellement hébergées sur YouTube (lecture intégrée) ; leur visionnage peut donc impliquer un échange technique avec YouTube/Google selon les conditions de ce service, indépendantes de Layaida.",
+        s9Title: "9. Vos droits",
+        s9Body:
+          "Si vous résidez dans l'Union européenne, le règlement général sur la protection des données (RGPD) vous donne le droit d'accéder à vos données, de les faire rectifier ou supprimer, de vous opposer à leur traitement ou d'en demander la portabilité. Ces mêmes possibilités (accès, rectification, suppression) sont offertes à tous les utilisateurs de Layaida, quel que soit leur pays de résidence, sur simple demande.",
+        s10Title: "10. Contact",
+        s10Body:
+          "Pour exercer ces droits ou pour toute question sur cette politique, contactez-nous via la page Contact du site.",
+      },
+    },
   },
   en: {
     common: {
@@ -1468,6 +1589,77 @@ const translations: Record<Locale, TranslationKeys> = {
       dashboardCardTitle: "Mock exam",
       dashboardCardBody: "Practice under timed conditions",
     },
+    legal: {
+      lastUpdated: "Last updated: August 30, 2026",
+      backToHome: "Back to home",
+      terms: {
+        pageTitle: "Terms of Service",
+        intro:
+          "These Terms of Service govern access to and use of the Layaida platform, an online learning service for middle- and high-school students and their parents. By creating an account or using the site, you accept these terms.",
+        s1Title: "1. What Layaida is",
+        s1Body:
+          "Layaida offers online courses (videos, documents, quizzes) organized by subject, chapter and lesson, along with progress tracking, completion certificates, and a question-and-answer space with teachers. The service is available in French, English and Arabic.",
+        s2Title: "2. Accounts",
+        s2Body:
+          "Most features require an account (student, parent, teacher or admin). An account can be created directly by the user through the sign-up form, or created by a Layaida staff member on a student's behalf, in particular as part of a manually managed paid enrollment. You are responsible for keeping your password confidential and for any activity carried out from your account.",
+        s3Title: "3. Minor students",
+        s3Body:
+          "Layaida is aimed primarily at minors. The online sign-up form does not currently ask for a date of birth or any proof of age, and therefore does not verify a user's age. It is the parent's or legal guardian's responsibility to ensure a minor only uses the service with their permission, and to supervise that use. Where an account is created by Layaida staff as part of a supervised enrollment (payment, partner school), the parent's or legal guardian's agreement is obtained beforehand, outside the site, at the time of that enrollment.",
+        s4Title: "4. Content and intellectual property",
+        s4Body:
+          "Courses, text, videos, documents and graphic elements on the site belong to Layaida or its teaching partners, unless stated otherwise. You may view and download content made available to you for your personal, non-commercial use. Reproducing, redistributing or reselling it without permission is prohibited.",
+        s5Title: "5. Payment",
+        s5Body:
+          "Some courses may require paid access. The payment terms in effect at the time of enrollment are communicated to you directly; as of today, payment is handled manually (offline) and course access is activated by a staff member once payment is confirmed. No card payment data is entered or stored on the site.",
+        s6Title: "6. Service availability",
+        s6Body:
+          "Layaida is under continuous development; features or content may change, be added, or be removed without notice. The service is provided \"as is\", with no guarantee of permanent availability; occasional interruptions for maintenance are possible.",
+        s7Title: "7. Termination",
+        s7Body:
+          "You may stop using the service at any time. Layaida may suspend or delete an account in case of abusive or fraudulent use, or use contrary to these terms. You may request the closure of your account and the deletion of your data by contacting us (see the privacy policy).",
+        s8Title: "8. Liability",
+        s8Body:
+          "Layaida strives to provide reliable educational content but does not guarantee that courses or exercises are free of errors. Use of the service is at your own risk; Layaida is not liable for indirect damages resulting from its use.",
+        s9Title: "9. Governing law and contact",
+        s9Body:
+          "These terms are primarily intended for use in Algeria and are written accordingly; users residing in the European Union also benefit from the rights described in our privacy policy. For any question about these terms, contact us via the site's Contact page.",
+      },
+      privacy: {
+        pageTitle: "Privacy Policy",
+        intro:
+          "This policy explains what data Layaida collects, why, and how it is protected. Layaida is an independent, self-hosted project with no ties to an advertising group or commercial third party.",
+        s1Title: "1. Data controller",
+        s1Body:
+          "Layaida is published and operated independently. For any question about your personal data, you can contact us via the site's Contact page.",
+        s2Title: "2. Data we collect",
+        s2Body:
+          "At sign-up: your name, email address, and a password (hashed, never stored in plain text). While using the service: your learning progress (courses followed, lessons completed, video playback position, quiz answers, downloaded documents, personal notes). If you ask a teacher a question: the content of that question and its answer. For a paid enrollment: the manual payment information recorded by staff (amount, method, status) — no card data is entered on the site. We do not collect date of birth or health data.",
+        s3Title: "3. Why we use it",
+        s3Body:
+          "This data is used only to run the service: creating and securing your account, showing and saving your progress, generating your certificates, running the question-and-answer feature and, where relevant, tracking a paid enrollment. It is never used for advertising purposes.",
+        s4Title: "4. Minor students and parental consent",
+        s4Body:
+          "Layaida is designed for minor students. We do not currently implement a technical mechanism to collect or verify parental consent at online sign-up; it is the parent's or legal guardian's responsibility to authorize and supervise their child's use of the service. Where an account is created by our staff as part of a supervised enrollment (payment, school), the parent's agreement is obtained beforehand, outside the site. A parent who wants to review, correct or delete their child's data can contact us at any time.",
+        s5Title: "5. Cookies and trackers",
+        s5Body:
+          "Layaida uses no audience-analytics tool (no Google Analytics or equivalent), no advertising cookie, and no third-party cookie. The only cookie set is a strictly necessary session cookie (layaida_session) that keeps you signed in for 30 days; it is not used to track you across other sites and does not require a consent banner, since it is strictly necessary for the service to work.",
+        s6Title: "6. Security",
+        s6Body:
+          "Your password is hashed (scrypt) and never stored in plain text. Sessions use a secure cookie accessible only to the server (httpOnly). Login attempts are rate-limited to reduce automated attacks, and traffic to the site is encrypted (HTTPS).",
+        s7Title: "7. Data retention",
+        s7Body:
+          "Your data is kept for as long as your account is active. There is currently no automatic deletion after a period of inactivity; you can request deletion of your account and data at any time by contacting us, and the request is then handled manually.",
+        s8Title: "8. Sharing with third parties",
+        s8Body:
+          "Your data is hosted on server infrastructure operated by Layaida's publisher (self-hosted), and is neither sold nor passed to third parties for commercial purposes. Course videos are currently hosted on YouTube (embedded playback); watching them may therefore involve a technical exchange with YouTube/Google under that service's own terms, independent of Layaida.",
+        s9Title: "9. Your rights",
+        s9Body:
+          "If you reside in the European Union, the General Data Protection Regulation (GDPR) gives you the right to access your data, have it corrected or deleted, object to its processing, or request its portability. The same options (access, correction, deletion) are offered to all Layaida users regardless of country of residence, on simple request.",
+        s10Title: "10. Contact",
+        s10Body:
+          "To exercise these rights or for any question about this policy, contact us via the site's Contact page.",
+      },
+    },
   },
   ar: {
     common: {
@@ -1949,6 +2141,77 @@ const translations: Record<Locale, TranslationKeys> = {
       retry: "إجراء امتحان آخر",
       dashboardCardTitle: "امتحان تجريبي",
       dashboardCardBody: "تدرّب في ظروف محددة بوقت",
+    },
+    legal: {
+      lastUpdated: "آخر تحديث: 30 غشت 2026",
+      backToHome: "العودة إلى الصفحة الرئيسية",
+      terms: {
+        pageTitle: "الشروط العامة للاستخدام",
+        intro:
+          "تنظّم هذه الشروط العامة للاستخدام الوصول إلى منصة لعيايدة واستخدامها، وهي خدمة تعليمية عبر الإنترنت موجّهة لتلاميذ المتوسط والثانوي وأولياء أمورهم. بإنشائك حسابًا أو استخدامك للموقع، فإنك توافق على هذه الشروط.",
+        s1Title: "1. موضوع الخدمة",
+        s1Body:
+          "تقدّم لعيايدة دروسًا عبر الإنترنت (فيديوهات، وثائق، اختبارات) منظّمة حسب المادة والفصل والدرس، إضافة إلى تتبّع للتقدّم، وشهادات إتمام الدروس، وفضاء لطرح الأسئلة على الأساتذة والإجابة عنها. الخدمة متاحة باللغات الفرنسية والإنجليزية والعربية.",
+        s2Title: "2. الحسابات",
+        s2Body:
+          "يتطلّب الوصول إلى معظم الميزات إنشاء حساب (تلميذ، ولي أمر، أستاذ أو مسؤول). يمكن إنشاء الحساب مباشرة من طرف المستخدم عبر استمارة التسجيل، أو من طرف أحد موظفي لعيايدة نيابة عن التلميذ، خاصة في إطار تسجيل مؤدى عنه يُدار يدويًا. أنت مسؤول عن سرّية كلمة مرورك وعن أي نشاط يتم من حسابك.",
+        s3Title: "3. التلاميذ القاصرون",
+        s3Body:
+          "توجَّه لعيايدة أساسًا لتلاميذ قاصرين. لا تطلب استمارة التسجيل عبر الإنترنت حاليًا تاريخ الميلاد ولا أي وثيقة إثبات، وبالتالي لا تتحقق من سنّ المستخدم. يقع على عاتق الولي أو الممثل القانوني للقاصر التأكد من أنه لا يستخدم الخدمة إلا بإذنه، والإشراف على استخدامه لها. عندما يُنشئ موظفو لعيايدة حسابًا في إطار تسجيل مؤطَّر (دفع، مؤسسة شريكة)، تُجمع موافقة الولي أو الممثل القانوني مسبقًا، خارج الموقع، عند ذلك التسجيل.",
+        s4Title: "4. المحتوى والملكية الفكرية",
+        s4Body:
+          "الدروس والنصوص والفيديوهات والوثائق والعناصر الرسومية على الموقع ملك للعيايدة أو لشركائها من الأساتذة، ما لم يُذكر خلاف ذلك. يمكنك الاطلاع على المحتوى المتاح لك وتحميله للاستخدام الشخصي غير التجاري. يُمنع أي نسخ أو نشر أو إعادة بيع دون إذن.",
+        s5Title: "5. الدفع",
+        s5Body:
+          "قد يخضع الوصول إلى بعض الدروس للدفع. تُبلَّغ بشروط الدفع المعمول بها وقت التسجيل مباشرة؛ وحتى اليوم، يتم الدفع يدويًا (خارج الموقع)، ويُفعَّل الوصول إلى الدرس من طرف أحد الموظفين بعد التأكد من الدفع. لا تُدخَل أو تُخزَّن أي بيانات بطاقة بنكية على الموقع.",
+        s6Title: "6. توفر الخدمة",
+        s6Body:
+          "لعيايدة خدمة قيد التطوير المستمر؛ قد تتغيّر بعض الميزات أو المحتويات أو تُضاف أو تُحذف دون إشعار مسبق. تُقدَّم الخدمة \"كما هي\"، دون ضمان لتوفرها الدائم؛ وقد تحدث انقطاعات مؤقتة لأغراض الصيانة.",
+        s7Title: "7. إنهاء الاستخدام",
+        s7Body:
+          "يمكنك التوقف عن استخدام الخدمة في أي وقت. يجوز للعيايدة تعليق أو حذف حساب في حال الاستخدام التعسفي أو الاحتيالي أو المخالف لهذه الشروط. يمكنك طلب إغلاق حسابك وحذف بياناتك بالتواصل معنا (انظر سياسة الخصوصية).",
+        s8Title: "8. المسؤولية",
+        s8Body:
+          "تسعى لعيايدة لتقديم محتوى تربوي موثوق، لكنها لا تضمن خلوّ الدروس أو التمارين من الأخطاء. استخدامك للخدمة على مسؤوليتك الخاصة؛ ولا تتحمّل لعيايدة مسؤولية الأضرار غير المباشرة الناتجة عن استخدامها.",
+        s9Title: "9. القانون المعمول به والتواصل",
+        s9Body:
+          "صُممت هذه الشروط أساسًا للاستخدام في الجزائر وحُرِّرت وفقًا لذلك؛ ويستفيد المستخدمون المقيمون في الاتحاد الأوروبي إضافة إلى ذلك من الحقوق الموضحة في سياسة الخصوصية الخاصة بنا. لأي سؤال بخصوص هذه الشروط، تواصل معنا عبر صفحة اتصل بنا في الموقع.",
+      },
+      privacy: {
+        pageTitle: "سياسة الخصوصية",
+        intro:
+          "توضّح هذه السياسة البيانات التي تجمعها لعيايدة، ولماذا، وكيف تتم حمايتها. لعيايدة مشروع مستقل، مستضاف ذاتيًا، ولا صلة له بأي مجموعة إعلانية أو طرف تجاري ثالث.",
+        s1Title: "1. الجهة المسؤولة عن المعالجة",
+        s1Body:
+          "تُنشر لعيايدة وتُدار بشكل مستقل. لأي سؤال يخص بياناتك الشخصية، يمكنك التواصل معنا عبر صفحة اتصل بنا في الموقع.",
+        s2Title: "2. البيانات التي نجمعها",
+        s2Body:
+          "عند التسجيل: اسمك، عنوان بريدك الإلكتروني، وكلمة مرور (مشفّرة تجزئةً، لا تُخزَّن أبدًا في صورة واضحة). أثناء الاستخدام: تقدّمك التعليمي (الدروس المتابَعة، الدروس المكتملة، موضع تشغيل الفيديو، إجابات الاختبارات، الوثائق المحمَّلة، ملاحظاتك الشخصية). إذا طرحت سؤالًا على أستاذ: محتوى ذلك السؤال وإجابته. في حالة تسجيل مؤدى عنه: معلومات الدفع اليدوي التي يسجّلها الموظفون (المبلغ، الوسيلة، الحالة) — لا تُدخَل أي بيانات بنكية على الموقع. لا نجمع تاريخ الميلاد ولا بيانات صحية.",
+        s3Title: "3. لماذا نستخدمها",
+        s3Body:
+          "تُستخدم هذه البيانات فقط لتشغيل الخدمة: إنشاء حسابك وتأمينه، عرض تقدّمك وحفظه، إصدار شهاداتك، إدارة الأسئلة والأجوبة، ومتابعة تسجيل مؤدى عنه عند الاقتضاء. لا تُستخدم أبدًا لأغراض إعلانية.",
+        s4Title: "4. التلاميذ القاصرون وموافقة الولي",
+        s4Body:
+          "صُممت لعيايدة لتلاميذ قاصرين. لا نطبّق حاليًا آلية تقنية لجمع أو التحقق من موافقة الولي عند التسجيل عبر الإنترنت؛ ويقع على عاتق الولي أو الممثل القانوني الإذن بإشراف الطفل على استخدام الخدمة. عندما يُنشئ موظفونا حسابًا في إطار تسجيل مؤطَّر (دفع، مؤسسة)، تُجمع موافقة الولي مسبقًا خارج الموقع. يمكن لأي ولي يرغب في الاطلاع على بيانات طفله أو تصحيحها أو حذفها التواصل معنا في أي وقت.",
+        s5Title: "5. ملفات تعريف الارتباط وأدوات التتبع",
+        s5Body:
+          "لا تستخدم لعيايدة أي أداة لتحليل الجمهور (لا Google Analytics ولا ما يعادلها)، ولا أي كوكيز إعلانية، ولا أي كوكيز من طرف ثالث. الكوكيز الوحيدة المستخدمة هي كوكيز الجلسة الضرورية حصرًا (layaida_session)، التي تُبقيك متصلًا لمدة 30 يومًا؛ لا تُستخدم لتتبعك عبر مواقع أخرى ولا تتطلب لافتة موافقة، لأنها ضرورية حصرًا لعمل الخدمة.",
+        s6Title: "6. الأمان",
+        s6Body:
+          "تُشفَّر كلمة مرورك تجزئةً (scrypt) ولا تُخزَّن أبدًا في صورة واضحة. تستخدم الجلسات كوكيز آمنة لا يمكن الوصول إليها إلا من الخادم (httpOnly). عدد محاولات تسجيل الدخول محدود للحد من الهجمات الآلية، وتُشفَّر التبادلات مع الموقع (HTTPS).",
+        s7Title: "7. مدة الاحتفاظ بالبيانات",
+        s7Body:
+          "تُحفَظ بياناتك طالما كان حسابك نشطًا. لا يوجد حاليًا حذف تلقائي بعد فترة من عدم النشاط؛ يمكنك طلب حذف حسابك وبياناتك في أي وقت بالتواصل معنا، وتُعالَج الطلب حينها يدويًا.",
+        s8Title: "8. المشاركة مع أطراف ثالثة",
+        s8Body:
+          "تُستضاف بياناتك على بنية تحتية للخوادم يديرها ناشر لعيايدة (استضافة ذاتية)، ولا تُباع ولا تُنقَل إلى أطراف ثالثة لأغراض تجارية. تُستضاف فيديوهات الدروس حاليًا على يوتيوب (تشغيل مضمَّن)؛ لذا قد تنطوي مشاهدتها على تبادل تقني مع يوتيوب/غوغل وفق شروط تلك الخدمة، وهي مستقلة عن لعيايدة.",
+        s9Title: "9. حقوقك",
+        s9Body:
+          "إذا كنت مقيمًا في الاتحاد الأوروبي، تخوّلك اللائحة العامة لحماية البيانات (RGPD) الحق في الوصول إلى بياناتك وتصحيحها أو حذفها، والاعتراض على معالجتها، أو طلب نقلها. تُتاح هذه الخيارات نفسها (الوصول، التصحيح، الحذف) لجميع مستخدمي لعيايدة أيًا كان بلد إقامتهم، بناءً على طلب بسيط.",
+        s10Title: "10. التواصل",
+        s10Body:
+          "لممارسة هذه الحقوق أو لأي سؤال حول هذه السياسة، تواصل معنا عبر صفحة اتصل بنا في الموقع.",
+      },
     },
   },
 };

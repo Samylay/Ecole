@@ -10,8 +10,8 @@ export function Footer() {
   const links = [
     { href: "#", label: t.footer.about },
     { href: "#", label: t.footer.contact },
-    { href: "#", label: t.footer.terms },
-    { href: "#", label: t.footer.privacy },
+    { href: "/terms", label: t.footer.terms },
+    { href: "/privacy", label: t.footer.privacy },
   ];
 
   return (
