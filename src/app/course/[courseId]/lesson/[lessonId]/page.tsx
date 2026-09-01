@@ -10,6 +10,7 @@ import {
   ChevronRight,
   FileText,
   Download,
+  ChevronDown,
   Play,
   ClipboardCheck,
   List,
@@ -42,6 +43,8 @@ import {
   recordActiveDay,
   isDocumentDownloaded,
   recordDocumentDownload,
+  getCompletedExercises,
+  toggleExerciseCompleted,
   getResumePosition,
   setResumePosition,
   getLastQuizAttempt,
@@ -142,6 +145,8 @@ export default function LessonPage({
   const [noteText, setNoteText] = useState("");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [downloadTick, setDownloadTick] = useState(0);
+  const [previewOpen, setPreviewOpen] = useState<number | null>(null);
+  const [exerciseTick, setExerciseTick] = useState(0);
   const [countdown, setCountdown] = useState<number | null>(null);
   const [celebrate, setCelebrate] = useState<"idle" | "in" | "out">("idle");
   const [currentTime, setCurrentTime] = useState(0);
@@ -652,38 +657,102 @@ export default function LessonPage({
                     {lesson.documents.map((doc, i) => {
                       void downloadTick;
                       const downloaded = isDocumentDownloaded(courseId, lessonId, doc.name);
+                      const previewingThis = previewOpen === i;
                       return (
-                        <li key={i} className="flex items-center gap-3 rounded-card border border-border bg-surface p-4">
-                          <span className={`flex h-10 w-10 items-center justify-center rounded-input ${colors.bg} ${colors.text}`}>
-                            <FileText className="h-5 w-5" aria-hidden="true" />
-                          </span>
-                          <span className="min-w-0 flex-1 truncate text-[15px] font-medium text-ink">{doc.name}</span>
-                          {downloaded && (
-                            <span
-                              className="flex items-center gap-1 text-[13px] text-success"
-                              title={t.course.downloaded}
-                            >
-                              <Check className="h-4 w-4" aria-hidden="true" />
-                              <span className="sr-only">{t.course.downloaded}</span>
+                        <li key={i} className="rounded-card border border-border bg-surface p-4">
+                          <div className="flex items-center gap-3">
+                            <span className={`flex h-10 w-10 items-center justify-center rounded-input ${colors.bg} ${colors.text}`}>
+                              <FileText className="h-5 w-5" aria-hidden="true" />
                             </span>
+                            <span className="min-w-0 flex-1 truncate text-[15px] font-medium text-ink">{doc.name}</span>
+                            {downloaded && (
+                              <span
+                                className="flex items-center gap-1 text-[13px] text-success"
+                                title={t.course.downloaded}
+                              >
+                                <Check className="h-4 w-4" aria-hidden="true" />
+                                <span className="sr-only">{t.course.downloaded}</span>
+                              </span>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => setPreviewOpen(previewingThis ? null : i)}
+                              aria-expanded={previewingThis}
+                              className="flex min-h-11 items-center gap-1.5 rounded-pill px-4 text-[13px] font-semibold text-slate transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:bg-mist active:scale-[0.98]"
+                            >
+                              <ChevronDown
+                                className={`h-4 w-4 transition-transform duration-[var(--duration-base)] ${previewingThis ? "rotate-180" : ""}`}
+                                aria-hidden="true"
+                              />
+                              {previewingThis ? t.lesson.hidePreview : t.lesson.previewPdf}
+                            </button>
+                            <a
+                              href={doc.url}
+                              download={doc.name}
+                              onClick={() => {
+                                recordDocumentDownload(courseId, lessonId, doc.name);
+                                setDownloadTick((n) => n + 1);
+                              }}
+                              className="flex min-h-11 items-center gap-1.5 rounded-pill px-4 text-[13px] font-semibold text-primary transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:bg-primary-soft active:scale-[0.98]"
+                            >
+                              <Download className="h-4 w-4" aria-hidden="true" />
+                              {t.course.downloadPdf}
+                            </a>
+                          </div>
+                          {previewingThis && (
+                            <div className="page-enter mt-3 overflow-hidden rounded-input border border-border">
+                              <iframe src={doc.url} title={doc.name} className="h-[70vh] w-full" />
+                            </div>
                           )}
-                          <a
-                            href={doc.url}
-                            download={doc.name}
-                            onClick={() => {
-                              recordDocumentDownload(courseId, lessonId, doc.name);
-                              setDownloadTick((n) => n + 1);
-                            }}
-                            className="flex min-h-11 items-center gap-1.5 rounded-pill px-4 text-[13px] font-semibold text-primary transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:bg-primary-soft active:scale-[0.98]"
-                          >
-                            <Download className="h-4 w-4" aria-hidden="true" />
-                            {t.course.downloadPdf}
-                          </a>
                         </li>
                       );
                     })}
                   </ul>
                 )}
+
+                {lesson.exercises && lesson.exercises.length > 0 && (() => {
+                  void exerciseTick;
+                  const completed = getCompletedExercises(courseId, lessonId);
+                  return (
+                    <div className="mt-6">
+                      <div className="mb-3 flex items-baseline justify-between gap-3">
+                        <h3 className="text-[15px] font-semibold text-ink">{t.lesson.exercisesTitle}</h3>
+                        <span className="text-[13px] text-muted">
+                          {formatNumber(locale, completed.length)}/{formatNumber(locale, lesson.exercises.length)} {t.lesson.exercisesDone}
+                        </span>
+                      </div>
+                      <ul className="space-y-2">
+                        {lesson.exercises.map((ex, i) => {
+                          const done = completed.includes(ex.id);
+                          return (
+                            <li key={ex.id}>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  toggleExerciseCompleted(courseId, lessonId, ex.id);
+                                  setExerciseTick((n) => n + 1);
+                                }}
+                                aria-pressed={done}
+                                className="flex min-h-11 w-full items-center gap-3 rounded-input border border-border bg-surface px-3 py-2 text-start transition-[background-color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] hover:bg-mist active:scale-[0.98]"
+                              >
+                                <span
+                                  className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-[6px] border transition-[background-color,border-color] duration-[var(--duration-base)] ${
+                                    done ? `${colors.accent} border-transparent` : "border-border"
+                                  }`}
+                                >
+                                  {done && <Check className="h-3.5 w-3.5 text-white" aria-hidden="true" />}
+                                </span>
+                                <span className={`text-[14px] ${done ? "text-muted line-through" : "text-ink"}`}>
+                                  {formatNumber(locale, i + 1)}. {ex.label[locale]}
+                                </span>
+                              </button>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  );
+                })()}
               </div>
             )}
           </div>
