@@ -159,7 +159,23 @@ export function ensureContentTables(database: Database.Database = getDb()): void
       updated_at INTEGER NOT NULL DEFAULT (unixepoch() * 1000)
     );
   `);
+  ensureLiveColumns(database);
   contentTablesReady = true;
+}
+
+/**
+ * P9-T2: chapters and lessons can carry a teacher-scheduled Meet link.
+ * Additive and idempotent, same shape as the sessions metadata migration.
+ */
+function ensureLiveColumns(database: Database.Database): void {
+  for (const table of ["chapters", "lessons"] as const) {
+    const names = new Set(
+      (database.prepare(`SELECT name FROM pragma_table_info('${table}')`).all() as { name: string }[])
+        .map((column) => column.name)
+    );
+    if (!names.has("livestream_url")) database.exec(`ALTER TABLE ${table} ADD COLUMN livestream_url TEXT`);
+    if (!names.has("scheduled_at")) database.exec(`ALTER TABLE ${table} ADD COLUMN scheduled_at TEXT`);
+  }
 }
 
 function contentDb(): Database.Database {

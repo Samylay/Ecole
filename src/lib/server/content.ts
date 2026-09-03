@@ -14,7 +14,13 @@ export type CourseInput = {
   studentCount?: number;
   rating?: number;
 };
-export type ChapterInput = { id: string; title: LocalizedText; position?: number };
+export type ChapterInput = {
+  id: string;
+  title: LocalizedText;
+  position?: number;
+  livestreamUrl?: string;
+  scheduledAt?: string;
+};
 export type LessonInput = {
   id: string;
   title: LocalizedText;
@@ -22,6 +28,8 @@ export type LessonInput = {
   videoUrl: string;
   description: LocalizedText;
   position?: number;
+  livestreamUrl?: string;
+  scheduledAt?: string;
 };
 export type QuestionInput = {
   id: string;
@@ -65,6 +73,60 @@ export function listCoursesForOwner(userId: number) {
         : "SELECT * FROM courses WHERE owner_id = ? ORDER BY updated_at DESC"
     )
     .all(...(user.role === "admin" ? [] : [userId]));
+}
+
+/** Full editing payload for one course the caller owns: course + chapters + lessons. */
+export function getCourseTree(courseId: string, userId: number) {
+  assertOwnership(courseId, userId);
+  const db = getContentDb();
+  const course = db.prepare("SELECT * FROM courses WHERE id = ?").get(courseId);
+  const chapters = db
+    .prepare("SELECT * FROM chapters WHERE course_id = ? ORDER BY position, id")
+    .all(courseId);
+  const lessons = db
+    .prepare("SELECT * FROM lessons WHERE course_id = ? ORDER BY position, id")
+    .all(courseId);
+  return { course, chapters, lessons };
+}
+
+export type LiveSession = {
+  scope: "chapter" | "lesson";
+  chapterId: string;
+  lessonId: string | null;
+  livestreamUrl: string;
+  scheduledAt: string | null;
+};
+
+/**
+ * P8-H: live links never ride along in the public catalogue payload. Callers
+ * must have checked enrolment before calling this.
+ */
+export function listLiveSessions(courseId: string): LiveSession[] {
+  const db = getContentDb();
+  const chapters = db
+    .prepare("SELECT id, livestream_url, scheduled_at FROM chapters WHERE course_id = ? AND livestream_url IS NOT NULL")
+    .all(courseId) as { id: string; livestream_url: string; scheduled_at: string | null }[];
+  const lessons = db
+    .prepare(
+      "SELECT chapter_id, id, livestream_url, scheduled_at FROM lessons WHERE course_id = ? AND livestream_url IS NOT NULL"
+    )
+    .all(courseId) as { chapter_id: string; id: string; livestream_url: string; scheduled_at: string | null }[];
+  return [
+    ...chapters.map((row) => ({
+      scope: "chapter" as const,
+      chapterId: row.id,
+      lessonId: null,
+      livestreamUrl: row.livestream_url,
+      scheduledAt: row.scheduled_at,
+    })),
+    ...lessons.map((row) => ({
+      scope: "lesson" as const,
+      chapterId: row.chapter_id,
+      lessonId: row.id,
+      livestreamUrl: row.livestream_url,
+      scheduledAt: row.scheduled_at,
+    })),
+  ];
 }
 
 export function createCourse(userId: number, input: CourseInput) {
@@ -112,16 +174,20 @@ export function deleteCourse(courseId: string, userId: number): void {
 export function createChapter(courseId: string, userId: number, input: ChapterInput) {
   assertOwnership(courseId, userId);
   getContentDb().prepare(
-    "INSERT INTO chapters (course_id, id, title_fr, title_en, title_ar, position) VALUES (?, ?, ?, ?, ?, ?)"
-  ).run(courseId, input.id, input.title.fr, input.title.en, input.title.ar, input.position ?? 0);
+    `INSERT INTO chapters (course_id, id, title_fr, title_en, title_ar, position, livestream_url, scheduled_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+  ).run(courseId, input.id, input.title.fr, input.title.en, input.title.ar, input.position ?? 0,
+    input.livestreamUrl ?? null, input.scheduledAt ?? null);
   return getContentDb().prepare("SELECT * FROM chapters WHERE course_id = ? AND id = ?").get(courseId, input.id);
 }
 
 export function updateChapter(courseId: string, chapterId: string, userId: number, input: Omit<ChapterInput, "id">) {
   assertOwnership(courseId, userId);
   const result = getContentDb().prepare(
-    "UPDATE chapters SET title_fr = ?, title_en = ?, title_ar = ?, position = ? WHERE course_id = ? AND id = ?"
-  ).run(input.title.fr, input.title.en, input.title.ar, input.position ?? 0, courseId, chapterId);
+    `UPDATE chapters SET title_fr = ?, title_en = ?, title_ar = ?, position = ?,
+     livestream_url = ?, scheduled_at = ? WHERE course_id = ? AND id = ?`
+  ).run(input.title.fr, input.title.en, input.title.ar, input.position ?? 0,
+    input.livestreamUrl ?? null, input.scheduledAt ?? null, courseId, chapterId);
   if (!result.changes) throw new Error("chapter_not_found");
   return getContentDb().prepare("SELECT * FROM chapters WHERE course_id = ? AND id = ?").get(courseId, chapterId);
 }
@@ -135,10 +201,11 @@ export function createLesson(courseId: string, chapterId: string, userId: number
   assertOwnership(courseId, userId);
   getContentDb().prepare(`INSERT INTO lessons (
     course_id, chapter_id, id, title_fr, title_en, title_ar, duration, video_url,
-    description_fr, description_en, description_ar, position
-  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+    description_fr, description_en, description_ar, position, livestream_url, scheduled_at
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
     .run(courseId, chapterId, input.id, input.title.fr, input.title.en, input.title.ar,
-      input.duration, input.videoUrl, input.description.fr, input.description.en, input.description.ar, input.position ?? 0);
+      input.duration, input.videoUrl, input.description.fr, input.description.en, input.description.ar,
+      input.position ?? 0, input.livestreamUrl ?? null, input.scheduledAt ?? null);
   return getContentDb().prepare("SELECT * FROM lessons WHERE course_id = ? AND chapter_id = ? AND id = ?")
     .get(courseId, chapterId, input.id);
 }
@@ -146,11 +213,12 @@ export function createLesson(courseId: string, chapterId: string, userId: number
 export function updateLesson(courseId: string, chapterId: string, lessonId: string, userId: number, input: Omit<LessonInput, "id">) {
   assertOwnership(courseId, userId);
   const result = getContentDb().prepare(`UPDATE lessons SET title_fr = ?, title_en = ?, title_ar = ?,
-    duration = ?, video_url = ?, description_fr = ?, description_en = ?, description_ar = ?, position = ?
+    duration = ?, video_url = ?, description_fr = ?, description_en = ?, description_ar = ?, position = ?,
+    livestream_url = ?, scheduled_at = ?
     WHERE course_id = ? AND chapter_id = ? AND id = ?`)
     .run(input.title.fr, input.title.en, input.title.ar, input.duration, input.videoUrl,
       input.description.fr, input.description.en, input.description.ar, input.position ?? 0,
-      courseId, chapterId, lessonId);
+      input.livestreamUrl ?? null, input.scheduledAt ?? null, courseId, chapterId, lessonId);
   if (!result.changes) throw new Error("lesson_not_found");
   return getContentDb().prepare("SELECT * FROM lessons WHERE course_id = ? AND chapter_id = ? AND id = ?")
     .get(courseId, chapterId, lessonId);

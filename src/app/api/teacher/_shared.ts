@@ -42,17 +42,36 @@ function optionalNumber(value: unknown, min: number, max = Number.MAX_SAFE_INTEG
   return value === undefined || (typeof value === "number" && Number.isFinite(value) && value >= min && value <= max);
 }
 
+/** Meet links only: any other host would be a streaming product we deliberately do not run. */
+function optionalMeetUrl(value: unknown): boolean {
+  if (value === undefined || value === null || value === "") return true;
+  if (typeof value !== "string" || value.length > 1000) return false;
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" && (url.hostname === "meet.google.com" || url.hostname.endsWith(".meet.google.com"));
+  } catch {
+    return false;
+  }
+}
+
+function optionalDate(value: unknown): boolean {
+  if (value === undefined || value === null || value === "") return true;
+  return typeof value === "string" && value.length <= 40 && Number.isFinite(Date.parse(value));
+}
+
 export function validChapter(value: unknown, requireId: boolean): value is ChapterInput {
   if (!value || typeof value !== "object" || Array.isArray(value)) return false;
   const v = value as Record<string, unknown>;
-  return (!requireId || text(v.id, 128)) && localized(v.title, 200) && optionalNumber(v.position, 0);
+  return (!requireId || text(v.id, 128)) && localized(v.title, 200) && optionalNumber(v.position, 0) &&
+    optionalMeetUrl(v.livestreamUrl) && optionalDate(v.scheduledAt);
 }
 
 export function validLesson(value: unknown, requireId: boolean): value is LessonInput {
   if (!value || typeof value !== "object" || Array.isArray(value)) return false;
   const v = value as Record<string, unknown>;
   return (!requireId || text(v.id, 128)) && localized(v.title, 200) && text(v.duration, 32) &&
-    text(v.videoUrl, 1000) && localized(v.description, 2000) && optionalNumber(v.position, 0);
+    text(v.videoUrl, 1000) && localized(v.description, 2000) && optionalNumber(v.position, 0) &&
+    optionalMeetUrl(v.livestreamUrl) && optionalDate(v.scheduledAt);
 }
 
 export function contentError(error: unknown) {

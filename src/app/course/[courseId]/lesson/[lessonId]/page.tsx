@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useLocale } from "@/lib/locale-context";
 import { useAuth } from "@/lib/auth-context";
+import { useLiveSessions } from "@/lib/useLiveSessions";
 import { useOverlay } from "@/lib/useOverlay";
 import { rovingTabIndexHandler } from "@/lib/rovingTabIndex";
 import { useToast } from "@/components/Toast";
@@ -138,6 +139,7 @@ export default function LessonPage({
 
   const [completed, setCompleted] = useState(false);
   const [enrolled, setEnrolled] = useState(false);
+  const liveSessions = useLiveSessions(courseId, enrolled);
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
   const [tab, setTab] = useState<Tab>("about");
   const tabListRef = useRef<HTMLDivElement>(null);
@@ -504,13 +506,16 @@ export default function LessonPage({
             </Button>
           </div>
 
-          {enrolled && (
-            <LiveSessionLink
-              livestreamUrl={lesson.livestreamUrl}
-              scheduledAt={lesson.scheduledAt}
-              className="mt-4"
-            />
-          )}
+          {liveSessions
+            .filter((session) => session.lessonId === lessonId)
+            .map((session) => (
+              <LiveSessionLink
+                key={session.lessonId}
+                livestreamUrl={session.livestreamUrl}
+                scheduledAt={session.scheduledAt ?? undefined}
+                className="mt-4"
+              />
+            ))}
 
           {/* Auto-advance banner */}
           {countdown !== null && nextHref && (

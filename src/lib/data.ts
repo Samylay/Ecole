@@ -12,16 +12,12 @@ export type Lesson = {
   // Per-exercise checklist for a worksheet document (e.g. an "exo série" PDF);
   // tracked independently from lesson completion via progress.ts.
   exercises?: { id: string; label: { fr: string; en: string; ar: string } }[];
-  livestreamUrl?: string;
-  scheduledAt?: string;
 };
 
 export type Chapter = {
   id: string;
   title: { fr: string; en: string; ar: string };
   lessons: Lesson[];
-  livestreamUrl?: string;
-  scheduledAt?: string;
 };
 
 export type QuizQuestion = {
@@ -95,15 +91,12 @@ export const courses: Course[] = [
       {
         id: "ch1",
         title: { fr: "Introduction à l'algèbre", en: "Introduction to Algebra", ar: "مقدمة في الجبر" },
-        livestreamUrl: "https://meet.google.com/abc-defg-hij", // ILLUSTRATIVE Meet link pending teacher scheduling UI
         lessons: [
           {
             id: "l1",
             title: { fr: "Qu'est-ce que l'algèbre ?", en: "What is Algebra?", ar: "ما هو الجبر؟" },
             duration: "12:30",
             videoUrl: "https://www.youtube.com/embed/aqz-KE-bpKQ", // ILLUSTRATIVE placeholder (Big Buck Bunny, CC-BY) pending real Algèbre video production — see ROADMAP P3-T2
-            livestreamUrl: "https://meet.google.com/klm-nopq-rst", // ILLUSTRATIVE Meet link
-            scheduledAt: "2026-09-01T17:00:00+02:00", // ILLUSTRATIVE schedule
             description: {
               fr: "Découvrez les concepts fondamentaux de l'algèbre.",
               en: "Discover the fundamental concepts of algebra.",
@@ -116,7 +109,6 @@ export const courses: Course[] = [
             title: { fr: "Variables et constantes", en: "Variables and Constants", ar: "المتغيرات والثوابت" },
             duration: "15:45",
             videoUrl: "https://www.youtube.com/embed/aqz-KE-bpKQ", // ILLUSTRATIVE placeholder (Big Buck Bunny, CC-BY) pending real Algèbre video production — see ROADMAP P3-T2
-            livestreamUrl: "https://meet.google.com/uvw-xyza-bcd", // ILLUSTRATIVE Meet link
             description: {
               fr: "Apprenez à différencier les variables des constantes.",
               en: "Learn to differentiate variables from constants.",

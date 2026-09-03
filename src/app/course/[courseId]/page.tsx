@@ -25,6 +25,7 @@ import { LiveSessionLink } from "@/components/LiveSessionLink";
 import { useToast } from "@/components/Toast";
 import { useLocale } from "@/lib/locale-context";
 import { useAuth } from "@/lib/auth-context";
+import { useLiveSessions } from "@/lib/useLiveSessions";
 import { formatNumber } from "@/lib/i18n";
 import {
   getCourse,
@@ -55,6 +56,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
   const router = useRouter();
   const { showToast } = useToast();
   const [enrolled, setEnrolled] = useState(false);
+  const liveSessions = useLiveSessions(courseId, enrolled);
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
   const [openChapter, setOpenChapter] = useState<string | null>(null);
   const course = getCourse(courseId);
@@ -121,14 +123,6 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
   );
   const masteryPercent = computeCourseMasteryPercent([...chapterMastery.values()]);
   const slug = teacherSlug(course.instructor.name);
-  const liveSessions = course.chapters.flatMap((chapter) => [
-    { key: chapter.id, livestreamUrl: chapter.livestreamUrl, scheduledAt: chapter.scheduledAt },
-    ...chapter.lessons.map((lesson) => ({
-      key: `${chapter.id}-${lesson.id}`,
-      livestreamUrl: lesson.livestreamUrl,
-      scheduledAt: lesson.scheduledAt,
-    })),
-  ]);
 
   const handleEnroll = async () => {
     // T7-1: enrolment is granted server-side; the UI only reflects the answer.
@@ -215,11 +209,11 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
                   </span>
                 </div>
 
-                {enrolled && liveSessions.map((session) => (
+                {liveSessions.map((session) => (
                   <LiveSessionLink
-                    key={session.key}
+                    key={`${session.chapterId}-${session.lessonId ?? "chapter"}`}
                     livestreamUrl={session.livestreamUrl}
-                    scheduledAt={session.scheduledAt}
+                    scheduledAt={session.scheduledAt ?? undefined}
                     className="mt-5"
                   />
                 ))}
