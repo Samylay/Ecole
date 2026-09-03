@@ -554,3 +554,44 @@ SUBSCRIPTION-based, not one-time-per-course:
   authenticated endpoint before real paid courses carry real links (reviewer P1-1)
 - [ ] P8-I: real content production (videos/PDFs) — NEEDS-SAMY
 - [ ] P8-J: legal pages (P4-T4 still open), monitoring probe (P4-T3 still open)
+
+## Phase 9 — Ce que le prof ne peut PAS faire aujourd'hui (constaté 2026-09-03, dans le code)
+
+Samy, 2026-09-03 : « chaque prof alimente ses cours et contenus, ses séries, ses
+vidéos enregistrées ; live + rediffusion par matière ». État réel vérifié dans
+la source, pas dans le roadmap :
+
+- **Backend prof : OK.** `src/app/api/teacher/courses/**` expose le CRUD
+  cours→chapitres→leçons, `src/lib/server/content.ts` vérifie `owner_id` sur
+  chaque écriture (T7-6).
+- **UI prof : inexistante.** `src/app/teacher/` ne contient que le profil
+  public `[slug]`. `src/app/admin/page.tsx` = paiements + création d'élèves,
+  aucun formulaire de contenu. Un prof ne peut rien saisir depuis l'app.
+- **Live :** `src/components/LiveSessionLink.tsx` affiche le bouton "Rejoindre"
+  aux inscrits pendant la fenêtre horaire, mais les 3 liens Meet sont en dur et
+  factices dans `data.ts` (algèbre seulement, commentés ILLUSTRATIVE). Aucune
+  planification possible par un prof.
+- **Rediffusion :** absente. Pas de stockage vidéo, pas d'enregistrement. Le
+  `replay` de `i18n.ts` est le "rejouer" du quiz, sans rapport.
+- **Séries d'exercices :** pas commencées (T7-9).
+
+- [ ] **P9-T1 — Écran prof : CRUD cours/chapitres/leçons** (P8-D, le plus
+  important) — front sur l'API T7-6 existante, scoped aux cours dont le prof
+  est `owner_id`. Trilingue obligatoire (les 3 locales par champ de contenu).
+  Le design system n'a ni table de données ni pattern "zone dangereuse" —
+  voir la revue design de P6-T16 : prévoir un petit ticket design d'abord.
+- [ ] **P9-T2 — Planification live par le prof** — champ `livestreamUrl` +
+  `scheduledAt` éditables depuis P9-T1, remplaçant les liens Meet en dur de
+  `data.ts`. Inclut P8-H : sortir `livestreamUrl` de la réponse publique et le
+  servir derrière un endpoint authentifié, avant que de vrais liens payants y
+  passent.
+- [ ] **P9-T3 — NEEDS-USER : upload de vidéos enregistrées par le prof** —
+  aujourd'hui `videoUrl` est une URL YouTube saisie à la main. Un vrai upload
+  demande un hébergeur (recherche faite : Bunny Stream pour l'upload prof,
+  R2 pour l'egress — `.scratch/live-replay/assets/video-storage-research.md`).
+  Auto-héberger la vidéo derrière le tunnel CF viole la ToS Cloudflare.
+  Décision de Samy : payer un hébergeur vidéo, ou rester sur YouTube non
+  répertorié.
+- [ ] **P9-T4 — Rediffusion par matière** — dépend de P9-T3. Meet n'enregistre
+  pas sans Google Workspace ; à défaut, le prof téléverse son enregistrement
+  et il devient une leçon vidéo du chapitre. NEEDS-USER avec P9-T3.
