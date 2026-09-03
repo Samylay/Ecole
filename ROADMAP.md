@@ -575,12 +575,30 @@ la source, pas dans le roadmap :
   `replay` de `i18n.ts` est le "rejouer" du quiz, sans rapport.
 - **Séries d'exercices :** pas commencées (T7-9).
 
-- [ ] **P9-T1 — Écran prof : CRUD cours/chapitres/leçons** (P8-D, le plus
-  important) — front sur l'API T7-6 existante, scoped aux cours dont le prof
+- [x] **P9-T1 — Écran prof : CRUD cours/chapitres/leçons** (2026-09-03, attendu :
+  `/teacher/manage`, lien navbar pour les rôles teacher/admin. Liste des cours
+  du propriétaire, création/édition/archivage, chapitres et leçons créés,
+  édités et supprimés en ligne, chaque champ de contenu saisi en fr/en/ar via
+  un `LocalizedField` unique, bloc session live par chapitre et par leçon.
+  Nouvelle route `GET /api/teacher/courses/[courseId]` renvoyant l'arbre
+  complet. Vérifié sur DB jetable avec un vrai navigateur : un prof crée cours
+  et chapitre depuis le formulaire, les lignes arrivent avec les trois locales
+  et le lien Meet ; un second prof reçoit 403 en lecture comme en écriture,
+  un élève 403 sur l'API. typecheck + build:verify + 3/3 e2e verts. Les
+  quiz et documents ne sont pas encore éditables — voir P9-T6.)
+  (P8-D, le plus important) — front sur l'API T7-6 existante, scoped aux cours dont le prof
   est `owner_id`. Trilingue obligatoire (les 3 locales par champ de contenu).
   Le design system n'a ni table de données ni pattern "zone dangereuse" —
   voir la revue design de P6-T16 : prévoir un petit ticket design d'abord.
-- [ ] **P9-T2 — Planification live par le prof** — champ `livestreamUrl` +
+- [x] **P9-T2 — Planification live par le prof** (2026-09-03, attendu : colonnes
+  additives `livestream_url`/`scheduled_at` sur `chapters` et `lessons` (ALTER
+  idempotent, sauvegarde de `data/layaida.db` prise avant), éditables depuis
+  P9-T1 ; `GET /api/live/[courseId]` ne les sert qu'à un élève inscrit connecté
+  ou au staff (anon 401, non-inscrit 403, inscrit/prof 200 — vérifié en direct) ;
+  l'API refuse tout hôte autre que meet.google.com ; les 3 liens Meet factices
+  sont retirés de `data.ts` et n'apparaissent plus dans le HTML public ni dans
+  les bundles client. Ferme aussi P8-H.)
+  (remplacé, ancien libellé) — champ `livestreamUrl` +
   `scheduledAt` éditables depuis P9-T1, remplaçant les liens Meet en dur de
   `data.ts`. Inclut P8-H : sortir `livestreamUrl` de la réponse publique et le
   servir derrière un endpoint authentifié, avant que de vrais liens payants y
@@ -595,3 +613,19 @@ la source, pas dans le roadmap :
 - [ ] **P9-T4 — Rediffusion par matière** — dépend de P9-T3. Meet n'enregistre
   pas sans Google Workspace ; à défaut, le prof téléverse son enregistrement
   et il devient une leçon vidéo du chapitre. NEEDS-USER avec P9-T3.
+
+- [ ] **P9-T5 — Les élèves ne voient pas encore ce que le prof saisit** (constaté
+  2026-09-03 en développant P9-T1, le plus important après lui). Tout le front
+  élève lit `src/lib/data.ts` (import statique) : catalogue, dashboard, fiche
+  cours, lecteur, quiz, exam-prep, parent. Les tables `courses/chapters/lessons`
+  ne sont lues par personne côté élève, seulement écrites par l'API prof. Donc
+  un cours créé dans l'espace prof est bien enregistré mais reste invisible.
+  Il faut un chemin de lecture : `GET /api/content` renvoyant le catalogue DB
+  au format `Course[]`, `data.ts` réduit au rôle de seed/repli, et les pages
+  branchées dessus. Contrainte connue : ces pages sont des composants client
+  qui importent `courses` au niveau module, donc prévoir un fournisseur qui
+  remplace le catalogue après hydratation plutôt qu'une réécriture de chaque
+  page. Sans cette tâche, P9-T1 écrit dans le vide.
+- [ ] **P9-T6 — Quiz et documents dans l'espace prof** — `content.ts` a déjà le
+  CRUD (`createQuestion`, `createDocument`...), mais aucune route HTTP ni écran
+  ne l'expose. Suite directe de P9-T1.
