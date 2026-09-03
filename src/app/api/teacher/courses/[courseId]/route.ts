@@ -1,8 +1,17 @@
 import { NextResponse } from "next/server";
-import { deleteCourse, updateCourse } from "@/lib/server/content";
+import { deleteCourse, getCourseTree, updateCourse } from "@/lib/server/content";
 import { authorizeTeacher, contentError, validCourse } from "../../_shared";
 
 type Context = { params: Promise<{ courseId: string }> };
+
+export async function GET(request: Request, context: Context) {
+  const auth = await authorizeTeacher(request);
+  if ("error" in auth) return auth.error;
+  try {
+    const { courseId } = await context.params;
+    return NextResponse.json({ success: true, ...getCourseTree(courseId, auth.user.id) });
+  } catch (error) { return contentError(error); }
+}
 
 export async function PUT(request: Request, context: Context) {
   const auth = await authorizeTeacher(request);

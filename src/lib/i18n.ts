@@ -53,6 +53,7 @@ type TranslationKeys = {
     dashboard: string;
     profile: string;
     admin: string;
+    studio: string;
     signIn: string;
     signUp: string;
   };
@@ -359,6 +360,65 @@ type TranslationKeys = {
     activationSubject: string;
     activationText: string;
   };
+  studio: {
+    title: string;
+    subtitle: string;
+    myCourses: string;
+    newCourse: string;
+    noCoursesTitle: string;
+    noCoursesBody: string;
+    courseIdLabel: string;
+    courseIdHint: string;
+    subject: string;
+    level: string;
+    levelMiddle: string;
+    levelHigh: string;
+    thumbnail: string;
+    instructorName: string;
+    instructorAvatar: string;
+    instructorBio: string;
+    courseTitle: string;
+    courseDescription: string;
+    save: string;
+    create: string;
+    archive: string;
+    archiveTitle: string;
+    archiveBody: string;
+    cancel: string;
+    confirm: string;
+    chapters: string;
+    addChapter: string;
+    chapterTitleLabel: string;
+    lessons: string;
+    addLesson: string;
+    lessonTitleLabel: string;
+    duration: string;
+    videoUrl: string;
+    lessonDescription: string;
+    position: string;
+    liveSection: string;
+    liveUrl: string;
+    liveUrlHint: string;
+    liveSchedule: string;
+    deleteChapter: string;
+    deleteChapterBody: string;
+    deleteLesson: string;
+    deleteLessonBody: string;
+    savedToast: string;
+    createdToast: string;
+    deletedToast: string;
+    archivedToast: string;
+    requestFailed: string;
+    invalidForm: string;
+    idLocked: string;
+    noChapters: string;
+    subjectMath: string;
+    subjectPhysics: string;
+    subjectBiology: string;
+    emptyEditorTitle: string;
+    emptyEditorBody: string;
+    archivedBadge: string;
+  };
   teacher: {
     coursesBy: string;
     students: string;
@@ -586,6 +646,7 @@ const translations: Record<Locale, TranslationKeys> = {
       dashboard: "Tableau de bord",
       profile: "Profil",
       admin: "Administration",
+      studio: "Espace prof",
       signIn: "Connexion",
       signUp: "Inscription",
     },
@@ -614,6 +675,65 @@ const translations: Record<Locale, TranslationKeys> = {
       pending: "En attente",
       activationSubject: "Active ton compte Layaida",
       activationText: "Salam {name} !\n\nTon inscription est confirmée. Active ton compte avec ce lien valable 24 heures :\n{link}\n\nCe lien est personnel et à usage unique.\n\n— Layaida",
+    },
+    studio: {
+      title: "Espace prof",
+      subtitle: "Crée et modifie tes cours, chapitres et leçons dans les trois langues.",
+      myCourses: "Mes cours",
+      newCourse: "Nouveau cours",
+      noCoursesTitle: "Aucun cours pour l'instant",
+      noCoursesBody: "Crée ton premier cours pour commencer à publier des leçons.",
+      courseIdLabel: "Identifiant",
+      courseIdHint: "Minuscules et tirets, par exemple math-algebre-101. Non modifiable ensuite.",
+      subject: "Matière",
+      level: "Niveau",
+      levelMiddle: "Collège",
+      levelHigh: "Lycée",
+      thumbnail: "Vignette (chemin)",
+      instructorName: "Nom de l'enseignant",
+      instructorAvatar: "Avatar (chemin)",
+      instructorBio: "Biographie",
+      courseTitle: "Titre du cours",
+      courseDescription: "Description",
+      save: "Enregistrer",
+      create: "Créer",
+      archive: "Archiver",
+      archiveTitle: "Archiver ce cours ?",
+      archiveBody: "Le cours disparaît de ta liste. Rien n'est supprimé définitivement.",
+      cancel: "Annuler",
+      confirm: "Confirmer",
+      chapters: "Chapitres",
+      addChapter: "Ajouter un chapitre",
+      chapterTitleLabel: "Titre du chapitre",
+      lessons: "Leçons",
+      addLesson: "Ajouter une leçon",
+      lessonTitleLabel: "Titre de la leçon",
+      duration: "Durée",
+      videoUrl: "URL de la vidéo",
+      lessonDescription: "Description de la leçon",
+      position: "Ordre",
+      liveSection: "Session en direct",
+      liveUrl: "Lien Google Meet",
+      liveUrlHint: "Uniquement un lien meet.google.com. Visible seulement par les élèves inscrits.",
+      liveSchedule: "Date et heure",
+      deleteChapter: "Supprimer le chapitre",
+      deleteChapterBody: "Le chapitre et ses leçons seront supprimés.",
+      deleteLesson: "Supprimer la leçon",
+      deleteLessonBody: "Cette leçon sera supprimée.",
+      savedToast: "Modifications enregistrées.",
+      createdToast: "Créé.",
+      deletedToast: "Supprimé.",
+      archivedToast: "Cours archivé.",
+      requestFailed: "L'opération a échoué. Réessaie.",
+      invalidForm: "Remplis les trois langues et les champs obligatoires.",
+      idLocked: "Identifiant figé après création.",
+      noChapters: "Aucun chapitre. Ajoute le premier.",
+      subjectMath: "Mathématiques",
+      subjectPhysics: "Physique",
+      subjectBiology: "Biologie",
+      emptyEditorTitle: "Choisis un cours",
+      emptyEditorBody: "Sélectionne un cours à gauche ou crée-en un nouveau.",
+      archivedBadge: "Archivé",
     },
     home: {
       hero: {
@@ -1140,6 +1260,7 @@ const translations: Record<Locale, TranslationKeys> = {
       dashboard: "Dashboard",
       profile: "Profile",
       admin: "Admin",
+      studio: "Teacher studio",
       signIn: "Sign in",
       signUp: "Sign up",
     },
@@ -1168,6 +1289,65 @@ const translations: Record<Locale, TranslationKeys> = {
       pending: "Pending",
       activationSubject: "Activate your Layaida account",
       activationText: "Salam {name}!\n\nYour registration is confirmed. Activate your account with this link, valid for 24 hours:\n{link}\n\nThis link is personal and can only be used once.\n\n— Layaida",
+    },
+    studio: {
+      title: "Teacher studio",
+      subtitle: "Create and edit your courses, chapters and lessons in all three languages.",
+      myCourses: "My courses",
+      newCourse: "New course",
+      noCoursesTitle: "No courses yet",
+      noCoursesBody: "Create your first course to start publishing lessons.",
+      courseIdLabel: "Identifier",
+      courseIdHint: "Lowercase and dashes, e.g. math-algebra-101. Cannot be changed later.",
+      subject: "Subject",
+      level: "Level",
+      levelMiddle: "Middle school",
+      levelHigh: "High school",
+      thumbnail: "Thumbnail (path)",
+      instructorName: "Instructor name",
+      instructorAvatar: "Avatar (path)",
+      instructorBio: "Biography",
+      courseTitle: "Course title",
+      courseDescription: "Description",
+      save: "Save",
+      create: "Create",
+      archive: "Archive",
+      archiveTitle: "Archive this course?",
+      archiveBody: "The course leaves your list. Nothing is permanently deleted.",
+      cancel: "Cancel",
+      confirm: "Confirm",
+      chapters: "Chapters",
+      addChapter: "Add a chapter",
+      chapterTitleLabel: "Chapter title",
+      lessons: "Lessons",
+      addLesson: "Add a lesson",
+      lessonTitleLabel: "Lesson title",
+      duration: "Duration",
+      videoUrl: "Video URL",
+      lessonDescription: "Lesson description",
+      position: "Order",
+      liveSection: "Live session",
+      liveUrl: "Google Meet link",
+      liveUrlHint: "meet.google.com links only. Visible to enrolled students only.",
+      liveSchedule: "Date and time",
+      deleteChapter: "Delete chapter",
+      deleteChapterBody: "The chapter and its lessons will be deleted.",
+      deleteLesson: "Delete lesson",
+      deleteLessonBody: "This lesson will be deleted.",
+      savedToast: "Changes saved.",
+      createdToast: "Created.",
+      deletedToast: "Deleted.",
+      archivedToast: "Course archived.",
+      requestFailed: "The request failed. Try again.",
+      invalidForm: "Fill in all three languages and the required fields.",
+      idLocked: "Identifier is fixed after creation.",
+      noChapters: "No chapters yet. Add the first one.",
+      subjectMath: "Mathematics",
+      subjectPhysics: "Physics",
+      subjectBiology: "Biology",
+      emptyEditorTitle: "Pick a course",
+      emptyEditorBody: "Select a course on the left or create a new one.",
+      archivedBadge: "Archived",
     },
     home: {
       hero: {
@@ -1694,6 +1874,7 @@ const translations: Record<Locale, TranslationKeys> = {
       dashboard: "لوحة التحكم",
       profile: "الملف الشخصي",
       admin: "الإدارة",
+      studio: "فضاء الأستاذ",
       signIn: "تسجيل الدخول",
       signUp: "إنشاء حساب",
     },
@@ -1722,6 +1903,65 @@ const translations: Record<Locale, TranslationKeys> = {
       pending: "معلّقة",
       activationSubject: "فعّل حسابك في العيايدة",
       activationText: "السلام عليكم {name}!\n\nتم تأكيد تسجيلك. فعّل حسابك عبر هذا الرابط الصالح لمدة 24 ساعة:\n{link}\n\nهذا الرابط شخصي ويُستخدم مرة واحدة فقط.\n\n— العيايدة",
+    },
+    studio: {
+      title: "فضاء الأستاذ",
+      subtitle: "أنشئ دروسك وفصولك وحصصك وعدّلها باللغات الثلاث.",
+      myCourses: "دروسي",
+      newCourse: "درس جديد",
+      noCoursesTitle: "لا توجد دروس بعد",
+      noCoursesBody: "أنشئ درسك الأول لتبدأ بنشر الحصص.",
+      courseIdLabel: "المعرّف",
+      courseIdHint: "حروف صغيرة وشرطات، مثل math-algebra-101. لا يمكن تغييره لاحقاً.",
+      subject: "المادة",
+      level: "المستوى",
+      levelMiddle: "المتوسط",
+      levelHigh: "الثانوي",
+      thumbnail: "الصورة المصغّرة (المسار)",
+      instructorName: "اسم الأستاذ",
+      instructorAvatar: "الصورة الشخصية (المسار)",
+      instructorBio: "نبذة",
+      courseTitle: "عنوان الدرس",
+      courseDescription: "الوصف",
+      save: "حفظ",
+      create: "إنشاء",
+      archive: "أرشفة",
+      archiveTitle: "أرشفة هذا الدرس؟",
+      archiveBody: "سيختفي الدرس من قائمتك. لا شيء يُحذف نهائياً.",
+      cancel: "إلغاء",
+      confirm: "تأكيد",
+      chapters: "الفصول",
+      addChapter: "أضف فصلاً",
+      chapterTitleLabel: "عنوان الفصل",
+      lessons: "الحصص",
+      addLesson: "أضف حصة",
+      lessonTitleLabel: "عنوان الحصة",
+      duration: "المدة",
+      videoUrl: "رابط الفيديو",
+      lessonDescription: "وصف الحصة",
+      position: "الترتيب",
+      liveSection: "بث مباشر",
+      liveUrl: "رابط Google Meet",
+      liveUrlHint: "روابط meet.google.com فقط. يراها الطلبة المسجّلون وحدهم.",
+      liveSchedule: "التاريخ والوقت",
+      deleteChapter: "حذف الفصل",
+      deleteChapterBody: "سيُحذف الفصل وكل حصصه.",
+      deleteLesson: "حذف الحصة",
+      deleteLessonBody: "ستُحذف هذه الحصة.",
+      savedToast: "تم حفظ التعديلات.",
+      createdToast: "تم الإنشاء.",
+      deletedToast: "تم الحذف.",
+      archivedToast: "تمت أرشفة الدرس.",
+      requestFailed: "فشلت العملية. أعد المحاولة.",
+      invalidForm: "املأ اللغات الثلاث والحقول المطلوبة.",
+      idLocked: "المعرّف ثابت بعد الإنشاء.",
+      noChapters: "لا توجد فصول. أضف الأول.",
+      subjectMath: "الرياضيات",
+      subjectPhysics: "الفيزياء",
+      subjectBiology: "علوم الحياة",
+      emptyEditorTitle: "اختر درساً",
+      emptyEditorBody: "اختر درساً من القائمة أو أنشئ درساً جديداً.",
+      archivedBadge: "مؤرشف",
     },
     home: {
       hero: {

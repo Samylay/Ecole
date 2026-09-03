@@ -47,6 +47,9 @@ export function Navbar() {
         { href: "/courses", label: t.nav.courses },
         { href: "/my-courses", label: t.nav.myCourses },
         { href: "/profile", label: t.nav.profile },
+        ...(user.role === "teacher" || user.role === "admin"
+          ? [{ href: "/teacher/manage", label: t.nav.studio }]
+          : []),
         ...(user.role === "admin" ? [{ href: "/admin", label: t.nav.admin }] : []),
       ]
     : [
