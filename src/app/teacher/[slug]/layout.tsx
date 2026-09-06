@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { getTeacher } from "@/lib/data";
+import { getTeacher, teacherSlug } from "@/lib/data";
+import { listPublicCourses } from "@/lib/server/content";
 
 export async function generateMetadata({
   params,
@@ -7,7 +8,11 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const teacher = getTeacher(slug);
+  const publicCourses = listPublicCourses();
+  const taught = publicCourses.filter((course) => teacherSlug(course.instructor.name) === slug);
+  const teacher = taught.length > 0
+    ? { instructor: taught[0].instructor }
+    : getTeacher(slug);
   if (!teacher) return { title: "Enseignant introuvable" };
   return {
     title: teacher.instructor.name,

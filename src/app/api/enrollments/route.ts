@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/server/auth";
 import { listEnrollments, grantEnrollment } from "@/lib/server/db";
 import { isRateLimited, clientIp } from "@/lib/server/rateLimit";
-import { getCourse } from "@/lib/data";
+import { getCourse as getSeedCourse } from "@/lib/data";
+import { isCourseArchived, publicCourseExists } from "@/lib/server/content";
 
 // T7-1: server-authoritative enrolment. GET = the signed-in user's active
 // enrolments (course ids). POST = self-enrol; while courses carry no price
@@ -28,7 +29,10 @@ export async function POST(request: Request) {
     if (typeof body.courseId !== "string" || body.courseId.length === 0 || body.courseId.length > 128) {
       return NextResponse.json({ success: false, error: "invalid_request" }, { status: 400 });
     }
-    const exists = getCourse(body.courseId) !== undefined;
+    if (publicCourseExists(body.courseId)) {
+      return NextResponse.json({ success: false, error: "access_required" }, { status: 403 });
+    }
+    const exists = !isCourseArchived(body.courseId) && getSeedCourse(body.courseId) !== undefined;
     if (!exists) {
       return NextResponse.json({ success: false, error: "unknown_course" }, { status: 404 });
     }

@@ -28,14 +28,12 @@ import { useAuth } from "@/lib/auth-context";
 import { useLiveSessions } from "@/lib/useLiveSessions";
 import { formatNumber } from "@/lib/i18n";
 import {
-  getCourse,
   getCourseExtras,
-  getAllLessons,
-  chapterHasQuiz,
   subjectColors,
   subjectIcons,
   teacherSlug,
 } from "@/lib/data";
+import { useContent } from "@/lib/content-context";
 import {
   computeChapterMastery,
   computeCourseMasteryPercent,
@@ -53,6 +51,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
   const { courseId } = use(params);
   const { locale, t, dir } = useLocale();
   const { user, isLoading } = useAuth();
+  const { getCourse, getAllLessons, chapterHasQuiz, refresh } = useContent();
   const router = useRouter();
   const { showToast } = useToast();
   const [enrolled, setEnrolled] = useState(false);
@@ -70,7 +69,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
     setEnrolled(isEnrolled(courseId));
     setCompletedIds(getCompletedLessonIds(courseId));
     setOpenChapter(getCourse(courseId)?.chapters[0]?.id ?? null);
-  }, [courseId]);
+  }, [courseId, getCourse]);
 
   if (isLoading || !user) {
     return (
@@ -128,6 +127,7 @@ export default function CoursePage({ params }: { params: Promise<{ courseId: str
     // T7-1: enrolment is granted server-side; the UI only reflects the answer.
     const granted = await enroll(courseId);
     if (granted) {
+      await refresh();
       setEnrolled(true);
       showToast(t.course.enrolledToast);
     } else {

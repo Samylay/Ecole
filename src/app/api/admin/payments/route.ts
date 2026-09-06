@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
-import { getCourse } from "@/lib/data";
+import { getCourse as getSeedCourse } from "@/lib/data";
+import { isCourseArchived, publicCourseExists } from "@/lib/server/content";
 import { getCurrentUser } from "@/lib/server/auth";
 import {
   createPayment,
   findUserById,
+  listAccessPlans,
   listPendingPayments,
 } from "@/lib/server/db";
 import { clientIp, isRateLimited } from "@/lib/server/rateLimit";
@@ -43,6 +45,8 @@ export async function POST(request: Request) {
       courseId?: unknown;
       amount?: unknown;
       method?: unknown;
+      programId?: unknown;
+      planId?: unknown;
     };
     if (
       !Number.isInteger(body.userId) ||
@@ -55,7 +59,15 @@ export async function POST(request: Request) {
     ) {
       return NextResponse.json({ success: false, error: "invalid_request" }, { status: 400 });
     }
-    if (!findUserById(body.userId as number) || !getCourse(body.courseId)) {
+    const hasAccessPlan = body.programId !== undefined || body.planId !== undefined;
+    if (
+      hasAccessPlan &&
+      (typeof body.programId !== "string" || body.programId.length === 0 || body.programId.length > 128 ||
+        typeof body.planId !== "string" || !listAccessPlans(body.programId).some((plan) => plan.id === body.planId))
+    ) {
+      return NextResponse.json({ success: false, error: "invalid_access_plan" }, { status: 400 });
+    }
+    if (!findUserById(body.userId as number) || (!publicCourseExists(body.courseId) && (isCourseArchived(body.courseId) || !getSeedCourse(body.courseId)))) {
       return NextResponse.json({ success: false, error: "not_found" }, { status: 404 });
     }
     const payment = createPayment(
@@ -63,7 +75,11 @@ export async function POST(request: Request) {
       body.courseId,
       body.amount as number,
       body.method,
-      auth.admin.id
+      auth.admin.id,
+      hasAccessPlan ? {
+        programId: body.programId as string,
+        planId: body.planId as string,
+      } : undefined
     );
     return NextResponse.json({ success: true, payment }, { status: 201 });
   } catch {

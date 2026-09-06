@@ -1,16 +1,90 @@
 # Roadmap — Ecole (Layaida)
 
-> Executor contract: each night an unattended Sonnet agent (`claude -p`, cwd = this repo) picks the FIRST unchecked task, does ONLY that task, verifies it per the task's Verify note, commits with an `autoloop:` prefix (one logical change per commit, never leave the tree dirty), then ticks the checkbox adding the date and a one-line result, and appends details to ## Log. If verification fails: revert, leave unchecked, add a `BLOCKED:` note. Tasks marked **NEEDS-USER** are decisions/credentials only Samy can provide — never attempt them unattended.
+> Executor contract: each night an unattended Sonnet agent (`claude -p`, cwd = this repo) picks the FIRST unchecked task under **Current execution queue**, does ONLY that task, verifies it per the task's Verify note, commits with an `autoloop:` prefix (one logical change per commit, never leave the tree dirty), then ticks the checkbox adding the date and a one-line result, and appends details to ## Log. If verification fails: revert, leave unchecked, add a `BLOCKED:` note. Tasks marked **NEEDS-USER** are decisions/credentials only Samy can provide — never attempt them unattended. Checkboxes elsewhere are historical evidence, not the active queue.
 
 ## Context for the executor
 
 - **Stack:** Next.js 15 App Router + React 19 + Tailwind CSS 4 + TypeScript + lucide-react. Verification gate: `npm run typecheck && npm run build:verify` (both pass — keep them passing). **Use `build:verify`, never bare `npm run build`.** `ecole.service` runs `next start` from THIS directory and holds the build's chunk manifest in memory; a plain build rewrites `.next` with new content-hashed chunk names and the running process instantly starts serving HTML pointing at files that no longer exist → every chunk 400s → fatal `ChunkLoadError` white screen. That is what broke the live site for four days (P4-T5). `build:verify` builds into the scratch `.next-verify` and leaves the deploy untouched. No test suite yet (see P1-T6).
-- **State (2026-07-08):** the full « Nord Campus » redesign is implemented (see `design/handoff/README.md` — the spec; `DESIGN_PROMPT.md` — the original brief). All screens exist: accueil, auth, onboarding, dashboard, catalogue `/courses`, fiche cours, lecteur, quiz, mes cours, profil, teacher, parent, 404/erreur/offline. Light+dark themes, fr/en/ar with full RTL.
-- **Data model:** still intentionally **mock/local** — courses in `src/lib/data.ts` (trilingual), auth hardcoded in `src/app/api/auth/*`, all learner state per-user in localStorage (`src/lib/progress.ts`). Phase 1 stays mock; Phases 2+ replace it deliberately, task by task.
+- **State (2026-09-06):** the full « Nord Campus » UI is shipped in light/dark,
+  fr/en/ar, and RTL. Real SQLite auth, roles, enrolments, payments, teacher
+  content CRUD, passwordless links, and secured Meet scheduling exist.
+- **Data model:** auth, enrolments, payments, sessions, and teacher-authored content
+  are server-side in SQLite. Learner progress is server-mirrored with an offline
+  local cache. Student content pages still read the static seed in `src/lib/data.ts`;
+  closing that gap is canonical task Q1.
 - **Trilingual rule (never break):** every user-visible string goes through `src/lib/i18n.ts` in all three locales; the `TranslationKeys` type enforces it.
 - **RTL rule:** logical Tailwind utilities only (`ms-/me-/ps-/pe-/start-/end-/text-start/text-end`); directional icons must mirror (`dir === "rtl"` → `-scale-x-100`).
 - **Design rules:** tokens only (no raw hex in components); type scale 30/22/17/15/13 + mono 11; motion 180ms ease-out; touch targets ≥44px; empty states always suggest an action.
 - Never add a dependency unattended — propose as NEEDS-USER.
+
+## Current execution queue (canonical, reviewed 2026-09-06)
+
+- [x] **Q1 / P9-T5 — Serve teacher-authored content to students.** (2026-09-06:
+  added `/api/content`, a hydration-safe seed fallback/provider, DB projections
+  for courses/chapters/lessons/documents/quizzes, archived-course shadowing, and
+  migrated every student consumer; private owner/Meet data is excluded. Combined
+  typecheck, build:verify, and 3/3 e2e pass.) Add a DB
+  read path returning the existing `Course[]` shape and excluding archived courses
+  while making `data.ts` seed/fallback only, and connect every student consumer.
+  Preserve enrolment checks, progress identifiers, SSR/hydration behaviour, all
+  three locales, and RTL. Do not invent publication-state columns; that migration
+  is Q13. Verify with a scratch DB: content created in
+  `/teacher/manage` appears in the catalogue and can be opened by an entitled
+  student; `npm run typecheck && npm run build:verify && npm run test:e2e` pass.
+- [x] **Q2 / P9-T6 — Teacher quiz and document authoring.** (2026-09-06: added
+  ownership-checked question/document routes and complete `/teacher/manage` CRUD;
+  scratch HTTP probes passed create/update/delete, cross-teacher/student 403s, and
+  nested document scope; combined typecheck, build:verify, and 3/3 e2e pass.) Expose the existing
+  ownership-checked CRUD through HTTP and `/teacher/manage`. Preserve course
+  ownership and require all localized text. Verify cross-teacher/student 403s,
+  persistence in a scratch DB, and the standard gate.
+- [x] **Q3 / P8-A — Flexible access-plan foundation.** (2026-09-06: added
+  additive subject programs, plan periods/prices, course mappings, entitlement
+  states, payment coverage metadata, compatibility adapters, and an idempotent
+  legacy backfill. Rehearsed twice on a scratch DB; live DB untouched.) Model
+  subject-program access by academic year with annual, term, monthly, and cash-
+  installment plans; payment periods; active/expired/grace states; and migration/
+  backfill from course enrolments. Do not hard-code the commercial model to monthly.
+  Rehearse on a DB copy before any live migration.
+- [ ] **Q4 / P8-B — Subject pricing and admin controls.** Depends on Q3.
+- [x] **Q5a / P8-C — Expiry-aware access checks.** (2026-09-06: active and grace
+  subject entitlements grant mapped-course access; expired/revoked do not; legacy
+  permanent enrolments remain valid. Scratch probes pass.)
+- [ ] **Q5b — Renewal notices.** Depends on production SMTP and a decided reminder
+  cadence/template.
+- [ ] **Q6 / P8-E — NEEDS-USER: install real SMTP credentials in the service.**
+- [ ] **Q7 / P8-F — NEEDS-USER: create/connect the Chargily account and verify
+  its live sandbox contract.** Cash remains the working fallback.
+- [ ] **Q8 — Launch operations closure.** Set a real contact channel for data
+  rights, confirm the Prometheus target is loaded, and decide validation,
+  error-tracking, and DB-backup cadence/retention.
+- [ ] **Q9 / P9-T3/T4 — NEEDS-USER: choose recorded-video hosting.** Pick managed
+  video upload or unlisted YouTube, then implement subject replay.
+- [ ] **Q10 / P8-I — NEEDS-USER: produce real pilot videos, PDFs, and reviewed
+  quizzes.**
+- [ ] **Q11 / P8-G — Enforce account-sharing policy.** Warn, then email step-up,
+  then lock/recovery, using the existing detection signals.
+- [ ] **Q12 / T7-9 — Exercise sheets, manual grading, then optional OCR.** OCR
+  provider remains a later NEEDS-USER decision.
+- [ ] **Q13 / P6-T15 — NEEDS-USER: approve publication/soft-delete migration.**
+  Add publication state and retention-aware deletion without breaking stable
+  content identifiers or enrolled learners.
+- [x] **Q14 — Academic-stream profile foundation.** (2026-09-06: lycée learners
+  can select/edit a stream through onboarding/profile using existing synced learner
+  state; collège and legacy profiles remain unset; typecheck passes.) Streams:
+  sciences expérimentales, mathématiques,
+  technique mathématique, gestion et économie, lettres et philosophie, langues
+  étrangères.
+- [ ] **Q14b — Connect streams to program discovery and eligibility.** Depends on
+  the Q3 subject-program/access schema. Never hide a valid program solely because a
+  legacy learner has no stream stored.
+- [x] **Q15 — Public sample-resource acquisition MVP.** (2026-09-06: added a
+  trilingual `/resources` route for one clearly identified lycée worksheet, optional
+  consented email, bounded optional referral code, and direct download; it stores
+  nothing and collects no IP/analytics/pixel data; combined gates pass.)
+- [ ] **Q15b — Teacher-managed public resources and consented lead storage.** Let
+  staff attach a public sample to a subject program. Before storing contacts, define
+  purpose, retention, deletion/export, staff access, and consent evidence.
 
 ## Phase 1 — Polish & content depth (mock data, autoloop-safe)
 
@@ -145,7 +219,7 @@ under each are called out explicitly and can proceed without waiting.
 
 ### Payments (`.scratch/payments/MAP.md`)
 
-- [ ] **P6-T3 — NEEDS-USER: pick a collection method** — read
+- [x] **P6-T3 — CLOSED: collection method decided by Phase 7** — cash for staff-assisted enrolment plus Chargily CIB/EDAHABIA for online payment. The cash path shipped in T7-4; Chargily go-live remains tracked once as P8-F. Historical research: read
   `.scratch/payments/MAP.md` and `RESEARCH.md` (done 2026-08-15/17: every
   automated Algerian gateway gates on an RC except Chargily's Test Mode,
   which needs zero documents; CIB/Edahabia cards are domestic-only so the
@@ -186,7 +260,7 @@ under each are called out explicitly and can proceed without waiting.
     cash-payment/activation flow, 2026-08-22, both attended) closed both gaps
     before this task was ever revisited, so the block is now moot rather than
     resolved as originally scoped.
-- [ ] **P6-T5 — NEEDS-USER: online provider integration** — `src/lib/server/
+- [x] **P6-T5 — CLOSED: superseded by P8-F (Chargily go-live)** — `src/lib/server/
   payments/chargily.ts` built and proven offline 2026-08-17 (same pattern as
   LifeOS's `enable-banking.ts`): `buildCheckoutPayload`,
   `verifyChargilyWebhookSignature` (HMAC-SHA256 over the raw body, confirmed
@@ -239,7 +313,7 @@ under each are called out explicitly and can proceed without waiting.
     missing-columns block at the time; T7-8 (2026-08-22, attended) added them
     before this task was ever revisited, so the block is now moot rather than
     resolved as originally scoped.
-- [ ] **P6-T9 — NEEDS-USER: what the step-up factor is** — read
+- [x] **P6-T9 — CLOSED: email step-up selected in the Phase 7 replan** — read
   `.scratch/risk-auth/MAP.md` and `RESEARCH.md` (done 2026-08-15: BAC-week
   shutdowns are real and recurring, ~June 7-11 2026; direct SMTP from the
   homelab cannot reach inboxes at all — structural, not a deliverability risk
@@ -283,7 +357,7 @@ under each are called out explicitly and can proceed without waiting.
 
 ### Teacher back office (absorbs P5-T4/P5-T6, continues `.scratch/live-replay/`)
 
-- [ ] **P6-T11 — NEEDS-USER: `users.role` rebuild to add `teacher`+`admin`**
+- [x] **P6-T11 — CLOSED: implemented by T7-5 (`teacher` + `admin` roles)**
   — SQLite CHECK constraints can't `ALTER`; needs the 12-step table-rebuild
   (create `users_new`, copy rows, drop, rename), on the **live** `users` table
   with `sessions`/`learner_state` FK cascades. First gate for all of Phase 6's
@@ -296,7 +370,7 @@ under each are called out explicitly and can proceed without waiting.
   target, not a passthrough — `src/app/api/auth/signup/route.ts:26` already
   defaults anything unrecognised to `"student"`, verified by probe 2026-08-15
   (`role:"teacher"` came back `"student"`); keep that shape.
-- [ ] **P6-T12 — NEEDS-USER: resolve ticket 02 (content hierarchy)** — confirm
+- [x] **P6-T12 — CLOSED: hierarchy implemented by T7-6** — the shipped mapping is matière/level → course → chapter → lesson; historical proposal: confirm
   or refute the proposed mapping (matière→Subject/Level, série→Course,
   cours→Chapter, vidéo→Lesson, no new entity) in
   `.scratch/live-replay/tickets/02-grilling-content-hierarchy.md`; answer its 3
@@ -325,7 +399,7 @@ under each are called out explicitly and can proceed without waiting.
   bookkeeping closes. `npm run typecheck` passes; no source touched, so
   `build:verify` wasn't re-run — nothing to verify beyond the roadmap edit.)
 - [x] **P6-T14 — Server-side ownership checks on every content write** (2026-09-03: CLOSED, already satisfied by T7-6, no code change — this task's own dependency, P6-T13, is closed. `src/lib/server/content.ts`'s `assertOwnership(courseId, userId)` re-fetches `SELECT owner_id FROM courses WHERE id = ?` and compares to `userId`, throwing `forbidden` on mismatch and returning early for `role === "admin"` (the bypass); every write function — `updateCourse`/`deleteCourse`/`create|update|deleteChapter`/`create|update|deleteLesson`/`create|update|deleteQuestion`/`create|update|deleteDocument` — calls it (or `writer()`, same role gate, for `createCourse`) before touching the DB. Confirmed the `userId` passed in is never client-controlled: every route under `src/app/api/teacher/courses/**` calls `authorizeTeacher(request)` (`src/app/api/teacher/_shared.ts`, session-based via `getCurrentUser()`) and passes `auth.user.id` into these functions — `grep -n "auth.user.id" src/app/api/teacher/courses/**/*.ts` shows this in all 5 route files, no route reads a `userId`/`owner` field from the request body. `npm run typecheck` passes; no source touched, so `build:verify` wasn't re-run — nothing to verify beyond the roadmap edit.)
-- [ ] **P6-T15 — Delete policy: unpublish/archive/hard-delete** — implements
+- **P6-T15 — Moved to canonical queue Q13.** Delete policy: unpublish/archive/hard-delete — implements
   ticket 04's R6 (soft delete + publication states, `deleted_at`, retention
   window before hard delete, object sweep separate from row delete). Depends on
   P6-T2 (needs `enrollments` to answer "is anyone enrolled") and P6-T13.
@@ -348,7 +422,7 @@ under each are called out explicitly and can proceed without waiting.
     CHECK-constrained column) so it can run as an attended ticket, or
     explicitly authorizes an unattended additive migration for this repo.
     No code changed; tree left clean.
-- [ ] **P6-T16 — NEEDS-USER: resolve remaining live-replay tickets** — 03 (chat
+- [x] **P6-T16 — CLOSED: superseded by the Meet-only decision and Phase 9 video tasks** — 03 (chat
   moderation — proposed resolution appended 2026-08-15/17: owning teacher
   only moderates for the pilot, mic-mute and chat-mute are two distinct
   LiveKit calls not one button, three severity tiers map to three distinct
@@ -429,9 +503,6 @@ under each are called out explicitly and can proceed without waiting.
 
 ## Phase 7 — Replan 2026-08-22 (Samy, attended): the real product
 
-Samys directive: build the real school. Teachers input courses, séries
-## Phase 7 — Replan 2026-08-22 (Samy, attended): the real product
-
 Samy's directive: build the real school. Teachers input courses, séries
 d'exercices (later: OCR of handwritten answers), and videos. Livestreams are
 OUT-OF-SCOPE as product features — use Google Meet links per lesson/chapter,
@@ -503,7 +574,7 @@ onboarding, passwordless, and step-up.
   → email notice + step-up via emailed code (T7-2/T7-3). Geo/impossible-travel
   deferred (noisy on Algerian mobile carriers).
 
-- [ ] **T7-9 — Séries d'exercices + OCR (later)** — exercise sheets per
+- **T7-9 — Moved to canonical queue Q12.** Exercise sheets per
   chapter; v1: upload scan, teacher grades manually against it; v2: OCR pass
   (NEEDS-USER: Mathpix vs self-hosted). Depends on T7-6.
 
@@ -515,67 +586,53 @@ Samy is admin (layaida.samy@gmail.com). Password login still works; magic
 links live but emails log to journalctl until SMTP creds are set.
 
 ### New product decision (Samy, 2026-08-22) — pricing model
-Students subscribe per TOPIC/SUBJECT, each subject costs its own monthly
-amount (e.g. math 2000 DZD/mo, physics 1500 DZD/mo). Enrolment is therefore
-SUBSCRIPTION-based, not one-time-per-course:
-- enrolment grants should expire/renew monthly per subject, not per course
+Students buy access per TOPIC/SUBJECT PROGRAM. A program can be sold annually,
+by school term, monthly, or through cash installments. Enrolment is therefore
+time-bound access, not one-time-per-course:
+- entitlement grants expire/renew by subject program, not per individual course
 - a student can hold several active subscriptions at once
 - payments table needs period fields (period_start, period_end or
   months_paid) and a subscription state machine (active/expired/grace)
-- Chargily online flow should create recurring-or-manual-renewal payments;
-  cash path = staff marks N months paid
+- Chargily handles supported online plans; cash path lets staff record an annual,
+  term, monthly, or installment payment
 - access checks must become expiry-aware (enrollments.expires_at)
 
-### Backlog before full release (unprioritized)
-- [ ] P8-A: subscription model migration (enrollments gains expires_at +
+## Product vision and release path (reviewed 2026-09-06)
+
+Layaida is a trilingual Algerian online school, not a generic course marketplace.
+Teachers own and publish structured subject content; students subscribe by subject,
+learn asynchronously, join scheduled Google Meet sessions, practise, and track
+progress. Staff handle accounts, cash payments, pricing, and support. The pilot
+stays operationally simple: homelab + SQLite, passwordless email, cash + Chargily,
+Meet for live teaching, and either unlisted YouTube or a selected managed video
+host for recordings.
+
+Release order:
+1. Close the content loop: teacher-authored DB content must appear for students
+   (P9-T5), then expose quiz/document authoring (P9-T6).
+2. Make access commercial: subject subscriptions, prices, expiry, renewals
+   (P8-A/B/C), then Chargily (P8-F).
+3. Make operations real: SMTP, legal pages, monitoring, backups, and production
+   content (P8-E/I/J plus the remaining P4-T2 operations).
+4. Add recorded-video/replay only after the hosting choice (P9-T3/T4).
+5. Add differentiators after launch: exercise sheets/OCR and sharing enforcement
+   (T7-9, P8-G).
+
+### Backlog before full release (priority order)
+- P8-A: moved to canonical queue Q3; subscription model migration (enrollments gains expires_at +
   subject scoping OR subscriptions table; payments gain period fields)
-- [ ] P8-B: pricing config per subject + admin UI to set/change prices
-- [ ] P8-C: expiry-aware access checks + renewal reminders by email
-- [ ] P8-D: teacher UI on top of T7-6 backend (courses/chapters/lessons CRUD)
-- [ ] P8-E: real SMTP creds in ecole.service env (NEEDS-USER)
-- [ ] P8-F: Chargily integration go-live (contract researched in
+- P8-B: moved to Q4; pricing config per subject + admin UI to set/change prices
+- P8-C: moved to Q5; expiry-aware access checks + renewal reminders by email
+- [x] P8-D: teacher UI on top of T7-6 backend — shipped as P9-T1
+- P8-E: moved to Q6; real SMTP creds in ecole.service env (NEEDS-USER)
+- P8-F: moved to Q7; Chargily integration go-live (contract researched in
   .scratch/payments/chargily-api-contract.md) (NEEDS-USER: account)
-- [ ] P8-G: sharing-detection enforcement (warn → step-up → lock) on top of T7-8 v1
-- [ ] P8-H: replace illustrative Meet links + move livestreamUrl behind an
-  authenticated endpoint before real paid courses carry real links (reviewer P1-1)
-- [ ] P8-I: real content production (videos/PDFs) — NEEDS-SAMY
-- [ ] P8-J: legal pages (P4-T4 still open), monitoring probe (P4-T3 still open)
+- P8-G: moved to Q11; sharing-detection enforcement (warn → step-up → lock) on top of T7-8 v1
+- [x] P8-H: secure real Meet scheduling — shipped as P9-T2
+- P8-I: moved to Q10; real content production (videos/PDFs) — NEEDS-SAMY
+- P8-J: legal pages and monitoring shipped; remaining operational closure is Q8
 
-## ⏸️ PAUSE POINT 2026-08-22 — resume here
-
-State: Phases 1-7 shipped and deployed (see git log; T7-1..T7-8 done incl.
-swarm wave). Live at ecole.samylayaida.com via ecole.service on 127.0.0.1:3002.
-Samy is admin (layaida.samy@gmail.com). Password login still works; magic
-links live but emails log to journalctl until SMTP creds are set.
-
-### New product decision (Samy, 2026-08-22) — pricing model
-Students subscribe per TOPIC/SUBJECT, each subject costs its own monthly
-amount (e.g. math 2000 DZD/mo, physics 1500 DZD/mo). Enrolment is therefore
-SUBSCRIPTION-based, not one-time-per-course:
-- enrolment grants should expire/renew monthly per subject, not per course
-- a student can hold several active subscriptions at once
-- payments table needs period fields (period_start, period_end or
-  months_paid) and a subscription state machine (active/expired/grace)
-- Chargily online flow should create recurring-or-manual-renewal payments;
-  cash path = staff marks N months paid
-- access checks must become expiry-aware (enrollments.expires_at)
-
-### Backlog before full release (unprioritized)
-- [ ] P8-A: subscription model migration (enrollments gains expires_at +
-  subject scoping OR subscriptions table; payments gain period fields)
-- [ ] P8-B: pricing config per subject + admin UI to set/change prices
-- [ ] P8-C: expiry-aware access checks + renewal reminders by email
-- [ ] P8-D: teacher UI on top of T7-6 backend (courses/chapters/lessons CRUD)
-- [ ] P8-E: real SMTP creds in ecole.service env (NEEDS-USER)
-- [ ] P8-F: Chargily integration go-live (contract researched in
-  .scratch/payments/chargily-api-contract.md) (NEEDS-USER: account)
-- [ ] P8-G: sharing-detection enforcement (warn then step-up then lock) on top of T7-8 v1
-- [ ] P8-H: replace illustrative Meet links + move livestreamUrl behind an
-  authenticated endpoint before real paid courses carry real links (reviewer P1-1)
-- [ ] P8-I: real content production (videos/PDFs) — NEEDS-SAMY
-- [ ] P8-J: legal pages (P4-T4 still open), monitoring probe (P4-T3 still open)
-
-## Phase 9 — Ce que le prof ne peut PAS faire aujourd'hui (constaté 2026-09-03, dans le code)
+## Phase 9 — Close the teacher-to-student content loop
 
 Samy, 2026-09-03 : « chaque prof alimente ses cours et contenus, ses séries, ses
 vidéos enregistrées ; live + rediffusion par matière ». État réel vérifié dans
@@ -584,13 +641,10 @@ la source, pas dans le roadmap :
 - **Backend prof : OK.** `src/app/api/teacher/courses/**` expose le CRUD
   cours→chapitres→leçons, `src/lib/server/content.ts` vérifie `owner_id` sur
   chaque écriture (T7-6).
-- **UI prof : inexistante.** `src/app/teacher/` ne contient que le profil
-  public `[slug]`. `src/app/admin/page.tsx` = paiements + création d'élèves,
-  aucun formulaire de contenu. Un prof ne peut rien saisir depuis l'app.
-- **Live :** `src/components/LiveSessionLink.tsx` affiche le bouton "Rejoindre"
-  aux inscrits pendant la fenêtre horaire, mais les 3 liens Meet sont en dur et
-  factices dans `data.ts` (algèbre seulement, commentés ILLUSTRATIVE). Aucune
-  planification possible par un prof.
+- **UI prof : OK pour cours/chapitres/leçons.** `/teacher/manage` pilote le
+  backend avec contrôle de propriété et saisie trilingue (P9-T1).
+- **Live : OK pour le pilote.** Le prof planifie les liens Meet; ils ne sont
+  servis qu'aux inscrits et au staff derrière une API authentifiée (P9-T2).
 - **Rediffusion :** absente. Pas de stockage vidéo, pas d'enregistrement. Le
   `replay` de `i18n.ts` est le "rejouer" du quiz, sans rapport.
 - **Séries d'exercices :** pas commencées (T7-9).
@@ -623,18 +677,18 @@ la source, pas dans le roadmap :
   `data.ts`. Inclut P8-H : sortir `livestreamUrl` de la réponse publique et le
   servir derrière un endpoint authentifié, avant que de vrais liens payants y
   passent.
-- [ ] **P9-T3 — NEEDS-USER : upload de vidéos enregistrées par le prof** —
+- **P9-T3 — Moved to canonical queue Q9.** Upload de vidéos enregistrées par le prof —
   aujourd'hui `videoUrl` est une URL YouTube saisie à la main. Un vrai upload
   demande un hébergeur (recherche faite : Bunny Stream pour l'upload prof,
   R2 pour l'egress — `.scratch/live-replay/assets/video-storage-research.md`).
   Auto-héberger la vidéo derrière le tunnel CF viole la ToS Cloudflare.
   Décision de Samy : payer un hébergeur vidéo, ou rester sur YouTube non
   répertorié.
-- [ ] **P9-T4 — Rediffusion par matière** — dépend de P9-T3. Meet n'enregistre
+- **P9-T4 — Moved to canonical queue Q9.** Rediffusion par matière — dépend de P9-T3. Meet n'enregistre
   pas sans Google Workspace ; à défaut, le prof téléverse son enregistrement
   et il devient une leçon vidéo du chapitre. NEEDS-USER avec P9-T3.
 
-- [ ] **P9-T5 — Les élèves ne voient pas encore ce que le prof saisit** (constaté
+- **P9-T5 — Canonical queue Q1.** Les élèves ne voient pas encore ce que le prof saisit (constaté
   2026-09-03 en développant P9-T1, le plus important après lui). Tout le front
   élève lit `src/lib/data.ts` (import statique) : catalogue, dashboard, fiche
   cours, lecteur, quiz, exam-prep, parent. Les tables `courses/chapters/lessons`
@@ -646,6 +700,6 @@ la source, pas dans le roadmap :
   qui importent `courses` au niveau module, donc prévoir un fournisseur qui
   remplace le catalogue après hydratation plutôt qu'une réécriture de chaque
   page. Sans cette tâche, P9-T1 écrit dans le vide.
-- [ ] **P9-T6 — Quiz et documents dans l'espace prof** — `content.ts` a déjà le
+- **P9-T6 — Canonical queue Q2.** Quiz et documents dans l'espace prof — `content.ts` a déjà le
   CRUD (`createQuestion`, `createDocument`...), mais aucune route HTTP ni écran
   ne l'expose. Suite directe de P9-T1.

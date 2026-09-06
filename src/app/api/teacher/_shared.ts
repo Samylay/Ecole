@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/server/auth";
 import { clientIp, isRateLimited } from "@/lib/server/rateLimit";
-import type { ChapterInput, CourseInput, LessonInput, LocalizedText } from "@/lib/server/content";
+import type { ChapterInput, CourseInput, DocumentInput, LessonInput, LocalizedText, QuestionInput } from "@/lib/server/content";
 
 export async function authorizeTeacher(request: Request) {
   const user = await getCurrentUser();
@@ -59,6 +59,34 @@ function optionalDate(value: unknown): boolean {
   return typeof value === "string" && value.length <= 40 && Number.isFinite(Date.parse(value));
 }
 
+/**
+ * Lessons may be authored before a recording is ready, so an empty URL is
+ * valid. Once present, the player and transcript code only support YouTube
+ * playback. Keep this exact-host allowlist here rather than accepting an
+ * arbitrary iframe destination from a teacher-controlled field.
+ */
+function optionalVideoUrl(value: unknown): boolean {
+  if (value === undefined || value === null) return true;
+  if (typeof value !== "string" || value.length > 1000) return false;
+  if (value.trim() === "") return true;
+  let url: URL;
+  try {
+    url = new URL(value);
+  } catch {
+    return false;
+  }
+  if (url.protocol !== "https:" || url.username || url.password || url.port) return false;
+
+  const host = url.hostname.toLowerCase();
+  if (host === "youtu.be") return /^\/[^/?#]+$/.test(url.pathname);
+  if (host === "www.youtube-nocookie.com" || host === "youtube-nocookie.com") {
+    return /^\/embed\/[^/?#]+$/.test(url.pathname);
+  }
+  if (host !== "youtube.com" && host !== "www.youtube.com" && host !== "m.youtube.com") return false;
+  if (url.pathname === "/watch") return Boolean(url.searchParams.get("v"));
+  return /^\/(?:embed|shorts|live)\/[^/?#]+$/.test(url.pathname);
+}
+
 export function validChapter(value: unknown, requireId: boolean): value is ChapterInput {
   if (!value || typeof value !== "object" || Array.isArray(value)) return false;
   const v = value as Record<string, unknown>;
@@ -70,8 +98,37 @@ export function validLesson(value: unknown, requireId: boolean): value is Lesson
   if (!value || typeof value !== "object" || Array.isArray(value)) return false;
   const v = value as Record<string, unknown>;
   return (!requireId || text(v.id, 128)) && localized(v.title, 200) && text(v.duration, 32) &&
-    text(v.videoUrl, 1000) && localized(v.description, 2000) && optionalNumber(v.position, 0) &&
+    typeof v.videoUrl === "string" && optionalVideoUrl(v.videoUrl) && localized(v.description, 2000) && optionalNumber(v.position, 0) &&
     optionalMeetUrl(v.livestreamUrl) && optionalDate(v.scheduledAt);
+}
+
+export function validQuestion(value: unknown, requireId: boolean): value is QuestionInput {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+  const v = value as Record<string, unknown>;
+  const options = v.options;
+  return (!requireId || text(v.id, 128)) && text(v.lessonId, 128) && localized(v.question, 2000) &&
+    Array.isArray(options) && options.length >= 2 && options.length <= 6 &&
+    options.every((option) => localized(option, 500)) &&
+    typeof v.correctIndex === "number" && Number.isInteger(v.correctIndex) &&
+    v.correctIndex >= 0 && v.correctIndex < options.length && localized(v.explanation, 2000) &&
+    optionalNumber(v.position, 0);
+}
+
+function validDocumentUrl(value: unknown): boolean {
+  if (typeof value !== "string" || value.trim().length === 0 || value.length > 2000) return false;
+  if (value.startsWith("/")) return !value.startsWith("//");
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+export function validDocument(value: unknown): value is DocumentInput {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+  const v = value as Record<string, unknown>;
+  return text(v.name, 300) && validDocumentUrl(v.url) && optionalNumber(v.position, 0);
 }
 
 export function contentError(error: unknown) {

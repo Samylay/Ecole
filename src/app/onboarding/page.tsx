@@ -7,11 +7,12 @@ import { useLocale } from "@/lib/locale-context";
 import { useAuth } from "@/lib/auth-context";
 import { useToast } from "@/components/Toast";
 import { Button } from "@/components/Button";
-import { setPrefs } from "@/lib/progress";
+import { ACADEMIC_STREAMS, AcademicStream, setPrefs } from "@/lib/progress";
 import { subjectColors, subjectIcons, Subject } from "@/lib/data";
 import { rovingTabIndexHandler } from "@/lib/rovingTabIndex";
 
 const GRADES = ["sixieme", "cinquieme", "quatrieme", "troisieme", "seconde", "premiere", "terminale"] as const;
+const HIGH_GRADES = ["seconde", "premiere", "terminale"] as const;
 const SUBJECTS: Subject[] = ["math", "physics", "biology"];
 const GOALS = [
   { id: "light", target: 2 },
@@ -27,11 +28,14 @@ export default function OnboardingPage() {
 
   const [step, setStep] = useState(0);
   const [grade, setGrade] = useState<string>("troisieme");
+  const [academicStream, setAcademicStream] = useState<AcademicStream | undefined>(undefined);
   const [subjects, setSubjects] = useState<Subject[]>([...SUBJECTS]);
   const [goal, setGoal] = useState<(typeof GOALS)[number]["id"]>("regular");
   const [reminders, setReminders] = useState(true);
   const gradeGroupRef = useRef<HTMLDivElement>(null);
   const goalGroupRef = useRef<HTMLDivElement>(null);
+
+  const isHighGrade = HIGH_GRADES.includes(grade as (typeof HIGH_GRADES)[number]);
 
   useEffect(() => {
     if (!isLoading && !user) router.replace("/signin");
@@ -44,6 +48,7 @@ export default function OnboardingPage() {
     setPrefs({
       grade: useDefaults ? "troisieme" : grade,
       subjects: useDefaults ? [...SUBJECTS] : subjects.length ? subjects : [...SUBJECTS],
+      academicStream: useDefaults || !isHighGrade ? undefined : academicStream,
       weeklyGoal: target,
       reminders: useDefaults ? true : reminders,
       onboarded: true,
@@ -54,6 +59,11 @@ export default function OnboardingPage() {
 
   const toggleSubject = (s: Subject) => {
     setSubjects((prev) => (prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]));
+  };
+
+  const selectGrade = (nextGrade: string) => {
+    setGrade(nextGrade);
+    if (!HIGH_GRADES.includes(nextGrade as (typeof HIGH_GRADES)[number])) setAcademicStream(undefined);
   };
 
   const stepTitles = [
@@ -94,33 +104,57 @@ export default function OnboardingPage() {
 
           {/* Step 1 — classe */}
           {step === 0 && (
-            <div
-              ref={gradeGroupRef}
-              className="mt-6 grid grid-cols-2 gap-3"
-              role="radiogroup"
-              aria-label={t.onboarding.classTitle}
-              onKeyDown={rovingTabIndexHandler(gradeGroupRef, '[role="radio"]', (i) => setGrade(GRADES[i]), dir)}
-            >
-              {GRADES.map((g) => {
-                const active = grade === g;
-                return (
-                  <button
-                    key={g}
-                    role="radio"
-                    aria-checked={active}
-                    tabIndex={active ? 0 : -1}
-                    onClick={() => setGrade(g)}
-                    className={`min-h-11 rounded-input border-[1.5px] px-4 py-3 text-start text-[15px] font-medium transition-[border-color,background-color,color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] active:scale-[0.98] ${
-                      active
-                        ? "border-primary bg-primary-soft/50 text-ink"
-                        : "border-mist text-slate hover:border-faint"
-                    }`}
-                  >
-                    {t.grades[g]}
-                  </button>
-                );
-              })}
-            </div>
+            <>
+              <div
+                ref={gradeGroupRef}
+                className="mt-6 grid grid-cols-2 gap-3"
+                role="radiogroup"
+                aria-label={t.onboarding.classTitle}
+                onKeyDown={rovingTabIndexHandler(gradeGroupRef, '[role="radio"]', (i) => selectGrade(GRADES[i]), dir)}
+              >
+                {GRADES.map((g) => {
+                  const active = grade === g;
+                  return (
+                    <button
+                      key={g}
+                      role="radio"
+                      aria-checked={active}
+                      tabIndex={active ? 0 : -1}
+                      onClick={() => selectGrade(g)}
+                      className={`min-h-11 rounded-input border-[1.5px] px-4 py-3 text-start text-[15px] font-medium transition-[border-color,background-color,color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] active:scale-[0.98] ${
+                        active
+                          ? "border-primary bg-primary-soft/50 text-ink"
+                          : "border-mist text-slate hover:border-faint"
+                      }`}
+                    >
+                      {t.grades[g]}
+                    </button>
+                  );
+                })}
+              </div>
+              {isHighGrade && <div className="mt-8">
+                <h2 className="text-[17px] font-semibold text-ink">{t.onboarding.streamTitle}</h2>
+                <p className="mt-1 text-[13px] text-muted">{t.onboarding.streamSubtitle}</p>
+                <div className="mt-3 grid gap-2 sm:grid-cols-2" role="radiogroup" aria-label={t.onboarding.streamTitle}>
+                  {ACADEMIC_STREAMS.map((stream) => {
+                    const active = academicStream === stream;
+                    return (
+                      <button
+                        key={stream}
+                        role="radio"
+                        aria-checked={active}
+                        onClick={() => setAcademicStream(stream)}
+                        className={`min-h-11 rounded-input border-[1.5px] px-3 py-2 text-start text-[13px] font-medium transition-[border-color,background-color,color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] active:scale-[0.98] ${
+                          active ? "border-primary bg-primary-soft/50 text-ink" : "border-mist text-slate hover:border-faint"
+                        }`}
+                      >
+                        {t.academicStreams[stream]}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>}
+            </>
           )}
 
           {/* Step 2 — matières (multi) */}

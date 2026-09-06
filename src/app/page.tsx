@@ -10,12 +10,14 @@ import { CourseCard } from "@/components/CourseCard";
 import { useLocale } from "@/lib/locale-context";
 import { useAuth } from "@/lib/auth-context";
 import { formatNumber } from "@/lib/i18n";
-import { courses, subjectColors, subjectIcons, Subject } from "@/lib/data";
+import { subjectColors, subjectIcons, Subject } from "@/lib/data";
+import { useContent } from "@/lib/content-context";
 
 const subjects: Subject[] = ["math", "physics", "biology"];
 
 export default function HomePage() {
   const { t, locale, dir } = useLocale();
+  const { courses } = useContent();
   const { user, isLoading } = useAuth();
   const router = useRouter();
 

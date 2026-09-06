@@ -11,7 +11,8 @@ import { ButtonLink } from "@/components/Button";
 import { Segmented } from "@/components/Tabs";
 import { useLocale } from "@/lib/locale-context";
 import { useAuth } from "@/lib/auth-context";
-import { getCourse, getAllLessons, Course } from "@/lib/data";
+import { Course } from "@/lib/data";
+import { useContent } from "@/lib/content-context";
 import { getEnrolledCourseIds, getCompletedLessonIds, migrateLegacyProgress } from "@/lib/progress";
 
 type TabValue = "inProgress" | "completed";
@@ -19,6 +20,7 @@ type EnrolledCourse = { course: Course; progress: number };
 
 export default function MyCoursesPage() {
   const { t } = useLocale();
+  const { getCourse, getAllLessons } = useContent();
   const { user, isLoading } = useAuth();
   const router = useRouter();
   const [tab, setTab] = useState<TabValue>("inProgress");
@@ -40,7 +42,7 @@ export default function MyCoursesPage() {
         return { course, progress: total ? Math.round((done / total) * 100) : 0 };
       });
     setEnrolled(items);
-  }, [user]);
+  }, [user, getCourse, getAllLessons]);
 
   if (isLoading || !user || enrolled === null) {
     return (

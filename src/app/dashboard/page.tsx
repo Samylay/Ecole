@@ -13,7 +13,8 @@ import { ButtonLink } from "@/components/Button";
 import { useLocale } from "@/lib/locale-context";
 import { useAuth } from "@/lib/auth-context";
 import { formatNumber } from "@/lib/i18n";
-import { courses, getCourse, getLesson, getAllLessons, subjectColors, subjectIcons, Subject } from "@/lib/data";
+import { subjectColors, subjectIcons, Subject } from "@/lib/data";
+import { useContent } from "@/lib/content-context";
 import {
   migrateLegacyProgress,
   getEnrolledCourseIds,
@@ -49,6 +50,7 @@ type DashState = {
 
 export default function DashboardPage() {
   const { t, locale, dir } = useLocale();
+  const { courses, getCourse, getLesson, getAllLessons } = useContent();
   const { user, isLoading } = useAuth();
   const router = useRouter();
   const [state, setState] = useState<DashState | null>(null);
@@ -128,7 +130,7 @@ export default function DashboardPage() {
       courseMastery,
       wrongCount: wrongQuestions.length,
     });
-  }, [user, router]);
+  }, [user, router, getCourse, getAllLessons]);
 
   if (isLoading || !user || !state) {
     return (

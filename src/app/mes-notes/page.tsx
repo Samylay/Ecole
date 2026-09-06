@@ -10,7 +10,7 @@ import { EmptyState } from "@/components/EmptyState";
 import { ButtonLink } from "@/components/Button";
 import { useAuth } from "@/lib/auth-context";
 import { useLocale } from "@/lib/locale-context";
-import { courses } from "@/lib/data";
+import { useContent } from "@/lib/content-context";
 import { CourseLessonNote, getAllNotes, migrateLegacyProgress } from "@/lib/progress";
 
 function secondsFromTimestamp(timestamp: string): number {
@@ -22,6 +22,7 @@ function secondsFromTimestamp(timestamp: string): number {
 export default function NotesPage() {
   const { user, isLoading } = useAuth();
   const { locale, t } = useLocale();
+  const { courses } = useContent();
   const router = useRouter();
   const [notes, setNotes] = useState<CourseLessonNote[] | null>(null);
   const [courseFilter, setCourseFilter] = useState("all");
@@ -47,12 +48,12 @@ export default function NotesPage() {
         if (!chapter || !lesson) return [];
         return [{ note, course, chapter, lesson }];
       }),
-    [notes],
+    [notes, courses],
   );
 
   const availableCourses = useMemo(
     () => courses.filter((course) => noteDetails.some((item) => item.course.id === course.id)),
-    [noteDetails],
+    [noteDetails, courses],
   );
   const availableChapters = useMemo(() => {
     const seen = new Set<string>();

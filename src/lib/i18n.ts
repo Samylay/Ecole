@@ -56,6 +56,7 @@ type TranslationKeys = {
     studio: string;
     signIn: string;
     signUp: string;
+    resources: string;
   };
   home: {
     hero: {
@@ -237,6 +238,41 @@ type TranslationKeys = {
     start: string;
     welcomeToast: string;
     lessonsPerWeek: string;
+    streamTitle: string;
+    streamSubtitle: string;
+  };
+  academicStreams: {
+    sciences_experimentales: string;
+    mathematiques: string;
+    technique_mathematique: string;
+    gestion_economie: string;
+    lettres_philosophie: string;
+    langues_etrangeres: string;
+  };
+  resources: {
+    navLabel: string;
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    chooseLevel: string;
+    chooseStream: string;
+    levelMiddle: string;
+    levelHigh: string;
+    download: string;
+    downloadHint: string;
+    resourceTitle: string;
+    resourceDescription: string;
+    optionalContact: string;
+    emailLabel: string;
+    emailHint: string;
+    consentLabel: string;
+    referralLabel: string;
+    referralHint: string;
+    privacyNote: string;
+    readyTitle: string;
+    readyBody: string;
+    validationEmail: string;
+    validationReferral: string;
   };
   dashboard: {
     greeting: string;
@@ -390,11 +426,32 @@ type TranslationKeys = {
     addChapter: string;
     chapterTitleLabel: string;
     lessons: string;
+    noLessons: string;
     addLesson: string;
     lessonTitleLabel: string;
     duration: string;
     videoUrl: string;
     lessonDescription: string;
+    questions: string;
+    addQuestion: string;
+    noQuestions: string;
+    questionIdLabel: string;
+    questionLabel: string;
+    optionLabel: string;
+    addOption: string;
+    removeOption: string;
+    correctOption: string;
+    explanation: string;
+    deleteQuestion: string;
+    deleteQuestionBody: string;
+    documents: string;
+    addDocument: string;
+    noDocuments: string;
+    documentName: string;
+    documentUrl: string;
+    documentUrlHint: string;
+    deleteDocument: string;
+    deleteDocumentBody: string;
     position: string;
     liveSection: string;
     liveUrl: string;
@@ -649,6 +706,7 @@ const translations: Record<Locale, TranslationKeys> = {
       studio: "Espace prof",
       signIn: "Connexion",
       signUp: "Inscription",
+      resources: "Ressources",
     },
     admin: {
       title: "Administration",
@@ -706,11 +764,32 @@ const translations: Record<Locale, TranslationKeys> = {
       addChapter: "Ajouter un chapitre",
       chapterTitleLabel: "Titre du chapitre",
       lessons: "Leçons",
+      noLessons: "Enregistre une leçon avant d'ajouter une question.",
       addLesson: "Ajouter une leçon",
       lessonTitleLabel: "Titre de la leçon",
       duration: "Durée",
       videoUrl: "URL de la vidéo",
       lessonDescription: "Description de la leçon",
+      questions: "Questions du quiz",
+      addQuestion: "Ajouter une question",
+      noQuestions: "Aucune question. Ajoute la première.",
+      questionIdLabel: "Identifiant de la question",
+      questionLabel: "Question",
+      optionLabel: "Option",
+      addOption: "Ajouter une option",
+      removeOption: "Retirer l'option",
+      correctOption: "Bonne réponse",
+      explanation: "Explication",
+      deleteQuestion: "Supprimer la question",
+      deleteQuestionBody: "Cette question et sa correction seront supprimées.",
+      documents: "Documents de la leçon",
+      addDocument: "Ajouter un document",
+      noDocuments: "Aucun document. Ajoute une fiche ou un exercice.",
+      documentName: "Nom du document",
+      documentUrl: "URL du document",
+      documentUrlHint: "Chemin local ou lien HTTPS vers un PDF ou une fiche.",
+      deleteDocument: "Supprimer le document",
+      deleteDocumentBody: "Ce document sera supprimé.",
       position: "Ordre",
       liveSection: "Session en direct",
       liveUrl: "Lien Google Meet",
@@ -916,6 +995,41 @@ const translations: Record<Locale, TranslationKeys> = {
       start: "C'est parti !",
       welcomeToast: "Bienvenue sur Layaida ! Ton espace est prêt.",
       lessonsPerWeek: "leçons / semaine",
+      streamTitle: "Ta filière scolaire",
+      streamSubtitle: "On utilise ta filière pour mieux orienter les ressources.",
+    },
+    academicStreams: {
+      sciences_experimentales: "Sciences expérimentales",
+      mathematiques: "Mathématiques",
+      technique_mathematique: "Technique mathématique",
+      gestion_economie: "Gestion et économie",
+      lettres_philosophie: "Lettres et philosophie",
+      langues_etrangeres: "Langues étrangères",
+    },
+    resources: {
+      navLabel: "Ressources gratuites",
+      eyebrow: "Un support pour tes révisions",
+      title: "Commence par une fiche claire",
+      subtitle: "Choisis ton niveau et ta filière pour télécharger un support de révision Layaida, sans compte obligatoire.",
+      chooseLevel: "Ton niveau",
+      chooseStream: "Ta filière",
+      levelMiddle: "Collège",
+      levelHigh: "Lycée",
+      download: "Télécharger la fiche PDF",
+      downloadHint: "Le téléchargement démarre directement. Aucun pixel, aucune adresse IP enregistrée.",
+      resourceTitle: "Fonctions exponentielles — exercices",
+      resourceDescription: "Une fiche illustrative avec rappels, exercices et espace de travail.",
+      optionalContact: "Recevoir les prochaines ressources (facultatif)",
+      emailLabel: "Adresse e-mail (facultatif)",
+      emailHint: "Elle n'est pas enregistrée dans cette version. Elle serait utilisée uniquement avec ton accord.",
+      consentLabel: "J'accepte de recevoir des ressources pédagogiques par e-mail.",
+      referralLabel: "Code de recommandation (facultatif)",
+      referralHint: "8 caractères maximum, lettres et chiffres uniquement.",
+      privacyNote: "Tes choix restent dans ton navigateur pour ce téléchargement. Nous ne vendons pas tes données et ne collectons pas ton adresse IP.",
+      readyTitle: "Ta fiche est prête",
+      readyBody: "Merci. Tu peux télécharger le support quand tu veux.",
+      validationEmail: "Entre une adresse e-mail valide ou laisse le champ vide.",
+      validationReferral: "Le code doit contenir 8 caractères maximum, lettres et chiffres uniquement.",
     },
     dashboard: {
       greeting: "Salut",
@@ -1263,6 +1377,7 @@ const translations: Record<Locale, TranslationKeys> = {
       studio: "Teacher studio",
       signIn: "Sign in",
       signUp: "Sign up",
+      resources: "Resources",
     },
     admin: {
       title: "Administration",
@@ -1320,11 +1435,32 @@ const translations: Record<Locale, TranslationKeys> = {
       addChapter: "Add a chapter",
       chapterTitleLabel: "Chapter title",
       lessons: "Lessons",
+      noLessons: "Save a lesson before adding a question.",
       addLesson: "Add a lesson",
       lessonTitleLabel: "Lesson title",
       duration: "Duration",
       videoUrl: "Video URL",
       lessonDescription: "Lesson description",
+      questions: "Quiz questions",
+      addQuestion: "Add a question",
+      noQuestions: "No questions yet. Add the first one.",
+      questionIdLabel: "Question identifier",
+      questionLabel: "Question",
+      optionLabel: "Option",
+      addOption: "Add an option",
+      removeOption: "Remove option",
+      correctOption: "Correct answer",
+      explanation: "Explanation",
+      deleteQuestion: "Delete question",
+      deleteQuestionBody: "This question and its explanation will be deleted.",
+      documents: "Lesson documents",
+      addDocument: "Add a document",
+      noDocuments: "No documents yet. Add a handout or exercise.",
+      documentName: "Document name",
+      documentUrl: "Document URL",
+      documentUrlHint: "A local path or HTTPS link to a PDF or handout.",
+      deleteDocument: "Delete document",
+      deleteDocumentBody: "This document will be deleted.",
       position: "Order",
       liveSection: "Live session",
       liveUrl: "Google Meet link",
@@ -1530,6 +1666,41 @@ const translations: Record<Locale, TranslationKeys> = {
       start: "Let's go!",
       welcomeToast: "Welcome to Layaida! Your space is ready.",
       lessonsPerWeek: "lessons / week",
+      streamTitle: "Your academic stream",
+      streamSubtitle: "We use it to guide you to more relevant resources.",
+    },
+    academicStreams: {
+      sciences_experimentales: "Experimental sciences",
+      mathematiques: "Mathematics",
+      technique_mathematique: "Mathematical technology",
+      gestion_economie: "Management and economics",
+      lettres_philosophie: "Literature and philosophy",
+      langues_etrangeres: "Foreign languages",
+    },
+    resources: {
+      navLabel: "Free resources",
+      eyebrow: "A useful revision sheet",
+      title: "Start with a clear study sheet",
+      subtitle: "Choose your level and stream to download a Layaida revision resource, with no account required.",
+      chooseLevel: "Your level",
+      chooseStream: "Your stream",
+      levelMiddle: "Middle school",
+      levelHigh: "High school",
+      download: "Download the PDF sheet",
+      downloadHint: "The download starts directly. No pixels and no IP address collection.",
+      resourceTitle: "Exponential functions — exercises",
+      resourceDescription: "An illustrative sheet with reminders, exercises, and workspace.",
+      optionalContact: "Receive future resources (optional)",
+      emailLabel: "Email address (optional)",
+      emailHint: "It is not saved in this version. It would only be used with your consent.",
+      consentLabel: "I agree to receive educational resources by email.",
+      referralLabel: "Referral code (optional)",
+      referralHint: "Up to 8 letters or numbers.",
+      privacyNote: "Your choices stay in this browser for this download. We do not sell your data or collect your IP address.",
+      readyTitle: "Your sheet is ready",
+      readyBody: "Thanks. Download the resource whenever you are ready.",
+      validationEmail: "Enter a valid email or leave the field empty.",
+      validationReferral: "The code can contain up to 8 letters or numbers.",
     },
     dashboard: {
       greeting: "Hi",
@@ -1877,6 +2048,7 @@ const translations: Record<Locale, TranslationKeys> = {
       studio: "فضاء الأستاذ",
       signIn: "تسجيل الدخول",
       signUp: "إنشاء حساب",
+      resources: "الموارد",
     },
     admin: {
       title: "الإدارة",
@@ -1934,11 +2106,32 @@ const translations: Record<Locale, TranslationKeys> = {
       addChapter: "أضف فصلاً",
       chapterTitleLabel: "عنوان الفصل",
       lessons: "الحصص",
+      noLessons: "احفظ حصة قبل إضافة سؤال.",
       addLesson: "أضف حصة",
       lessonTitleLabel: "عنوان الحصة",
       duration: "المدة",
       videoUrl: "رابط الفيديو",
       lessonDescription: "وصف الحصة",
+      questions: "أسئلة الاختبار",
+      addQuestion: "أضف سؤالاً",
+      noQuestions: "لا توجد أسئلة بعد. أضف الأول.",
+      questionIdLabel: "معرّف السؤال",
+      questionLabel: "السؤال",
+      optionLabel: "الخيار",
+      addOption: "أضف خياراً",
+      removeOption: "احذف الخيار",
+      correctOption: "الإجابة الصحيحة",
+      explanation: "الشرح",
+      deleteQuestion: "حذف السؤال",
+      deleteQuestionBody: "سيُحذف هذا السؤال وشرحه.",
+      documents: "وثائق الحصة",
+      addDocument: "أضف وثيقة",
+      noDocuments: "لا توجد وثائق بعد. أضف ملخصاً أو تمريناً.",
+      documentName: "اسم الوثيقة",
+      documentUrl: "رابط الوثيقة",
+      documentUrlHint: "مسار محلي أو رابط HTTPS لملف PDF أو ورقة.",
+      deleteDocument: "حذف الوثيقة",
+      deleteDocumentBody: "ستُحذف هذه الوثيقة.",
       position: "الترتيب",
       liveSection: "بث مباشر",
       liveUrl: "رابط Google Meet",
@@ -2144,6 +2337,41 @@ const translations: Record<Locale, TranslationKeys> = {
       start: "هيا بنا!",
       welcomeToast: "مرحباً بك في العيايدة! مساحتك جاهزة.",
       lessonsPerWeek: "حصص / أسبوع",
+      streamTitle: "شعبتك الدراسية",
+      streamSubtitle: "نستخدمها لتوجيهك نحو الموارد الأنسب.",
+    },
+    academicStreams: {
+      sciences_experimentales: "علوم تجريبية",
+      mathematiques: "رياضيات",
+      technique_mathematique: "تقني رياضي",
+      gestion_economie: "تسيير واقتصاد",
+      lettres_philosophie: "آداب وفلسفة",
+      langues_etrangeres: "لغات أجنبية",
+    },
+    resources: {
+      navLabel: "موارد مجانية",
+      eyebrow: "ورقة مفيدة للمراجعة",
+      title: "ابدأ بملخص واضح",
+      subtitle: "اختر مستواك وشعبتك لتحميل مورد مراجعة من العيايدة، دون الحاجة إلى إنشاء حساب.",
+      chooseLevel: "مستواك",
+      chooseStream: "شعبتك",
+      levelMiddle: "متوسط",
+      levelHigh: "ثانوي",
+      download: "تحميل ورقة PDF",
+      downloadHint: "يبدأ التحميل مباشرة. لا نستخدم بكسلات التتبع ولا نجمع عنوان IP.",
+      resourceTitle: "الدوال الأسية — تمارين",
+      resourceDescription: "ورقة تجريبية تتضمن تذكيرات وتمارين ومساحة للعمل.",
+      optionalContact: "تلقي الموارد القادمة (اختياري)",
+      emailLabel: "البريد الإلكتروني (اختياري)",
+      emailHint: "لا يتم حفظه في هذه النسخة. سيُستخدم فقط بموافقتك.",
+      consentLabel: "أوافق على تلقي موارد تعليمية عبر البريد الإلكتروني.",
+      referralLabel: "رمز الإحالة (اختياري)",
+      referralHint: "8 أحرف أو أرقام كحد أقصى.",
+      privacyNote: "تبقى اختياراتك في متصفحك لهذا التحميل. لا نبيع بياناتك ولا نجمع عنوان IP.",
+      readyTitle: "ورقتك جاهزة",
+      readyBody: "شكراً. يمكنك تحميل المورد عندما تكون مستعداً.",
+      validationEmail: "أدخل بريداً إلكترونياً صحيحاً أو اترك الحقل فارغاً.",
+      validationReferral: "يمكن أن يتضمن الرمز 8 أحرف أو أرقام كحد أقصى.",
     },
     dashboard: {
       greeting: "أهلاً",

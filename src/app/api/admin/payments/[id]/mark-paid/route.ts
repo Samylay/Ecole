@@ -5,8 +5,7 @@ import { getCurrentUser } from "@/lib/server/auth";
 import {
   createEmailToken,
   findUserById,
-  grantEnrollment,
-  markPaymentPaid,
+  markPaymentPaidAndGrantAccess,
 } from "@/lib/server/db";
 import { sendMail } from "@/lib/server/mailer";
 import { clientIp, isRateLimited } from "@/lib/server/rateLimit";
@@ -33,7 +32,7 @@ export async function POST(
   if (!/^\d+$/.test(rawId)) {
     return NextResponse.json({ success: false, error: "invalid_request" }, { status: 400 });
   }
-  const payment = markPaymentPaid(Number(rawId));
+  const payment = markPaymentPaidAndGrantAccess(Number(rawId), admin.id);
   if (!payment) {
     return NextResponse.json({ success: false, error: "not_pending" }, { status: 409 });
   }
@@ -42,8 +41,6 @@ export async function POST(
   if (!student) {
     return NextResponse.json({ success: false, error: "not_found" }, { status: 404 });
   }
-  grantEnrollment(student.id, payment.course_id, "cash", admin.id);
-
   const token = randomBytes(32).toString("hex");
   createEmailToken(student.email, "account_activation", hashToken(token), ACTIVATION_TTL_MS);
   const base = process.env.LAYAIDA_PUBLIC_URL ?? new URL(request.url).origin;

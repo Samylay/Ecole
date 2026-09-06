@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getCourse } from "@/lib/data";
+import { getStudentCourse } from "@/lib/server/content";
 
 export async function generateMetadata({
   params,
@@ -7,7 +7,7 @@ export async function generateMetadata({
   params: Promise<{ courseId: string }>;
 }): Promise<Metadata> {
   const { courseId } = await params;
-  const course = getCourse(courseId);
+  const course = getStudentCourse(courseId);
   if (!course) return { title: "Cours introuvable" };
   return {
     title: course.title.fr,

@@ -10,7 +10,8 @@ import { EmptyState } from "@/components/EmptyState";
 import { useLocale } from "@/lib/locale-context";
 import { useAuth } from "@/lib/auth-context";
 import { formatNumber, Locale } from "@/lib/i18n";
-import { getCourse, getQuiz, QuizQuestion } from "@/lib/data";
+import { QuizQuestion } from "@/lib/data";
+import { useContent } from "@/lib/content-context";
 import { getWrongQuestions, clearWrongQuestion, migrateLegacyProgress } from "@/lib/progress";
 import { rovingTabIndexHandler } from "@/lib/rovingTabIndex";
 
@@ -22,7 +23,11 @@ type ReviewItem = {
   question: QuizQuestion;
 };
 
-function loadQueue(locale: Locale): ReviewItem[] {
+function loadQueue(
+  locale: Locale,
+  getCourse: ReturnType<typeof useContent>["getCourse"],
+  getQuiz: ReturnType<typeof useContent>["getQuiz"],
+): ReviewItem[] {
   const items: ReviewItem[] = [];
   for (const ref of getWrongQuestions()) {
     const course = getCourse(ref.courseId);
@@ -44,6 +49,7 @@ function loadQueue(locale: Locale): ReviewItem[] {
 export default function ReviewPage() {
   const { locale, t, dir } = useLocale();
   const { user, isLoading } = useAuth();
+  const { getCourse, getQuiz } = useContent();
   const router = useRouter();
   const optionsRef = useRef<HTMLDivElement>(null);
 
@@ -60,8 +66,8 @@ export default function ReviewPage() {
   useEffect(() => {
     if (!user) return;
     migrateLegacyProgress();
-    setQueue(loadQueue(locale));
-  }, [user, locale]);
+    setQueue(loadQueue(locale, getCourse, getQuiz));
+  }, [user, locale, getCourse, getQuiz]);
 
   if (isLoading || !user || queue === null) {
     return (
@@ -88,7 +94,7 @@ export default function ReviewPage() {
   };
 
   const handleRestart = () => {
-    setQueue(loadQueue(locale));
+    setQueue(loadQueue(locale, getCourse, getQuiz));
     setIndex(0);
     setCorrectCount(0);
     setSelected(null);

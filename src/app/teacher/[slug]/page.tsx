@@ -8,14 +8,24 @@ import { CourseCard } from "@/components/CourseCard";
 import { Button, ButtonLink } from "@/components/Button";
 import { useLocale } from "@/lib/locale-context";
 import { formatNumber } from "@/lib/i18n";
-import { getTeacher } from "@/lib/data";
+import { teacherSlug } from "@/lib/data";
+import { useContent } from "@/lib/content-context";
 import { isFollowingTeacher, toggleFollowTeacher } from "@/lib/progress";
 
 export default function TeacherPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
   const { locale, t } = useLocale();
+  const { courses } = useContent();
   const [following, setFollowing] = useState(false);
-  const teacher = getTeacher(slug);
+  const taughtCourses = courses.filter((course) => teacherSlug(course.instructor.name) === slug);
+  const teacher = taughtCourses.length > 0
+    ? {
+        instructor: taughtCourses[0].instructor,
+        courses: taughtCourses,
+        studentCount: taughtCourses.reduce((sum, course) => sum + course.studentCount, 0),
+        rating: taughtCourses.reduce((sum, course) => sum + course.rating, 0) / taughtCourses.length,
+      }
+    : null;
 
   useEffect(() => {
     setFollowing(isFollowingTeacher(slug));

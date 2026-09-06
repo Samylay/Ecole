@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/lib/theme-context";
 import { ToastProvider } from "@/components/Toast";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { OfflineBanner } from "@/components/OfflineBanner";
+import { ContentProvider } from "@/lib/content-context";
 
 // Registers the offline document cache (P3-T3); no-op if unsupported.
 function useDocumentServiceWorker() {
@@ -26,10 +27,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <ThemeProvider>
         <LocaleProvider>
           <AuthProvider>
-            <ToastProvider>
-              <OfflineBanner />
-              {children}
-            </ToastProvider>
+            <ContentProvider>
+              <ToastProvider>
+                <OfflineBanner />
+                {children}
+              </ToastProvider>
+            </ContentProvider>
           </AuthProvider>
         </LocaleProvider>
       </ThemeProvider>

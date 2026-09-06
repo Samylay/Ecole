@@ -10,7 +10,8 @@ import { EmptyState } from "@/components/EmptyState";
 import { useLocale } from "@/lib/locale-context";
 import { useAuth } from "@/lib/auth-context";
 import { formatNumber } from "@/lib/i18n";
-import { getCourse, getAllLessons, subjectColors, subjectIcons, Subject } from "@/lib/data";
+import { subjectColors, subjectIcons, Subject } from "@/lib/data";
+import { useContent } from "@/lib/content-context";
 import {
   migrateLegacyProgress,
   getEnrolledCourseIds,
@@ -31,6 +32,7 @@ type ParentState = {
 
 export default function ParentPage() {
   const { t, locale } = useLocale();
+  const { getCourse, getAllLessons } = useContent();
   const { user, isLoading } = useAuth();
   const router = useRouter();
   const [state, setState] = useState<ParentState | null>(null);
@@ -59,7 +61,7 @@ export default function ParentPage() {
       feed: getActivityFeed(8),
       timeSpentMin: weekCount * 18, // mock: ~18 min per lesson
     });
-  }, [user]);
+  }, [user, getCourse, getAllLessons]);
 
   if (isLoading || !user || !state) {
     return (

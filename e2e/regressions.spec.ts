@@ -142,6 +142,12 @@ test("student content projection returns DB courses, hides live/owner fields, an
   expect(afterPayload.courses.some((item: { id: string }) => item.id === courseId)).toBe(false);
   expect(afterPayload.archivedIds).toContain(courseId);
 
+  // Restore the seed fixture for the smoke suite, which enrols in this course.
+  // The E2E database is throwaway, but all specs in a run intentionally share it.
+  const db = new Database(E2E_DB);
+  db.prepare("DELETE FROM courses WHERE id = ?").run(courseId);
+  db.close();
+
   await teacher.dispose();
 });
 
@@ -155,6 +161,29 @@ test("teacher question and document CRUD is owner-scoped", async ({ request }) =
   expect((await owner.context.post("/api/teacher/courses", { data: courseInput(courseId, "CRUD course") })).status()).toBe(201);
   expect((await owner.context.post(`/api/teacher/courses/${courseId}/chapters`, { data: { ...chapterInput, livestreamUrl: undefined, scheduledAt: undefined } })).status()).toBe(201);
   expect((await owner.context.post(`/api/teacher/courses/${courseId}/chapters/chapter-1/lessons`, { data: { ...lessonInput, livestreamUrl: undefined, scheduledAt: undefined } })).status()).toBe(201);
+
+  for (const videoUrl of [
+    "javascript:alert(1)",
+    "data:text/html,<script>alert(1)</script>",
+    "http://www.youtube.com/embed/video-id",
+    "https://video.example.test/embed/video-id",
+    "not a URL",
+  ]) {
+    expect((await owner.context.put(`/api/teacher/courses/${courseId}/chapters/chapter-1/lessons/lesson-1`, {
+      data: { ...lessonInput, videoUrl, livestreamUrl: undefined, scheduledAt: undefined },
+    })).status()).toBe(400);
+  }
+  for (const videoUrl of [
+    "",
+    "https://www.youtube.com/watch?v=video-id",
+    "https://youtu.be/video-id",
+    "https://www.youtube.com/embed/video-id",
+    "https://www.youtube-nocookie.com/embed/video-id",
+  ]) {
+    expect((await owner.context.put(`/api/teacher/courses/${courseId}/chapters/chapter-1/lessons/lesson-1`, {
+      data: { ...lessonInput, videoUrl, livestreamUrl: undefined, scheduledAt: undefined },
+    })).ok()).toBe(true);
+  }
 
   const question = await owner.context.post(`/api/teacher/courses/${courseId}/chapters/chapter-1/questions`, { data: questionInput("question-1") });
   expect(question.status()).toBe(201);

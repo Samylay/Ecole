@@ -9,13 +9,14 @@ import { EmptyState } from "@/components/EmptyState";
 import { Button, ButtonLink } from "@/components/Button";
 import { useLocale } from "@/lib/locale-context";
 import { useAuth } from "@/lib/auth-context";
-import { getCourse, getAllLessons } from "@/lib/data";
+import { useContent } from "@/lib/content-context";
 import { getCourseProgress, getCourseCompletionDate, migrateLegacyProgress } from "@/lib/progress";
 
 export default function CertificatePage({ params }: { params: Promise<{ courseId: string }> }) {
   const { courseId } = use(params);
   const { locale, t, dir } = useLocale();
   const { user, isLoading } = useAuth();
+  const { getCourse, getAllLessons } = useContent();
   const router = useRouter();
   const course = getCourse(courseId);
   const [progress, setProgress] = useState<number | null>(null);
@@ -30,7 +31,7 @@ export default function CertificatePage({ params }: { params: Promise<{ courseId
     migrateLegacyProgress();
     setProgress(getCourseProgress(courseId, getAllLessons(course).length));
     setIssuedAt(getCourseCompletionDate(courseId));
-  }, [course, courseId]);
+  }, [course, courseId, getAllLessons]);
 
   if (isLoading || !user || !course || progress === null) {
     return (

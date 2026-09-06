@@ -11,7 +11,8 @@ import { Modal } from "@/components/Modal";
 import { ProgressRing } from "@/components/Progress";
 import { CelebrationCheck } from "@/components/Celebration";
 import { formatNumber } from "@/lib/i18n";
-import { getCourse, getQuiz, QuizQuestion } from "@/lib/data";
+import { QuizQuestion } from "@/lib/data";
+import { useContent } from "@/lib/content-context";
 import { recordQuizAttempt, getLastQuizAttempt, migrateLegacyProgress } from "@/lib/progress";
 import { rovingTabIndexHandler } from "@/lib/rovingTabIndex";
 
@@ -28,10 +29,11 @@ export default function QuizPage({ params }: { params: Promise<{ courseId: strin
   const { courseId, chapterId } = use(params);
   const { locale, t, dir } = useLocale();
   const { user, isLoading } = useAuth();
+  const { getCourse, getQuiz } = useContent();
   const router = useRouter();
 
   const course = getCourse(courseId);
-  const baseQuestions = useMemo(() => getQuiz(courseId, chapterId), [courseId, chapterId]);
+  const baseQuestions = useMemo(() => getQuiz(courseId, chapterId), [courseId, chapterId, getQuiz]);
   const chapter = course?.chapters.find((c) => c.id === chapterId);
   const chapterIndex = course?.chapters.findIndex((c) => c.id === chapterId) ?? -1;
   const isLastChapter = course ? chapterIndex === course.chapters.length - 1 : false;
@@ -48,6 +50,10 @@ export default function QuizPage({ params }: { params: Promise<{ courseId: strin
   const [answers, setAnswers] = useState<{ id: string; correct: boolean; picked: number }[]>([]);
   const [exitOpen, setExitOpen] = useState(false);
   const [celebrate, setCelebrate] = useState<"idle" | "in" | "out">("idle");
+
+  useEffect(() => {
+    setQuestions(baseQuestions ?? []);
+  }, [baseQuestions]);
 
   useEffect(() => {
     if (!isLoading && !user) router.push("/signin");

@@ -12,7 +12,8 @@ import { ProgressRing } from "@/components/Progress";
 import { useLocale } from "@/lib/locale-context";
 import { useAuth } from "@/lib/auth-context";
 import { formatNumber } from "@/lib/i18n";
-import { getExamQuestionPool, ExamQuestionRef, Level } from "@/lib/data";
+import { ExamQuestionRef, Level } from "@/lib/data";
+import { useContent } from "@/lib/content-context";
 import { rovingTabIndexHandler } from "@/lib/rovingTabIndex";
 
 const MAX_QUESTIONS = 20;
@@ -33,6 +34,7 @@ type Phase = "select" | "exam" | "results";
 export default function ExamPrepPage() {
   const { locale, t, dir } = useLocale();
   const { user, isLoading } = useAuth();
+  const { getExamQuestionPool } = useContent();
   const router = useRouter();
   const optionsRef = useRef<HTMLDivElement>(null);
 

@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { getLesson } from "@/lib/data";
+import { canViewCourseContent, getStudentCourse } from "@/lib/server/content";
 import { getCurrentUser } from "@/lib/server/auth";
 import { getLessonQuestion, isEnrolledIn } from "@/lib/server/db";
-import { clientIp, isRateLimited } from "@/lib/server/rateLimit";
+import { isRateLimited } from "@/lib/server/rateLimit";
 
 export const QA_PAGE_SIZE = 10;
 
@@ -25,17 +25,27 @@ export async function authorizeLessonQa(
   }
   const url = new URL(request.url);
   const courseId = url.searchParams.get("courseId") ?? "";
-  const result = getLesson(courseId, lessonId);
+  const course = getStudentCourse(courseId);
+  const result = course
+    ? (() => {
+        for (const chapter of course.chapters) {
+          const lesson = chapter.lessons.find((item) => item.id === lessonId);
+          if (lesson) return { course, chapter, lesson };
+        }
+        return null;
+      })()
+    : null;
   if (!result) {
     return { error: NextResponse.json({ success: false, error: "lesson_not_found" }, { status: 404 }) } as const;
   }
-  const chapter = result.course.chapters.find((item) => item.lessons.some((lesson) => lesson.id === lessonId));
+  const chapter = result.chapter;
   if (!chapter) {
     return { error: NextResponse.json({ success: false, error: "lesson_not_found" }, { status: 404 }) } as const;
   }
-  const isStaff = user.role === "teacher" || user.role === "admin";
   const enrolled = isEnrolledIn(user.id, courseId);
-  if ((options.enrolledOnly && !enrolled) || (!options.enrolledOnly && !enrolled && !isStaff)) {
+  const isStaff = user.role === "teacher" || user.role === "admin";
+  const canView = canViewCourseContent(user, courseId);
+  if ((options.enrolledOnly && !enrolled && !canView) || (!options.enrolledOnly && !canView)) {
     return { error: NextResponse.json({ success: false }, { status: 403 }) } as const;
   }
   return { user, courseId, chapterId: chapter.id, isStaff, enrolled } as const;

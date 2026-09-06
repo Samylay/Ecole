@@ -32,7 +32,8 @@ import { VideoControls, YouTubePlayer } from "@/components/VideoControls";
 import { TranscriptLine, TranscriptPanel } from "@/components/TranscriptPanel";
 import { QuestionThread } from "@/components/QuestionThread";
 import { formatNumber } from "@/lib/i18n";
-import { getLesson, getAllLessons, chapterHasQuiz, subjectColors, Course } from "@/lib/data";
+import { subjectColors, Course } from "@/lib/data";
+import { useContent } from "@/lib/content-context";
 import {
   isLessonCompleted,
   toggleLessonCompleted,
@@ -61,10 +62,16 @@ const QUIZ_PASS_RATIO = 0.6;
 // A chapter's last lesson routes to its quiz first (if not yet passed);
 // otherwise falls through to the next lesson (first lesson of the next
 // chapter, or null once the whole course is done).
-function computeNextHref(courseId: string, course: Course, lessonId: string, nextLessonId: string | null): string | null {
+function computeNextHref(
+  courseId: string,
+  course: Course,
+  lessonId: string,
+  nextLessonId: string | null,
+  hasQuiz: (courseId: string, chapterId: string) => boolean,
+): string | null {
   const chapter = course.chapters.find((c) => c.lessons.some((l) => l.id === lessonId));
   const isLastInChapter = chapter ? chapter.lessons[chapter.lessons.length - 1].id === lessonId : false;
-  if (chapter && isLastInChapter && chapterHasQuiz(courseId, chapter.id)) {
+  if (chapter && isLastInChapter && hasQuiz(courseId, chapter.id)) {
     const attempt = getLastQuizAttempt(courseId, chapter.id);
     const passed = attempt ? attempt.score / attempt.total >= QUIZ_PASS_RATIO : false;
     if (!passed) return `/course/${courseId}/quiz/${chapter.id}`;
@@ -134,6 +141,7 @@ export default function LessonPage({
   const { courseId, lessonId } = use(params);
   const { locale, t, dir } = useLocale();
   const { user, isLoading } = useAuth();
+  const { getLesson, getAllLessons, chapterHasQuiz } = useContent();
   const router = useRouter();
   const { showToast } = useToast();
 
@@ -252,7 +260,7 @@ export default function LessonPage({
   const allLessons = result ? getAllLessons(result.course) : [];
   const currentIndex = allLessons.findIndex((l) => l.id === lessonId);
   const nextLesson = currentIndex >= 0 && currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null;
-  const nextHref = result ? computeNextHref(courseId, result.course, lessonId, nextLesson?.id ?? null) : null;
+  const nextHref = result ? computeNextHref(courseId, result.course, lessonId, nextLesson?.id ?? null, chapterHasQuiz) : null;
 
   const goNext = useCallback(() => {
     if (nextHref) router.push(nextHref);

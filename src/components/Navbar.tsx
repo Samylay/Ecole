@@ -45,6 +45,7 @@ export function Navbar() {
     ? [
         { href: "/dashboard", label: t.nav.dashboard },
         { href: "/courses", label: t.nav.courses },
+        { href: "/resources", label: t.nav.resources },
         { href: "/my-courses", label: t.nav.myCourses },
         { href: "/profile", label: t.nav.profile },
         ...(user.role === "teacher" || user.role === "admin"
@@ -55,6 +56,7 @@ export function Navbar() {
     : [
         { href: "/", label: t.nav.home },
         { href: "/courses", label: t.nav.courses },
+        { href: "/resources", label: t.nav.resources },
       ];
 
   return (

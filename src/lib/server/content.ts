@@ -1,4 +1,6 @@
-import { DbUser, findUserById, getContentDb } from "./db";
+import { DbUser, findUserById, getContentDb, isEnrolledIn } from "./db";
+import { courses as seedCourseList, getCourse as getSeedCourse } from "@/lib/data";
+import type { Course, QuizQuestion } from "@/lib/data";
 
 export type LocalizedText = { fr: string; en: string; ar: string };
 export type CourseInput = {
@@ -41,6 +43,215 @@ export type QuestionInput = {
   position?: number;
 };
 export type DocumentInput = { name: string; url: string; position?: number };
+
+type CourseRow = {
+  id: string;
+  subject: Course["subject"];
+  level: Course["level"];
+  title_fr: string;
+  title_en: string;
+  title_ar: string;
+  description_fr: string;
+  description_en: string;
+  description_ar: string;
+  thumbnail: string;
+  instructor_name: string;
+  instructor_avatar: string;
+  instructor_bio_fr: string;
+  instructor_bio_en: string;
+  instructor_bio_ar: string;
+  total_lessons: number;
+  total_hours: number;
+  student_count: number;
+  rating: number;
+  archived: number;
+};
+
+type ChapterRow = {
+  course_id: string;
+  id: string;
+  title_fr: string;
+  title_en: string;
+  title_ar: string;
+  position: number;
+};
+
+type LessonRow = {
+  course_id: string;
+  chapter_id: string;
+  id: string;
+  title_fr: string;
+  title_en: string;
+  title_ar: string;
+  duration: string;
+  video_url: string;
+  description_fr: string;
+  description_en: string;
+  description_ar: string;
+  position: number;
+};
+
+type QuizRow = {
+  course_id: string;
+  chapter_id: string;
+  id: string;
+  lesson_id: string;
+  question_fr: string;
+  question_en: string;
+  question_ar: string;
+  options_json: string;
+  correct_index: number;
+  explanation_fr: string;
+  explanation_en: string;
+  explanation_ar: string;
+  position: number;
+};
+
+function publicCourse(row: CourseRow, chapters: ChapterRow[], lessons: LessonRow[], documents: Map<string, { name: string; url: string }[]>): Course {
+  return {
+    id: row.id,
+    subject: row.subject,
+    level: row.level,
+    title: { fr: row.title_fr, en: row.title_en, ar: row.title_ar },
+    description: { fr: row.description_fr, en: row.description_en, ar: row.description_ar },
+    thumbnail: row.thumbnail,
+    instructor: {
+      name: row.instructor_name,
+      avatar: row.instructor_avatar,
+      bio: { fr: row.instructor_bio_fr, en: row.instructor_bio_en, ar: row.instructor_bio_ar },
+    },
+    totalLessons: row.total_lessons,
+    totalHours: row.total_hours,
+    studentCount: row.student_count,
+    rating: row.rating,
+    chapters: chapters.map((chapter) => ({
+      id: chapter.id,
+      title: { fr: chapter.title_fr, en: chapter.title_en, ar: chapter.title_ar },
+      lessons: lessons.filter((lesson) => lesson.chapter_id === chapter.id).map((lesson) => ({
+        id: lesson.id,
+        title: { fr: lesson.title_fr, en: lesson.title_en, ar: lesson.title_ar },
+        duration: lesson.duration,
+        videoUrl: lesson.video_url,
+        description: { fr: lesson.description_fr, en: lesson.description_en, ar: lesson.description_ar },
+        ...(documents.has(`${chapter.id}:${lesson.id}`) ? { documents: documents.get(`${chapter.id}:${lesson.id}`) } : {}),
+      })),
+    })),
+  };
+}
+
+function publicContentRows() {
+  const db = getContentDb();
+  const rows = db.prepare("SELECT * FROM courses WHERE archived = 0 ORDER BY updated_at DESC, id").all() as CourseRow[];
+  const chapters = db.prepare("SELECT * FROM chapters ORDER BY position, id").all() as ChapterRow[];
+  const lessons = db.prepare("SELECT * FROM lessons ORDER BY position, id").all() as LessonRow[];
+  const documentRows = db.prepare("SELECT course_id, chapter_id, lesson_id, name, url FROM documents ORDER BY position, id").all() as {
+    course_id: string; chapter_id: string; lesson_id: string; name: string; url: string;
+  }[];
+  const documents = new Map<string, { name: string; url: string }[]>();
+  for (const document of documentRows) {
+    const key = `${document.course_id}:${document.chapter_id}:${document.lesson_id}`;
+    const items = documents.get(key) ?? [];
+    items.push({ name: document.name, url: document.url });
+    documents.set(key, items);
+  }
+  return { rows, chapters, lessons, documents };
+}
+
+/** Public student projection. Owner ids, timestamps, archived rows, and live links never leave this boundary. */
+export function listPublicCourses(): Course[] {
+  const { rows, chapters, lessons, documents } = publicContentRows();
+  return rows.map((row) => publicCourse(
+    row,
+    chapters.filter((chapter) => chapter.course_id === row.id),
+    lessons.filter((lesson) => lesson.course_id === row.id),
+    new Map([...documents].filter(([key]) => key.startsWith(`${row.id}:`)).map(([key, value]) => [key.slice(row.id.length + 1), value])),
+  ));
+}
+
+/** Remove lesson-level assets from the anonymous catalogue projection. */
+export function stripProtectedCourse(course: Course): Course {
+  return {
+    ...course,
+    chapters: course.chapters.map((chapter) => ({
+      ...chapter,
+      lessons: chapter.lessons.map(({ videoUrl: _videoUrl, documents: _documents, ...lesson }) => lesson),
+    })),
+  } as Course;
+}
+
+export function listPublicCourseMetadata(): Course[] {
+  return listPublicCourses().map(stripProtectedCourse);
+}
+
+export function listDatabaseCourseIds(): string[] {
+  return (getContentDb().prepare("SELECT id FROM courses WHERE archived = 0").all() as { id: string }[]).map((row) => row.id);
+}
+
+/** Protected student payload authorization. Teachers can preview only their own DB courses. */
+export function canViewCourseContent(user: DbUser, courseId: string): boolean {
+  if (user.role === "admin") return true;
+  const owner = getContentDb().prepare("SELECT owner_id FROM courses WHERE id = ? AND archived = 0").get(courseId) as
+    | { owner_id: number }
+    | undefined;
+  if (owner) return user.role === "teacher" ? owner.owner_id === user.id : isEnrolledIn(user.id, courseId);
+  return user.role === "teacher" || user.role === "student" || user.role === "parent"
+    ? isEnrolledIn(user.id, courseId)
+    : false;
+}
+
+export function listProtectedCoursesForUser(user: DbUser): Course[] {
+  const dbCourses = listPublicCourses().filter((course) => canViewCourseContent(user, course.id));
+  const dbIds = new Set(listDatabaseCourseIds());
+  return [...dbCourses, ...seedCourseList.filter((course) => !dbIds.has(course.id) && canViewCourseContent(user, course.id))];
+}
+
+export function getPublicCourse(courseId: string): Course | undefined {
+  return listPublicCourses().find((course) => course.id === courseId);
+}
+
+/** Server-side student lookup with the same seed fallback as the public API. */
+export function getStudentCourse(courseId: string): Course | undefined {
+  if (isCourseArchived(courseId)) return undefined;
+  return getPublicCourse(courseId) ?? getSeedCourse(courseId);
+}
+
+export function listPublicQuizzes(): Record<string, Record<string, QuizQuestion[]>> {
+  const db = getContentDb();
+  const rows = db.prepare(`
+    SELECT q.* FROM quiz_questions q
+    JOIN courses c ON c.id = q.course_id
+    WHERE c.archived = 0
+    ORDER BY q.position, q.id
+  `).all() as QuizRow[];
+  const quizzes: Record<string, Record<string, QuizQuestion[]>> = {};
+  for (const row of rows) {
+    let options: QuizQuestion["options"];
+    try { options = JSON.parse(row.options_json) as QuizQuestion["options"]; } catch { continue; }
+    quizzes[row.course_id] ??= {};
+    quizzes[row.course_id][row.chapter_id] ??= [];
+    quizzes[row.course_id][row.chapter_id].push({
+      id: row.id,
+      lessonId: row.lesson_id,
+      question: { fr: row.question_fr, en: row.question_en, ar: row.question_ar },
+      options,
+      correctIndex: row.correct_index,
+      explanation: { fr: row.explanation_fr, en: row.explanation_en, ar: row.explanation_ar },
+    });
+  }
+  return quizzes;
+}
+
+export function publicCourseExists(courseId: string): boolean {
+  return Boolean(getContentDb().prepare("SELECT 1 FROM courses WHERE id = ? AND archived = 0").get(courseId));
+}
+
+export function isCourseArchived(courseId: string): boolean {
+  return Boolean(getContentDb().prepare("SELECT 1 FROM courses WHERE id = ? AND archived = 1").get(courseId));
+}
+
+export function listArchivedCourseIds(): string[] {
+  return (getContentDb().prepare("SELECT id FROM courses WHERE archived = 1").all() as { id: string }[]).map((row) => row.id);
+}
 
 function actor(userId: number): DbUser {
   const user = findUserById(userId);
@@ -86,7 +297,25 @@ export function getCourseTree(courseId: string, userId: number) {
   const lessons = db
     .prepare("SELECT * FROM lessons WHERE course_id = ? ORDER BY position, id")
     .all(courseId);
-  return { course, chapters, lessons };
+  const questions = db
+    .prepare("SELECT * FROM quiz_questions WHERE course_id = ? ORDER BY chapter_id, position, id")
+    .all(courseId)
+    .map((row) => {
+      const question = row as { options_json: string } & Record<string, unknown>;
+      let options: unknown[] = [];
+      try {
+        options = JSON.parse(question.options_json);
+      } catch {
+        // Existing rows are validated on write. Keep a malformed legacy row
+        // visible to the owner without making the whole editor unreadable.
+        options = [];
+      }
+      return { ...question, options };
+    });
+  const documents = db
+    .prepare("SELECT * FROM documents WHERE course_id = ? ORDER BY chapter_id, lesson_id, position, id")
+    .all(courseId);
+  return { course, chapters, lessons, questions, documents };
 }
 
 export type LiveSession = {
@@ -238,17 +467,20 @@ export function createQuestion(courseId: string, chapterId: string, userId: numb
   ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
     .run(courseId, chapterId, input.id, input.lessonId, input.question.fr, input.question.en, input.question.ar,
       JSON.stringify(input.options), input.correctIndex, input.explanation.fr, input.explanation.en,
-      input.explanation.ar, input.position ?? 0);
+    input.explanation.ar, input.position ?? 0);
+  return getContentDb().prepare("SELECT * FROM quiz_questions WHERE course_id = ? AND chapter_id = ? AND id = ?")
+    .get(courseId, chapterId, input.id);
 }
 
 export function updateQuestion(courseId: string, chapterId: string, questionId: string, userId: number, input: Omit<QuestionInput, "id">): void {
   assertOwnership(courseId, userId);
-  getContentDb().prepare(`UPDATE quiz_questions SET lesson_id = ?, question_fr = ?, question_en = ?, question_ar = ?,
+  const result = getContentDb().prepare(`UPDATE quiz_questions SET lesson_id = ?, question_fr = ?, question_en = ?, question_ar = ?,
     options_json = ?, correct_index = ?, explanation_fr = ?, explanation_en = ?, explanation_ar = ?, position = ?
     WHERE course_id = ? AND chapter_id = ? AND id = ?`)
     .run(input.lessonId, input.question.fr, input.question.en, input.question.ar, JSON.stringify(input.options),
       input.correctIndex, input.explanation.fr, input.explanation.en, input.explanation.ar, input.position ?? 0,
       courseId, chapterId, questionId);
+  if (!result.changes) throw new Error("question_not_found");
 }
 
 export function deleteQuestion(courseId: string, chapterId: string, questionId: string, userId: number): void {
@@ -267,13 +499,30 @@ export function createDocument(courseId: string, chapterId: string, lessonId: st
   return Number(result.lastInsertRowid);
 }
 
+/** Ensure a nested document route cannot address a different lesson's row. */
+export function assertDocumentScope(
+  courseId: string,
+  chapterId: string,
+  lessonId: string,
+  documentId: number,
+  userId: number
+): void {
+  assertOwnership(courseId, userId);
+  const row = getContentDb().prepare(
+    "SELECT 1 FROM documents WHERE course_id = ? AND chapter_id = ? AND lesson_id = ? AND id = ?"
+  ).get(courseId, chapterId, lessonId, documentId);
+  if (!row) throw new Error("document_not_found");
+}
+
 export function updateDocument(courseId: string, documentId: number, userId: number, input: DocumentInput): void {
   assertOwnership(courseId, userId);
-  getContentDb().prepare("UPDATE documents SET name = ?, url = ?, position = ? WHERE course_id = ? AND id = ?")
+  const result = getContentDb().prepare("UPDATE documents SET name = ?, url = ?, position = ? WHERE course_id = ? AND id = ?")
     .run(input.name, input.url, input.position ?? 0, courseId, documentId);
+  if (!result.changes) throw new Error("document_not_found");
 }
 
 export function deleteDocument(courseId: string, documentId: number, userId: number): void {
   assertOwnership(courseId, userId);
-  getContentDb().prepare("DELETE FROM documents WHERE course_id = ? AND id = ?").run(courseId, documentId);
+  const result = getContentDb().prepare("DELETE FROM documents WHERE course_id = ? AND id = ?").run(courseId, documentId);
+  if (!result.changes) throw new Error("document_not_found");
 }

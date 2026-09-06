@@ -40,6 +40,26 @@ type LessonRow = ChapterRow & {
   description_fr: string; description_en: string; description_ar: string;
 };
 
+type QuestionRow = {
+  id: string;
+  chapter_id: string;
+  lesson_id: string;
+  question_fr: string; question_en: string; question_ar: string;
+  options: LocalizedValue[];
+  correct_index: number;
+  explanation_fr: string; explanation_en: string; explanation_ar: string;
+  position: number;
+};
+
+type DocumentRow = {
+  id: number;
+  chapter_id: string;
+  lesson_id: string;
+  name: string;
+  url: string;
+  position: number;
+};
+
 type LessonForm = {
   id: string;
   isNew: boolean;
@@ -50,6 +70,26 @@ type LessonForm = {
   position: string;
   livestreamUrl: string;
   scheduledAt: string;
+  documents: DocumentForm[];
+};
+
+type QuestionForm = {
+  id: string;
+  isNew: boolean;
+  lessonId: string;
+  question: LocalizedValue;
+  options: LocalizedValue[];
+  correctIndex: string;
+  explanation: LocalizedValue;
+  position: string;
+};
+
+type DocumentForm = {
+  id: number | null;
+  isNew: boolean;
+  name: string;
+  url: string;
+  position: string;
 };
 
 type ChapterForm = {
@@ -60,6 +100,7 @@ type ChapterForm = {
   livestreamUrl: string;
   scheduledAt: string;
   lessons: LessonForm[];
+  questions: QuestionForm[];
 };
 
 type CourseForm = {
@@ -76,6 +117,22 @@ type CourseForm = {
 };
 
 const emptyText: LocalizedValue = { fr: "", en: "", ar: "" };
+
+function emptyOption(): LocalizedValue {
+  return { fr: "", en: "", ar: "" };
+}
+
+function blankDocument(position = 1): DocumentForm {
+  return { id: null, isNew: true, name: "", url: "", position: String(position) };
+}
+
+function blankQuestion(lessonId = "", position = 1): QuestionForm {
+  return {
+    id: "", isNew: true, lessonId, question: emptyText,
+    options: [emptyOption(), emptyOption()], correctIndex: "0", explanation: emptyText,
+    position: String(position),
+  };
+}
 
 function text(row: Record<string, unknown>, prefix: string): LocalizedValue {
   return {
@@ -117,7 +174,13 @@ export default function TeacherStudioPage() {
   const [busy, setBusy] = useState(false);
   const [formError, setFormError] = useState("");
   const [archiveOpen, setArchiveOpen] = useState(false);
-  const [pendingDelete, setPendingDelete] = useState<{ chapterId: string; lessonId?: string } | null>(null);
+  const [pendingDelete, setPendingDelete] = useState<{
+    chapterId: string;
+    lessonId?: string;
+    questionId?: string;
+    documentId?: number;
+    documentLessonId?: string;
+  } | null>(null);
 
   const staff = user?.role === "teacher" || user?.role === "admin";
 
@@ -145,6 +208,8 @@ export default function TeacherStudioPage() {
     }
     const data = await response.json();
     const course = data.course as CourseRow;
+    const questionRows = (data.questions ?? []) as QuestionRow[];
+    const documentRows = (data.documents ?? []) as DocumentRow[];
     setCourseForm({
       id: course.id, isNew: false, subject: course.subject, level: course.level,
       title: text(course, "title"), description: text(course, "description"),
@@ -164,6 +229,20 @@ export default function TeacherStudioPage() {
             description: text(lesson, "description"), duration: lesson.duration,
             videoUrl: lesson.video_url, position: String(lesson.position),
             livestreamUrl: lesson.livestream_url ?? "", scheduledAt: toInputDate(lesson.scheduled_at),
+            documents: documentRows
+              .filter((document) => document.chapter_id === chapter.id && document.lesson_id === lesson.id)
+              .map((document) => ({
+                id: document.id, isNew: false, name: document.name, url: document.url,
+                position: String(document.position),
+              })),
+          })),
+        questions: questionRows
+          .filter((question) => question.chapter_id === chapter.id)
+          .map((question) => ({
+            id: question.id, isNew: false, lessonId: question.lesson_id,
+            question: text(question, "question"), options: question.options,
+            correctIndex: String(question.correct_index), explanation: text(question, "explanation"),
+            position: String(question.position),
           })),
       }))
     );
@@ -243,6 +322,50 @@ export default function TeacherStudioPage() {
       )
     );
 
+  const patchQuestion = (chapterIndex: number, questionIndex: number, next: Partial<QuestionForm>) =>
+    setChapters((current) =>
+      current.map((chapter, i) =>
+        i === chapterIndex
+          ? {
+              ...chapter,
+              questions: chapter.questions.map((question, j) => (j === questionIndex ? { ...question, ...next } : question)),
+            }
+          : chapter
+      )
+    );
+
+  const patchQuestionOption = (chapterIndex: number, questionIndex: number, optionIndex: number, value: LocalizedValue) =>
+    setChapters((current) =>
+      current.map((chapter, i) =>
+        i === chapterIndex
+          ? {
+              ...chapter,
+              questions: chapter.questions.map((question, j) =>
+                j === questionIndex
+                  ? { ...question, options: question.options.map((option, k) => (k === optionIndex ? value : option)) }
+                  : question
+              ),
+            }
+          : chapter
+      )
+    );
+
+  const patchDocument = (chapterIndex: number, lessonIndex: number, documentIndex: number, next: Partial<DocumentForm>) =>
+    setChapters((current) =>
+      current.map((chapter, i) =>
+        i === chapterIndex
+          ? {
+              ...chapter,
+              lessons: chapter.lessons.map((lesson, j) =>
+                j === lessonIndex
+                  ? { ...lesson, documents: lesson.documents.map((document, k) => (k === documentIndex ? { ...document, ...next } : document)) }
+                  : lesson
+              ),
+            }
+          : chapter
+      )
+    );
+
   const saveChapter = async (chapter: ChapterForm) => {
     if (!courseForm || !filled(chapter.title) || !chapter.id.trim()) {
       setFormError(t.studio.invalidForm);
@@ -281,12 +404,54 @@ export default function TeacherStudioPage() {
     await openCourse(courseForm.id);
   };
 
+  const saveQuestion = async (chapter: ChapterForm, question: QuestionForm) => {
+    if (!courseForm || !question.id.trim() || !question.lessonId || !filled(question.question) ||
+      !filled(question.explanation) || question.options.length < 2 ||
+      question.options.some((option) => !filled(option))) {
+      setFormError(t.studio.invalidForm);
+      return;
+    }
+    const base = `/api/teacher/courses/${encodeURIComponent(courseForm.id)}/chapters/${encodeURIComponent(chapter.id)}/questions`;
+    const payload = {
+      id: question.id, lessonId: question.lessonId, question: question.question, options: question.options,
+      correctIndex: Number(question.correctIndex), explanation: question.explanation, position: Number(question.position) || 0,
+    };
+    const ok = question.isNew
+      ? await request(base, "POST", payload)
+      : await request(`${base}/${encodeURIComponent(question.id)}`, "PUT", payload);
+    if (!ok) return;
+    showToast(question.isNew ? t.studio.createdToast : t.studio.savedToast);
+    await openCourse(courseForm.id);
+  };
+
+  const saveDocument = async (chapter: ChapterForm, lesson: LessonForm, document: DocumentForm) => {
+    if (!courseForm || !document.name.trim() || !document.url.trim()) {
+      setFormError(t.studio.invalidForm);
+      return;
+    }
+    const base = `/api/teacher/courses/${encodeURIComponent(courseForm.id)}/chapters/${encodeURIComponent(chapter.id)}/lessons/${encodeURIComponent(lesson.id)}/documents`;
+    const payload = { name: document.name, url: document.url, position: Number(document.position) || 0 };
+    const ok = document.isNew
+      ? await request(base, "POST", payload)
+      : await request(`${base}/${document.id}`, "PUT", payload);
+    if (!ok) return;
+    showToast(document.isNew ? t.studio.createdToast : t.studio.savedToast);
+    await openCourse(courseForm.id);
+  };
+
   const confirmDelete = async () => {
     if (!courseForm || !pendingDelete) return;
-    const { chapterId, lessonId } = pendingDelete;
+    const { chapterId, lessonId, questionId, documentId, documentLessonId } = pendingDelete;
     setPendingDelete(null);
-    const base = `/api/teacher/courses/${encodeURIComponent(courseForm.id)}/chapters/${encodeURIComponent(chapterId)}`;
-    const ok = await request(lessonId ? `${base}/lessons/${encodeURIComponent(lessonId)}` : base, "DELETE");
+    const chapterBase = `/api/teacher/courses/${encodeURIComponent(courseForm.id)}/chapters/${encodeURIComponent(chapterId)}`;
+    const url = questionId
+      ? `${chapterBase}/questions/${encodeURIComponent(questionId)}`
+      : documentId && documentLessonId
+        ? `${chapterBase}/lessons/${encodeURIComponent(documentLessonId)}/documents/${documentId}`
+        : lessonId
+          ? `${chapterBase}/lessons/${encodeURIComponent(lessonId)}`
+          : chapterBase;
+    const ok = await request(url, "DELETE");
     if (!ok) return;
     showToast(t.studio.deletedToast);
     await openCourse(courseForm.id);
@@ -472,7 +637,7 @@ export default function TeacherStudioPage() {
                           ...current,
                           {
                             id: "", isNew: true, title: emptyText, position: String(current.length + 1),
-                            livestreamUrl: "", scheduledAt: "", lessons: [],
+                            livestreamUrl: "", scheduledAt: "", lessons: [], questions: [],
                           },
                         ])
                       }
@@ -548,7 +713,7 @@ export default function TeacherStudioPage() {
                                     {
                                       id: "", isNew: true, title: emptyText, description: emptyText,
                                       duration: "", videoUrl: "", position: String(chapter.lessons.length + 1),
-                                      livestreamUrl: "", scheduledAt: "",
+                                      livestreamUrl: "", scheduledAt: "", documents: [],
                                     },
                                   ],
                                 })
@@ -631,6 +796,67 @@ export default function TeacherStudioPage() {
                                     onChange={(event) => patchLesson(index, lessonIndex, { scheduledAt: event.target.value })}
                                   />
                                 </div>
+                                <div className="mt-5 rounded-card border border-border bg-surface p-4">
+                                  <div className="flex flex-wrap items-center justify-between gap-3">
+                                    <h3 className="text-[15px] font-semibold text-ink">{t.studio.documents}</h3>
+                                    <Button
+                                      type="button"
+                                      size="sm"
+                                      variant="secondary"
+                                      onClick={() => patchLesson(index, lessonIndex, {
+                                        documents: [...lesson.documents, blankDocument(lesson.documents.length + 1)],
+                                      })}
+                                    >
+                                      <Plus className="h-4 w-4" aria-hidden="true" />
+                                      {t.studio.addDocument}
+                                    </Button>
+                                  </div>
+                                  {lesson.documents.length === 0 ? (
+                                    <p className="mt-3 text-[13px] text-muted">{t.studio.noDocuments}</p>
+                                  ) : (
+                                    <ul className="mt-4 space-y-3">
+                                      {lesson.documents.map((document, documentIndex) => (
+                                        <li key={document.isNew ? `new-document-${documentIndex}` : document.id} className="rounded-card border border-border bg-bg p-3">
+                                          <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,2fr)_96px]">
+                                            <Input
+                                              label={t.studio.documentName}
+                                              value={document.name}
+                                              onChange={(event) => patchDocument(index, lessonIndex, documentIndex, { name: event.target.value })}
+                                            />
+                                            <Input
+                                              label={t.studio.documentUrl}
+                                              value={document.url}
+                                              onChange={(event) => patchDocument(index, lessonIndex, documentIndex, { url: event.target.value })}
+                                            />
+                                            <Input
+                                              label={t.studio.position}
+                                              type="number"
+                                              value={document.position}
+                                              onChange={(event) => patchDocument(index, lessonIndex, documentIndex, { position: event.target.value })}
+                                            />
+                                          </div>
+                                          <p className="mt-2 text-[13px] text-muted">{t.studio.documentUrlHint}</p>
+                                          <div className="mt-3 flex flex-wrap gap-3">
+                                            <Button type="button" size="sm" loading={busy} onClick={() => void saveDocument(chapter, lesson, document)}>
+                                              {document.isNew ? t.studio.create : t.studio.save}
+                                            </Button>
+                                            {!document.isNew && document.id !== null && (
+                                              <Button
+                                                type="button"
+                                                size="sm"
+                                                variant="ghost"
+                                                onClick={() => setPendingDelete({ chapterId: chapter.id, documentId: document.id!, documentLessonId: lesson.id })}
+                                              >
+                                                <Trash2 className="h-4 w-4" aria-hidden="true" />
+                                                {t.studio.deleteDocument}
+                                              </Button>
+                                            )}
+                                          </div>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  )}
+                                </div>
                                 <div className="mt-4 flex flex-wrap gap-3">
                                   <Button size="sm" loading={busy} onClick={() => void saveLesson(chapter, lesson)}>
                                     {lesson.isNew ? t.studio.create : t.studio.save}
@@ -650,6 +876,152 @@ export default function TeacherStudioPage() {
                             </li>
                           ))}
                         </ul>
+                      )}
+                      {!chapter.isNew && (
+                        <section className="mt-6 rounded-card border border-border bg-bg p-4" aria-labelledby={`questions-${chapter.id}`}>
+                          <div className="flex flex-wrap items-center justify-between gap-3">
+                            <h3 id={`questions-${chapter.id}`} className="text-[15px] font-semibold text-ink">{t.studio.questions}</h3>
+                            <Button
+                              type="button"
+                              size="sm"
+                              variant="secondary"
+                              disabled={chapter.lessons.every((lesson) => lesson.isNew)}
+                              onClick={() => patchChapter(index, {
+                                questions: [
+                                  ...chapter.questions,
+                                  blankQuestion(chapter.lessons.find((lesson) => !lesson.isNew)?.id, chapter.questions.length + 1),
+                                ],
+                              })}
+                            >
+                              <Plus className="h-4 w-4" aria-hidden="true" />
+                              {t.studio.addQuestion}
+                            </Button>
+                          </div>
+                          {chapter.lessons.every((lesson) => lesson.isNew) ? (
+                            <p className="mt-3 text-[13px] text-muted">{t.studio.noLessons}</p>
+                          ) : chapter.questions.length === 0 ? (
+                            <p className="mt-3 text-[13px] text-muted">{t.studio.noQuestions}</p>
+                          ) : (
+                            <ul className="mt-4 space-y-4">
+                              {chapter.questions.map((question, questionIndex) => (
+                                <li key={question.isNew ? `new-question-${questionIndex}` : question.id} className="rounded-card border border-border bg-surface p-4">
+                                  <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_120px]">
+                                    <Input
+                                      label={t.studio.questionIdLabel}
+                                      value={question.id}
+                                      disabled={!question.isNew}
+                                      onChange={(event) => patchQuestion(index, questionIndex, { id: event.target.value })}
+                                    />
+                                    <div>
+                                      <label htmlFor={`question-lesson-${index}-${questionIndex}`} className="mb-1.5 block text-[13px] font-medium text-slate">{t.studio.lessonTitleLabel}</label>
+                                      <select
+                                        id={`question-lesson-${index}-${questionIndex}`}
+                                        className={selectClass}
+                                        value={question.lessonId}
+                                        onChange={(event) => patchQuestion(index, questionIndex, { lessonId: event.target.value })}
+                                      >
+                                        {chapter.lessons.filter((lesson) => !lesson.isNew).map((lesson) => (
+                                          <option key={lesson.id} value={lesson.id}>{lesson.title[locale] || lesson.id}</option>
+                                        ))}
+                                      </select>
+                                    </div>
+                                    <Input
+                                      label={t.studio.position}
+                                      type="number"
+                                      value={question.position}
+                                      onChange={(event) => patchQuestion(index, questionIndex, { position: event.target.value })}
+                                    />
+                                  </div>
+                                  <div className="mt-4 space-y-5">
+                                    <LocalizedField
+                                      label={t.studio.questionLabel}
+                                      multiline
+                                      value={question.question}
+                                      onChange={(value) => patchQuestion(index, questionIndex, { question: value })}
+                                    />
+                                    <LocalizedField
+                                      label={t.studio.explanation}
+                                      multiline
+                                      value={question.explanation}
+                                      onChange={(value) => patchQuestion(index, questionIndex, { explanation: value })}
+                                    />
+                                  </div>
+                                  <div className="mt-4 space-y-3">
+                                    {question.options.map((option, optionIndex) => (
+                                      <div key={optionIndex} className="rounded-card border border-border bg-bg p-3">
+                                        <div className="flex items-center justify-between gap-3">
+                                          <p className="text-[13px] font-semibold text-slate">{t.studio.optionLabel} {optionIndex + 1}</p>
+                                          {question.options.length > 2 && (
+                                            <Button
+                                              type="button"
+                                              size="sm"
+                                              variant="ghost"
+                                              onClick={() => patchQuestion(index, questionIndex, {
+                                                options: question.options.filter((_, i) => i !== optionIndex),
+                                                correctIndex: String(Math.min(Number(question.correctIndex), question.options.length - 2)),
+                                              })}
+                                            >
+                                              {t.studio.removeOption}
+                                            </Button>
+                                          )}
+                                        </div>
+                                        <div className="mt-2">
+                                          <LocalizedField
+                                            label={`${t.studio.optionLabel} ${optionIndex + 1}`}
+                                            value={option}
+                                            onChange={(value) => patchQuestionOption(index, questionIndex, optionIndex, value)}
+                                          />
+                                        </div>
+                                      </div>
+                                    ))}
+                                    <div className="flex flex-wrap items-end gap-3">
+                                      <div className="min-w-48 flex-1">
+                                        <label htmlFor={`question-correct-${index}-${questionIndex}`} className="mb-1.5 block text-[13px] font-medium text-slate">{t.studio.correctOption}</label>
+                                        <select
+                                          id={`question-correct-${index}-${questionIndex}`}
+                                          className={selectClass}
+                                          value={question.correctIndex}
+                                          onChange={(event) => patchQuestion(index, questionIndex, { correctIndex: event.target.value })}
+                                        >
+                                          {question.options.map((_, optionIndex) => (
+                                            <option key={optionIndex} value={optionIndex}>{t.studio.optionLabel} {optionIndex + 1}</option>
+                                          ))}
+                                        </select>
+                                      </div>
+                                      {question.options.length < 6 && (
+                                        <Button
+                                          type="button"
+                                          size="sm"
+                                          variant="secondary"
+                                          onClick={() => patchQuestion(index, questionIndex, { options: [...question.options, emptyOption()] })}
+                                        >
+                                          <Plus className="h-4 w-4" aria-hidden="true" />
+                                          {t.studio.addOption}
+                                        </Button>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div className="mt-4 flex flex-wrap gap-3">
+                                    <Button type="button" size="sm" loading={busy} onClick={() => void saveQuestion(chapter, question)}>
+                                      {question.isNew ? t.studio.create : t.studio.save}
+                                    </Button>
+                                    {!question.isNew && (
+                                      <Button
+                                        type="button"
+                                        size="sm"
+                                        variant="ghost"
+                                        onClick={() => setPendingDelete({ chapterId: chapter.id, questionId: question.id })}
+                                      >
+                                        <Trash2 className="h-4 w-4" aria-hidden="true" />
+                                        {t.studio.deleteQuestion}
+                                      </Button>
+                                    )}
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </section>
                       )}
                     </div>
                   ))}
@@ -672,10 +1044,16 @@ export default function TeacherStudioPage() {
       <Modal
         open={pendingDelete !== null}
         onClose={() => setPendingDelete(null)}
-        title={pendingDelete?.lessonId ? t.studio.deleteLesson : t.studio.deleteChapter}
+        title={pendingDelete?.questionId ? t.studio.deleteQuestion : pendingDelete?.documentId ? t.studio.deleteDocument : pendingDelete?.lessonId ? t.studio.deleteLesson : t.studio.deleteChapter}
       >
         <p className="text-[15px] text-muted">
-          {pendingDelete?.lessonId ? t.studio.deleteLessonBody : t.studio.deleteChapterBody}
+          {pendingDelete?.questionId
+            ? t.studio.deleteQuestionBody
+            : pendingDelete?.documentId
+              ? t.studio.deleteDocumentBody
+              : pendingDelete?.lessonId
+                ? t.studio.deleteLessonBody
+                : t.studio.deleteChapterBody}
         </p>
         <div className="mt-5 flex justify-end gap-3">
           <Button variant="ghost" onClick={() => setPendingDelete(null)}>{t.studio.cancel}</Button>

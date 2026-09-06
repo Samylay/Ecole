@@ -15,7 +15,11 @@ import { useAuth } from "@/lib/auth-context";
 import { useTheme, Theme } from "@/lib/theme-context";
 import { Locale, localeNames, formatNumber } from "@/lib/i18n";
 import {
+  ACADEMIC_STREAMS,
+  AcademicStream,
+  getPrefs,
   getWeeklyGoal,
+  setPrefs,
   setWeeklyGoal,
   getNotificationsEnabled,
   setNotificationsEnabled,
@@ -46,6 +50,8 @@ export default function ProfilePage() {
   const [goal, setGoal] = useState(4);
   const [notifications, setNotifications] = useState(true);
   const [dataSaver, setDataSaver] = useState(false);
+  const [grade, setGrade] = useState<string>("");
+  const [academicStream, setAcademicStream] = useState<AcademicStream | undefined>(undefined);
   const [currentPw, setCurrentPw] = useState("");
   const [newPw, setNewPw] = useState("");
   const [pwError, setPwError] = useState("");
@@ -60,10 +66,15 @@ export default function ProfilePage() {
 
   useEffect(() => {
     migrateLegacyProgress();
+    const prefs = getPrefs();
     setGoal(getWeeklyGoal());
     setNotifications(getNotificationsEnabled());
     setDataSaver(getDataSaverEnabled());
+    setGrade(prefs.grade);
+    setAcademicStream(prefs.academicStream);
   }, [user]);
+
+  const isHighGrade = ["seconde", "premiere", "terminale"].includes(grade);
 
   const loadSessions = async () => {
     setSessionsLoading(true);
@@ -208,6 +219,33 @@ export default function ProfilePage() {
             {/* Preferences */}
             {section === "preferences" && (
               <>
+                {isHighGrade && <div className="rounded-card border border-border bg-surface p-6">
+                  <h2 className="text-[15px] font-semibold text-ink">{t.onboarding.streamTitle}</h2>
+                  <p className="mt-1 text-[13px] text-muted">{t.onboarding.streamSubtitle}</p>
+                  <div className="mt-3 grid gap-2 sm:grid-cols-2" role="radiogroup" aria-label={t.onboarding.streamTitle}>
+                    {ACADEMIC_STREAMS.map((stream) => {
+                      const active = academicStream === stream;
+                      return (
+                        <button
+                          key={stream}
+                          role="radio"
+                          aria-checked={active}
+                          onClick={() => {
+                            setAcademicStream(stream);
+                            setPrefs({ ...getPrefs(), academicStream: stream });
+                            showToast(t.profile.savedToast);
+                          }}
+                          className={`min-h-11 rounded-input border-[1.5px] px-3 py-2 text-start text-[13px] font-medium transition-[border-color,background-color,color,transform] duration-[var(--duration-base)] ease-[var(--ease-out-custom)] active:scale-[0.98] ${
+                            active ? "border-primary bg-primary-soft/50 text-ink" : "border-mist text-slate hover:border-faint"
+                          }`}
+                        >
+                          {t.academicStreams[stream]}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>}
+
                 {/* Language — instant, flips dir at root via locale context */}
                 <div className="rounded-card border border-border bg-surface p-6">
                   <h2 className="text-[15px] font-semibold text-ink">{t.profile.language}</h2>

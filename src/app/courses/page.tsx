@@ -14,7 +14,8 @@ import { HighlightMatch } from "@/components/HighlightMatch";
 import { useLocale } from "@/lib/locale-context";
 import { useOverlay } from "@/lib/useOverlay";
 import { formatNumber } from "@/lib/i18n";
-import { courses, Subject, Level, subjectIcons } from "@/lib/data";
+import { Subject, Level, subjectIcons } from "@/lib/data";
+import { useContent } from "@/lib/content-context";
 
 const SUBJECTS: Subject[] = ["math", "physics", "biology"];
 type Duration = "all" | "short" | "medium" | "long";
@@ -28,6 +29,7 @@ function matchesDuration(hours: number, d: Duration): boolean {
 
 function CatalogContent() {
   const { t, locale, dir } = useLocale();
+  const { courses } = useContent();
   const router = useRouter();
   const params = useSearchParams();
 
@@ -57,7 +59,7 @@ function CatalogContent() {
       }
       return true;
     });
-  }, [query, selectedSubjects, level, duration, minRating, locale, t]);
+  }, [query, selectedSubjects, level, duration, minRating, locale, t, courses]);
 
   const lessonMatches = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -74,7 +76,7 @@ function CatalogContent() {
       }
     }
     return hits;
-  }, [query, locale]);
+  }, [query, locale, courses]);
 
   const activeChips: { key: string; label: string; clear: () => void }[] = [
     ...selectedSubjects.map((s) => ({

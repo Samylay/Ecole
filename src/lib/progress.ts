@@ -59,11 +59,24 @@ export type CourseLessonNote = LessonNote & {
 export type OnboardingPrefs = {
   grade: string;
   subjects: string[];
+  /** Algeria-first academic stream, optional for legacy learner profiles. */
+  academicStream?: AcademicStream;
   weeklyGoal: number;
   reminders: boolean;
   onboarded: boolean;
   dataSaver?: boolean;
 };
+
+export const ACADEMIC_STREAMS = [
+  "sciences_experimentales",
+  "mathematiques",
+  "technique_mathematique",
+  "gestion_economie",
+  "lettres_philosophie",
+  "langues_etrangeres",
+] as const;
+
+export type AcademicStream = (typeof ACADEMIC_STREAMS)[number];
 
 export type ActivityEvent = {
   type: "lesson" | "quiz" | "enroll";
@@ -515,7 +528,10 @@ export function getPrefs(): OnboardingPrefs {
     onboarded: false,
     dataSaver: false,
   });
-  return { ...prefs, dataSaver: prefs.dataSaver ?? false };
+  const academicStream = ACADEMIC_STREAMS.includes(prefs.academicStream as AcademicStream)
+    ? prefs.academicStream
+    : undefined;
+  return { ...prefs, academicStream, dataSaver: prefs.dataSaver ?? false };
 }
 
 export function setPrefs(prefs: OnboardingPrefs): void {
