@@ -33,6 +33,8 @@ export default defineConfig({
     url: `http://127.0.0.1:${PORT}`,
     timeout: 240_000,
     reuseExistingServer: !process.env.CI,
-    env: { LAYAIDA_DB: E2E_DB, NEXT_DIST_DIR: ".next-verify" },
+    // The test server is HTTP on localhost; keep auth cookies usable by API
+    // and browser contexts without changing production's secure-cookie default.
+    env: { LAYAIDA_DB: E2E_DB, NEXT_DIST_DIR: ".next-verify", LAYAIDA_INSECURE_COOKIE: "1" },
   },
 });
