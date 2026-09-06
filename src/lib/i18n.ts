@@ -395,6 +395,35 @@ type TranslationKeys = {
     pending: string;
     activationSubject: string;
     activationText: string;
+    programsTitle: string;
+    programsSubtitle: string;
+    newProgram: string;
+    programId: string;
+    programIdHint: string;
+    programTitle: string;
+    academicYear: string;
+    stream: string;
+    streamHint: string;
+    createProgram: string;
+    noProgramsTitle: string;
+    noProgramsBody: string;
+    plans: string;
+    addPlan: string;
+    period: string;
+    periodAnnual: string;
+    periodTerm: string;
+    periodMonthly: string;
+    periodInstallment: string;
+    priceDzd: string;
+    activate: string;
+    deactivate: string;
+    linkedCourses: string;
+    linkCourse: string;
+    link: string;
+    programCreatedToast: string;
+    planCreatedToast: string;
+    planUpdatedToast: string;
+    courseLinkedToast: string;
   };
   studio: {
     title: string;
@@ -733,6 +762,35 @@ const translations: Record<Locale, TranslationKeys> = {
       pending: "En attente",
       activationSubject: "Active ton compte Layaida",
       activationText: "Salam {name} !\n\nTon inscription est confirmée. Active ton compte avec ce lien valable 24 heures :\n{link}\n\nCe lien est personnel et à usage unique.\n\n— Layaida",
+      programsTitle: "Programmes et tarifs",
+      programsSubtitle: "Crée un programme par matière, fixe ses tarifs et relie ses cours.",
+      newProgram: "Nouveau programme",
+      programId: "Identifiant",
+      programIdHint: "Minuscules, chiffres et tirets uniquement, ex. math-lycee-2026.",
+      programTitle: "Titre du programme",
+      academicYear: "Année scolaire",
+      stream: "Filière (optionnel)",
+      streamHint: "Laisser vide si le programme s'applique à toutes les filières.",
+      createProgram: "Créer le programme",
+      noProgramsTitle: "Aucun programme",
+      noProgramsBody: "Crée un programme pour commencer à vendre l'accès à une matière.",
+      plans: "Tarifs",
+      addPlan: "Ajouter un tarif",
+      period: "Formule",
+      periodAnnual: "Annuel",
+      periodTerm: "Trimestriel",
+      periodMonthly: "Mensuel",
+      periodInstallment: "Versement",
+      priceDzd: "Prix (DA)",
+      activate: "Activer",
+      deactivate: "Désactiver",
+      linkedCourses: "Cours liés",
+      linkCourse: "Lier un cours",
+      link: "Lier",
+      programCreatedToast: "Programme créé.",
+      planCreatedToast: "Tarif ajouté.",
+      planUpdatedToast: "Tarif mis à jour.",
+      courseLinkedToast: "Cours lié au programme.",
     },
     studio: {
       title: "Espace prof",
@@ -1404,6 +1462,35 @@ const translations: Record<Locale, TranslationKeys> = {
       pending: "Pending",
       activationSubject: "Activate your Layaida account",
       activationText: "Salam {name}!\n\nYour registration is confirmed. Activate your account with this link, valid for 24 hours:\n{link}\n\nThis link is personal and can only be used once.\n\n— Layaida",
+      programsTitle: "Subject programs & pricing",
+      programsSubtitle: "Create a program per subject, set its prices, and link its courses.",
+      newProgram: "New program",
+      programId: "Identifier",
+      programIdHint: "Lowercase letters, digits, and hyphens only, e.g. math-high-2026.",
+      programTitle: "Program title",
+      academicYear: "Academic year",
+      stream: "Stream (optional)",
+      streamHint: "Leave empty if the program applies to every stream.",
+      createProgram: "Create program",
+      noProgramsTitle: "No programs yet",
+      noProgramsBody: "Create a program to start selling access to a subject.",
+      plans: "Prices",
+      addPlan: "Add a price",
+      period: "Plan",
+      periodAnnual: "Annual",
+      periodTerm: "Term",
+      periodMonthly: "Monthly",
+      periodInstallment: "Installment",
+      priceDzd: "Price (DZD)",
+      activate: "Activate",
+      deactivate: "Deactivate",
+      linkedCourses: "Linked courses",
+      linkCourse: "Link a course",
+      link: "Link",
+      programCreatedToast: "Program created.",
+      planCreatedToast: "Price added.",
+      planUpdatedToast: "Price updated.",
+      courseLinkedToast: "Course linked to the program.",
     },
     studio: {
       title: "Teacher studio",
@@ -2075,6 +2162,35 @@ const translations: Record<Locale, TranslationKeys> = {
       pending: "معلّقة",
       activationSubject: "فعّل حسابك في العيايدة",
       activationText: "السلام عليكم {name}!\n\nتم تأكيد تسجيلك. فعّل حسابك عبر هذا الرابط الصالح لمدة 24 ساعة:\n{link}\n\nهذا الرابط شخصي ويُستخدم مرة واحدة فقط.\n\n— العيايدة",
+      programsTitle: "البرامج والأسعار",
+      programsSubtitle: "أنشئ برنامجاً لكل مادة، حدّد أسعاره واربط دروسه.",
+      newProgram: "برنامج جديد",
+      programId: "المعرّف",
+      programIdHint: "أحرف صغيرة وأرقام وشرطات فقط، مثال: math-lycee-2026.",
+      programTitle: "عنوان البرنامج",
+      academicYear: "السنة الدراسية",
+      stream: "الشعبة (اختياري)",
+      streamHint: "اتركه فارغاً إذا كان البرنامج يشمل كل الشعب.",
+      createProgram: "إنشاء البرنامج",
+      noProgramsTitle: "لا يوجد أي برنامج",
+      noProgramsBody: "أنشئ برنامجاً لتبدأ ببيع الوصول إلى مادة.",
+      plans: "الأسعار",
+      addPlan: "إضافة سعر",
+      period: "الصيغة",
+      periodAnnual: "سنوي",
+      periodTerm: "فصلي",
+      periodMonthly: "شهري",
+      periodInstallment: "بالتقسيط",
+      priceDzd: "السعر (دج)",
+      activate: "تفعيل",
+      deactivate: "إلغاء التفعيل",
+      linkedCourses: "الدروس المرتبطة",
+      linkCourse: "ربط درس",
+      link: "ربط",
+      programCreatedToast: "تم إنشاء البرنامج.",
+      planCreatedToast: "تمت إضافة السعر.",
+      planUpdatedToast: "تم تحديث السعر.",
+      courseLinkedToast: "تم ربط الدرس بالبرنامج.",
     },
     studio: {
       title: "فضاء الأستاذ",
