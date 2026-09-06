@@ -784,6 +784,19 @@ export function listAccessPlans(programId?: string): AccessPlan[] {
     : database.prepare("SELECT * FROM access_plans WHERE active = 1 ORDER BY program_id, amount_dzd, id").all()) as AccessPlan[];
 }
 
+export function listSubjectProgramCourseIds(programId: string): string[] {
+  const rows = getEnrollmentsDb()
+    .prepare("SELECT course_id FROM subject_program_courses WHERE program_id = ? ORDER BY course_id")
+    .all(programId) as { course_id: string }[];
+  return rows.map((row) => row.course_id);
+}
+
+export function setAccessPlanActive(programId: string, planId: string, active: boolean): void {
+  getEnrollmentsDb()
+    .prepare("UPDATE access_plans SET active = ?, updated_at = unixepoch() * 1000 WHERE id = ? AND program_id = ?")
+    .run(active ? 1 : 0, planId, programId);
+}
+
 export function grantSubjectEntitlement(input: {
   userId: number;
   programId: string;
