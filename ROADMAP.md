@@ -407,6 +407,7 @@ under each are called out explicitly and can proceed without waiting.
   open questions (co-teaching ownership, `instructor` becoming a real user,
   série-as-real-fifth-level falsifier).
 - [x] **P6-T13 — Course content into DB with owner + hierarchy (2026-09-02: CLOSED, absorbed by T7-6)** — this is
+  - SAMY 2026-09-08: approved
   P2-T4, done under Phase 6's naming from P6-T12: `courses/chapters/lessons`
   tables, `courses.owner_user_id`, `data.ts` becomes the seed. Depends on
   P6-T11 (owner FK needs the role to exist) and P6-T12 (table names/shape).
