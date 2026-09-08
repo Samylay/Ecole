@@ -87,7 +87,8 @@
 - [ ] **Q8 — Launch operations closure.** Set a real contact channel for data
   rights, confirm the Prometheus target is loaded, and decide validation,
   error-tracking, and DB-backup cadence/retention.
-- [ ] **Q9 / P9-T3/T4 — NEEDS-USER: choose recorded-video hosting.** Pick managed
+- [ ] **Q9 / P9-T3/T4 — choose recorded-video hosting.** Pick managed
+  - SAMY 2026-09-08: approved
   video upload or unlisted YouTube, then implement subject replay.
 - [ ] **Q10 / P8-I — produce real pilot videos, PDFs, and reviewed
   - SAMY 2026-09-08: approved
