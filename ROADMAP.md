@@ -585,6 +585,7 @@ onboarding, passwordless, and step-up.
   Depends on T7-2.
 
 - [x]**T7-4 — Staff-created accounts + cash payment path (P6-T4)** (2026-08-22: done via swarm — payments table, admin API routes with role checks + rate limits, admin page, activation magic-link flow; merged+gated) —
+  - SAMY 2026-09-08: approved
   `payments(user_id, course_id, amount, method cash|chargily, status,
   recorded_by, created_at)`; admin UI to create a student account (name+email),
   mark cash payment, grant enrolment (source=cash); student receives an
