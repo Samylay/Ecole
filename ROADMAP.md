@@ -261,6 +261,7 @@ under each are called out explicitly and can proceed without waiting.
   (residency, RC/NIF, Algerian bank/CCP account, merchant-of-record, offline
   collection acceptable for pilot, DZD-only vs EUR too, refund policy).
 - [x] **P6-T4 — Manual/offline payment path (2026-08-30: CLOSED, absorbed by T7-4)** — an admin marks a `payments` row
+  - SAMY 2026-09-08: approved
   paid and grants the matching `enrollments` row; needs P6-T1 (rehearsed and
   proven against a DB copy 2026-08-17, see
   `.scratch/payments/p6-t1-migration-rehearsal.md` — idempotent, row counts
