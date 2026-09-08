@@ -89,7 +89,8 @@
   error-tracking, and DB-backup cadence/retention.
 - [ ] **Q9 / P9-T3/T4 — NEEDS-USER: choose recorded-video hosting.** Pick managed
   video upload or unlisted YouTube, then implement subject replay.
-- [ ] **Q10 / P8-I — NEEDS-USER: produce real pilot videos, PDFs, and reviewed
+- [ ] **Q10 / P8-I — produce real pilot videos, PDFs, and reviewed
+  - SAMY 2026-09-08: approved
   quizzes.**
 - [ ] **Q11 / P8-G — Enforce account-sharing policy.** Warn, then email step-up,
   then lock/recovery, using the existing detection signals.
