@@ -362,6 +362,7 @@ under each are called out explicitly and can proceed without waiting.
   if that is the pick — still needs product sign-off, not a dependency
   approval.
 - [x] **P6-T10 — Password reset flow (2026-09-01: CLOSED, superseded by T7-3)** — there is none today; a locked-out user
+  - SAMY 2026-09-08: approved
   has no recovery path. Must ship in the same breath as P6-T9's step-up pick,
   not after — a challenge that can fail closed with no recovery permanently
   locks out children. NEEDS-USER: depends on P6-T9's answer (email? parent-
