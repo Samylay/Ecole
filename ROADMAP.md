@@ -81,7 +81,8 @@
     forbidden by CLAUDE.md. Recommend Samy resolve Q6 and specify a cadence/
     template (e.g. as a NEEDS-USER decision note) before this can run. No code
     changed; tree left clean.
-- [ ] **Q6 / P8-E — NEEDS-USER: install real SMTP credentials in the service.**
+- [ ] **Q6 / P8-E — install real SMTP credentials in the service.**
+  - SAMY 2026-09-08: approved
 - [ ] **Q7 / P8-F — create/connect the Chargily account and verify
   - SAMY 2026-09-08: approved
   its live sandbox contract.** Cash remains the working fallback.
