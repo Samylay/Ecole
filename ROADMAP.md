@@ -568,7 +568,8 @@ onboarding, passwordless, and step-up.
   self-enrol probe (PUT /api/state with enrolled) no longer grants access.
   ATTENDED-OK: additive migration, no ALTER on users.
 
-- [x] **T7-2 — Email infrastructure** (2026-08-22: done attended — src/lib/server/mailer.ts, zero new dependencies (hand-rolled STARTTLS/AUTH-PLAIN SMTP client), env LAYAIDA_SMTP_HOST/PORT/USER/PASS/FROM; LAYAIDA_DEV_MAIL_LOG=1 or missing host logs instead of sends so dev/e2e need no creds; email_tokens table (sha256 token hash, single-use, TTL). NEEDS-USER still open: real SMTP credentials before prod send.) — SMTP sender
+- [x] **T7-2 — Email infrastructure** (2026-08-22: done attended — src/lib/server/mailer.ts, zero new dependencies (hand-rolled STARTTLS/AUTH-PLAIN SMTP client), env LAYAIDA_SMTP_HOST/PORT/USER/PASS/FROM; LAYAIDA_DEV_MAIL_LOG=1 or missing host logs instead of sends so dev/e2e need no creds; email_tokens table (sha256 token hash, single-use, TTL). still open: real SMTP credentials before prod send.) — SMTP sender
+  - SAMY 2026-09-08: approved
   (`src/lib/server/mailer.ts`, env: LAYAIDA_SMTP_HOST/PORT/USER/PASS/FROM;
   nodemailer is proposed as the single approved dependency),
   `email_tokens` table (email, purpose, token_hash, expires_at,
