@@ -590,7 +590,8 @@ onboarding, passwordless, and step-up.
   activation magic-link email. Depends on T7-2/T7-3/T7-5.
   NEEDS-USER: seed Samy's account as admin.
 
-- [x] **T7-5 — Roles: teacher + admin (P6-T11)** (2026-08-22: done attended — idempotent CHECK rebuild in migrate(); rehearsed on a copy of data/layaida.db first: all rows preserved, teacher role insertable; typecheck + build:verify green, 3/3 e2e pass. Admin seeding of Samy""s account still NEEDS-USER: which email is admin.) — users.role CHECK rebuild
+- [x] **T7-5 — Roles: teacher + admin (P6-T11)** (2026-08-22: done attended — idempotent CHECK rebuild in migrate(); rehearsed on a copy of data/layaida.db first: all rows preserved, teacher role insertable; typecheck + build:verify green, 3/3 e2e pass. Admin seeding of Samy""s account still which email is admin.) — users.role CHECK rebuild
+  - SAMY 2026-09-08: approved
   (student|parent|teacher|admin) with migration; role helpers in auth.ts.
   ATTENDED-OK migration (rebuilds users table).
 
