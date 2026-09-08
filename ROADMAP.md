@@ -657,6 +657,7 @@ Release order:
 - P8-B: moved to Q4; pricing config per subject + admin UI to set/change prices
 - P8-C: moved to Q5; expiry-aware access checks + renewal reminders by email
 - [x] P8-D: teacher UI on top of T7-6 backend — shipped as P9-T1
+  - SAMY 2026-09-08: approved
 - P8-E: moved to Q6; real SMTP creds in ecole.service env (NEEDS-USER)
 - P8-F: moved to Q7; Chargily integration go-live (contract researched in
   .scratch/payments/chargily-api-contract.md) (NEEDS-USER: account)
