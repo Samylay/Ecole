@@ -82,7 +82,8 @@
     template (e.g. as a NEEDS-USER decision note) before this can run. No code
     changed; tree left clean.
 - [ ] **Q6 / P8-E — NEEDS-USER: install real SMTP credentials in the service.**
-- [ ] **Q7 / P8-F — NEEDS-USER: create/connect the Chargily account and verify
+- [ ] **Q7 / P8-F — create/connect the Chargily account and verify
+  - SAMY 2026-09-08: approved
   its live sandbox contract.** Cash remains the working fallback.
 - [ ] **Q8 — Launch operations closure.** Set a real contact channel for data
   rights, confirm the Prometheus target is loaded, and decide validation,
