@@ -95,6 +95,7 @@
 - [ ] **Q11 / P8-G — Enforce account-sharing policy.** Warn, then email step-up,
   then lock/recovery, using the existing detection signals.
 - [ ] **Q12 / T7-9 — Exercise sheets, manual grading, then optional OCR.** OCR
+  - SAMY 2026-09-08: approved
   provider remains a later NEEDS-USER decision.
 - [ ] **Q13 / P6-T15 — NEEDS-USER: approve publication/soft-delete migration.**
   Add publication state and retention-aware deletion without breaking stable
