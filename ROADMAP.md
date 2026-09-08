@@ -99,7 +99,8 @@
 - [ ] **Q12 / T7-9 — Exercise sheets, manual grading, then optional OCR.** OCR
   - SAMY 2026-09-08: approved
   provider remains a later NEEDS-USER decision.
-- [ ] **Q13 / P6-T15 — NEEDS-USER: approve publication/soft-delete migration.**
+- [ ] **Q13 / P6-T15 — approve publication/soft-delete migration.**
+  - SAMY 2026-09-08: approved
   Add publication state and retention-aware deletion without breaking stable
   content identifiers or enrolled learners.
 - [x] **Q14 — Academic-stream profile foundation.** (2026-09-06: lycée learners
