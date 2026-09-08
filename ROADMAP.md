@@ -696,6 +696,7 @@ la source, pas dans le roadmap :
   Le design system n'a ni table de données ni pattern "zone dangereuse" —
   voir la revue design de P6-T16 : prévoir un petit ticket design d'abord.
 - [x] **P9-T2 — Planification live par le prof** (2026-09-03, attendu : colonnes
+  - SAMY 2026-09-08: approved
   additives `livestream_url`/`scheduled_at` sur `chapters` et `lessons` (ALTER
   idempotent, sauvegarde de `data/layaida.db` prise avant), éditables depuis
   P9-T1 ; `GET /api/live/[courseId]` ne les sert qu'à un élève inscrit connecté
