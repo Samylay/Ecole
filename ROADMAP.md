@@ -605,6 +605,7 @@ onboarding, passwordless, and step-up.
   enrolled students only, trilingual i18n. No streaming infrastructure built.
 
 - [x]**T7-8 — Risk-based auth: account-sharing detection (P6-T8 + heuristics)** (2026-08-22: v1 done via swarm — sessions ua/ip/last_seen_at, per-session revoke API + profile devices section, distinct-devices risk endpoint; enforcement pending) —
+  - SAMY 2026-09-08: approved
   sessions gain nullable device metadata (user_agent, ip, last_seen_at) —
   ATTENDED-OK additive migration; per-session revoke UI; sharing heuristics v1:
   >N distinct active devices in 24h or simultaneous activity from distinct IPs
