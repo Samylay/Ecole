@@ -4,6 +4,8 @@
 
 ## Context for the executor
 
+- Development output is isolated in `.next-dev`, including bare `next dev` (2026-09-09 recovery). Never override `NEXT_DIST_DIR` to `.next` for development or verification. Production serves `.next`; verification keeps `.next-verify`.
+
 - **Stack:** Next.js 15 App Router + React 19 + Tailwind CSS 4 + TypeScript + lucide-react. Verification gate: `npm run typecheck && npm run build:verify` (both pass — keep them passing). **Use `build:verify`, never bare `npm run build`.** `ecole.service` runs `next start` from THIS directory and holds the build's chunk manifest in memory; a plain build rewrites `.next` with new content-hashed chunk names and the running process instantly starts serving HTML pointing at files that no longer exist → every chunk 400s → fatal `ChunkLoadError` white screen. That is what broke the live site for four days (P4-T5). `build:verify` builds into the scratch `.next-verify` and leaves the deploy untouched. No test suite yet (see P1-T6).
 - **State (2026-09-06):** the full « Nord Campus » UI is shipped in light/dark,
   fr/en/ar, and RTL. Real SQLite auth, roles, enrolments, payments, teacher

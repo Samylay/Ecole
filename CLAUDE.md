@@ -16,7 +16,7 @@
 - Wordmark in Arabic stays العيايدة.
 
 ## Conventions
-- Verify gate for every change: `npm run typecheck && npm run build` (no test suite yet — P1-T6 is gated on a dependency decision).
+- Verify gate for every change: `npm run typecheck && npm run build:verify`. Development writes `.next-dev`, verification writes `.next-verify`, and the production service serves `.next`. Only an authorized deployment may rebuild `.next`, with the service stopped while replacing it.
 - Type scale 30/22/17/15/13 + mono 11; motion 180ms ease-out; touch targets ≥44px; empty states always suggest an action.
 
 ## Locked decisions

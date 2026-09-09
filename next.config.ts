@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { PHASE_DEVELOPMENT_SERVER } from "next/constants";
 
 const nextConfig: NextConfig = {
   // Verification builds MUST NOT write the live `.next`.
@@ -69,4 +70,11 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default function config(phase: string): NextConfig {
+  return {
+    ...nextConfig,
+    // A local dev server also rewrites manifests and removes BUILD_ID.
+    // Keep even a bare `next dev` away from the production artifact.
+    distDir: process.env.NEXT_DIST_DIR || (phase === PHASE_DEVELOPMENT_SERVER ? ".next-dev" : ".next"),
+  };
+}
