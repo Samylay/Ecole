@@ -69,6 +69,7 @@
   subject entitlements grant mapped-course access; expired/revoked do not; legacy
   permanent enrolments remain valid. Scratch probes pass.)
 - [ ] **Q5b — Renewal notices.** Depends on production SMTP and a decided reminder
+  - SAMY 2026-09-10: rejected
   cadence/template.
   - BLOCKED 2026-09-08 (autoloop, first attempt): both of this task's own named
     dependencies are still open. `grep -n LAYAIDA_SMTP src/lib/server/mailer.ts`
